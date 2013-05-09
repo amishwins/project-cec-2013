@@ -15,8 +15,6 @@ public class Main {
             public void run() {
 
                 JFrame mainWindow = new EmailClient("Collaborative Email Client");
-                mainWindow.setSize(750, 550);
-                mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 mainWindow.setVisible(true);
 
             }
