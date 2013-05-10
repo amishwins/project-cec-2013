@@ -107,9 +107,9 @@ public class EmailClient extends JFrame{
                                                          JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                                                          JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-                    RightPanelChildTop.setMaximumSize(new Dimension(1200, 120));
-                    RightPanelChildTop.setMinimumSize(new Dimension(520, 120));
-                    RightPanelChildTop.setPreferredSize(new Dimension(530, 120));       
+                    RightPanelChildTop.setMaximumSize(new Dimension(1200, 150));
+                    RightPanelChildTop.setMinimumSize(new Dimension(520, 150));
+                    RightPanelChildTop.setPreferredSize(new Dimension(530, 150));       
 
               
           
@@ -131,7 +131,7 @@ public class EmailClient extends JFrame{
       //Adding components to the Main Panel
         Container c = getContentPane();        
         c.add(TopPanel,BorderLayout.NORTH);
-        c.add(BottomPanel,BorderLayout.LINE_START);        
+        c.add(BottomPanel,BorderLayout.CENTER);        
     }       
 }
 
