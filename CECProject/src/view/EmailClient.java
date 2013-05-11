@@ -42,9 +42,15 @@ public class EmailClient extends JFrame{
         JMenuBar jMenuBar1 = new JMenuBar();
         setJMenuBar(jMenuBar1);
         JMenu file = new JMenu("File");
-        jMenuBar1.add(file);
+        jMenuBar1.add(file);    
+        
+        JMenuItem newMessage = new JMenuItem("New Message");
+        file.add(newMessage);   
+        
         JMenuItem exit = new JMenuItem("Exit");
-        file.add(exit);               
+        file.add(exit);           
+        
+        newMessage.addActionListener(new MenuFileNewMessage());        
         exit.addActionListener(new MenuFileExit());
         
          
@@ -61,7 +67,7 @@ public class EmailClient extends JFrame{
         //Swing Components - Top Panel 
             JPanel TopPanel = new JPanel();            
             
-            ImageIcon EmailIcon  = new ImageIcon("C:\\Deyvid\\Concordia 2013\\SOEN 6441\\SVN\\trunk\\JavaApplication1\\src\\View\\EmailImg2.png");
+            ImageIcon EmailIcon  = new ImageIcon("G:\\SOEN6441\\trunk\\CECProject\\src\\view\\emaillogo.png");
             JLabel Title = new JLabel("CEC - Collaborative Email Client", EmailIcon, JLabel.LEFT); 
            
             TopPanel.setPreferredSize(new Dimension(1024, 36));  
@@ -168,8 +174,17 @@ public class EmailClient extends JFrame{
     
 }
 
+
+//Menu Classes
+
     class MenuFileExit implements ActionListener{
         public void actionPerformed (ActionEvent e){
             System.exit(0);
+        }
+    }
+
+    class MenuFileNewMessage implements ActionListener{
+        public void actionPerformed (ActionEvent e){
+            new NewMessageUI().setVisible(true);
         }
     }
