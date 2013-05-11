@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Persistence;
+package persistence;
 
 import java.io.File;
 import javax.xml.parsers.DocumentBuilder;
