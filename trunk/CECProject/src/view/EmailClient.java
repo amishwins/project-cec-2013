@@ -67,7 +67,7 @@ public class EmailClient extends JFrame{
         //Swing Components - Top Panel 
             JPanel TopPanel = new JPanel();            
             
-            ImageIcon EmailIcon  = new ImageIcon("G:\\SOEN6441\\trunk\\CECProject\\src\\view\\emaillogo.png");
+            ImageIcon EmailIcon  = new ImageIcon("images/emaillogo.png");
             JLabel Title = new JLabel("CEC - Collaborative Email Client", EmailIcon, JLabel.LEFT); 
            
             TopPanel.setPreferredSize(new Dimension(1024, 36));  
