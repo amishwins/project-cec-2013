@@ -4,6 +4,7 @@
 
 package View;
 
+import Service.Controller;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -21,11 +22,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.ScrollPaneLayout;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.DefaultTreeCellRenderer;
 
 
 public class EmailClient extends JFrame{
+    
+       JTree FolderList = new JTree();
     
     public EmailClient(String title){
         
@@ -76,16 +78,35 @@ public class EmailClient extends JFrame{
             //Swing Components - Left Panel         
 
                   //Jtree >
-                  JTree FolderList = new JTree();
-
+               
                   FolderList.setPreferredSize(new java.awt.Dimension(200, 400));
-                  FolderList.setRootVisible(false);
-                  DefaultMutableTreeNode root   = new DefaultMutableTreeNode("Root");
-                  DefaultMutableTreeNode child1 = new DefaultMutableTreeNode("Inbox");
-                  root.add(child1);
-                  DefaultMutableTreeNode child2 = new DefaultMutableTreeNode("Outbox");
-                  root.add(child2);            
-                  FolderList.setModel(new DefaultTreeModel(root));
+                  
+                  DefaultTreeCellRenderer render = (DefaultTreeCellRenderer)FolderList.getCellRenderer();
+                  render.setLeafIcon(new ImageIcon("C:\\Deyvid\\Concordia 2013\\SOEN 6441\\SVN\\trunk\\JavaApplication1\\src\\View\\folder.gif"));
+                  render.setOpenIcon(new ImageIcon("C:\\Deyvid\\Concordia 2013\\SOEN 6441\\SVN\\trunk\\JavaApplication1\\src\\View\\folder.gif"));
+                  render.setClosedIcon(new ImageIcon("C:\\Deyvid\\Concordia 2013\\SOEN 6441\\SVN\\trunk\\JavaApplication1\\src\\View\\folder.gif"));
+
+                  //Generating Folder List
+                  Controller Controller = new Controller();
+                  Controller.getFolderListTree(FolderList);
+                  
+                  
+                 FolderList.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
+                        public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
+                            jTree1ValueChanged(evt);
+                        }
+                    });
+                 
+   
+
+
+//                  FolderList.setRootVisible(false);
+//                  DefaultMutableTreeNode root   = new DefaultMutableTreeNode("Root");
+//                  DefaultMutableTreeNode child1 = new DefaultMutableTreeNode("Inbox");
+//                  root.add(child1);
+//                  DefaultMutableTreeNode child2 = new DefaultMutableTreeNode("Outbox");
+//                  root.add(child2);            
+//                  FolderList.setModel(new DefaultTreeModel(root));
 
                   //Adding components to the Left Panel
                   JScrollPane LeftPanel = new JScrollPane(FolderList, 
@@ -133,6 +154,18 @@ public class EmailClient extends JFrame{
         c.add(TopPanel,BorderLayout.NORTH);
         c.add(BottomPanel,BorderLayout.CENTER);        
     }       
+    
+    
+    private void jTree1ValueChanged(javax.swing.event.TreeSelectionEvent evt) {                                    
+       
+        //System.out.println(FolderList.getLastSelectedPathComponent());
+          //System.out.println(FolderList.getSelectionPaths().toString());
+            System.out.println(FolderList.getSelectionPath());
+            //  System.out.println(FolderList.getLeadSelectionRow());
+
+    }    
+
+    
 }
 
     class MenuFileExit implements ActionListener{
