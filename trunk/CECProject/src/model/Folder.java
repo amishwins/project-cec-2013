@@ -4,7 +4,7 @@
 
 package model;
 
-import DAO.FolderStructure;
+import persistence.FolderStructure;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 
