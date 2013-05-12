@@ -5,6 +5,7 @@
 package view;
 
 import java.awt.BorderLayout;
+
 import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -21,7 +22,7 @@ public class NewMessage2 extends JFrame{
   
         //Layout Manager
         super(title);
-        setSize(670, 300);
+        setSize(670, 400);
         setLayout(new BorderLayout());
         setVisible(true);
         
@@ -59,7 +60,7 @@ public class NewMessage2 extends JFrame{
 
         
         //Swing Components - Bottom Panel 
-        JTextArea body = new JTextArea(10,10);
+        JTextArea body = new JTextArea(15,20);
         body.setLineWrap(true);
         body.setWrapStyleWord(true);
         JScrollPane scroll = new JScrollPane(body);
@@ -68,7 +69,7 @@ public class NewMessage2 extends JFrame{
         //Finishing Panels Disposal
         add(bar, BorderLayout.NORTH);    
         add(mid, BorderLayout.LINE_START);  
-        add(scroll);   
+        add(scroll, BorderLayout.SOUTH);   
         
       }    
 }
