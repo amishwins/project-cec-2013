@@ -9,5 +9,5 @@ package persistence;
  * @author Pankaj Kapania
  */
 public interface NewMessageDao {
-    public void save(String to, String subject, String body, String location);
+    public void save(String to, String cc, String subject, String body, String location);
 }

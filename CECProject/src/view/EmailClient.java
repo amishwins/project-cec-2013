@@ -88,9 +88,9 @@ public class EmailClient extends JFrame{
                   FolderList.setPreferredSize(new java.awt.Dimension(200, 400));
                   
                   DefaultTreeCellRenderer render = (DefaultTreeCellRenderer)FolderList.getCellRenderer();
-                  render.setLeafIcon(new ImageIcon("C:\\Deyvid\\Concordia 2013\\SOEN 6441\\SVN\\trunk\\JavaApplication1\\src\\View\\folder.gif"));
-                  render.setOpenIcon(new ImageIcon("C:\\Deyvid\\Concordia 2013\\SOEN 6441\\SVN\\trunk\\JavaApplication1\\src\\View\\folder.gif"));
-                  render.setClosedIcon(new ImageIcon("C:\\Deyvid\\Concordia 2013\\SOEN 6441\\SVN\\trunk\\JavaApplication1\\src\\View\\folder.gif"));
+                  render.setLeafIcon(new ImageIcon("images/folder.gif"));
+                  render.setOpenIcon(new ImageIcon("images/folder.gif"));
+                  render.setClosedIcon(new ImageIcon("images/folder.gif"));
 
                   //Generating Folder List
                   Controller Controller = new Controller();

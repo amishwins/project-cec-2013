@@ -19,59 +19,74 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
- * 
+ *
  * @author Pankaj Kapania
  */
 public class NewMessageXMLDao implements NewMessageDao {
 
-	public void save(String to, String subject, String body, String location) {
+    public Document buildXmlFile(String to, String cc, String subject, String body) {
 
-		try {
+        DocumentBuilderFactory documentFactory = null;
+        DocumentBuilder documentBuilder = null;
+        Document emailInXMLFormat = null;
+        try {
 
-			DocumentBuilderFactory docFactory = DocumentBuilderFactory
-					.newInstance();
-			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+            documentFactory = DocumentBuilderFactory
+                    .newInstance();
+            documentBuilder = documentFactory.newDocumentBuilder();
 
-			// root elements
-			Document doc = docBuilder.newDocument();
-			Element eMail = doc.createElement("E-Mail");
-			doc.appendChild(eMail);
+            // root element Email
+            emailInXMLFormat = documentBuilder.newDocument();
+            Element emailRootElement = emailInXMLFormat.createElement("E-Mail");
+            emailInXMLFormat.appendChild(emailRootElement);
 
-			// to
-			Element toLabel = doc.createElement("To");
-			toLabel.appendChild(doc.createTextNode(to));
-			eMail.appendChild(toLabel);
+            // to
+            Element toLabel = emailInXMLFormat.createElement("To");
+            toLabel.appendChild(emailInXMLFormat.createTextNode(to));
+            emailRootElement.appendChild(toLabel);
 
-			// subject
-			Element subjectLabel = doc.createElement("Subject");
-			subjectLabel.appendChild(doc.createTextNode(subject));
-			eMail.appendChild(subjectLabel);
+            // cc
+            Element ccLabel = emailInXMLFormat.createElement("CC");
+            ccLabel.appendChild(emailInXMLFormat.createTextNode(cc));
+            emailRootElement.appendChild(ccLabel);
 
-			// body
-			Element bodyLabel = doc.createElement("Body");
-			bodyLabel.appendChild(doc.createTextNode(body));
-			eMail.appendChild(bodyLabel);
+            // subject
+            Element subjectLabel = emailInXMLFormat.createElement("Subject");
+            subjectLabel.appendChild(emailInXMLFormat.createTextNode(subject));
+            emailRootElement.appendChild(subjectLabel);
 
-			// write the content into xml file
-			TransformerFactory transformerFactory = TransformerFactory
-					.newInstance();
-			Transformer transformer = transformerFactory.newTransformer();
-			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(new File(
-					"C:\\temp\\file.xml"));
+            // body
+            Element bodyLabel = emailInXMLFormat.createElement("Body");
+            bodyLabel.appendChild(emailInXMLFormat.createTextNode(body));
+            emailRootElement.appendChild(bodyLabel);
 
-			// Output to console for testing
-			// StreamResult result = new StreamResult(System.out);
 
-			transformer.transform(source, result);
+        } catch (ParserConfigurationException pce) {
+            pce.printStackTrace();
+        }
+        return emailInXMLFormat;
 
-			System.out.println("File saved!");
+    }
 
-		} catch (ParserConfigurationException pce) {
-			pce.printStackTrace();
-		} catch (TransformerException tfe) {
-			tfe.printStackTrace();
-		}
+    public void save(String to, String cc, String subject, String body, String folder) {
+        final String ROOT_FOLDER = "emails";
+        final String INNER_FOLDER = folder;
+        final String FILE_NAME="mail";
+        final String PATH_TO_SAVE_EMAIL = ROOT_FOLDER+"/"+INNER_FOLDER+"/"+FILE_NAME;
+        try {
+            Document emailInXMLFormat = buildXmlFile(to, cc, subject, body);        
+            // write the content into xml file
+            TransformerFactory transformerFactory = TransformerFactory
+                    .newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(emailInXMLFormat);
+            StreamResult result = new StreamResult(new File(                   
+                    PATH_TO_SAVE_EMAIL));
+            transformer.transform(source, result);
+            System.out.println("File saved!");
 
-	}
+         } catch (TransformerException tfe) {
+            tfe.printStackTrace();
+        }
+    }
 }

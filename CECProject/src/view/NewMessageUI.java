@@ -12,7 +12,7 @@ import service.NewMessageService;
  */
 public class NewMessageUI extends javax.swing.JFrame {
 
-    NewMessageService newMesseageService = new NewMessageService();
+    NewMessageService newEmailService = new NewMessageService();
     
     /**
      * Creates new form NewMessegeUI
@@ -54,6 +54,11 @@ public class NewMessageUI extends javax.swing.JFrame {
         });
 
         jButton2.setText("Draft");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -164,9 +169,19 @@ public class NewMessageUI extends javax.swing.JFrame {
         String cc = jTextField2.getText();
         String subject = jTextField3.getText();
         String body = jTextArea1.getText();
-        newMesseageService.sendMessage(to, cc, subject, body);
+        newEmailService.sendEmail(to, cc, subject, body);
         
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        String to = jTextField1.getText();
+        String cc = jTextField2.getText();
+        String subject = jTextField3.getText();
+        String body = jTextArea1.getText();
+        newEmailService.draftEmail(to, cc, subject, body);
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
