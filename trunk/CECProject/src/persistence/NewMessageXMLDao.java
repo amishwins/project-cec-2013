@@ -24,7 +24,7 @@ import org.w3c.dom.Element;
  */
 public class NewMessageXMLDao implements NewMessageDao {
 
-    public Document buildXmlFile(String to, String cc, String subject, String body) {
+    public Document buildXmlFile(String to, String cc, String subject, String body, String lastAccessedTime) {
 
         DocumentBuilderFactory documentFactory = null;
         DocumentBuilder documentBuilder = null;
@@ -49,7 +49,12 @@ public class NewMessageXMLDao implements NewMessageDao {
             Element ccLabel = emailInXMLFormat.createElement("CC");
             ccLabel.appendChild(emailInXMLFormat.createTextNode(cc));
             emailRootElement.appendChild(ccLabel);
-
+            
+            // lastAccessedTime
+            Element lastAccessedTimeLabel = emailInXMLFormat.createElement("LastAccessedTime");
+            lastAccessedTimeLabel.appendChild(emailInXMLFormat.createTextNode(lastAccessedTime));
+            emailRootElement.appendChild(lastAccessedTimeLabel);
+            
             // subject
             Element subjectLabel = emailInXMLFormat.createElement("Subject");
             subjectLabel.appendChild(emailInXMLFormat.createTextNode(subject));
@@ -68,13 +73,13 @@ public class NewMessageXMLDao implements NewMessageDao {
 
     }
 
-    public void save(String to, String cc, String subject, String body, String folder) {
+    public void save(String to, String cc, String subject, String body,String lastAccessedTime, String folder) {
         final String ROOT_FOLDER = "emails";
         final String INNER_FOLDER = folder;
-        final String FILE_NAME="mail";
+        final String FILE_NAME=lastAccessedTime;
         final String PATH_TO_SAVE_EMAIL = ROOT_FOLDER+"/"+INNER_FOLDER+"/"+FILE_NAME;
         try {
-            Document emailInXMLFormat = buildXmlFile(to, cc, subject, body);        
+            Document emailInXMLFormat = buildXmlFile(to ,cc , subject, body ,lastAccessedTime);        
             // write the content into xml file
             TransformerFactory transformerFactory = TransformerFactory
                     .newInstance();
@@ -82,7 +87,12 @@ public class NewMessageXMLDao implements NewMessageDao {
             DOMSource source = new DOMSource(emailInXMLFormat);
             StreamResult result = new StreamResult(new File(                   
                     PATH_TO_SAVE_EMAIL));
+
+            // Output to console for testing
+            // StreamResult result = new StreamResult(System.out);
+
             transformer.transform(source, result);
+
             System.out.println("File saved!");
 
          } catch (TransformerException tfe) {
