@@ -4,7 +4,7 @@
  */
 package service;
 import model.Email;
-import model.EMailBuilder;
+import model.EmailBuilder;
 /**
  *
  * @author Pankaj Kapania
@@ -15,16 +15,23 @@ public class NewMessageService {
         
     }
    
-   public void sendMessage(String to, String cc, String subject, String body){
-       EMailBuilder msg = new EMailBuilder();
-       Email message = msg.withTo(to)
+   public void sendEmail(String to, String cc, String subject, String body){
+       EmailBuilder mailBuilder = new EmailBuilder();
+       Email email = mailBuilder.withTo(to)
                           .withSubject(subject)
                           .withBody(body)
+                          .withCC(cc)
                           .build();
-       message.saveToSentFolder();
+       email.send();
    }
-   public void draftMessage(String To, String CC, String Subject, String content){
-       
+   public void draftEmail(String to, String cc, String subject, String body){
+       EmailBuilder mailBuilder = new EmailBuilder();
+       Email email = mailBuilder.withTo(to)
+                          .withSubject(subject)
+                          .withBody(body)
+                          .withCC(cc)
+                          .build();
+       email.saveToDraftFolder();
    }
    
 }
