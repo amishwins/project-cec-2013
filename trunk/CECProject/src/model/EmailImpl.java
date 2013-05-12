@@ -50,7 +50,6 @@ public class EmailImpl implements Email {
     }
     public void saveToDraftFolder(){
         newMessageDao = NewMessageDaoFactory.getNewMessageDao();
-        //Assuming Email has been sent successfully.
         newMessageDao.save(to, cc, subject, body, "Draft");
     }
     
