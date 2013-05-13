@@ -18,14 +18,16 @@ import javax.swing.*;
 
 public class NewMessage2 extends JFrame{
     
-      public NewMessage2(String title){
+      public NewMessage2(){
   
         //Layout Manager
-        super(title);
-        setSize(670, 400);
+        super("New Message");
+        setSize(610, 410);
         setLayout(new BorderLayout());
-        setVisible(true);
-        
+        setResizable(false);
+        setVisible(true);  
+        setLocationRelativeTo(null);
+
         
         //Panels Hierarchy
             //JToolBar     (TOP)
@@ -34,8 +36,10 @@ public class NewMessage2 extends JFrame{
         
         
         //Swing Components - Top Panel 
-        JButton send = new JButton(" Send >> ");
-        JButton draft = new JButton("Save as Draft");
+        ImageIcon sendIcon = new ImageIcon("images/emailblue.png");
+        ImageIcon draftIcon = new ImageIcon("images/emailyellow.png");
+        JButton send = new JButton(" Send >> ",sendIcon );
+        JButton draft = new JButton("Save as Draft",draftIcon);
         JToolBar bar = new JToolBar();  
         bar.add(send);
         bar.add(draft);
