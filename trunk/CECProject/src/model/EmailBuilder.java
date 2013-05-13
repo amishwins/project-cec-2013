@@ -13,6 +13,7 @@ public class EmailBuilder {
     String cc = "";
     String subject = "";
     String body = "";
+    String lastAccessedTime="";
 
     // method chaining
     public EmailBuilder withTo(String to){
@@ -34,8 +35,15 @@ public class EmailBuilder {
         this.body = body;
         return this;
     }
-
+    protected EmailBuilder withLastAccessedTime(String lastAccessedTime){
+        this.lastAccessedTime = lastAccessedTime;
+        return this;
+    }
     public Email build(){
         return new EmailImpl(to, cc, subject, body);
+    }
+    
+    protected Email buildWithAccessedTime(){
+        return new EmailImpl(to, cc, subject, body,lastAccessedTime);
     }
 }

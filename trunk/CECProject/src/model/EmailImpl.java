@@ -26,7 +26,14 @@ public class EmailImpl implements Email {
         this.cc = cc;
         this.subject = subject;
         this.body = body;
-        this.lastAccessedTime= currentDateTime();
+        //this.lastAccessedTime= currentDateTime();
+    }
+    protected EmailImpl(String to, String cc, String subject, String body, String lastAccessedTime){
+        this.to = to;
+        this.cc = cc;
+        this.subject = subject;
+        this.body = body;
+        this.lastAccessedTime = lastAccessedTime;
     }
     
     public void setTo(String to){
@@ -38,8 +45,14 @@ public class EmailImpl implements Email {
     public void setbody(String body){
         this.body=body;
     }
+    public void setCC(String to){
+        this.to = to;
+    }
     
     public String getTo(){
+        return to;
+    }
+      public String getCC(){
         return to;
     }
     public String getSubject(){
@@ -48,9 +61,13 @@ public class EmailImpl implements Email {
     public String getBody(){
         return body;
     }
-    public String getlastAccessedTime(){
+    public String getLastAccessedTime(){
         return lastAccessedTime;
     }
+    protected void setLastAccessedTime(String lastAccessedTime){
+        this.lastAccessedTime = lastAccessedTime;
+    }
+    
     private String currentDateTime(){
         SimpleDateFormat currentDateTime = new SimpleDateFormat("yyyy.MM.dd_'At'_HH.mm.ss.SSS");
 	return currentDateTime.format(new Date());
@@ -58,11 +75,11 @@ public class EmailImpl implements Email {
     public void send(){
         newMessageDao = NewMessageDaoFactory.getNewMessageDao();
         //Assuming Email has been sent successfully.
-        newMessageDao.save(to, cc, subject, body, lastAccessedTime, "Sent");
+        newMessageDao.save(to, cc, subject, body, currentDateTime(), "Sent");
     }
     public void saveToDraftFolder(){
         newMessageDao = NewMessageDaoFactory.getNewMessageDao();
-        newMessageDao.save(to, cc, subject, body, lastAccessedTime, "Draft");
+        newMessageDao.save(to, cc, subject, body, currentDateTime(), "Draft");
     }
     
 }
