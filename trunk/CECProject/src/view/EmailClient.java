@@ -30,13 +30,14 @@ public class EmailClient extends JFrame{
        JTree FolderList = new JTree();
     
     public EmailClient(String title){
-        
-        super(title);
+               
         
         //Layout Manager
+        super(title);
         setSize(760, 560);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
+        setLocationRelativeTo(null);
         
         //Menu
         JMenuBar jMenuBar1 = new JMenuBar();
@@ -67,7 +68,7 @@ public class EmailClient extends JFrame{
         //Swing Components - Top Panel 
             JPanel TopPanel = new JPanel();            
             
-            ImageIcon EmailIcon  = new ImageIcon("images/emaillogo.png");
+            ImageIcon EmailIcon  = new ImageIcon("images/emailblue2.png");
             JLabel Title = new JLabel("CEC - Collaborative Email Client", EmailIcon, JLabel.LEFT); 
            
             TopPanel.setPreferredSize(new Dimension(1024, 36));  
@@ -179,7 +180,8 @@ public class EmailClient extends JFrame{
 
     class MenuFileExit implements ActionListener{
         public void actionPerformed (ActionEvent e){
-            System.exit(0);
+            //System.exit(0);
+            JFrame nm = new NewMessage2();
         }
     }
 
