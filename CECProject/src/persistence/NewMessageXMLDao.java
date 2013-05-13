@@ -77,7 +77,9 @@ public class NewMessageXMLDao implements NewMessageDao {
         final String ROOT_FOLDER = "emails";
         final String INNER_FOLDER = folder;
         final String FILE_NAME=lastAccessedTime;
-        final String PATH_TO_SAVE_EMAIL = ROOT_FOLDER+"/"+INNER_FOLDER+"/"+FILE_NAME;
+        final String EXTENSION = ".xml";
+        final String PATH_TO_SAVE_EMAIL = ROOT_FOLDER+"/"+INNER_FOLDER+"/"+FILE_NAME+EXTENSION;
+        
         try {
             Document emailInXMLFormat = buildXmlFile(to ,cc , subject, body ,lastAccessedTime);        
             // write the content into xml file

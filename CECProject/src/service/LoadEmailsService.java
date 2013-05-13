@@ -2,12 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package service;
+import model.FolderImpl;
 
 /**
  *
  * @author Pankaj Kapania
  */
-public interface Folder {
-    public Iterable<Email> loadEmails(String folder);
+public class LoadEmailsService {
+    
 }

@@ -11,4 +11,10 @@ package model;
 public interface Email {
     public void send();
     public void saveToDraftFolder();
+    public String getTo();
+    public String getCC();
+    public String getSubject();
+    public String getBody();
+    public String getLastAccessedTime();
+    
 }
