@@ -19,16 +19,55 @@ import service.NewMessageService;
 
 public class NewMessage2 extends JFrame{
     
+      NewMessageService newEmailService = new NewMessageService(); 
+    
+      //Shared Components
+      JTextField toField = new JTextField(22);
+      JTextField ccField = new JTextField(22);
+      JTextField subjectField = new JTextField(22);
+      JTextArea bodyField = new JTextArea(15,20);
+    
+    
       public NewMessage2(){
   
         //Layout Manager
         super("New Message");
-        setSize(610, 420);
+        setSize(610, 440);
         setLayout(new BorderLayout());
         setResizable(false);
         setVisible(true);  
         setLocationRelativeTo(null);
 
+        
+        //Menu
+        JMenuBar menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
+        JMenu fileMenuBarEntry = new JMenu("File");
+        menuBar.add(fileMenuBarEntry);    
+        
+        JMenuItem sendItem = new JMenuItem("Send");
+        fileMenuBarEntry.add(sendItem);   
+        
+        JMenuItem draftItem = new JMenuItem("Save as Draft");
+        fileMenuBarEntry.add(draftItem);  
+
+        JMenuItem exitItem = new JMenuItem("Exit");
+        fileMenuBarEntry.add(exitItem);  
+                
+ 
+        sendItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sendNewMessage();}});
+        
+        draftItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                draftNewMessage();}});
+        
+        exitItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                discardNewMessage();}});        
+                
+        
         
         //Panels Hierarchy
             //JToolBar     (TOP)
@@ -52,28 +91,22 @@ public class NewMessage2 extends JFrame{
         
         send.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sendNewMessage(evt);}});
+                sendNewMessage();}});
         
         draft.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                draftNewMessage(evt);}});
+                draftNewMessage();}});
         
         discard.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                discardNewMessage(evt);}});
+                discardNewMessage();}});
         
-
 
         
         //Swing Components - Middle Panel
-        JLabel to = new JLabel("To:         ");
-        JTextField toField = new JTextField(22);
-        JLabel cc = new JLabel("Cc:         ");
-        JTextField ccField = new JTextField(22);
-        JLabel subject = new JLabel("Subject:");
-        JTextField subjectField = new JTextField(22);
-        
-        
+        JLabel to = new JLabel("To:         ");       
+        JLabel cc = new JLabel("Cc:         ");        
+        JLabel subject = new JLabel("Subject:");        
         
                 
         JPanel mid = new JPanel();  
@@ -87,10 +120,9 @@ public class NewMessage2 extends JFrame{
 
         
         //Swing Components - Bottom Panel 
-        JTextArea body = new JTextArea(15,20);
-        body.setLineWrap(true);
-        body.setWrapStyleWord(true);
-        JScrollPane scroll = new JScrollPane(body);
+        bodyField.setLineWrap(true);
+        bodyField.setWrapStyleWord(true);
+        JScrollPane scroll = new JScrollPane(bodyField);
        
         
         //Finishing Panels Disposal
@@ -102,27 +134,27 @@ public class NewMessage2 extends JFrame{
       }    
       
       //Actions - Discard
-      private void discardNewMessage(ActionEvent evt) {                                
+      private void discardNewMessage() {                                
         this.dispose();        
     }                                        
       
-      //Actions - Discard
-      private void draftNewMessage(ActionEvent evt) {   
+      //Actions - Draft
+      private void draftNewMessage() {   
        
-       /* String to = toField.getText();
-        String cc = ccField.getText();
-        String subject = jTextField3.getText();
-        String body = jTextArea1.getText();
-        newEmailService.draftEmail(to, cc, subject, body);  */
+        String auxTo = toField.getText();
+        String auxCc = ccField.getText();
+        String auxSubject = subjectField.getText();
+        String auxBody = bodyField.getText();
+        newEmailService.draftEmail(auxTo, auxCc, auxSubject, auxBody);  
     }                                        
       
-      //Actions - Discard
-      private void sendNewMessage(ActionEvent evt) {                                
-      /*  String to = jTextField1.getText();
-        String cc = jTextField2.getText();
-        String subject = jTextField3.getText();
-        String body = jTextArea1.getText();
-        newEmailService.sendEmail(to, cc, subject, body);   */    
+      //Actions - Send
+      private void sendNewMessage() {                                
+        String auxTo = toField.getText();
+        String auxCc = ccField.getText();
+        String auxSubject = subjectField.getText();
+        String auxBody = bodyField.getText();
+        newEmailService.sendEmail(auxTo, auxCc, auxSubject, auxBody);    
     }                                        
             
 }
