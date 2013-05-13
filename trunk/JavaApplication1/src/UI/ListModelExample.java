@@ -2,7 +2,6 @@
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -10,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 
 
@@ -48,12 +48,20 @@ public class ListModelExample extends JPanel {
         }
 
         public String toString() {
+            
+            
+            for (int i = to.length(); i < 40; i++)
+            to = to + " ";
+            
             return to + "   " + subject;
+            
         }
         
         public String getFilename() {
             return filename;
         }        
+        
+        
         
     }
     
@@ -82,6 +90,19 @@ public class ListModelExample extends JPanel {
     
     JButton print = new JButton("Print");
     
+    
+    String[] columnNames = {"Sender", "Subject"};
+    Object[][] data = {
+        {"Kathy", "Smith"
+        },
+        {"John", "Doe"}
+    };
+
+     JTable table = new JTable(data, columnNames);
+    
+    
+    
+    
  /*   for (int i = 0; i < 15; i++)
       model.addElement("Element " + i);
 */
@@ -98,7 +119,7 @@ public class ListModelExample extends JPanel {
       }
     });
 
-    print.addActionListener(new ActionListener() {
+ /*   print.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
        
       int selected[] = list.getSelectedIndices();
@@ -109,17 +130,42 @@ public class ListModelExample extends JPanel {
             .getElementAt(selected[i]);
         System.out.println("  " + element.getFilename());
       }
-
+       
+      
+      
       
       
       }
     });
+   */ 
+        
+  list.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                
+                if (!evt.getValueIsAdjusting()){
+                      
+                int selected[] = list.getSelectedIndices();
+                System.out.println("Selected Elements:  ");
+
+                for (int i = 0; i < selected.length; i++) {
+                  EmailInfo element = (EmailInfo) list.getModel()
+                      .getElementAt(selected[i]);
+                  System.out.println("  " + element.getFilename());
+                  
+                }
+                }   
+            }
+        });
     
     
-    add(pane, BorderLayout.NORTH);
+    
+   // add(pane, BorderLayout.NORTH);
+   
+   add(pane, BorderLayout.NORTH);
     add(addButton, BorderLayout.WEST);
     add(removeButton, BorderLayout.EAST);
      add(print, BorderLayout.SOUTH);
+    
   }
 
   public static void main(String s[]) {
