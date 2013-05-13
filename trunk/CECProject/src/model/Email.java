@@ -6,7 +6,7 @@ package model;
 
 /**
  *
- * @author Pankaj Kapania
+ * @author Pankaj Kapania and the team
  */
 public interface Email {
     public void send();
