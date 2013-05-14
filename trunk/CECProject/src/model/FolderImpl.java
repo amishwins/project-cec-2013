@@ -11,9 +11,14 @@ import java.util.*;
 
 public class FolderImpl implements Folder {
     
-    //Class atributes - Private Variables
-    private String Name;
-    private String Path;
+    private String name;
+    private String path;
+    private Collection<Email> emailsInFolder;
+    
+    public FolderImpl(String name, String path) {
+        this.name = name;
+        this.path = path;
+    }
     
    // public DefaultMutableTreeNode getFolderList(){
         //FolderStructure a = new FolderStructure();
@@ -21,9 +26,9 @@ public class FolderImpl implements Folder {
    // }
     
     public Iterable<Email> loadEmails(String folder){
-        Collection<Email> emailList = new LinkedList<Email>();
-        FolderDao folder1 = FolderDaoFactory.getFolderDaoInstance();
-        Iterable<Map<String,String>> emailsData = folder1.loadEmails(folder);
+        emailsInFolder = new LinkedList<Email>();
+        FolderDao folderDao = FolderDaoFactory.getFolderDaoInstance();
+        Iterable<Map<String,String>> emailsData = folderDao.loadEmails(folder);
         for(Map<String,String> emailData: emailsData){
           //System.out.println("TO"+email.get("To"));
           //System.out.println("CC"+email.get("CC"));
@@ -37,13 +42,13 @@ public class FolderImpl implements Folder {
                                      .withBody(emailData.get("Body"))
                                      .withLastAccessedTime(emailData.get("LastAccessedTime"))
                                      .buildWithAccessedTime();
-          emailList.add(email);
+          emailsInFolder.add(email);
           
         }
         
         
         
-        return emailList;
+        return emailsInFolder;
     }
      
    
