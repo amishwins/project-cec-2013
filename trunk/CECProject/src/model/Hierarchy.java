@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Hierarchy {
     private Object[] hierarchy;
+    private List<Folder> allFolders;
     
     
     public Hierarchy() {

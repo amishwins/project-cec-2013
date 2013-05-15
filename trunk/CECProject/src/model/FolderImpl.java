@@ -15,9 +15,10 @@ public class FolderImpl implements Folder {
     private String path;
     private Collection<Email> emailsInFolder;
     
-    public FolderImpl(String name, String path) {
-        this.name = name;
+    
+    public FolderImpl(String path) {
         this.path = path;
+        this.name = extractName(path);
     }
     
    // public DefaultMutableTreeNode getFolderList(){
@@ -66,5 +67,10 @@ public class FolderImpl implements Folder {
          //  System.out.println("LastAccessedTime : "+ eachEmail.getLastAccessedTime());
          //}
      }
+
+    private String extractName(String path) {
+        //String[] segments = path.split("\\");
+        return path;
+    }
      
 }
