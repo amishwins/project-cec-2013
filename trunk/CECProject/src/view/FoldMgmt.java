@@ -28,6 +28,7 @@ import javax.swing.event.TreeSelectionListener;
                                     TreePath fullpath = select.getPath();
                                     System.out.println("you selected");
                                     selectedFolder="";
+                                    
                                     for (int i=0; i<fullpath.getPathCount()-1; i++)
                                     {						
                                                     selectedFolder+=fullpath.getPathComponent(i).toString()+"\\";
@@ -132,13 +133,7 @@ import javax.swing.event.TreeSelectionListener;
                    else           		    	             
                       direct.mkdir();		    	  
                    
-            }
-		
-		
-		
-			
-	
-			
+            }					
 	public static void main(String[] args) 
 	{
 		//JFrame theTree = new JFrame();
