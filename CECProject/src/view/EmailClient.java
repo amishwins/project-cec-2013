@@ -11,6 +11,8 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.List;
+import java.util.Vector;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -23,9 +25,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.ScrollPaneLayout;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
+import model.Hierarchy;
+import persistence.FolderDaoFactory;
+import persistence.FolderDaoImpl;
+import service.TreeModelBuilder;
 
 
 public class EmailClient extends JFrame{
@@ -68,9 +76,23 @@ public class EmailClient extends JFrame{
 
         //Swing Components - Left Panel         
         //Jtree >
-        TreeModel model = new FileTreeModel(new File("emails"));
-        folders = new JTree(model);
         
+        TreeModelBuilder tmb = new TreeModelBuilder(new DefaultMutableTreeNode());
+        List<File> listOfFiles = FolderDaoImpl.getSubFoldersRecursively(new File("emails"));
+        TreeModel model = tmb.buildTreeNodeFromFileList(listOfFiles);
+  
+        folders = new JTree(model);
+        folders.setRootVisible(false);
+        
+        //
+        DefaultMutableTreeNode currentNode = ((DefaultMutableTreeNode)model.getRoot()).getNextNode();
+        do {
+            if (currentNode.getLevel()==1) 
+                folders.expandPath(new TreePath(currentNode.getPath()));
+            
+            currentNode = currentNode.getNextNode();
+        }
+        while (currentNode != null);
         
         folders.setPreferredSize(new java.awt.Dimension(200, 400));
         DefaultTreeCellRenderer render = (DefaultTreeCellRenderer)folders.getCellRenderer();
