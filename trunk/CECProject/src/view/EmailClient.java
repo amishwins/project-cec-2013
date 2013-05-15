@@ -25,6 +25,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.ScrollPaneLayout;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
@@ -36,9 +38,10 @@ import persistence.FolderDaoImpl;
 import service.TreeModelBuilder;
 
 
-public class EmailClient extends JFrame{
+public class EmailClient extends JFrame implements TreeSelectionListener {
     JTree folders;    
     Controller controller = new Controller();
+    JList emailList;
     
     public EmailClient(String title){
         super(title);
@@ -83,6 +86,7 @@ public class EmailClient extends JFrame{
   
         folders = new JTree(model);
         folders.setRootVisible(false);
+        folders.addTreeSelectionListener(this);
         
         //
         DefaultMutableTreeNode currentNode = ((DefaultMutableTreeNode)model.getRoot()).getNextNode();
@@ -100,11 +104,11 @@ public class EmailClient extends JFrame{
         render.setOpenIcon(new ImageIcon("images/folder.gif"));
         render.setClosedIcon(new ImageIcon("images/folder.gif"));
 
-        folders.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
-            public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
-                jTree1ValueChanged(evt);
-            }
-        });
+//        folders.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
+//            public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
+//                folderSelected(evt);
+//            }
+//        });
 
         //Adding components to the Left Panel
         JScrollPane leftPanel = new JScrollPane(folders, 
@@ -117,9 +121,9 @@ public class EmailClient extends JFrame{
 
         //Right-TOP
         String[] emailListValues = { "Item 1", "Item 2", "Item 3", "Item 4",  "Item 5", "Item 6", "Item 7", "Item 8","Item 9", };
-        JList EmailList = new JList(emailListValues);
+        emailList = new JList(emailListValues);
 
-        JScrollPane rightPanelChildTop = new JScrollPane(EmailList,
+        JScrollPane rightPanelChildTop = new JScrollPane(emailList,
                                              JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                                              JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
@@ -145,7 +149,7 @@ public class EmailClient extends JFrame{
     }       
     
     
-    private void jTree1ValueChanged(javax.swing.event.TreeSelectionEvent evt) {                                    
+    private void folderSelected(javax.swing.event.TreeSelectionEvent evt) {                                    
        
         //System.out.println(FolderList.getLastSelectedPathComponent());
           //System.out.println(FolderList.getSelectionPaths().toString());
@@ -173,6 +177,20 @@ public class EmailClient extends JFrame{
         newMessageItem.addActionListener(new MenuFileNewMessage());   
         newMessageItemNewUI.addActionListener(new MenuFileNewMessageNewUI());
         exitItem.addActionListener(new MenuFileExit());
+    }
+
+    @Override
+    public void valueChanged(TreeSelectionEvent tse) {
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode)                            
+                folders.getLastSelectedPathComponent(); 
+        TreePath selectedFolderPath = folders.getSelectionPath();
+//        Folder selectedFolder = new Folder(pathToFolder);
+        
+        if (node == null) return;           
+        Object nodeInfo = node.getUserObject(); 
+        System.out.println(nodeInfo.toString());
+        System.out.println(folders.getSelectionPath().toString());
+        // emailList.setModel();
     }
 
     

@@ -10,6 +10,7 @@ import java.util.*;
  * @author Pankaj Kapania
  */
 public interface FolderDao {
+    
     public Iterable<Map<String,String>> loadEmails(String dir);
     //public Iterable<List<String>> loadFolders();
 }
