@@ -22,6 +22,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.ScrollPaneLayout;
@@ -32,16 +33,27 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
+import model.FolderImpl;
 import model.Hierarchy;
 import persistence.FolderDaoFactory;
 import persistence.FolderDaoImpl;
 import service.TreeModelBuilder;
 
 
+class EmailViewEntity {
+    String sentFrom;
+    String subject;
+    String sentDate;
+}
+
 public class EmailClient extends JFrame implements TreeSelectionListener {
     JTree folders;    
     Controller controller = new Controller();
     JList emailList;
+    JTable emailTable;
+    
+    String[] emailTableViewColumns = {"Sent From", "Subject", "Date Sent"};
+
     
     public EmailClient(String title){
         super(title);
@@ -81,6 +93,8 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         //Jtree >
         
         TreeModelBuilder tmb = new TreeModelBuilder(new DefaultMutableTreeNode());
+        
+        // Move the code to get the subfolder list of paths into the Hierarchy Model object
         List<File> listOfFiles = FolderDaoImpl.getSubFoldersRecursively(new File("emails"));
         TreeModel model = tmb.buildTreeNodeFromFileList(listOfFiles);
   
@@ -123,7 +137,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         String[] emailListValues = { "Item 1", "Item 2", "Item 3", "Item 4",  "Item 5", "Item 6", "Item 7", "Item 8","Item 9", };
         emailList = new JList(emailListValues);
 
-        JScrollPane rightPanelChildTop = new JScrollPane(emailList,
+        JScrollPane rightPanelChildTop = new JScrollPane(emailTable,
                                              JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                                              JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
@@ -183,17 +197,38 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     public void valueChanged(TreeSelectionEvent tse) {
         DefaultMutableTreeNode node = (DefaultMutableTreeNode)                            
                 folders.getLastSelectedPathComponent(); 
-        TreePath selectedFolderPath = folders.getSelectionPath();
-//        Folder selectedFolder = new Folder(pathToFolder);
-        
-        if (node == null) return;           
-        Object nodeInfo = node.getUserObject(); 
-        System.out.println(nodeInfo.toString());
-        System.out.println(folders.getSelectionPath().toString());
-        // emailList.setModel();
-    }
+        Object[] pathComponents = folders.getSelectionPath().getPath();
 
-    
+        StringBuilder sb = new StringBuilder();
+        for(Object o: pathComponents) {
+            sb.append(o);
+            sb.append("\\");
+        }
+        sb.deleteCharAt(0);
+        sb.deleteCharAt(sb.length() - 1);
+
+        // TODO do we need this check?
+        if (node == null) return;     
+        
+        System.out.println(sb.toString());
+        
+        // 1 tell controller to take care of the emailList view
+        //controller.notifyEmailListView(sb.toString(), emailList);
+        
+        // 2 ask the controller for the data, and set it on the emailList view
+       // emailList.setModel(controller.getEmailListModel(sb.toString()));
+       
+        FolderImpl folderSelected = new FolderImpl(sb.toString());
+        Object[][] emailTableData = {
+            {"A","B","C"},
+            {"D","E","F"},
+            {"H","I","J"}        
+        };
+        
+        // not yet painting on the screen
+        emailTable =  new JTable(emailTableData, emailTableViewColumns);
+        
+    }
 }
     class MenuFileExit implements ActionListener{
         public void actionPerformed (ActionEvent e){

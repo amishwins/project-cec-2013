@@ -8,16 +8,18 @@ import persistence.NewMessageDao;
 import persistence.NewMessageDaoFactory;
 import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.UUID;
 
 public class EmailImpl implements Email {
     
-    //Class atributes - Private Variables
     private String to;
     private String subject;
     private String cc;
     private String body;
     private String lastAccessedTime;
+    private String sentTime;    
     private String folder;
+    private UUID id;
     private NewMessageDao newMessageDao;
     
     
