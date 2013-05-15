@@ -28,7 +28,7 @@ public class FolderDaoImpl implements FolderDao {
        
     }
 
-    private static List<File> getSubFoldersRecursively(File file) {
+    public static List<File> getSubFoldersRecursively(File file) {
         List<File> subFolders = Arrays.asList(file.listFiles(new FileFilter() {
             public boolean accept(File file) {
                 return file.isDirectory();
@@ -45,7 +45,7 @@ public class FolderDaoImpl implements FolderDao {
         return subFolders;
 
     }
-
+    
     public Iterable<Map<String, String>> loadEmails(String folder) {
         Collection<Map<String, String>> listOfEmails = new ArrayList<>();
         Map<String, String> email;
