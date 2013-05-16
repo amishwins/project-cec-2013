@@ -1,58 +1,41 @@
-package service;
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package cec.service;
 
+import java.io.File;
 import java.util.Enumeration;
-
-import javax.swing.JFrame;
-import javax.swing.JTree;
+import java.util.List;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-public class PathTest {
-    public PathTest() {
-        // Create the root node, I'm assuming that the delimited strings will have
-        // different string value at index 0
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("ROOT");
+/**
+ *
+ * @author a_gala
+ */
+public class TreeModelBuilder {
+    private DefaultTreeModel model;
 
-        // Create the tree model and add the root node to it
-        DefaultTreeModel model = new DefaultTreeModel(root);
-
-        // Create the tree with the new model
-      
-
-        
-        
-        // Build the tree from the various string samples
-        buildTreeFromString(model, "inbox");
-        buildTreeFromString(model, "draft/child-draft");
-        buildTreeFromString(model, "inbox/Folder 1");
-        buildTreeFromString(model, "inbox/Folder 2/Child 3");
-        buildTreeFromString(model, "draft");
-        
-
-        
-        JTree tree = new JTree(model);
-        
-        // UI
-        JFrame f = new JFrame();
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.add(tree);
-        f.setSize(300, 300);
-        f.setLocation(200, 200);
-        f.setVisible(true);
+    public TreeModelBuilder(DefaultMutableTreeNode root) {
+        model = new DefaultTreeModel(root);
     }
-
-    /**
-     * Builds a tree from a given forward slash delimited string.
-     * 
-     * @param model The tree model
-     * @param str The string to build the tree from
-     */
-    private void buildTreeFromString(final DefaultTreeModel model, final String str) {
+    
+    public DefaultTreeModel buildTreeNodeFromFileList(List<File> listOfFiles) {
+        
+        for(File file: listOfFiles) {
+            buildTreeFromString(file.getPath());
+        }
+        
+        return model;
+    }
+    
+    private void buildTreeFromString(final String str) {
         // Fetch the root node
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
 
         // Split the string around the delimiter
-        String [] strings = str.split("/");
+        String [] strings = str.split("\\\\");
 
         // Create a node object to use for traversing down the tree as it 
         // is being created
@@ -99,9 +82,5 @@ public class PathTest {
         }
 
         return index;
-    }
-
-    public static void main(String[] args) {
-        new PathTest();
     }
 }

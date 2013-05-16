@@ -2,7 +2,7 @@
  * @author Deyvid William / Created 07-May-13
  */
 
-package view;
+package cec.view;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;

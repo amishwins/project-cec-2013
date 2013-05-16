@@ -2,19 +2,14 @@
  * NewMessage screen
   */
 
-package view;
+package cec.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.JToolBar;
 import javax.swing.*;
-import service.NewMessageService;
+
+import cec.service.NewMessageService;
 
 
 public class NewMessage2 extends JFrame{

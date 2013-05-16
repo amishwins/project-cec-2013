@@ -1,4 +1,4 @@
-package view;
+package cec.view;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;

@@ -1,4 +1,4 @@
-package model;
+package cec.model;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -1,5 +1,5 @@
 
-package persistence;
+package cec.persistence;
 
 import java.io.File;
 import javax.swing.tree.DefaultMutableTreeNode;
