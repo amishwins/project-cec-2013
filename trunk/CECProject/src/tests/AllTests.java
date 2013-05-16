@@ -7,7 +7,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({ 
 	EmailBuilderTests.class, 
-	EmailTests.class })
+	EmailTests.class,
+	EmailSortingTests.class })
 
 public class AllTests {
 }
