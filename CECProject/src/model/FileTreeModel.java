@@ -106,13 +106,12 @@ public class FileTreeModel implements TreeModel {
   // JTree displays these by calling the File.toString() method.
   public Object getChild(Object parent, int index) {
    
- String[] children = ((File)parent).list();
-    	FileFilter directoryFilter = new FileFilter() {
-            public boolean accept(File file) {
-                return file.isDirectory();
-            }
-        };
-     
+ 	FileFilter directoryFilter = new FileFilter() {
+        public boolean accept(File file) {
+            return file.isDirectory();
+        }
+    };
+ 
     File[] fchildren = ((File)parent).listFiles(directoryFilter);
     if ((fchildren == null) || (index >= fchildren.length)) return null;
     return new File((File) parent, fchildren[index].getName());

@@ -3,7 +3,6 @@
  */
 package view;
 
-import model.FileTreeModel;
 import service.Controller;
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -12,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
-import java.util.Vector;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -30,12 +28,9 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import model.FolderImpl;
-import model.Hierarchy;
-import persistence.FolderDaoFactory;
 import persistence.FolderDaoImpl;
 import service.TreeModelBuilder;
 
@@ -47,7 +42,11 @@ class EmailViewEntity {
 }
 
 public class EmailClient extends JFrame implements TreeSelectionListener {
-    JTree folders;    
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 7366789547512037235L;
+	JTree folders;    
     Controller controller = new Controller();
     JList emailList;
     JTable emailTable;
@@ -102,7 +101,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         folders.setRootVisible(false);
         folders.addTreeSelectionListener(this);
         
-        //
+        // Show one level of folders displayed by default
         DefaultMutableTreeNode currentNode = ((DefaultMutableTreeNode)model.getRoot()).getNextNode();
         do {
             if (currentNode.getLevel()==1) 
