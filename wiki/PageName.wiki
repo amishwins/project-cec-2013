@@ -19,5 +19,4 @@ Some awesome links:
 * 
 http://docs.oracle.com/javase/tutorial/uiswing/components/table.html#data
 
-*Working with Table Model
-http://stackoverflow.com/questions/3090013/load-an-array-to-a-java-table
+*Working with Abstract Table Model http://stackoverflow.com/questions/3090013/load-an-array-to-a-java-table
