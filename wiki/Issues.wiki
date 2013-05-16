@@ -1,0 +1,8 @@
+#summary List of things we still need to do!
+
+= Topics =
+
+== UI ==
+
+* Look and Feel for JTree of Folders
+* Headings for JTable are different in Inbox (From, Subject, Time), and Drafts (To, Subject, Time)
