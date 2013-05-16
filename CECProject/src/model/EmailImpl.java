@@ -112,7 +112,7 @@ public class EmailImpl implements Email, Comparable<Email>{
 			e.printStackTrace();
 		}
 		
-		// this is the latest code
+		// this comment has been updated
 
 		return currentEmailDate.compareTo(anotherEmailDate);
 	}
