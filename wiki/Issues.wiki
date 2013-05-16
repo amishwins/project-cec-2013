@@ -1,6 +1,6 @@
 #summary List of things we still need to do!
 
-= Topics =
+= Document Issues we Find (todos, etc.) =
 
 == UI ==
 
