@@ -41,8 +41,8 @@ public class FolderImpl implements Folder {
                                      .withCC(emailData.get("CC"))
                                      .withSubject(emailData.get("Subject"))
                                      .withBody(emailData.get("Body"))
-                                     .withLastAccessedTime(emailData.get("LastAccessedTime"))
-                                     .buildWithAccessedTime();
+                                     .withLastModifiedTime(emailData.get("LastAccessedTime"))
+                                     .build();
           emailsInFolder.add(email);
           
         }

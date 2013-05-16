@@ -9,7 +9,7 @@ package persistence;
  * @author Pankaj Kapania
  */
 public class NewMessageDaoFactory {
-    public static NewMessageDao getNewMessageDao() {
+    public static EmailDao getNewMessageDao() {
         return new NewMessageXMLDao();
     }
 }
