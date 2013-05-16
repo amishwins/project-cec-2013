@@ -15,9 +15,15 @@ import cec.model.Email;
 import cec.model.EmailBuilder;
 
 public class EmailBuilderTests {
+	
+	EmailBuilder cut;
+	UUID idEmail1;
 
 	@Before
 	public void setUp() throws Exception {
+		cut = new EmailBuilder();
+		idEmail1 = UUID.randomUUID();
+		
 	}
 
 	@After
@@ -26,9 +32,8 @@ public class EmailBuilderTests {
 
 	@Test
     public void showEmailSortingWorks() throws Exception {
-		EmailBuilder emailBuilder = new EmailBuilder();
-		UUID idEmail1 = UUID.randomUUID(); 
-		Email firstEmail = emailBuilder.withId(idEmail1)
+ 
+		Email firstEmail = cut.withId(idEmail1)
 				                       .withTo("PankajKapania@yahoo.com")
 				                       .withCC("PankajKapania@yahoo.com")
 		                               .withSubject("TestSubject1")
@@ -38,7 +43,7 @@ public class EmailBuilderTests {
 		                               .build();
 		
 		UUID idEmail2 = UUID.randomUUID();
-		Email secondEmail = emailBuilder.withId(idEmail2)
+		Email secondEmail = cut.withId(idEmail2)
                 .withTo("PankajKapania@yahoo.com")
                 .withCC("PankajKapania@yahoo.com")
                 .withSubject("TestSubject2")
@@ -48,7 +53,7 @@ public class EmailBuilderTests {
                 .build();
 		
 		UUID idEmail3 = UUID.randomUUID();
-		Email thirdEmail = emailBuilder.withId(idEmail3)
+		Email thirdEmail = cut.withId(idEmail3)
                 .withTo("PankajKapania@yahoo.com")
                 .withCC("PankajKapania@yahoo.com")
                 .withSubject("TestSubject3")
