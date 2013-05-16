@@ -48,7 +48,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	 */
 	private static final long serialVersionUID = 7366789547512037235L;
 	JTree folders;    
-    Controller controller = new Controller();
+    Controller controller = new Controller(); 
     JList emailList;
     JTable emailTable;
     
@@ -218,7 +218,6 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         // 2 ask the controller for the data, and set it on the emailList view
        // emailList.setModel(controller.getEmailListModel(sb.toString()));
        
-        FolderImpl folderSelected = new FolderImpl(sb.toString());
         Object[][] emailTableData = {
             {"A","B","C"},
             {"D","E","F"},

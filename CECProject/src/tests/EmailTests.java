@@ -11,27 +11,53 @@ import org.junit.Test;
 import cec.model.Email;
 import cec.model.EmailImpl;
 import cec.model.Folder;
+import cec.model.FolderFactory;
+import cec.model.FolderImpl;
 import cec.persistence.EmailDao;
 
 public class EmailTests {
 	
 	EmailImplCUT myEmail;
 	EmailDaoStub stubbedEmailPersistence;
+	Folder folderStub;
+	UUID id;
 
 	@Before
 	public void setUp() throws Exception {
+		id = UUID.randomUUID();
+		FolderFactory folderFactor = new FolderFactory();
+		folderStub = folderFactor.getFolder("test/name");
 		stubbedEmailPersistence = new EmailDaoStub();
-		myEmail = new EmailImplCUT(UUID.randomUUID(), "a@b.com", "c@d.com", "", "", "", "", "", null);
-		
+		myEmail = new EmailImplCUT(id, "from@email.com", "to@email.com", 
+				"cc@email.com", "Subject", "Body", "20130516", "20130515", folderStub);
 	}
 
 	@After
 	public void tearDown() throws Exception {
 	}
+	
+	@Test 
+	public void newEmailAbleToGetFields() {
+		assertTrue(myEmail.getId().equals(id));
+		assertTrue(myEmail.getTo().equals("to@email.com"));
+		assertTrue(myEmail.getFrom().equals("from@email.com"));
+		assertTrue(myEmail.getCC().equals("cc@email.com"));
+		assertTrue(myEmail.getSubject().equals("Subject"));
+		assertTrue(myEmail.getBody().equals("Body"));
+		assertTrue(myEmail.getLastModifiedTime().equals("20130516"));
+		assertTrue(myEmail.getSentTime().equals("20130515"));
+		assertTrue(myEmail.getParentFolder().equals(folderStub));
+	}
 
 	@Test
-	public void saveWasCalled() {
+	public void saveWasCalledForSending() {
 		myEmail.send();
+		assertEquals(true, ((EmailDaoStub)myEmail.getEmailDao()).saveWasCalled);
+	}
+	
+	@Test
+	public void saveWasCalledForSavingToDraft() {
+		myEmail.saveToDraftFolder();
 		assertEquals(true, ((EmailDaoStub)myEmail.getEmailDao()).saveWasCalled);
 	}
 

@@ -56,7 +56,7 @@ public class EmailImpl implements Email, Comparable<Email>{
 	}
 
 	public String getCC() {
-		return to;
+		return cc;
 	}
 
 	public String getSubject() {
@@ -120,8 +120,6 @@ public class EmailImpl implements Email, Comparable<Email>{
 			
 			e.printStackTrace();
 		}
-		
-		// this comment has been updated
 
 		return currentEmailDate.compareTo(anotherEmailDate);
 	}
