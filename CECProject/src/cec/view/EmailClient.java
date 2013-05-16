@@ -281,10 +281,11 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         JMenuItem delFolder;
         JMenuItem newFolder;        
         public FoldersPopup(){
+            newFolder = new JMenuItem("New Folder");
+            add(newFolder);        	
         	delFolder = new JMenuItem("Delete Folder");
             add(delFolder);
-            newFolder = new JMenuItem("New Folder");
-            add(newFolder);
+
             
             delFolder.addActionListener(new PopupDeleteFolder());   
         }
