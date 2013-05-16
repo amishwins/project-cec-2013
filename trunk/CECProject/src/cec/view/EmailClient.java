@@ -8,7 +8,10 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
+import java.text.ParseException;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -17,7 +20,9 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -50,10 +55,13 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	JTree folders;    
     Controller controller = new Controller(); 
     JList emailList;
-    JTable emailTable;
-    
+       
     String[] emailTableViewColumns = {"Sent From", "Subject", "Date Sent"};
-
+    Object[][] emailTableData = {
+            {"","",""}      
+        };
+    
+    JTable emailTable = new JTable(emailTableData, emailTableViewColumns);
     
     public EmailClient(String title){
         super(title);
@@ -68,7 +76,6 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         
         setupMenuBar();
         
-        // this should go in the design and be removed from here:
         //Panels Hierarchy
             //Panel (TOP)
             //Panel (BOTTOM)
@@ -76,6 +83,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
                 //Panel (RIGHT) = RightPanel
                         //SPanel (RIGHT-TOP) = RightPanelChildTop
                         //SPanel (RIGHT-BOTTOM) = RightPanelChildBottom
+        
         //Swing Components - Top Panel 
         JPanel topPanel = new JPanel();            
         ImageIcon emailIcon  = new ImageIcon("images/email_at.png");
@@ -101,6 +109,8 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         folders = new JTree(model);
         folders.setRootVisible(false);
         folders.addTreeSelectionListener(this);
+        folders.addMouseListener(new FoldersPopupListener(folders));
+        
         
         // Show one level of folders displayed by default
         DefaultMutableTreeNode currentNode = ((DefaultMutableTreeNode)model.getRoot()).getNextNode();
@@ -124,6 +134,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 //            }
 //        });
 
+        
         //Adding components to the Left Panel
         JScrollPane leftPanel = new JScrollPane(folders, 
                                                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -136,10 +147,13 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         //Right-TOP
         String[] emailListValues = { "Item 1", "Item 2", "Item 3", "Item 4",  "Item 5", "Item 6", "Item 7", "Item 8","Item 9", };
         emailList = new JList(emailListValues);
-
+       
+       
         JScrollPane rightPanelChildTop = new JScrollPane(emailTable,
                                              JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                                              JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        emailTable.setFillsViewportHeight(true);
+
 
         rightPanelChildTop.setMaximumSize(new Dimension(1200, 150));
         rightPanelChildTop.setMinimumSize(new Dimension(520, 150));
@@ -218,14 +232,14 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         // 2 ask the controller for the data, and set it on the emailList view
        // emailList.setModel(controller.getEmailListModel(sb.toString()));
        
-        Object[][] emailTableData = {
+       /* Object[][] emailTableData = {
             {"A","B","C"},
             {"D","E","F"},
             {"H","I","J"}        
-        };
+        };*/
         
         // not yet painting on the screen
-        emailTable =  new JTable(emailTableData, emailTableViewColumns);
+       // emailTable =  new JTable(emailTableData, emailTableViewColumns);
         
     }
 }
@@ -246,3 +260,70 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
             new NewMessageUI().setVisible(true);
         }
     }
+    
+    class PopupDeleteFolder implements ActionListener{
+        public void actionPerformed (ActionEvent e){
+        	
+        	try{
+        		int i;
+        		i = 1/0;        		
+        		
+        	} catch (ArithmeticException  x) {
+        		JOptionPane.showMessageDialog(null, "Operation not allowed");	
+            }   
+        	   
+        }
+    }        
+    
+    
+    //Folders PopUp Menu (Right-Click)
+    class FoldersPopup extends JPopupMenu {
+        JMenuItem delItem;
+        public FoldersPopup(){
+        	delItem = new JMenuItem("Delete Folder");
+            add(delItem);
+            delItem.addActionListener(new PopupDeleteFolder());   
+        }
+    }    
+    //Folders PopUp Menu Listener
+    class FoldersPopupListener extends MouseAdapter {
+    	
+    	JTree tree;
+    	int   selNode;
+    	
+    	public FoldersPopupListener(JTree foldersTree){
+    		this.tree = foldersTree;    		
+    	}    	
+    	
+        public void mousePressed(MouseEvent e){
+        	
+        	/** Checking if we are clicking on a valid JTree node - If so, we trigger the popup menu */
+        	selNode = tree.getRowForLocation(e.getX(), e.getY());
+        	TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
+        	
+        	System.out.println(selNode);
+        	System.out.println(selPath);        	
+        	
+        	if(selNode != -1) {	  
+        		tree.setSelectionPath(selPath);
+	            if (e.isPopupTrigger())
+	                doPop(e);
+        	}
+        }
+
+        public void mouseReleased(MouseEvent e){
+        	if(selNode != -1) {	  
+	            if (e.isPopupTrigger())
+	                doPop(e);
+        	}
+        }
+
+        private void doPop(MouseEvent e){
+        	FoldersPopup menu = new FoldersPopup();
+            menu.show(e.getComponent(), e.getX()+7, e.getY());
+        }
+    }
+    
+
+    
+        
