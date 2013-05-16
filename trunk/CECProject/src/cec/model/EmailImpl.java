@@ -2,15 +2,16 @@
  * @author Pankaj Kapania
  */
 
-package model;
+package cec.model;
 
-import persistence.EmailDao;
-import persistence.NewMessageDaoFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
+
+import cec.persistence.EmailDao;
+import cec.persistence.EmailDaoFactory;
 
 public class EmailImpl implements Email, Comparable<Email>{
     private final UUID id;
@@ -23,7 +24,7 @@ public class EmailImpl implements Email, Comparable<Email>{
 	private String sentTime;
 	private Folder parentFolder;
 	
-	private EmailDao newMessageDao;
+	protected EmailDao emailDao;
 
 	public EmailImpl(UUID id, String from, String to, String cc, String subject, String body, String lastModifiedTime, String sentTime, Folder parentFolder) {
 		this.id = id;
@@ -35,8 +36,13 @@ public class EmailImpl implements Email, Comparable<Email>{
 		this.lastModifiedTime=lastModifiedTime;
 		this.sentTime = sentTime;
 		this.parentFolder = parentFolder;
+		setEmailDao(EmailDaoFactory.getNewMessageDao());
 	}
-
+	
+	protected void setEmailDao(EmailDao emailDao) {
+		this.emailDao = emailDao;
+	}
+	
 	public UUID getId() {
 		return id;
 	}
@@ -75,14 +81,12 @@ public class EmailImpl implements Email, Comparable<Email>{
 	
 
     public void send() {
-		newMessageDao = NewMessageDaoFactory.getNewMessageDao();
 		// Assumption that email has been sent successfully..
-		newMessageDao.save(to, cc, subject, body, sentTime, "Sent");
+		emailDao.save(to, cc, subject, body, sentTime, "Sent");
 	}
 
 	public void saveToDraftFolder() {
-		newMessageDao = NewMessageDaoFactory.getNewMessageDao();
-		newMessageDao.save(to, cc, subject, body, lastModifiedTime, "Draft");
+		emailDao.save(to, cc, subject, body, lastModifiedTime, "Draft");
 	}
 	
 	@Override

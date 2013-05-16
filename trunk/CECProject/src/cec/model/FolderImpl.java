@@ -2,11 +2,12 @@
  * @author Deyvid William / Created 07-May-13
  */
 
-package model;
+package cec.model;
 
-import persistence.FolderDao;
-import persistence.FolderDaoFactory;
 import java.util.*;
+
+import cec.persistence.FolderDao;
+import cec.persistence.FolderDaoFactory;
 
 
 public class FolderImpl implements Folder {

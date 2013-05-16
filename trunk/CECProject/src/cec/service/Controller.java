@@ -2,12 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package service;
+package cec.service;
 
-import model.FolderImpl;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
-import model.Hierarchy;
+
+import cec.model.FolderImpl;
+import cec.model.Hierarchy;
 
 /**
  *

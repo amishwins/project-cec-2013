@@ -1,4 +1,4 @@
-package model;
+package cec.model;
 
 import java.lang.reflect.Array;
 import java.util.List;

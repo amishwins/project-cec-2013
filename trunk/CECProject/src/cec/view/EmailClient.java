@@ -1,9 +1,8 @@
 /**
  * @author Deyvid William / Created 07-May-13
  */
-package view;
+package cec.view;
 
-import service.Controller;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -30,9 +29,11 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
-import model.FolderImpl;
-import persistence.FolderDaoImpl;
-import service.TreeModelBuilder;
+
+import cec.model.FolderImpl;
+import cec.persistence.FolderDaoImpl;
+import cec.service.Controller;
+import cec.service.TreeModelBuilder;
 
 
 class EmailViewEntity {
