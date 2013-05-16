@@ -86,8 +86,7 @@ class EmailDaoStub implements EmailDao {
 	public boolean saveWasCalled = false;
 
 	@Override
-	public void save(String to, String cc, String subject, String body,
-			String lastAccessedTime, String location) {
+	public void save(UUID id, String from,  String to, String cc, String subject, String body,String lastModifiedTime,String sentTime, String location) {
 		saveWasCalled = true;
 		
 	}

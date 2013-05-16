@@ -82,11 +82,11 @@ public class EmailImpl implements Email{
 
     public void send() {
 		// Assumption that email has been sent successfully..
-		emailDao.save(to, cc, subject, body, sentTime, "Sent");
+		emailDao.save(id, from, to, cc, subject, body, lastModifiedTime ,sentTime, "emails/Outbox");
 	}
 
 	public void saveToDraftFolder() {
-		emailDao.save(to, cc, subject, body, lastModifiedTime, "Draft");
+		emailDao.save(id, from, to, cc, subject, body, lastModifiedTime ,sentTime, "emails/Outbox");
 	}
 	
 	@Override

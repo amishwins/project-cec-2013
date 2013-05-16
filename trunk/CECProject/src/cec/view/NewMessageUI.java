@@ -4,7 +4,7 @@
  */
 package cec.view;
 
-import cec.service.NewMessageService;
+import cec.service.EmailService;
 
 /**
  *
@@ -12,7 +12,7 @@ import cec.service.NewMessageService;
  */
 public class NewMessageUI extends javax.swing.JFrame {
 
-    NewMessageService newEmailService = new NewMessageService();
+    EmailService newEmailService = new EmailService();
     
     /**
      * Creates new form NewMessegeUI

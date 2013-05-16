@@ -10,6 +10,6 @@ package cec.persistence;
  */
 public class EmailDaoFactory {
     public static EmailDao getNewMessageDao() {
-        return new NewMessageXMLDao();
+        return new EmailXMLDao();
     }
 }

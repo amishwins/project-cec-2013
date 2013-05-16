@@ -9,7 +9,7 @@ import cec.model.EmailBuilder;
  *
  * @author Pankaj Kapania
  */
-public class NewMessageService {
+public class EmailService {
     
    public void  NewMessageService(){
         
