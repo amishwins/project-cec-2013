@@ -22,7 +22,7 @@ import org.w3c.dom.Element;
  *
  * @author Pankaj Kapania
  */
-public class NewMessageXMLDao implements NewMessageDao {
+public class NewMessageXMLDao implements EmailDao {
 
     public Document buildXmlFile(String to, String cc, String subject, String body, String lastAccessedTime) {
 

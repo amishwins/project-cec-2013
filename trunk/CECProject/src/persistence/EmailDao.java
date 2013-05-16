@@ -8,6 +8,6 @@ package persistence;
  *
  * @author Pankaj Kapania
  */
-public interface NewMessageDao {
+public interface EmailDao {
     public void save(String to, String cc, String subject, String body,String lastAccessedTime, String location);
 }

@@ -4,6 +4,8 @@
  */
 package model;
 
+import java.util.UUID;
+
 /**
  *
  * @author Pankaj Kapania and the team
@@ -11,10 +13,13 @@ package model;
 public interface Email {
     public void send();
     public void saveToDraftFolder();
+    
+    public UUID getId();
     public String getTo();
     public String getCC();
     public String getSubject();
     public String getBody();
-    public String getLastAccessedTime();
-    
+    public String getSentTime();
+    public String getLastModifiedTime();
+    public Folder getParentFolder();
 }

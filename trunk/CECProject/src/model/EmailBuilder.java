@@ -1,49 +1,93 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
 
 /**
  *
  * @author Pankaj Kapania
  */
 public class EmailBuilder {
+
+    UUID id;
+    String from = "";
     String to = "";
     String cc = "";
     String subject = "";
     String body = "";
-    String lastAccessedTime="";
+    String lastModifiedTime = "";
+    String sentTime = "";
+    Folder parentFolder;
 
     // method chaining
-    public EmailBuilder withTo(String to){
+    public EmailBuilder withId(UUID id) {
+        this.id = id;
+        return this;
+    }
+
+    public EmailBuilder withFrom(String from) {
+        this.from = from;
+        return this;
+    }
+
+    public EmailBuilder withTo(String to) {
         this.to = to;
         return this;
     }
 
-    public EmailBuilder withCC(String cc){
+    public EmailBuilder withCC(String cc) {
         this.cc = cc;
         return this;
     }
 
-    public EmailBuilder withSubject(String subject){
+    public EmailBuilder withSubject(String subject) {
         this.subject = subject;
         return this;
     }
 
-    public EmailBuilder withBody(String body){
+    public EmailBuilder withBody(String body) {
         this.body = body;
         return this;
     }
-    protected EmailBuilder withLastAccessedTime(String lastAccessedTime){
-        this.lastAccessedTime = lastAccessedTime;
+
+    public EmailBuilder withLastModifiedTime(String lastModifiedTime) {
+        this.lastModifiedTime = lastModifiedTime;
         return this;
     }
-    public Email build(){
-        return new EmailImpl(to, cc, subject, body);
+
+    public EmailBuilder withSentTime(String sentTime) {
+        this.sentTime = sentTime;
+        return this;
     }
-    
-    protected Email buildWithAccessedTime(){
-        return new EmailImpl(to, cc, subject, body,lastAccessedTime);
+
+    public EmailBuilder withParentFolder(Folder parentFolder) {
+        this.parentFolder = parentFolder;
+        return this;
+    }
+
+    public EmailBuilder computeID() {
+        this.id = UUID.randomUUID();
+        return this;
+    }
+
+    public EmailBuilder computelastModifiedTime() {
+        this.lastModifiedTime = currentDateTime();
+        return this;
+    }
+
+    public EmailBuilder computeSentTime() {
+        this.sentTime = currentDateTime();
+        return this;
+    }
+
+    private String currentDateTime() {
+        SimpleDateFormat currentDateTime = new SimpleDateFormat(
+                "yyyy.MM.dd_'At'_HH.mm.ss.SSS");
+        return currentDateTime.format(new Date());
+    }
+
+    public Email build() {
+        return new EmailImpl(id, from, to, cc, subject, body, lastModifiedTime, sentTime, parentFolder);
     }
 }

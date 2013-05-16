@@ -1,1 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><E-Mail><To>s</To><CC>s</CC><LastAccessedTime>Sun May 12 13:25:13 EDT 2013</LastAccessedTime><Subject>s</Subject><Body>s</Body></E-Mail>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<E-Mail>
+    <To>s</To>
+    <CC>s</CC>
+    <LastAccessedTime>Sun May 12 13:25:13 EDT 2013</LastAccessedTime>
+    <Subject>s</Subject>
+    <Body>s</Body>
+</E-Mail>
