@@ -15,16 +15,20 @@ public class FolderImpl implements Folder {
     private String path;
     private Collection<Email> emailsInFolder;
     
-    
     public FolderImpl(String path) {
         this.path = path;
         this.name = extractName(path);
     }
     
-   // public DefaultMutableTreeNode getFolderList(){
-        //FolderStructure a = new FolderStructure();
-        //return a.getStructure();
-   // }
+    @Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public String getPath() {
+		return path;
+	}
     
     public Iterable<Email> loadEmails(String folder){
         emailsInFolder = new LinkedList<Email>();
@@ -51,9 +55,7 @@ public class FolderImpl implements Folder {
         
         return emailsInFolder;
     }
-     
-   
-    
+      
     
     public static void main(String[] args) {
          
@@ -69,8 +71,9 @@ public class FolderImpl implements Folder {
      }
 
     private String extractName(String path) {
-        //String[] segments = path.split("\\");
         return path;
     }
+
+
      
 }

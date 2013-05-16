@@ -14,7 +14,7 @@ import java.util.UUID;
 
 public class EmailImpl implements Email, Comparable<Email>{
     private final UUID id;
-    private String from;
+	private String from;
 	private String to;
 	private String cc;
 	private String subject;
@@ -40,8 +40,13 @@ public class EmailImpl implements Email, Comparable<Email>{
 	public UUID getId() {
 		return id;
 	}
+
 	public String getTo() {
 		return to;
+	}
+	
+	public String getFrom() {
+		return from;
 	}
 
 	public String getCC() {
