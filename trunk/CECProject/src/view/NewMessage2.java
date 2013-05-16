@@ -45,13 +45,13 @@ public class NewMessage2 extends JFrame{
         JMenu fileMenuBarEntry = new JMenu("File");
         menuBar.add(fileMenuBarEntry);    
         
-        JMenuItem sendItem = new JMenuItem("Send");
+        JMenuItem sendItem = new JMenuItem("Send            Ctrl+S");
         fileMenuBarEntry.add(sendItem);   
         
-        JMenuItem draftItem = new JMenuItem("Save as Draft");
+        JMenuItem draftItem = new JMenuItem("Save as Draft  Ctrl+D");
         fileMenuBarEntry.add(draftItem);  
 
-        JMenuItem exitItem = new JMenuItem("Exit");
+        JMenuItem exitItem = new JMenuItem("Exit            ESC");
         fileMenuBarEntry.add(exitItem);  
                 
  
@@ -128,11 +128,56 @@ public class NewMessage2 extends JFrame{
         //Finishing Panels Disposal
         add(bar, BorderLayout.NORTH);    
         add(mid, BorderLayout.LINE_START);  
-        add(scroll, BorderLayout.SOUTH);   
-                
-        
-      }    
+        add(scroll, BorderLayout.SOUTH); 
+        bodyField.addKeyListener(KenterL);        
+      } 
       
+      
+      java.awt.event.KeyListener KenterL = new java.awt.event.KeyListener()
+        {			
+                public void keyPressed(java.awt.event.KeyEvent ke) 
+                {				
+                        if(ke.isControlDown())
+                        {	
+                                if(ke.getKeyCode()==ke.VK_S)
+                                { 
+                                        sendNewMessage();
+                                        JOptionPane.showMessageDialog(null, "MESSAGE SENT");
+                                }
+
+                                else if (ke.getKeyCode()==ke.VK_D)
+                                {						
+                                        draftNewMessage();
+                                        JOptionPane.showMessageDialog(null, "MESSAGE SENT TO DRAFT");
+                                }
+                                else if (ke.getKeyCode()==ke.VK_V)
+                                {			
+                                        JOptionPane.showMessageDialog(null, "V   ESCAPE");
+                                }
+
+                        }
+
+                        if(ke.getKeyCode()==ke.VK_ESCAPE)
+                        {
+                                discardNewMessage();
+                                JOptionPane.showMessageDialog(null, "DISCARD");
+                        }
+
+                }	
+
+
+                @Override
+                public void keyReleased(java.awt.event.KeyEvent ke) {
+                        // TODO Auto-generated method stub
+
+                }
+
+                @Override
+                public void keyTyped(java.awt.event.KeyEvent ke) {
+                        // TODO Auto-generated method stub
+
+                }				
+        };
       //Actions - Discard
       private void discardNewMessage() {                                
         this.dispose();        
