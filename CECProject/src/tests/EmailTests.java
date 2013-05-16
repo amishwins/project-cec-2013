@@ -4,11 +4,11 @@ import static org.junit.Assert.*;
 
 import java.util.UUID;
 
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import cec.model.Email;
 import cec.model.EmailImpl;
 import cec.model.Folder;
 import cec.model.FolderFactory;
@@ -91,5 +91,6 @@ class EmailDaoStub implements EmailDao {
 		saveWasCalled = true;
 		
 	}
+	
 	
 }

@@ -10,7 +10,7 @@ import java.util.UUID;
  *
  * @author Pankaj Kapania and the team
  */
-public interface Email {
+public interface Email extends Comparable<Email> {
     public void send();
     public void saveToDraftFolder();
     

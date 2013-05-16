@@ -13,7 +13,7 @@ import java.util.UUID;
 import cec.persistence.EmailDao;
 import cec.persistence.EmailDaoFactory;
 
-public class EmailImpl implements Email, Comparable<Email>{
+public class EmailImpl implements Email{
     private final UUID id;
 	private String from;
 	private String to;
@@ -120,8 +120,9 @@ public class EmailImpl implements Email, Comparable<Email>{
 			
 			e.printStackTrace();
 		}
+		
+		return anotherEmailDate.compareTo(currentEmailDate);
 
-		return currentEmailDate.compareTo(anotherEmailDate);
 	}
 	
 	
