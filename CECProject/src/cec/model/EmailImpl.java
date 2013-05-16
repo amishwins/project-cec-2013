@@ -117,14 +117,15 @@ public class EmailImpl implements Email{
 			 anotherEmailDate = dateFormat.parse((anotherEmail.getLastModifiedTime()));
 			   
 		} catch (ParseException e) {
-			
-			e.printStackTrace();
+			handleParseException(e);
 		}
 		
 		return anotherEmailDate.compareTo(currentEmailDate);
 
 	}
 	
-	
+	protected void handleParseException(Exception e) {
+		e.printStackTrace();
+	}
 
 }
