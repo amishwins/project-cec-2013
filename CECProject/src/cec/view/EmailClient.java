@@ -30,6 +30,7 @@ import javax.swing.JTree;
 import javax.swing.ScrollPaneLayout;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeModel;
@@ -57,9 +58,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     JList emailList;
        
     String[] emailTableViewColumns = {"Sent From", "Subject", "Date Sent"};
-    Object[][] emailTableData = {
-            {"","",""}      
-        };
+    Object[][] emailTableData = {{"","",""}};
     
     JTable emailTable = new JTable(emailTableData, emailTableViewColumns);
     
@@ -224,7 +223,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         // TODO do we need this check?
         if (node == null) return;     
         
-        System.out.println(sb.toString());
+        System.out.println("Deyvid > " + sb.toString());
         
         // 1 tell controller to take care of the emailList view
         //controller.notifyEmailListView(sb.toString(), emailList);
@@ -240,6 +239,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         
         // not yet painting on the screen
        // emailTable =  new JTable(emailTableData, emailTableViewColumns);
+        emailTable.setModel(new EmailListModel(emailTableViewColumns));
         
     }
 }
@@ -278,11 +278,15 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     
     //Folders PopUp Menu (Right-Click)
     class FoldersPopup extends JPopupMenu {
-        JMenuItem delItem;
+        JMenuItem delFolder;
+        JMenuItem newFolder;        
         public FoldersPopup(){
-        	delItem = new JMenuItem("Delete Folder");
-            add(delItem);
-            delItem.addActionListener(new PopupDeleteFolder());   
+        	delFolder = new JMenuItem("Delete Folder");
+            add(delFolder);
+            newFolder = new JMenuItem("New Folder");
+            add(newFolder);
+            
+            delFolder.addActionListener(new PopupDeleteFolder());   
         }
     }    
     //Folders PopUp Menu Listener
@@ -307,23 +311,38 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         	if(selNode != -1) {	  
         		tree.setSelectionPath(selPath);
 	            if (e.isPopupTrigger())
-	                doPop(e);
+	            	Popup(e);
         	}
         }
 
         public void mouseReleased(MouseEvent e){
         	if(selNode != -1) {	  
 	            if (e.isPopupTrigger())
-	                doPop(e);
+	            	Popup(e);
         	}
         }
 
-        private void doPop(MouseEvent e){
+        private void Popup(MouseEvent e){
         	FoldersPopup menu = new FoldersPopup();
             menu.show(e.getComponent(), e.getX()+7, e.getY());
         }
     }
     
+    //Tree Abstract Model
+    class EmailListModel extends AbstractTableModel {
+    	
+    	String[] header;
+    	
+    	public EmailListModel (String[] emailTableViewColumns) { 
+    		header = emailTableViewColumns;
+    	}
+    	
+    	public int getRowCount() {return 1;}
+        public int getColumnCount() { return 3; }
+        public Object getValueAt(int row, int column){ return 3; }
+        public String getColumnName(int i) {return header[i] ;}
+    
+    }
 
     
         
