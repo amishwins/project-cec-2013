@@ -7,6 +7,9 @@ package cec.view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+
 import javax.swing.*;
 
 import cec.service.NewMessageService;
@@ -40,13 +43,18 @@ public class NewMessage2 extends JFrame{
         JMenu fileMenuBarEntry = new JMenu("File");
         menuBar.add(fileMenuBarEntry);    
         
-        JMenuItem sendItem = new JMenuItem("Send            Ctrl+S");
+        JMenuItem sendItem = new JMenuItem("Send",KeyEvent.VK_S);
+        sendItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,InputEvent.CTRL_DOWN_MASK));
         fileMenuBarEntry.add(sendItem);   
         
-        JMenuItem draftItem = new JMenuItem("Save as Draft  Ctrl+D");
+        JMenuItem draftItem = new JMenuItem("Save as Draft",KeyEvent.VK_D);
+        draftItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D,InputEvent.CTRL_DOWN_MASK));
         fileMenuBarEntry.add(draftItem);  
 
-        JMenuItem exitItem = new JMenuItem("Exit            ESC");
+        JMenuItem exitItem = new JMenuItem("Exit");
+        exitItem.setAccelerator(KeyStroke.getKeyStroke("ESCAPE"));
+        
+        
         fileMenuBarEntry.add(exitItem);  
                 
  
@@ -124,11 +132,11 @@ public class NewMessage2 extends JFrame{
         add(bar, BorderLayout.NORTH);    
         add(mid, BorderLayout.LINE_START);  
         add(scroll, BorderLayout.SOUTH); 
-        bodyField.addKeyListener(KenterL);        
+        //bodyField.addKeyListener(KenterL);        
       } 
       
       
-      java.awt.event.KeyListener KenterL = new java.awt.event.KeyListener()
+     /* java.awt.event.KeyListener KenterL = new java.awt.event.KeyListener()
         {			
                 public void keyPressed(java.awt.event.KeyEvent ke) 
                 {				
@@ -172,7 +180,7 @@ public class NewMessage2 extends JFrame{
                         // TODO Auto-generated method stub
 
                 }				
-        };
+        };*/
       //Actions - Discard
       private void discardNewMessage() {                                
         this.dispose();        
