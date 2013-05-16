@@ -6,3 +6,14 @@
 
   * Look and Feel for JTree of Folders
   * Headings for JTable are different in Inbox (From, Subject, Time), and Drafts (To, Subject, Time)
+  * Should we sort the inbox and drafts differently? We should sort all folders?
+
+
+== Model ==
+
+  * Finalize interfaces
+  * Unit tests
+
+== Persistence ==
+
+  * Unit tests ?
