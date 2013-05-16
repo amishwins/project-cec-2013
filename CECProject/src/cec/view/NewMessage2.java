@@ -12,12 +12,12 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.*;
 
-import cec.service.NewMessageService;
+import cec.service.EmailService;
 
 
 public class NewMessage2 extends JFrame{
     
-      NewMessageService newEmailService = new NewMessageService(); 
+      EmailService newEmailService = new EmailService(); 
     
       //Shared Components
       JTextField toField = new JTextField(22);
