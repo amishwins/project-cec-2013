@@ -86,7 +86,8 @@ public class PathTest {
      * @return The index
      */
     private int childIndex(final DefaultMutableTreeNode node, final String childValue) {
-        Enumeration<DefaultMutableTreeNode> children = node.children();
+        @SuppressWarnings("unchecked")
+		Enumeration<DefaultMutableTreeNode> children = node.children();
         DefaultMutableTreeNode child = null;
         int index = -1;
 

@@ -11,12 +11,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.text.ParseException;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -49,12 +47,11 @@ class EmailViewEntity {
 
 public class EmailClient extends JFrame implements TreeSelectionListener {
     /**
-	 * 
+	 *  TODO: Amish - added a serial version UID (I don't know why!?)
 	 */
 	private static final long serialVersionUID = 7366789547512037235L;
 	JTree folders;    
     Controller controller = new Controller(); 
-    JList emailList;
        
     String[] emailTableViewColumns = {"Sent From", "Subject", "Date Sent"};
     Object[][] emailTableData = {{"","",""}};
@@ -143,10 +140,6 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         rightPanel.setLayout(new BorderLayout());                      
 
         //Right-TOP
-        String[] emailListValues = { "Item 1", "Item 2", "Item 3", "Item 4",  "Item 5", "Item 6", "Item 7", "Item 8","Item 9", };
-        emailList = new JList(emailListValues);
-       
-       
         JScrollPane rightPanelChildTop = new JScrollPane(emailTable,
                                              JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                                              JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -173,16 +166,6 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         container.add(topPanel,BorderLayout.NORTH);
         container.add(bottomPanel,BorderLayout.CENTER);        
     }       
-    
-    
-    private void folderSelected(javax.swing.event.TreeSelectionEvent evt) {                                    
-       
-        //System.out.println(FolderList.getLastSelectedPathComponent());
-          //System.out.println(FolderList.getSelectionPaths().toString());
-            System.out.println(folders.getSelectionPath());
-            //  System.out.println(FolderList.getLeadSelectionRow());
-
-    }    
 
     private void setupMenuBar() {
         //Menu
@@ -273,22 +256,17 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 
     class PopupDeleteFolder implements ActionListener{
         public void actionPerformed (ActionEvent e){
-        	
-        	try{
-        		int i;
-        		i = 1/0;        		
-        		
-        	} catch (ArithmeticException  x) {
-        		JOptionPane.showMessageDialog(null, "Operation not allowed");	
-            }   
-        	   
+        	JOptionPane.showMessageDialog(null, "Operation not allowed");
         }
-    }        
-    
+    }            
     
     //Folders PopUp Menu (Right-Click)
     class FoldersPopup extends JPopupMenu {
-        JMenuItem delFolder;
+        /**
+		 * TODO: Same comment as above! Why do we need a serialVersionUID? 
+		 */
+		private static final long serialVersionUID = -5926440670627487856L;
+		JMenuItem delFolder;
         JMenuItem newFolder;        
         public FoldersPopup(){
             newFolder = new JMenuItem("New Folder");
@@ -342,7 +320,11 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     //Tree Abstract Model
     class EmailListModel extends AbstractTableModel {
     	
-    	String[] header;
+    	/**
+		 * 
+		 */
+		private static final long serialVersionUID = 5641320475551936954L;
+		String[] header;
     	
     	public EmailListModel (String[] emailTableViewColumns) { 
     		header = emailTableViewColumns;

@@ -3,12 +3,8 @@
  * and open the template in the editor.
  */
 package cec.persistence;
-import java.io.File;
 import java.util.*;
-/**
- *
- * @author Pankaj Kapania
- */
+
 public interface FolderDao {
     
     public Iterable<Map<String,String>> loadEmails(String dir);

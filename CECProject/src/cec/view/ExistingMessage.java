@@ -6,7 +6,6 @@ package cec.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
@@ -17,6 +16,11 @@ import cec.service.EmailService;
 
 public class ExistingMessage extends JFrame{
     
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6361797821203537189L;
+
 	EmailService newEmailService = new EmailService(); 
     
       //Shared Components

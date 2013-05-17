@@ -3,15 +3,10 @@
  * and open the template in the editor.
  */
 package cec.service;
-import java.util.UUID;
 
 import cec.model.Email;
 import cec.model.EmailBuilder;
-import cec.model.Folder;
-/**
- *
- * @author Pankaj Kapania
- */
+
 public class EmailService {
     
       

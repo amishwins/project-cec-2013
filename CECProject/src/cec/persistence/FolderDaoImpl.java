@@ -62,9 +62,6 @@ public class FolderDaoImpl implements FolderDao {
     private String[] getFileNames(String dir) {
         File folder = new File(dir);
         String[] xmlFiles = folder.list(FileFileFilter.FILE);
-        for (String xmlfile : xmlFiles) {
-            //ystem.out.println(xmlfile);
-        }
         return xmlFiles;
     }
 
