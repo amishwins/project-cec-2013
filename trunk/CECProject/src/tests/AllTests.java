@@ -10,7 +10,9 @@ import org.junit.runners.Suite.SuiteClasses;
 	EmailBuilderTests.class, 
 	EmailSortingTests.class,
 	EmailTests.class,
-	FolderFactoryTests.class })
+	FolderFactoryTests.class,
+	FolderTests.class })
 
 public class AllTests {
 }
+
