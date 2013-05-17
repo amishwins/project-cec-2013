@@ -2,6 +2,7 @@ package cec.view;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -61,18 +62,32 @@ class FoldMgmt {
 				delete_click();
 			}
 		});
+		
+		JButton Bmove = new JButton("MOVE");
+		Bmove.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent click) {
+				move_click();
+			}
+		});		
+		
 
 		JPanel Buttons = new JPanel();
 		Buttons.add(Bcreate, BorderLayout.WEST);
-		Buttons.add(Bdelete, BorderLayout.EAST);
+		Buttons.add(Bdelete, BorderLayout.CENTER);
+		Buttons.add(Bmove, BorderLayout.EAST);
 
 		tree.addKeyListener(KenterL);
 
 		final JPopupMenu Pmenu = new JPopupMenu();
 		JMenuItem menuItem;
 		menuItem = new JMenuItem("Delete Ctrl+D");
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D,InputEvent.CTRL_DOWN_MASK));
 		Pmenu.add(menuItem);
 		menuItem = new JMenuItem("Create Ctrl+C");
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,InputEvent.CTRL_DOWN_MASK));
+		Pmenu.add(menuItem);
+		menuItem = new JMenuItem("Move Ctrl+M");
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M,InputEvent.CTRL_DOWN_MASK));		
 		Pmenu.add(menuItem);
 
 		menuItem.addActionListener(new ActionListener() {
@@ -163,6 +178,23 @@ class FoldMgmt {
 			JOptionPane.showMessageDialog(null, "SELECT FOLDER TO DELETE");
 	}
 
+	public static void move_click() {
+		if (selectedFolder != null)
+			btnMove(selectedFolder);
+		else
+			JOptionPane.showMessageDialog(null, "SELECT FOLDER TO MOVE FIRST");
+	}
+	
+	public static void btnCreate(String pathName, String folderName)// ,DefaultMutableTreeNode
+	// node)
+	{
+		File direct = new File(pathName + "/" + folderName);
+		if (direct.exists())
+			JOptionPane.showMessageDialog(null, " This folder already exists");
+		else
+			direct.mkdir();
+
+	}
 	public static void btnDelete(String folderName)// ,String folderName)
 	{
 
@@ -174,16 +206,29 @@ class FoldMgmt {
 			direct.delete();// seems that can delete only if folder is empty.
 	}
 
-	public static void btnCreate(String pathName, String folderName)// ,DefaultMutableTreeNode
-	// node)
+	public static void btnMove(String folderName)// ,String folderName)
 	{
-		File direct = new File(pathName + "/" + folderName);
-		if (direct.exists())
-			JOptionPane.showMessageDialog(null, " This folder already exists");
-		else
-			direct.mkdir();
 
+		File direct = new File(folderName);
+		if (!direct.exists())
+			JOptionPane.showMessageDialog(null,
+					" This folder does not exist...");
+		else
+		{
+			
+			JFileChooser dialogue = new JFileChooser(direct);//(new File("."));
+			File fichier;
+			
+			
+			//TO FIX
+			if (dialogue.showOpenDialog(null)== 
+			    JFileChooser.APPROVE_OPTION) {
+			    fichier = dialogue.getSelectedFile();
+			}
+
+		}
 	}
+	
 
 	public static void main(String[] args) {
 		// JFrame theTree = new JFrame();
