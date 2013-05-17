@@ -50,13 +50,13 @@ public class EmailTests {
 	@Test
 	public void saveWasCalledForSending() {
 		myEmail.send();
-		assertEquals(true, ((EmailDaoStub)myEmail.getEmailDao()).saveWasCalled);
+		assertTrue(((EmailDaoStub)myEmail.getEmailDao()).saveWasCalled);
 	}
 	
 	@Test
 	public void saveWasCalledForSavingToDraft() {
 		myEmail.saveToDraftFolder();
-		assertEquals(true, ((EmailDaoStub)myEmail.getEmailDao()).saveWasCalled);
+		assertTrue(((EmailDaoStub)myEmail.getEmailDao()).saveWasCalled);
 	}
 
 	@Test
@@ -66,7 +66,6 @@ public class EmailTests {
 		String formattedEmail = myEmail.getLastModifiedTimeNicelyFormatted();
 		assertEquals(formattedEmail, "Fri, May 17, 2013");		
 	}
-
 	
 	@Test
 	public void delete() {
@@ -79,7 +78,6 @@ public class EmailTests {
 		myEmail.move(folderStub);
 		assertTrue(((EmailDaoStub)myEmail.getEmailDao()).moveWasCalled);
 	}
-
 }
 
 class EmailImplCUT extends EmailImpl {
