@@ -14,7 +14,6 @@ StreamSource stylesource = new StreamSource(getClass().getResourceAsStream("prop
 == Some awesome links: ==
 
   * http://oreilly.com/catalog/jfcnut/chapter/ch03.html#ch03_20.html
-  * 
-http://docs.oracle.com/javase/tutorial/uiswing/components/table.html#data
+  * http://docs.oracle.com/javase/tutorial/uiswing/components/table.html#data
 
   * Working with Abstract Table Model http://stackoverflow.com/questions/3090013/load-an-array-to-a-java-table
