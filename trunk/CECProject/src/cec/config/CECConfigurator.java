@@ -20,6 +20,7 @@ public class CECConfigurator {
 	}
 	
 	private void mapDefaultSystemFolders() {
+		systemSettings.put("ClientEmail", "test.user@cec.com");
 		systemSettings.put("Inbox", "emails/Inbox");
 		systemSettings.put("Drafts", "emails/Drafts");
 		systemSettings.put("Sent", "emails/Sent");

@@ -3,6 +3,7 @@ package tests;
 import static org.junit.Assert.*;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -11,69 +12,64 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import cec.config.CECConfigurator;
 import cec.model.Email;
 import cec.model.EmailBuilder;
+import cec.model.Folder;
+import cec.model.FolderFactory;
 
 public class EmailBuilderTests {
 	
 	EmailBuilder cut;
-	UUID idEmail1;
-
+	UUID emailId;
+	Folder myFolder;
+	Email email;
+	
 	@Before
 	public void setUp() throws Exception {
 		cut = new EmailBuilder();
-		idEmail1 = UUID.randomUUID();
-		
+		emailId = UUID.randomUUID();	
+		myFolder = (new FolderFactory()).getFolder("test/folder");
 	}
 
 	@After
 	public void tearDown() throws Exception {
 	}
-
+	
 	@Test
-    public void showEmailSortingWorks() throws Exception {
- 
-		Email firstEmail = cut.withId(idEmail1)
-				                       .withTo("PankajKapania@yahoo.com")
-				                       .withCC("PankajKapania@yahoo.com")
-		                               .withSubject("TestSubject1")
-		                               .withLastModifiedTime("2013.05.12_At_14.07.56.874")
-		                               .withSentTime("2013.05.12_At_14.07.56.874")
-		                               .withBody("Body1")
-		                               .build();
+	public void buildSimpleEmail() {
+		email = cut.withId(emailId)
+			.withFrom((new CECConfigurator()).get("ClientEmail"))
+			.withTo("PankajKapania@yahoo.com")
+			.withCC("PankajKapania@gmail.com")
+			.withSubject("TestSubject1")
+			.withBody("Body1")
+			.withLastModifiedTime("2013.05.12_At_14.07.56.874")
+			.withSentTime("2013.05.13_At_14.07.56.874")
+			.withParentFolder(myFolder)
+			.build();
 		
-		UUID idEmail2 = UUID.randomUUID();
-		Email secondEmail = cut.withId(idEmail2)
-                .withTo("PankajKapania@yahoo.com")
-                .withCC("PankajKapania@yahoo.com")
-                .withSubject("TestSubject2")
-                .withLastModifiedTime("2013.05.12_At_14.25.55.474")
-                .withSentTime("2013.05.12_At_14.25.55.474")
-                .withBody("Body2")
-                .build();
+		assertTrue(email.getId().equals(emailId));
+		assertTrue(email.getFrom().equals("test.user@cec.com"));
+		assertTrue(email.getTo().equals("PankajKapania@yahoo.com"));
+		assertTrue(email.getCC().equals("PankajKapania@gmail.com"));
+		assertTrue(email.getSubject().equals("TestSubject1"));
+		assertTrue(email.getBody().equals("Body1"));
+		assertTrue(email.getLastModifiedTime().equals("2013.05.12_At_14.07.56.874"));
+		assertTrue(email.getSentTime().equals("2013.05.13_At_14.07.56.874"));
+		assertEquals(email.getParentFolder(), myFolder);
+	}
+	
+	@Test
+	public void verifyComputedFields() {
+		email = cut.computeID()
+			.computelastModifiedTime()
+			.computeSentTime()
+			.build();
 		
-		UUID idEmail3 = UUID.randomUUID();
-		Email thirdEmail = cut.withId(idEmail3)
-                .withTo("PankajKapania@yahoo.com")
-                .withCC("PankajKapania@yahoo.com")
-                .withSubject("TestSubject3")
-                .withLastModifiedTime("2013.05.13_At_23.36.31.603")
-                .withSentTime("2013.05.13_At_23.36.31.603")
-                .withBody("Body3")
-                .build();
-		
-		
-		List<Email> emailList = new ArrayList<Email>();
-		emailList.add(secondEmail);
-		emailList.add(thirdEmail);
-		emailList.add(firstEmail);
-		
-		Collections.sort(emailList);
-		
-		assertEquals(idEmail3,emailList.get(0).getId());
-		assertEquals(idEmail2,emailList.get(1).getId());
-		assertEquals(idEmail1,emailList.get(2).getId());
-		
-		
-    }
+		// Not really great tests. Need to think about this a bit more
+		assertNotSame(UUID.randomUUID(), email.getId());
+		assertNotSame(new Date(), email.getLastModifiedTime());
+		assertNotSame(new Date(), email.getSentTime());				
+	}
 }
