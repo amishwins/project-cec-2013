@@ -47,17 +47,18 @@ public class ExistingMessage extends JFrame{
       JMenuItem sendItem = new JMenuItem("Send",KeyEvent.VK_S);
       JMenuItem deleteItem = new JMenuItem("Delete",KeyEvent.VK_D);
       JMenuItem exitItem = new JMenuItem("Exit");
-      
-      EmailViewEntity emailEntity;
+
+     // EmailViewEntity emailEntity;
+
+      public ExistingMessage() {}
       public ExistingMessage(EmailViewEntity email) {
-    	    	
+   	    	
         //Layout Manager
         super("Existing Message");
-        
-        emailEntity = email;
-        
-        SetExistingMessageFields();
-        
+
+       // emailEntity = email;
+        SetExistingMessageFields(email);
+       // SetExistingMessageFields();
         
         setSize(610, 440);
         setLayout(new BorderLayout());
@@ -248,14 +249,24 @@ public class ExistingMessage extends JFrame{
       }
       
       
-      private void SetExistingMessageFields(String to,String cc,String Subject,String emailbody)
+      private void SetExistingMessageFields(String to,String cc,String subject,String emailbody)
       {
-    	  toField.setText(emailEntity.getTo());
-          ccField.setText(emailEntity.getCC());
-          subjectField.setText(emailEntity.getSubject());
-          bodyField.setText(emailEntity.getBody());
+    	  toField.setText(to);//emailEntity.getTo());
+          ccField.setText(cc);//emailEntity.getCC());
+          subjectField.setText(subject);//emailEntity.getSubject());
+          bodyField.setText(emailbody);//emailEntity.getBody());
       }      
       
+      
+      private void SetExistingMessageFields(EmailViewEntity email)
+      {
+    	  toField.setText(email.getTo());
+          ccField.setText(email.getCC());
+          subjectField.setText(email.getSubject());
+          bodyField.setText(email.getBody());
+      } 
+      
+            
       private void SetExistingMessage() { 
     	  
     	  //FIELD EDITABLE
