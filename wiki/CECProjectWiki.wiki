@@ -43,7 +43,7 @@ The model layer email object has the following getters:
 
 === Unit Testing Checked Exceptions ===
 
-The {{{Email}}} interface extends {{{Comparable<Email>}}} in order for us to be able to sort emails (for now, based on {{{lastModifiedDate}}}). The issue we run into is that {{{SimpleDateFormat}}} method parse() throws a {{{ParseException}}}, which is a checked exception (forcing us to either add a throws keyword into the signature, or surround by try/catch. 
+The {{{Email}}} interface extends {{{Comparable<Email>}}} in order for us to be able to sort emails (for now, based on {{{lastModifiedDate}}}). The issue we run into is that {{{SimpleDateFormat}}} method parse() throws a {{{ParseException}}}, which is a checked exception (forcing us to either add a throws keyword into the signature, or surround by try/catch). 
 
 To circumvent this issue, we handle the exception in a protected method in the {{{EmailImpl}}} class, and inherit from this class in the unit test class {{{EmailSortingTests}}}. The handling class is overridden as follows:
 
@@ -62,7 +62,8 @@ And then our unit test looks like:
 	// We cannot cannot throw a ParseException since it is checked.  
 	@Test(expected=RuntimeException.class)
 	public void sortThrowsExceptionWhenBadDate() {
-		Email badlyFormatedEmail = new EmailImplExceptionCUT(UUID.randomUUID(), "", "", "", "", "", "xyz", "", null);
+		Email badlyFormatedEmail = new EmailImplExceptionCUT(UUID.randomUUID(), "", "", "", "", "", 
+			"xyz", "", null);
 		emailList.add(badlyFormatedEmail);
 		Collections.sort(emailList);
 	}
