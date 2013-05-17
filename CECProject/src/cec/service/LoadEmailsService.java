@@ -3,12 +3,7 @@
  * and open the template in the editor.
  */
 package cec.service;
-import cec.model.FolderImpl;
 
-/**
- *
- * @author Pankaj Kapania
- */
 public class LoadEmailsService {
     
 }

@@ -36,7 +36,6 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-import cec.model.FolderImpl;
 import cec.persistence.FolderDaoImpl;
 import cec.service.Controller;
 import cec.service.TreeModelBuilder;
