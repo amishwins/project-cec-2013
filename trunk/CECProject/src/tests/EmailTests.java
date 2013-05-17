@@ -12,7 +12,6 @@ import org.junit.Test;
 import cec.model.EmailImpl;
 import cec.model.Folder;
 import cec.model.FolderFactory;
-import cec.model.FolderImpl;
 import cec.persistence.EmailDao;
 
 public class EmailTests {

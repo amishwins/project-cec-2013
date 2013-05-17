@@ -7,7 +7,6 @@ package cec.service;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import cec.model.FolderImpl;
 import cec.model.Hierarchy;
 
 /**
