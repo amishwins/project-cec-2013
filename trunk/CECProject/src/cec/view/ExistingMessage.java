@@ -47,11 +47,14 @@ public class ExistingMessage extends JFrame{
       JMenuItem sendItem = new JMenuItem("Send",KeyEvent.VK_S);
       JMenuItem deleteItem = new JMenuItem("Delete",KeyEvent.VK_D);
       JMenuItem exitItem = new JMenuItem("Exit");
-      public ExistingMessage(){
-  
-    	
+      
+      EmailViewEntity emailEntity;
+      public ExistingMessage(EmailViewEntity email) {
+    	    	
         //Layout Manager
         super("Existing Message");
+        
+        emailEntity = email;
         
         SetExistingMessageFields();
         
@@ -247,10 +250,10 @@ public class ExistingMessage extends JFrame{
       
       private void SetExistingMessageFields(String to,String cc,String Subject,String emailbody)
       {
-    	  toField.setText(to);
-          ccField.setText(cc);
-          subjectField.setText(Subject);
-          bodyField.setText(emailbody);
+    	  toField.setText(emailEntity.getTo());
+          ccField.setText(emailEntity.getCC());
+          subjectField.setText(emailEntity.getSubject());
+          bodyField.setText(emailEntity.getBody());
       }      
       
       private void SetExistingMessage() { 

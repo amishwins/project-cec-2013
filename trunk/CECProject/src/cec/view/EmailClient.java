@@ -13,7 +13,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -34,7 +33,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeModel;
@@ -96,7 +94,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         
         TreeModelBuilder tmb = new TreeModelBuilder(new DefaultMutableTreeNode());
         
-        // Move the code to get the subfolder list of paths into the Hierarchy Model object
+        // TODO: Move the code to get the subfolder list of paths into the Hierarchy Model object
         List<File> listOfFiles = FolderDaoImpl.getSubFoldersRecursively(new File("emails"));
         TreeModel model = tmb.buildTreeNodeFromFileList(listOfFiles);
   
@@ -234,9 +232,34 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
             if (event.getValueIsAdjusting()) {
                 return;
             }
-            emailBody.append("ROW SELECTION EVENT. ");
+            
+            // What do we do if we are changing folders? 
+			EmailViewEntity selectedEmailEntity = ((EmailListViewData)(emailTable.getModel()))
+					.getViewEntityAtIndex(emailTable.getSelectedRow());
+            
+            emailBody.setText(selectedEmailEntity.getBody());
         }
     }
+    
+  //Email Table Mouse Events
+    class EmailTableMouseListener extends MouseAdapter {
+    	
+    	JTable table;
+    	
+    	public EmailTableMouseListener(JTable emailTable){
+    		this.table = emailTable;    		
+    	}    	
+    	
+    	public void mouseClicked(MouseEvent e) {
+    		if (e.getClickCount() == 2) {
+    			EmailViewEntity selectedEmailEntity = ((EmailListViewData)(emailTable.getModel()))
+    					.getViewEntityAtIndex(emailTable.getSelectedRow());
+    			JFrame nm = new ExistingMessage(selectedEmailEntity);
+			}	  
+    	}
+    }
+    
+    
     
 }
 
@@ -254,7 +277,7 @@ class MenuFileNewMessage implements ActionListener{
    
 class MenuFileExistingMessage implements ActionListener{
 	public void actionPerformed (ActionEvent e){
-		JFrame nm = new ExistingMessage();
+		JFrame nm = new ExistingMessage(new EmailViewEntity());
 	}
 }
 
@@ -263,6 +286,9 @@ class PopupDeleteFolder implements ActionListener{
     	JOptionPane.showMessageDialog(null, "Operation not allowed");
     }
 }            
+
+
+
     
 //Folders PopUp Menu (Right-Click)
 class FolderTreeContextMenu extends JPopupMenu {
@@ -317,24 +343,6 @@ class FoldersPopupListener extends MouseAdapter {
         menu.show(e.getComponent(), e.getX()+7, e.getY());
     }
 }
-
-
-//Email Table Mouse Events
-class EmailTableMouseListener extends MouseAdapter {
-	
-	JTable table;
-	
-	public EmailTableMouseListener(JTable emailTable){
-		this.table = emailTable;    		
-	}    	
-	
-	public void mouseClicked(MouseEvent e) {
-          if (e.getClickCount() == 2) {
-        	  JOptionPane.showMessageDialog(null, "Double click");
-    }
-}
-}
-
 
 
     
