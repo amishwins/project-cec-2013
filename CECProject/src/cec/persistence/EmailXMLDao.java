@@ -15,6 +15,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -108,7 +109,8 @@ public class EmailXMLDao implements EmailDao {
 			// write the content into xml file
 			TransformerFactory transformerFactory = TransformerFactory
 					.newInstance();
-			Transformer transformer = transformerFactory.newTransformer();
+			StreamSource stylesource = new StreamSource(getClass().getResourceAsStream("proper-indenting.xsl"));
+			Transformer transformer = transformerFactory.newTransformer(stylesource);
 			DOMSource source = new DOMSource(emailInXMLFormat);
 			StreamResult result = new StreamResult(new File(PATH_TO_SAVE_EMAIL));
 
