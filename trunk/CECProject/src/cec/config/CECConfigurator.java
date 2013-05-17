@@ -23,6 +23,7 @@ public class CECConfigurator {
 		systemSettings.put("ClientEmail", "test.user@cec.com");
 		systemSettings.put("Inbox", "emails/Inbox");
 		systemSettings.put("Drafts", "emails/Drafts");
+		systemSettings.put("Outbox", "emails/Outbox");
 		systemSettings.put("Sent", "emails/Sent");
 	}
 }

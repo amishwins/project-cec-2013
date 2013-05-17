@@ -37,6 +37,7 @@ public class CECConfiguratorTests {
 		assertTrue(cut.get("ClientEmail").equals("test.user@cec.com"));
 		assertTrue(cut.get("Inbox").equals("emails/Inbox"));
 		assertTrue(cut.get("Drafts").equals("emails/Drafts"));
+		assertTrue(cut.get("Outbox").equals("emails/Outbox"));
 		assertTrue(cut.get("Sent").equals("emails/Sent"));
 	}
 }

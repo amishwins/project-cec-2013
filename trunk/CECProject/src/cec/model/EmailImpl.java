@@ -83,7 +83,7 @@ public class EmailImpl implements Email{
     public void send() {
 		// Assumption that email has been sent successfully..
 		emailDao.save(id, from, to, cc, subject, body, lastModifiedTime,
-				sentTime, (new CECConfigurator()).get("Sent"));
+				sentTime, (new CECConfigurator()).get("Outbox"));
 	}
 
 	public void saveToDraftFolder() {
