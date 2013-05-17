@@ -15,8 +15,8 @@ public interface Email extends Comparable<Email> {
     public void saveToDraftFolder();
     
     public UUID getId();
-    public String getTo();
     public String getFrom();
+    public String getTo();
     public String getCC();
     public String getSubject();
     public String getBody();
