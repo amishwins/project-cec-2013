@@ -86,6 +86,12 @@ public class EmailXMLDao implements EmailDao {
 			Element bodyLabel = emailInXMLFormat.createElement("Body");
 			bodyLabel.appendChild(emailInXMLFormat.createTextNode(body));
 			emailRootElement.appendChild(bodyLabel);
+			
+			// parent folder
+			Element parentFolder = emailInXMLFormat.createElement("ParentFolder");
+			parentFolder.appendChild(emailInXMLFormat.createTextNode(location));
+			emailRootElement.appendChild(parentFolder);
+			
 
 		} catch (ParserConfigurationException pce) {
 			pce.printStackTrace();
