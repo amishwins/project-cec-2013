@@ -17,7 +17,7 @@ import cec.persistence.EmailDao;
 public class EmailTests {
 	
 	EmailImplCUT myEmail;
-	EmailDaoStub stubbedEmailPersistence;
+	//EmailDaoStub stubbedEmailPersistence;
 	Folder folderStub;
 	UUID id;
 
@@ -25,7 +25,7 @@ public class EmailTests {
 	public void setUp() throws Exception {
 		id = UUID.randomUUID();
 		folderStub = FolderFactory.getFolder("test/name");
-		stubbedEmailPersistence = new EmailDaoStub();
+		//stubbedEmailPersistence = new EmailDaoStub();
 		myEmail = new EmailImplCUT(id, "from@email.com", "to@email.com", 
 				"cc@email.com", "Subject", "Body", "20130516", "20130515", folderStub);
 	}
