@@ -9,6 +9,8 @@ StreamSource stylesource = new StreamSource(getClass().getResourceAsStream("prop
 Transformer transformer = transformerFactory.newTransformer(stylesource);
 }}}
 
+We used the following as inspiration:
+http://stackoverflow.com/questions/3273182/how-to-write-properly-formatted-xml
 
 
 == Some awesome links: ==
