@@ -8,6 +8,8 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -25,6 +27,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
+import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneLayout;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -174,11 +177,10 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         JMenu fileMenuBarEntry = new JMenu("File");
         menuBar.add(fileMenuBarEntry);    
         
-        JMenuItem newMessageItem = new JMenuItem("New Message");
-        fileMenuBarEntry.add(newMessageItem);   
-
-        JMenuItem newMessageItemNewUI = new JMenuItem("New Message New UI");
-        fileMenuBarEntry.add(newMessageItemNewUI);
+        JMenuItem newMessageItem = new JMenuItem("New Message",KeyEvent.VK_N);
+        newMessageItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,InputEvent.CTRL_DOWN_MASK));
+        fileMenuBarEntry.add(newMessageItem);
+       
         
         JMenuItem ExistingMessageItem = new JMenuItem("Existing Message");//EXISTING MESSA
         fileMenuBarEntry.add(ExistingMessageItem); 
@@ -186,8 +188,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         JMenuItem exitItem = new JMenuItem("Exit");
         fileMenuBarEntry.add(exitItem);           
         
-        newMessageItem.addActionListener(new MenuFileNewMessage());   
-        newMessageItemNewUI.addActionListener(new MenuFileNewMessageNewUI());
+        newMessageItem.addActionListener(new MenuFileNewMessage());
         ExistingMessageItem.addActionListener(new MenuFileExistingMessage());
         exitItem.addActionListener(new MenuFileExit());
     }
@@ -235,17 +236,12 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         }
     }
 
-    class MenuFileNewMessageNewUI implements ActionListener{
-        public void actionPerformed (ActionEvent e){
-            JFrame nm = new NewMessage2();
-        }
-    }
-
     class MenuFileNewMessage implements ActionListener{
         public void actionPerformed (ActionEvent e){
-            new NewMessageUI().setVisible(true);
+            JFrame nm = new NewMessage();
         }
     }
+   
     
     class MenuFileExistingMessage implements ActionListener{
         public void actionPerformed (ActionEvent e){
