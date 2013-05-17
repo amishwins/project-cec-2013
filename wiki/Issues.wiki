@@ -17,8 +17,8 @@
 == Persistence ==
 
   * Unit tests ?
+  * If you hit "enter" a few times while composing an email, the system inserts "\n" within the text. In the XML file however, it's stored simply as space (new lines). How can we preserve that when we convert the XML back to a string to display in the UI?
 
 == Cross-cutting Concerns ==
 
   * The fields for EACH LAYER need to be well established and documented
-
