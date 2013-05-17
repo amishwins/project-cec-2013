@@ -173,20 +173,32 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         JMenu fileMenuBarEntry = new JMenu("File");
         menuBar.add(fileMenuBarEntry);    
         
-        JMenuItem newMessageItem = new JMenuItem("New Message",KeyEvent.VK_N);
-        newMessageItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,InputEvent.CTRL_DOWN_MASK));
-        fileMenuBarEntry.add(newMessageItem);
-       
+        JMenuItem newEmail = new JMenuItem("New Email",KeyEvent.VK_N);
+        newEmail.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,InputEvent.CTRL_DOWN_MASK));
+        fileMenuBarEntry.add(newEmail);
         
-        JMenuItem ExistingMessageItem = new JMenuItem("Existing Message");//EXISTING MESSA
-        fileMenuBarEntry.add(ExistingMessageItem); 
+        JMenuItem showExistingEmail = new JMenuItem("Show Existing Email");
+        fileMenuBarEntry.add(showExistingEmail); 
         
         JMenuItem exitItem = new JMenuItem("Exit");
         fileMenuBarEntry.add(exitItem);           
         
-        newMessageItem.addActionListener(new MenuFileNewMessage());
-        ExistingMessageItem.addActionListener(new MenuFileExistingMessage());
+        // Add all the action listeners for the File menu
+        newEmail.addActionListener(new MenuFileNewMessage());
+        showExistingEmail.addActionListener(new MenuFileExistingMessage());
         exitItem.addActionListener(new MenuFileExit());
+        
+        // TODO: Add the keyboard shortcuts
+        JMenu editMenuBarEntry = new JMenu("Edit");
+        menuBar.add(editMenuBarEntry);
+        
+        JMenuItem deleteSelectedEmail = new JMenuItem("Delete Selected Email");
+        editMenuBarEntry.add(deleteSelectedEmail);
+        
+        JMenuItem deleteSelectedFolder = new JMenuItem("Delete Selected Folder");
+        editMenuBarEntry.add(deleteSelectedFolder);
+        
+        // TODO: Add all the action listeners for the Edit menu
     }
 
     @Override
