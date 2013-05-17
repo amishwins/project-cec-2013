@@ -17,3 +17,8 @@
 == Persistence ==
 
   * Unit tests ?
+
+== Cross-cutting Concerns ==
+
+  * The fields for EACH LAYER need to be well established and documented
+
