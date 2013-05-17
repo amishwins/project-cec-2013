@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
+import cec.config.CECConfigurator;
 import cec.persistence.EmailDao;
 import cec.persistence.EmailDaoFactory;
 
@@ -77,31 +78,32 @@ public class EmailImpl implements Email{
 	
 	public Folder getParentFolder() {
 		return parentFolder;
-	}
-	
+	}	
 
     public void send() {
 		// Assumption that email has been sent successfully..
-		emailDao.save(id, from, to, cc, subject, body, lastModifiedTime ,sentTime, "emails/Outbox");
+		emailDao.save(id, from, to, cc, subject, body, lastModifiedTime,
+				sentTime, (new CECConfigurator()).get("Sent"));
 	}
 
 	public void saveToDraftFolder() {
-		emailDao.save(id, from, to, cc, subject, body, lastModifiedTime ,sentTime, "emails/Draft");
+		emailDao.save(id, from, to, cc, subject, body, lastModifiedTime,
+				sentTime, (new CECConfigurator()).get("Drafts"));
 	}
 	
 	@Override
 	public String toString(){
 		StringBuilder email = new StringBuilder();
 		email.append("Email {");
-		email.append("id: " + this.getId());
-		email.append(", to: " + this.getTo());
-		email.append(", cc: " + this.getCC());
-		email.append(", subject: " + this.getSubject());
-		email.append(", body: " + this.getBody());
-		email.append(", lastModifiedTime: " + this.getLastModifiedTime());
-		email.append(", sentTime: " + this.getSentTime());
-		email.append(", getParentFolder: " + getParentFolder().toString());
-		email.append("}");
+		email.append("\n\tid: " + this.getId());
+		email.append(", \n\tto: " + this.getTo());
+		email.append(", \n\tcc: " + this.getCC());
+		email.append(", \n\tsubject: " + this.getSubject());
+		email.append(", \n\tbody: " + this.getBody());
+		email.append(", \n\tlastModifiedTime: " + this.getLastModifiedTime());
+		email.append(", \n\tsentTime: " + this.getSentTime());
+		email.append(", \n\tgetParentFolder: " + getParentFolder().toString());
+		email.append("\n}");
 		return email.toString();
 	}
 
@@ -119,7 +121,9 @@ public class EmailImpl implements Email{
 		} catch (ParseException e) {
 			handleParseException(e);
 		}
+		
 		return anotherEmailDate.compareTo(currentEmailDate);
+
 	}
 	
 	protected void handleParseException(Exception e) {
