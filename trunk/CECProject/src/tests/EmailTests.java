@@ -24,8 +24,7 @@ public class EmailTests {
 	@Before
 	public void setUp() throws Exception {
 		id = UUID.randomUUID();
-		FolderFactory folderFactor = new FolderFactory();
-		folderStub = folderFactor.getFolder("test/name");
+		folderStub = FolderFactory.getFolder("test/name");
 		stubbedEmailPersistence = new EmailDaoStub();
 		myEmail = new EmailImplCUT(id, "from@email.com", "to@email.com", 
 				"cc@email.com", "Subject", "Body", "20130516", "20130515", folderStub);
@@ -59,17 +58,26 @@ public class EmailTests {
 		myEmail.saveToDraftFolder();
 		assertEquals(true, ((EmailDaoStub)myEmail.getEmailDao()).saveWasCalled);
 	}
+
+	@Test
+	public void getNicelyFormattedDate() {
+		myEmail = new EmailImplCUT(id, "", "", "", "", "", "2013.05.17_At_13.52.03.824",
+				"", null);
+		String formattedEmail = myEmail.getLastModifiedTimeNicelyFormatted();
+		assertEquals(formattedEmail, "Fri, May 17, 2013");		
+	}
+
 	
 	@Test
 	public void delete() {
 		myEmail.delete();
-		assertEquals(true, ((EmailDaoStub)myEmail.getEmailDao()).deleteWasCalled);
+		assertTrue(((EmailDaoStub)myEmail.getEmailDao()).deleteWasCalled);
 	}
 	
 	@Test
 	public void move() {
-		myEmail.move(folderStub );
-		assertEquals(true, ((EmailDaoStub)myEmail.getEmailDao()).moveWasCalled);
+		myEmail.move(folderStub);
+		assertTrue(((EmailDaoStub)myEmail.getEmailDao()).moveWasCalled);
 	}
 
 }

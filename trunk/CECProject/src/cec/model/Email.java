@@ -25,4 +25,5 @@ public interface Email extends Comparable<Email> {
     public String getSentTime();
     public String getLastModifiedTime();
     public Folder getParentFolder();
+	public String getLastModifiedTimeNicelyFormatted();
 }

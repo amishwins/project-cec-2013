@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
+import cec.config.CECConfigurator;
+
 /**
  *
  * @author Pankaj Kapania
@@ -83,7 +85,7 @@ public class EmailBuilder {
 
     private String currentDateTime() {
         SimpleDateFormat currentDateTime = new SimpleDateFormat(
-                "yyyy.MM.dd_'At'_HH.mm.ss.SSS");
+        		CECConfigurator.getReference().get("DateFormat"));
         return currentDateTime.format(new Date());
     }
 

@@ -72,14 +72,24 @@ public class EmailImpl implements Email {
 		return lastModifiedTime;
 	}
 	
-	public Date getLastModifiedTimeUnformatted() {
-		Date result = new Date();
-		
-/*		try {
-			result 
-		}*/
-		
-		return new Date();
+	@Override
+	public String getLastModifiedTimeNicelyFormatted() {
+        Date lastModified = new Date();
+        
+        SimpleDateFormat sourceFormat = new SimpleDateFormat(
+        		CECConfigurator.getReference().get("DateFormat"));        
+        
+        try {
+        	lastModified = sourceFormat.parse(this.getLastModifiedTime());
+        } catch (ParseException e) {
+        	// if the date is poorly formatted, throw a runtime exception
+        	throw new RuntimeException();
+        }
+        
+        SimpleDateFormat targetFormat = new SimpleDateFormat(
+        		"EEE, MMM d, yyyy");
+        
+        return targetFormat.format(lastModified);
 	}
 
 	public String getSentTime() {
@@ -129,7 +139,7 @@ public class EmailImpl implements Email {
 	@Override
 	public int compareTo(Email anotherEmail) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat(
-					"yyyy.MM.dd_'At'_HH.mm.ss.SSS");
+				CECConfigurator.getReference().get("DateFormat"));
 		Date currentEmailDate = new Date();
 		Date anotherEmailDate = new Date();
 		
