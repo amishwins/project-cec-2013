@@ -78,6 +78,10 @@ We've decided to allow subfolder creation at any point in the tree. As specified
 
 This is accomplished by modelling a parent abstract {{{Folder}}} class, which implements the main create/updated/delete methods, and defining two subclasses: {{{SystemFolder}}} and {{{UserFolder}}}. Both subclasses override the delete method and act accordingly. A factory {{{FolderFactor}}} is responsible for creating the runtime model objects according the the rules stipulated above.
 
+=== Sorting Folders ===
+
+Our assumption is that users will always want to see the most recent messages on top. Therefore, each folder is sorted in a descending order. We will not (at least for phase 1) provide another means to sort.
+
 
 == Some awesome links: ==
 
