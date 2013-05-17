@@ -2,7 +2,7 @@
 
 == Design Decisions ==
 
-In EmailXMLDao, we are using a StreamSource xls file to help us format the XML output:
+In EmailXMLDao, we are using a StreamSource.xls file to help us format the XML output:
 
 {{{
 StreamSource stylesource = new StreamSource(getClass().getResourceAsStream("proper-indenting.xsl"));
