@@ -13,6 +13,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -39,6 +40,7 @@ import javax.swing.tree.TreePath;
 
 import cec.persistence.FolderDaoImpl;
 import cec.service.Controller;
+import cec.service.FolderService;
 import cec.service.TreeModelBuilder;
 
 
@@ -57,9 +59,10 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     Controller controller = new Controller(); 
        
     String[] emailTableViewColumns = {"Sent From", "Subject", "Date Sent"};
-    Object[][] emailTableData = {{"","",""}};
+    //String[][] emailTableData = new String[0][3];
     
-    JTable emailTable = new JTable(emailTableData, emailTableViewColumns);
+    JTable emailTable = new JTable(); //emailTableData, emailTableViewColumns);    
+    FolderService foldersEngine= new FolderService();
     
     public EmailClient(String title){
         super(title);
@@ -195,14 +198,15 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 
     @Override
     public void valueChanged(TreeSelectionEvent tse) {
+    	
         DefaultMutableTreeNode node = (DefaultMutableTreeNode)                            
-                folders.getLastSelectedPathComponent(); 
+        folders.getLastSelectedPathComponent(); 
         Object[] pathComponents = folders.getSelectionPath().getPath();
 
         StringBuilder sb = new StringBuilder();
         for(Object o: pathComponents) {
             sb.append(o);
-            sb.append("\\");
+            sb.append("/");
         }
         sb.deleteCharAt(0);
         sb.deleteCharAt(sb.length() - 1);
@@ -223,13 +227,12 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
             {"D","E","F"},
             {"H","I","J"}        
         };*/
-        
-        // not yet painting on the screen
-       // emailTable =  new JTable(emailTableData, emailTableViewColumns);
-        emailTable.setModel(new EmailListModel(emailTableViewColumns));
-        
+                    
+        Iterable<EmailViewEntity> emailsInEachFolder  = foldersEngine.loadEmails(sb.toString());
+        emailTable.setModel(new EmailListModel(emailTableViewColumns, emailsInEachFolder)); 
     }
 }
+
     class MenuFileExit implements ActionListener{
         public void actionPerformed (ActionEvent e){
             System.exit(0);
@@ -313,24 +316,49 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         }
     }
     
-    //Tree Abstract Model
+    // Table Abstract Model
     class EmailListModel extends AbstractTableModel {
     	
-    	/**
-		 * 
-		 */
 		private static final long serialVersionUID = 5641320475551936954L;
 		String[] header;
+		ArrayList<EmailViewEntity> data;
     	
-    	public EmailListModel (String[] emailTableViewColumns) { 
+    	public EmailListModel (String[] emailTableViewColumns,  Iterable<EmailViewEntity> emailTableViewData) { 
     		header = emailTableViewColumns;
+    		data   = (ArrayList<EmailViewEntity>)emailTableViewData;
+    		
     	}
     	
-    	public int getRowCount() {return 1;}
+    	public int getRowCount() {
+    		return data.size();
+		}
+    	
         public int getColumnCount() { return 3; }
-        public Object getValueAt(int row, int column){ return 3; }
-        public String getColumnName(int i) {return header[i] ;}
-    
+        
+        public Object getValueAt(int row, int column){ 
+        	EmailViewEntity currentRow = data.get(row);
+        	String columnValue = "";
+        	switch (column) {
+				case 0:
+					columnValue = currentRow.getFrom();		
+					break;
+				case 1:
+					columnValue = currentRow.getSubject();
+					break;
+				case 2:
+					columnValue = currentRow.getLastModifiedTime();
+					break;
+				default:
+					break;
+			}   
+        	
+        	return columnValue;
+    	}        
+        
+        public String getColumnName(int i) {
+        	return header[i];
+    	}
+            
     }
 
     
