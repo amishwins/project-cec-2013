@@ -12,6 +12,36 @@ Transformer transformer = transformerFactory.newTransformer(stylesource);
 We used the following as inspiration:
 http://stackoverflow.com/questions/3273182/how-to-write-properly-formatted-xml
 
+The persistence layer email object looks like:
+
+{{{
+<?xml version="1.0" encoding="UTF-8"?><E-Mail>
+   <Id>32e61786-ef7c-4ca3-8019-df5e2ca2020d</Id>
+   <From>cec@cec.com</From>
+   <To>1234</To>
+   <CC>4565</CC>
+   <LastModifiedTime>2013.05.17_At_00.05.18.763</LastModifiedTime>
+   <SentTime>2013.05.17_At_00.05.18.763</SentTime>
+   <Subject>7897</Subject>
+   <Body>1239</Body>
+</E-Mail>
+}}}
+
+The model layer email object has the following fields and getters:
+
+{{{
+    public UUID getId();
+    public String getTo();
+    public String getFrom();
+    public String getCC();
+    public String getSubject();
+    public String getBody();
+    public String getSentTime();
+    public String getLastModifiedTime();
+    public Folder getParentFolder();
+}}}
+
+
 
 == Some awesome links: ==
 
