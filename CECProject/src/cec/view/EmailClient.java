@@ -148,8 +148,8 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         
 
         rightPanelChildTop.setMaximumSize(new Dimension(1200, 150));
-        rightPanelChildTop.setMinimumSize(new Dimension(520, 150));
-        rightPanelChildTop.setPreferredSize(new Dimension(530, 150));       
+        rightPanelChildTop.setMinimumSize(new Dimension(550, 200));
+        rightPanelChildTop.setPreferredSize(new Dimension(550, 200));       
 
         //Right-BOTTOM
         emailBody = new JTextArea(10,10);
@@ -165,7 +165,10 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         //Adding components to the Main Panel
         Container container = getContentPane();        
         container.add(topPanel,BorderLayout.NORTH);
-        container.add(bottomPanel,BorderLayout.CENTER);        
+        container.add(bottomPanel,BorderLayout.CENTER);      
+        
+        //Focus on inbox folder when the App loads
+        folders.setSelectionRow(1);
     }       
 
     private void setupMenuBar() {
