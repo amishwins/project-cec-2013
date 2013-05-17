@@ -13,6 +13,8 @@ import java.util.UUID;
 public interface Email extends Comparable<Email> {
     public void send();
     public void saveToDraftFolder();
+    public void delete();
+    public void move(Folder destDir);
     
     public UUID getId();
     public String getFrom();

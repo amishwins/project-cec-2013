@@ -27,7 +27,14 @@ public class FolderDaoImpl implements FolderDao {
        //Collection<List<String>> folderIDs = new ArrayList<String>();
        
     }
-
+    
+    public void delete(String folderPath){
+    	
+    }
+    
+    public void create(String parentFolder, String newChildFolderName){
+    	
+    }
     
     public static List<File> getSubFoldersRecursively(File file) {
         List<File> subFolders = Arrays.asList(file.listFiles(new FileFilter() {

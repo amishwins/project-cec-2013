@@ -59,6 +59,18 @@ public class EmailTests {
 		myEmail.saveToDraftFolder();
 		assertEquals(true, ((EmailDaoStub)myEmail.getEmailDao()).saveWasCalled);
 	}
+	
+	@Test
+	public void delete() {
+		myEmail.delete();
+		assertEquals(true, ((EmailDaoStub)myEmail.getEmailDao()).deleteWasCalled);
+	}
+	
+	@Test
+	public void move() {
+		myEmail.move(folderStub );
+		assertEquals(true, ((EmailDaoStub)myEmail.getEmailDao()).moveWasCalled);
+	}
 
 }
 
@@ -83,6 +95,8 @@ class EmailImplCUT extends EmailImpl {
 class EmailDaoStub implements EmailDao {
 	
 	public boolean saveWasCalled = false;
+	public boolean deleteWasCalled = false;
+	public boolean moveWasCalled = false;
 
 	@Override
 	public void save(UUID id, String from,  String to, String cc, String subject, String body,String lastModifiedTime,String sentTime, String location) {
@@ -90,5 +104,14 @@ class EmailDaoStub implements EmailDao {
 		
 	}
 	
+	@Override
+	public void delete(String path, UUID id){
+		deleteWasCalled = true;
+		
+	}
 	
+	@Override
+	public void move(UUID id, String srcDir, String destDir){
+		moveWasCalled = true;		
+	}
 }

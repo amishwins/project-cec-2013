@@ -101,6 +101,15 @@ public class EmailImpl implements Email {
 				sentTime, CECConfigurator.getReference().get("Drafts"));
 	}
 	
+	public void delete(){
+		emailDao.delete(parentFolder.getPath(), id);
+	}
+	
+	public void move(Folder destDir){
+		emailDao.move(id, parentFolder.getPath(), destDir.getPath());
+	}
+	
+	
 	@Override
 	public String toString(){
 		StringBuilder email = new StringBuilder();
