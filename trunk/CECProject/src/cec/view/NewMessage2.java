@@ -188,21 +188,22 @@ public class NewMessage2 extends JFrame{
       
       //Actions - Draft
       private void draftNewMessage() {   
-       
+    	String auxFrom = "cec@cec.com";
         String auxTo = toField.getText();
         String auxCc = ccField.getText();
         String auxSubject = subjectField.getText();
         String auxBody = bodyField.getText();
-        newEmailService.draftEmail(auxTo, auxCc, auxSubject, auxBody);  
+        newEmailService.draftEmail(auxFrom,auxTo, auxCc, auxSubject, auxBody);  
     }                                        
       
       //Actions - Send
       private void sendNewMessage() {                                
-        String auxTo = toField.getText();
-        String auxCc = ccField.getText();
+        String auxFrom = "cec@cec.com";
+    	String auxTo = toField.getText();
+        String auxCc = ccField.getText(); 
         String auxSubject = subjectField.getText();
         String auxBody = bodyField.getText();
-        newEmailService.sendEmail(auxTo, auxCc, auxSubject, auxBody);    
+        newEmailService.sendEmail(auxFrom,auxTo, auxCc, auxSubject, auxBody);    
     }                                        
             
 }

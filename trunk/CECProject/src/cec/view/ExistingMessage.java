@@ -217,20 +217,21 @@ public class ExistingMessage extends JFrame{
     }   
       //Actions - Draft
       private void draftExistingMessage() {   
-       
+    	  String from = "cec@cec.com"; 
         String auxTo = toField.getText();
         String auxCc = ccField.getText();
         String auxSubject = subjectField.getText();
         String auxBody = bodyField.getText();
-        newEmailService.draftEmail(auxTo, auxCc, auxSubject, auxBody);  
+        newEmailService.draftEmail(from, auxTo, auxCc, auxSubject, auxBody);  
     }  
       
-      private void sendExistingMessage() {                                
+      private void sendExistingMessage() {
+    	  String from = "cec@cec.com"; 
           String auxTo = toField.getText();
           String auxCc = ccField.getText();
           String auxSubject = subjectField.getText();
           String auxBody = bodyField.getText();
-          newEmailService.sendEmail(auxTo, auxCc, auxSubject, auxBody);    
+          newEmailService.sendEmail(from, auxTo, auxCc, auxSubject, auxBody);    
       } 
       private void SetExistingMessageFields()
       {    	            
