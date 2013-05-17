@@ -164,22 +164,23 @@ public class NewMessageUI extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        
+    	String from = "cec@cec.com"; 
         String to = jTextField1.getText();
         String cc = jTextField2.getText();
         String subject = jTextField3.getText();
         String body = jTextArea1.getText();
-        newEmailService.sendEmail(to, cc, subject, body);
+        newEmailService.sendEmail(from, to, cc, subject, body);
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+    	String from = "cec@cec.com";
         String to = jTextField1.getText();
         String cc = jTextField2.getText();
         String subject = jTextField3.getText();
         String body = jTextArea1.getText();
-        newEmailService.draftEmail(to, cc, subject, body);
+        newEmailService.draftEmail(from, to, cc, subject, body);
         
     }//GEN-LAST:event_jButton2ActionPerformed
 

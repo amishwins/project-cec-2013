@@ -97,7 +97,7 @@ public class EmailXMLDao implements EmailDao {
 			String subject, String body, String lastModifiedTime,
 			String sentTime, String location) {
 		final String FOLDER_NAME = location;
-		final String FILE_NAME = lastModifiedTime;
+		final String FILE_NAME = id.toString();
 		final String EXTENSION = ".xml";
 		final String PATH_TO_SAVE_EMAIL = FOLDER_NAME + "/" + FILE_NAME
 				+ EXTENSION;

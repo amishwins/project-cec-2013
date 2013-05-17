@@ -86,7 +86,7 @@ public class EmailImpl implements Email{
 	}
 
 	public void saveToDraftFolder() {
-		emailDao.save(id, from, to, cc, subject, body, lastModifiedTime ,sentTime, "emails/Outbox");
+		emailDao.save(id, from, to, cc, subject, body, lastModifiedTime ,sentTime, "emails/Draft");
 	}
 	
 	@Override
@@ -119,9 +119,7 @@ public class EmailImpl implements Email{
 		} catch (ParseException e) {
 			handleParseException(e);
 		}
-		
 		return anotherEmailDate.compareTo(currentEmailDate);
-
 	}
 	
 	protected void handleParseException(Exception e) {
