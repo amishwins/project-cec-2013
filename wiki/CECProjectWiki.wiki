@@ -27,7 +27,7 @@ The persistence layer email object looks like:
 </E-Mail>
 }}}
 
-The model layer email object has the following fields and getters:
+The model layer email object has the following getters:
 
 {{{
     public UUID getId();
