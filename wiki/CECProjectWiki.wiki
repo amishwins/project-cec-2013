@@ -72,6 +72,10 @@ And then our unit test looks like:
 }}}
 
 
+=== Creation and Deletion of Folders ===
+
+We've decided to allow subfolder creation at any point in the tree. As specified by the professor, we will prevent the deletion of Inbox (and other System folders: Drafts & Outbox). 
+
 
 == Some awesome links: ==
 
