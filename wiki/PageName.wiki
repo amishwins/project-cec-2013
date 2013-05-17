@@ -6,7 +6,7 @@ In EmailXMLDao, we are using a StreamSource xls file to help us format the XML o
 
 {{{
 StreamSource stylesource = new StreamSource(getClass().getResourceAsStream("proper-indenting.xsl"));
-			Transformer transformer = transformerFactory.newTransformer(stylesource);
+Transformer transformer = transformerFactory.newTransformer(stylesource);
 }}}
 
 
