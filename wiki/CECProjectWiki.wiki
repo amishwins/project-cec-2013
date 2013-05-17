@@ -74,7 +74,9 @@ And then our unit test looks like:
 
 === Creation and Deletion of Folders ===
 
-We've decided to allow subfolder creation at any point in the tree. As specified by the professor, we will prevent the deletion of Inbox (and other System folders: Drafts & Outbox). 
+We've decided to allow subfolder creation at any point in the tree. As specified by the professor, we will prevent the deletion of Inbox (and other System folders: Drafts & Outbox).
+
+This is accomplished by modelling a parent abstract {{{Folder}}} class, which implements the main create/updated/delete methods, and defining two subclasses: {{{systemFolder}}} and {{{UserFolder}}}. Both subclasses override the delete method and act accordingly. A factory {{{FolderFactor}}} is responsible for creating the runtime model objects according the the rules stipulated above.
 
 
 == Some awesome links: ==
