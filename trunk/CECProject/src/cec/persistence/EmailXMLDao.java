@@ -5,6 +5,7 @@
 package cec.persistence;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.UUID;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -16,7 +17,9 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-
+import org.apache.commons.io.FileDeleteStrategy;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -102,11 +105,11 @@ public class EmailXMLDao implements EmailDao {
 	public void save(UUID id, String from, String to, String cc,
 			String subject, String body, String lastModifiedTime,
 			String sentTime, String location) {
-		final String FOLDER_NAME = location;
-		final String FILE_NAME = id.toString();
-		final String EXTENSION = ".xml";
-		final String PATH_TO_SAVE_EMAIL = FOLDER_NAME + "/" + FILE_NAME
-				+ EXTENSION;
+        String path = location;
+		String fileName = id.toString();
+        String extension = ".xml";
+		String pathToSaveFile = path + "/" + fileName
+				+ extension;
 
 		try {
 			Document emailInXMLFormat = buildXmlFile(id, from, to, cc, subject,
@@ -119,14 +122,33 @@ public class EmailXMLDao implements EmailDao {
 			Transformer transformer = transformerFactory
 					.newTransformer(stylesource);
 			DOMSource source = new DOMSource(emailInXMLFormat);
-			StreamResult result = new StreamResult(new File(PATH_TO_SAVE_EMAIL));
+			StreamResult result = new StreamResult(new File(pathToSaveFile));
 
 			transformer.transform(source, result);
 
 			System.out.println("File saved!");
 
-		} catch (TransformerException tfe) {
-			tfe.printStackTrace();
+		} catch (TransformerException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void delete(String path, UUID fileName){
+       FileDeleteStrategy file = FileDeleteStrategy.FORCE;
+       try{
+    	   file.delete(new File(path+"/"+fileName.toString()));
+       }catch(IOException fileDeleteException){
+    	   fileDeleteException.printStackTrace();
+       }     		
+	}
+	
+	public void move(UUID fileName, String srcDir, String destDir){
+		File file = new File(srcDir+"/"+fileName.toString());
+		File destinationDir = new File(destDir);
+		try {
+			FileUtils.moveFileToDirectory(file, destinationDir, false);
+		} catch (IOException fileMoveException) {
+			fileMoveException.printStackTrace();
 		}
 	}
 }
