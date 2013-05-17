@@ -39,11 +39,11 @@ import cec.service.Controller;
 import cec.service.TreeModelBuilder;
 
 
-class EmailViewEntity {
+/*class EmailViewEntity {
     String sentFrom;
     String subject;
     String sentDate;
-}
+}*/
 
 public class EmailClient extends JFrame implements TreeSelectionListener {
     /**

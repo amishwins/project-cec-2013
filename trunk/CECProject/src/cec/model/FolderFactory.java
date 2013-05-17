@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class FolderFactory {
 	
-	private ArrayList<String> systemFolders = new ArrayList<String>();
+	private static ArrayList<String> systemFolders = new ArrayList<String>();
 	
 	public FolderFactory() {
 		
@@ -14,7 +14,7 @@ public class FolderFactory {
 		systemFolders.add("emails/Sent");
 	}
 	
-	public Folder getFolder(String path) {
+	public static Folder getFolder(String path) {
 		if (systemFolders.contains(path)) {
 			return new SystemFolder(path);
 		}

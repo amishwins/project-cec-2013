@@ -4,9 +4,11 @@
  */
 package cec.model;
 
-import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import cec.persistence.FolderDao;
 import cec.persistence.FolderDaoFactory;
@@ -15,7 +17,7 @@ public abstract class Folder {
 	
 	private String name;
 	private String path;
-	private Collection<Email> emailsInFolder;
+	private List<Email> emailsInFolder;
 	
     public Folder(String path) {
         this.path = path;
@@ -24,21 +26,26 @@ public abstract class Folder {
     	
     public abstract void delete();
 	
-	public Iterable<Email> loadEmails(String folder) {
+	public Iterable<Email> loadEmails() {
 		emailsInFolder = new LinkedList<Email>();
 		FolderDao folderDao = FolderDaoFactory.getFolderDaoInstance();
-		Iterable<Map<String,String>> emailsData = folderDao.loadEmails(folder);
+		Iterable<Map<String,String>> emailsData = folderDao.loadEmails(path);
 		
 		for(Map<String,String> emailData: emailsData) {
 			EmailBuilder emailBuilder = new EmailBuilder();
-			Email email = emailBuilder.withTo(emailData.get("To"))
+			Email email = emailBuilder.withId(UUID.fromString(emailData.get("Id")))
+				.withFrom(emailData.get("From"))
+				.withTo(emailData.get("To"))
 				.withCC(emailData.get("CC"))
 				.withSubject(emailData.get("Subject"))
 				.withBody(emailData.get("Body"))
-				.withLastModifiedTime(emailData.get("LastAccessedTime"))
+				.withLastModifiedTime(emailData.get("LastModifiedTime"))
+				.withSentTime(emailData.get("SentTime"))
+				.withParentFolder(FolderFactory.getFolder(emailData.get("ParentFolder")))
 				.build();
 			emailsInFolder.add(email);
 		}	
+		Collections.sort(emailsInFolder);
 		return emailsInFolder;
 	}
        

@@ -63,19 +63,6 @@ public class EmailXMLDao implements EmailDao {
 			ccLabel.appendChild(emailInXMLFormat.createTextNode(cc));
 			emailRootElement.appendChild(ccLabel);
 
-			// lastAccessedTime
-			Element lastModifiedTimeLabel = emailInXMLFormat
-					.createElement("LastModifiedTime");
-			lastModifiedTimeLabel.appendChild(emailInXMLFormat
-					.createTextNode(lastModifiedTime));
-			emailRootElement.appendChild(lastModifiedTimeLabel);
-
-			// sentTime
-			Element sentTimeLabel = emailInXMLFormat.createElement("SentTime");
-			sentTimeLabel
-					.appendChild(emailInXMLFormat.createTextNode(sentTime));
-			emailRootElement.appendChild(sentTimeLabel);
-
 			// subject
 			Element subjectLabel = emailInXMLFormat.createElement("Subject");
 			subjectLabel.appendChild(emailInXMLFormat.createTextNode(subject));
@@ -85,12 +72,25 @@ public class EmailXMLDao implements EmailDao {
 			Element bodyLabel = emailInXMLFormat.createElement("Body");
 			bodyLabel.appendChild(emailInXMLFormat.createTextNode(body));
 			emailRootElement.appendChild(bodyLabel);
-			
+
+			// lastModifiedTime
+			Element lastModifiedTimeLabel = emailInXMLFormat
+					.createElement("LastModifiedTime");
+			lastModifiedTimeLabel.appendChild(emailInXMLFormat
+					.createTextNode(lastModifiedTime));
+			emailRootElement.appendChild(lastModifiedTimeLabel);
+
+			// sentTime
+			Element sentTimeLabel = emailInXMLFormat.createElement("SentTime");
+			sentTimeLabel
+			.appendChild(emailInXMLFormat.createTextNode(sentTime));
+			emailRootElement.appendChild(sentTimeLabel);
+
 			// parent folder
-			Element parentFolder = emailInXMLFormat.createElement("ParentFolder");
+			Element parentFolder = emailInXMLFormat
+					.createElement("ParentFolder");
 			parentFolder.appendChild(emailInXMLFormat.createTextNode(location));
 			emailRootElement.appendChild(parentFolder);
-			
 
 		} catch (ParserConfigurationException pce) {
 			pce.printStackTrace();
@@ -114,8 +114,10 @@ public class EmailXMLDao implements EmailDao {
 			// write the content into xml file
 			TransformerFactory transformerFactory = TransformerFactory
 					.newInstance();
-			StreamSource stylesource = new StreamSource(getClass().getResourceAsStream("proper-indenting.xsl"));
-			Transformer transformer = transformerFactory.newTransformer(stylesource);
+			StreamSource stylesource = new StreamSource(getClass()
+					.getResourceAsStream("proper-indenting.xsl"));
+			Transformer transformer = transformerFactory
+					.newTransformer(stylesource);
 			DOMSource source = new DOMSource(emailInXMLFormat);
 			StreamResult result = new StreamResult(new File(PATH_TO_SAVE_EMAIL));
 
