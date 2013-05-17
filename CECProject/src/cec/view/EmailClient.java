@@ -104,7 +104,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         folders.setRootVisible(false);
         folders.addTreeSelectionListener(this);
         folders.addMouseListener(new FoldersPopupListener(folders));
-        
+                
         
         // Show one level of folders displayed by default
         DefaultMutableTreeNode currentNode = ((DefaultMutableTreeNode)model.getRoot()).getNextNode();
@@ -143,7 +143,11 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
                                              JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                                              JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         emailTable.setFillsViewportHeight(true);
+        
         emailTable.getSelectionModel().addListSelectionListener(new RowListener());
+        emailTable.addMouseListener(new EmailTableMouseListener(emailTable));
+        
+        
 
         rightPanelChildTop.setMaximumSize(new Dimension(1200, 150));
         rightPanelChildTop.setMinimumSize(new Dimension(520, 150));
@@ -314,6 +318,22 @@ class FoldersPopupListener extends MouseAdapter {
     }
 }
 
+
+//Email Table Mouse Events
+class EmailTableMouseListener extends MouseAdapter {
+	
+	JTable table;
+	
+	public EmailTableMouseListener(JTable emailTable){
+		this.table = emailTable;    		
+	}    	
+	
+	public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+        	  JOptionPane.showMessageDialog(null, "Double click");
+    }
+}
+}
 
 
 
