@@ -10,7 +10,7 @@ import cec.view.EmailViewEntity;
 
 public class FolderService {
 	
-	static Folder folder;
+	private Folder folder;
 	
 	public Iterable<EmailViewEntity> loadEmails(String folderPath){
 		List<EmailViewEntity> emailListInView = new ArrayList<EmailViewEntity>();

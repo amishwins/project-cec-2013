@@ -71,6 +71,16 @@ public class EmailImpl implements Email {
 	public String getLastModifiedTime() {
 		return lastModifiedTime;
 	}
+	
+	public Date getLastModifiedTimeUnformatted() {
+		Date result = new Date();
+		
+/*		try {
+			result 
+		}*/
+		
+		return new Date();
+	}
 
 	public String getSentTime() {
 		return sentTime;
@@ -83,12 +93,12 @@ public class EmailImpl implements Email {
     public void send() {
 		// Assumption that email has been sent successfully..
 		emailDao.save(id, from, to, cc, subject, body, lastModifiedTime,
-				sentTime, (new CECConfigurator()).get("Outbox"));
+				sentTime, CECConfigurator.getReference().get("Outbox"));
 	}
 
 	public void saveToDraftFolder() {
 		emailDao.save(id, from, to, cc, subject, body, lastModifiedTime,
-				sentTime, (new CECConfigurator()).get("Drafts"));
+				sentTime, CECConfigurator.getReference().get("Drafts"));
 	}
 	
 	@Override

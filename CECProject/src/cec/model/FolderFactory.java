@@ -1,21 +1,11 @@
 package cec.model;
 
-import java.util.ArrayList;
+import cec.config.CECConfigurator;
 
 public class FolderFactory {
 	
-	private static ArrayList<String> systemFolders = new ArrayList<String>();
-	
-	public FolderFactory() {
-		
-		// Setup some protected folders - there has to be a better way?
-		systemFolders.add("emails/Inbox");
-		systemFolders.add("emails/Draft");
-		systemFolders.add("emails/Sent");
-	}
-	
 	public static Folder getFolder(String path) {
-		if (systemFolders.contains(path)) {
+		if (CECConfigurator.getReference().isPathForASystemFolder(path)) {
 			return new SystemFolder(path);
 		}
 		else 
