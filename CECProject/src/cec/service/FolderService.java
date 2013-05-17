@@ -24,7 +24,7 @@ public class FolderService {
 			emailInView.setCC(emailInModel.getCC());
 			emailInView.setSubject(emailInModel.getSubject());
 			emailInView.setBody(emailInModel.getBody());
-			emailInView.setLastModifiedTime(emailInModel.getLastModifiedTime());
+			emailInView.setLastModifiedTime(emailInModel.getLastModifiedTimeNicelyFormatted());
 			emailInView.setSentTime(emailInModel.getSentTime());
 			emailInView.setFolder(emailInModel.getParentFolder().getPath());
 		
@@ -32,7 +32,4 @@ public class FolderService {
 		}
 		return emailListInView;
 	}
-	
-	
-
 }

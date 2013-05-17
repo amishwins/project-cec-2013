@@ -1,14 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cec.service;
 
 import cec.model.Email;
 import cec.model.EmailBuilder;
 
-public class EmailService {
-    
+public class EmailService {    
       
    public void sendEmail(String from, String to, String cc, String subject, String body){
        EmailBuilder mailBuilder = new EmailBuilder();
@@ -23,6 +18,7 @@ public class EmailService {
                                    .build();
        newEmail.send();
    }
+
    public void draftEmail(String from, String to, String cc, String subject, String body){
        EmailBuilder mailBuilder = new EmailBuilder();
        Email email = mailBuilder.computeID()
@@ -35,6 +31,5 @@ public class EmailService {
                					.computeSentTime()
                					.build();
        email.saveToDraftFolder();
-   }
-   
+   }   
 }

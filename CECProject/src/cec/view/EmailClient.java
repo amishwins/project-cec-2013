@@ -62,7 +62,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     //String[][] emailTableData = new String[0][3];
     
     JTable emailTable = new JTable(); //emailTableData, emailTableViewColumns);    
-    FolderService foldersEngine= new FolderService();
+    FolderService folderService= new FolderService();
     
     public EmailClient(String title){
         super(title);
@@ -228,7 +228,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
             {"H","I","J"}        
         };*/
                     
-        Iterable<EmailViewEntity> emailsInEachFolder  = foldersEngine.loadEmails(sb.toString());
+        Iterable<EmailViewEntity> emailsInEachFolder  = folderService.loadEmails(sb.toString());
         emailTable.setModel(new EmailListModel(emailTableViewColumns, emailsInEachFolder)); 
     }
 }

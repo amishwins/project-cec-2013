@@ -67,7 +67,6 @@ class EmailImplExceptionCUT extends EmailImpl {
 			String subject, String body, String lastModifiedTime,
 			String sentTime, Folder parentFolder) {
 		super(id, from, to, cc, subject, body, lastModifiedTime, sentTime, parentFolder);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
