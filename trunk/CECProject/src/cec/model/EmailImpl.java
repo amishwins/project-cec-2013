@@ -14,7 +14,7 @@ import cec.config.CECConfigurator;
 import cec.persistence.EmailDao;
 import cec.persistence.EmailDaoFactory;
 
-public class EmailImpl implements Email{
+public class EmailImpl implements Email {
     private final UUID id;
 	private String from;
 	private String to;
