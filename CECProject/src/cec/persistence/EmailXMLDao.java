@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cec.persistence;
 
 import java.io.File;
@@ -23,24 +19,21 @@ import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-/**
- * 
- * @author Pankaj Kapania
- */
 public class EmailXMLDao implements EmailDao {
+	
+	DocumentBuilderFactory documentFactory = null;
+	DocumentBuilder documentBuilder = null;
+	Document emailInXMLFormat = null;
 
 	public Document buildXmlFile(UUID id, String from, String to, String cc,
 			String subject, String body, String lastModifiedTime,
 			String sentTime, String location) {
-
-		DocumentBuilderFactory documentFactory = null;
-		DocumentBuilder documentBuilder = null;
-		Document emailInXMLFormat = null;
+		
+		documentFactory = DocumentBuilderFactory.newInstance();
+		
 		try {
-
-			documentFactory = DocumentBuilderFactory.newInstance();
-			documentBuilder = documentFactory.newDocumentBuilder();
-
+			documentBuilder = documentFactory.newDocumentBuilder();			
+			
 			// root element Email
 			emailInXMLFormat = documentBuilder.newDocument();
 			Element emailRootElement = emailInXMLFormat.createElement("E-Mail");

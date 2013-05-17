@@ -30,6 +30,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneLayout;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.AbstractTableModel;
@@ -45,14 +47,15 @@ import cec.service.TreeModelBuilder;
 
 public class EmailClient extends JFrame implements TreeSelectionListener {
 	private static final long serialVersionUID = 7366789547512037235L;
+	
 	JTree folders;    
-    Controller controller = new Controller(); 
-       
-    String[] emailTableViewColumns = {"Sent From", "Subject", "Date Sent"};
-    //String[][] emailTableData = new String[0][3];
-    
-    JTable emailTable = new JTable(); //emailTableData, emailTableViewColumns);    
+	JTable emailTable = new JTable();    
+	JTextArea emailBody;
+
+	Controller controller = new Controller(); 
     FolderService folderService= new FolderService();
+
+    String[] emailTableViewColumns = {"Sent From", "Subject", "Date Sent"};
     
     public EmailClient(String title){
         super(title);
@@ -140,14 +143,14 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
                                              JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                                              JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         emailTable.setFillsViewportHeight(true);
-
+        emailTable.getSelectionModel().addListSelectionListener(new RowListener());
 
         rightPanelChildTop.setMaximumSize(new Dimension(1200, 150));
         rightPanelChildTop.setMinimumSize(new Dimension(520, 150));
         rightPanelChildTop.setPreferredSize(new Dimension(530, 150));       
 
         //Right-BOTTOM
-        JTextArea emailBody = new JTextArea(10,10);
+        emailBody = new JTextArea(10,10);
         JScrollPane rightPanelChildBottom = new JScrollPane(emailBody); 
         rightPanelChildBottom.setLayout(new ScrollPaneLayout());
 
@@ -205,22 +208,20 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         if (node == null) return;     
         
         System.out.println("Deyvid > " + sb.toString());
-        
-        // 1 tell controller to take care of the emailList view
-        //controller.notifyEmailListView(sb.toString(), emailList);
-        
-        // 2 ask the controller for the data, and set it on the emailList view
-       // emailList.setModel(controller.getEmailListModel(sb.toString()));
-       
-       /* Object[][] emailTableData = {
-            {"A","B","C"},
-            {"D","E","F"},
-            {"H","I","J"}        
-        };*/
                     
         Iterable<EmailViewEntity> emailsInEachFolder  = folderService.loadEmails(sb.toString());
         emailTable.setModel(new EmailListViewData(emailTableViewColumns, emailsInEachFolder)); 
     }
+    
+    private class RowListener implements ListSelectionListener {
+        public void valueChanged(ListSelectionEvent event) {
+            if (event.getValueIsAdjusting()) {
+                return;
+            }
+            emailBody.append("ROW SELECTION EVENT. ");
+        }
+    }
+    
 }
 
 class MenuFileExit implements ActionListener{
@@ -248,11 +249,11 @@ class PopupDeleteFolder implements ActionListener{
 }            
     
 //Folders PopUp Menu (Right-Click)
-class FoldersPopup extends JPopupMenu {
+class FolderTreeContextMenu extends JPopupMenu {
 	private static final long serialVersionUID = -5926440670627487856L;
 	JMenuItem delFolder;
     JMenuItem newFolder;        
-    public FoldersPopup(){
+    public FolderTreeContextMenu(){
         newFolder = new JMenuItem("New Folder");
         add(newFolder);        	
     	delFolder = new JMenuItem("Delete Folder");
@@ -296,8 +297,12 @@ class FoldersPopupListener extends MouseAdapter {
     }
 
     private void Popup(MouseEvent e){
-    	FoldersPopup menu = new FoldersPopup();
+    	FolderTreeContextMenu menu = new FolderTreeContextMenu();
         menu.show(e.getComponent(), e.getX()+7, e.getY());
     }
 }
+
+
+
+
     
