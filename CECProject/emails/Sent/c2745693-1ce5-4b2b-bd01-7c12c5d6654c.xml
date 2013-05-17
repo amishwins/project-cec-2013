@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><E-Mail>
+   <Id>c2745693-1ce5-4b2b-bd01-7c12c5d6654c</Id>
+   <From>cec@cec.com</From>
+   <To>pankajkapania@gmail.com</To>
+   <CC>amish.gala@gmail.com;dayevid@yahoo.com;romeo@gmail.com</CC>
+   <Subject>test email</Subject>
+   <Body>email</Body>
+   <LastModifiedTime>2013.05.17_At_13.52.04.177</LastModifiedTime>
+   <SentTime>2013.05.17_At_13.52.04.177</SentTime>
+   <ParentFolder>emails/Outbox</ParentFolder>
+</E-Mail>

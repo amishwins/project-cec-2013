@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><E-Mail>
+   <Id>b89f13b7-bd1e-4ac6-8646-16dbd0689c88</Id>
+   <From>cec@cec.com</From>
+   <To>to@encs.xyz</To>
+   <CC>ccField@encs.xyz</CC>
+   <Subject>Re: Subject</Subject>
+   <Body>All the send does is move the email into a folder to be sent later 
+ Troy</Body>
+   <LastModifiedTime>2013.05.17_At_13.51.01.321</LastModifiedTime>
+   <SentTime>2013.05.17_At_13.51.01.321</SentTime>
+   <ParentFolder>emails/Drafts</ParentFolder>
+</E-Mail>

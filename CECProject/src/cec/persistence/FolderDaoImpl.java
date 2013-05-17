@@ -28,6 +28,7 @@ public class FolderDaoImpl implements FolderDao {
        
     }
 
+    
     public static List<File> getSubFoldersRecursively(File file) {
         List<File> subFolders = Arrays.asList(file.listFiles(new FileFilter() {
             public boolean accept(File file) {
@@ -52,7 +53,6 @@ public class FolderDaoImpl implements FolderDao {
 
         String[] xmlFilesName = getFileNames(folder);
         for (String xmlFileName : xmlFilesName) {
-            //System.out.println(xmlFileName);
             email = read(folder, xmlFileName);
             listOfEmails.add(email);
         }
@@ -69,7 +69,6 @@ public class FolderDaoImpl implements FolderDao {
         Map<String, String> emailData = new TreeMap<String, String>();
         try {
             File xmlFile = new File(folder + "/" + xmlFileName);
-            // System.out.println("inread"+xmlFile.getName());
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
             Document email = documentBuilder.parse(xmlFile);
@@ -79,17 +78,15 @@ public class FolderDaoImpl implements FolderDao {
                 Node emailField = listOfEmailFields.item(index);
                 if (emailField.getNodeType() == Node.ELEMENT_NODE) {
                     Element eElement = (Element) emailField;
+                    emailData.put("Id", eElement.getElementsByTagName("Id").item(0).getTextContent());
+                    emailData.put("From", eElement.getElementsByTagName("From").item(0).getTextContent());
                     emailData.put("To", eElement.getElementsByTagName("To").item(0).getTextContent());
                     emailData.put("CC", eElement.getElementsByTagName("CC").item(0).getTextContent());
-                    emailData.put("LastAccessedTime", eElement.getElementsByTagName("LastAccessedTime").item(0).getTextContent());
                     emailData.put("Subject", eElement.getElementsByTagName("Subject").item(0).getTextContent());
                     emailData.put("Body", eElement.getElementsByTagName("Body").item(0).getTextContent());
-
-                    // System.out.println("To : " + eElement.getElementsByTagName("CC").item(0).getTextContent());
-                    //System.out.println("CC : " + eElement.getElementsByTagName("CC").item(0).getTextContent());
-                    //System.out.println("Last Accessed Time : " + eElement.getElementsByTagName("LastAccessedTime").item(0).getTextContent());
-                    // System.out.println("Subject : " + eElement.getElementsByTagName("Subject").item(0).getTextContent());
-                    // System.out.println("Body : " + eElement.getElementsByTagName("Body").item(0).getTextContent());
+                    emailData.put("LastModifiedTime", eElement.getElementsByTagName("LastModifiedTime").item(0).getTextContent());
+                    emailData.put("SentTime", eElement.getElementsByTagName("SentTime").item(0).getTextContent());
+                    emailData.put("ParentFolder", eElement.getElementsByTagName("ParentFolder").item(0).getTextContent());
                 }
             }
         } catch (Exception e) {
