@@ -43,17 +43,7 @@ import cec.service.Controller;
 import cec.service.FolderService;
 import cec.service.TreeModelBuilder;
 
-
-/*class EmailViewEntity {
-    String sentFrom;
-    String subject;
-    String sentDate;
-}*/
-
 public class EmailClient extends JFrame implements TreeSelectionListener {
-    /**
-	 *  TODO: Amish - added a serial version UID (I don't know why!?)
-	 */
 	private static final long serialVersionUID = 7366789547512037235L;
 	JTree folders;    
     Controller controller = new Controller(); 
@@ -70,7 +60,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     }
     
     private void initialize() {
-        setSize(760, 560);
+        setSize(1024, 768);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         setLocationRelativeTo(null);
@@ -229,137 +219,85 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         };*/
                     
         Iterable<EmailViewEntity> emailsInEachFolder  = folderService.loadEmails(sb.toString());
-        emailTable.setModel(new EmailListModel(emailTableViewColumns, emailsInEachFolder)); 
+        emailTable.setModel(new EmailListViewData(emailTableViewColumns, emailsInEachFolder)); 
     }
 }
 
-    class MenuFileExit implements ActionListener{
-        public void actionPerformed (ActionEvent e){
-            System.exit(0);
-        }
-    }
+class MenuFileExit implements ActionListener{
+	public void actionPerformed (ActionEvent e){
+		System.exit(0);
+	}
+}
 
-    class MenuFileNewMessage implements ActionListener{
-        public void actionPerformed (ActionEvent e){
-            JFrame nm = new NewMessage();
-        }
+class MenuFileNewMessage implements ActionListener{
+	public void actionPerformed (ActionEvent e){
+		JFrame nm = new NewMessage();
     }
+}
    
-    
-    class MenuFileExistingMessage implements ActionListener{
-        public void actionPerformed (ActionEvent e){
-            JFrame nm = new ExistingMessage();
-        }
+class MenuFileExistingMessage implements ActionListener{
+	public void actionPerformed (ActionEvent e){
+		JFrame nm = new ExistingMessage();
+	}
+}
+
+class PopupDeleteFolder implements ActionListener{
+	public void actionPerformed (ActionEvent e){
+    	JOptionPane.showMessageDialog(null, "Operation not allowed");
     }
-
-
-    class PopupDeleteFolder implements ActionListener{
-        public void actionPerformed (ActionEvent e){
-        	JOptionPane.showMessageDialog(null, "Operation not allowed");
-        }
-    }            
+}            
     
-    //Folders PopUp Menu (Right-Click)
-    class FoldersPopup extends JPopupMenu {
-        /**
-		 * TODO: Same comment as above! Why do we need a serialVersionUID? 
-		 */
-		private static final long serialVersionUID = -5926440670627487856L;
-		JMenuItem delFolder;
-        JMenuItem newFolder;        
-        public FoldersPopup(){
-            newFolder = new JMenuItem("New Folder");
-            add(newFolder);        	
-        	delFolder = new JMenuItem("Delete Folder");
-            add(delFolder);
-
-            
-            delFolder.addActionListener(new PopupDeleteFolder());   
-        }
-    }    
-    //Folders PopUp Menu Listener
-    class FoldersPopupListener extends MouseAdapter {
-    	
-    	JTree tree;
-    	int   selNode;
-    	
-    	public FoldersPopupListener(JTree foldersTree){
-    		this.tree = foldersTree;    		
-    	}    	
-    	
-        public void mousePressed(MouseEvent e){
-        	
-        	/** Checking if we are clicking on a valid JTree node - If so, we trigger the popup menu */
-        	selNode = tree.getRowForLocation(e.getX(), e.getY());
-        	TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-        	
-        	System.out.println(selNode);
-        	System.out.println(selPath);        	
-        	
-        	if(selNode != -1) {	  
-        		tree.setSelectionPath(selPath);
-	            if (e.isPopupTrigger())
-	            	Popup(e);
-        	}
-        }
-
-        public void mouseReleased(MouseEvent e){
-        	if(selNode != -1) {	  
-	            if (e.isPopupTrigger())
-	            	Popup(e);
-        	}
-        }
-
-        private void Popup(MouseEvent e){
-        	FoldersPopup menu = new FoldersPopup();
-            menu.show(e.getComponent(), e.getX()+7, e.getY());
-        }
+//Folders PopUp Menu (Right-Click)
+class FoldersPopup extends JPopupMenu {
+	private static final long serialVersionUID = -5926440670627487856L;
+	JMenuItem delFolder;
+    JMenuItem newFolder;        
+    public FoldersPopup(){
+        newFolder = new JMenuItem("New Folder");
+        add(newFolder);        	
+    	delFolder = new JMenuItem("Delete Folder");
+        add(delFolder);
+        
+        delFolder.addActionListener(new PopupDeleteFolder());   
     }
+}
     
-    // Table Abstract Model
-    class EmailListModel extends AbstractTableModel {
+//Folders PopUp Menu Listener
+class FoldersPopupListener extends MouseAdapter {
+	
+	JTree tree;
+	int   selNode;
+	
+	public FoldersPopupListener(JTree foldersTree){
+		this.tree = foldersTree;    		
+	}    	
+	
+    public void mousePressed(MouseEvent e){
     	
-		private static final long serialVersionUID = 5641320475551936954L;
-		String[] header;
-		ArrayList<EmailViewEntity> data;
+    	/** Checking if we are clicking on a valid JTree node - If so, we trigger the popup menu */
+    	selNode = tree.getRowForLocation(e.getX(), e.getY());
+    	TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
     	
-    	public EmailListModel (String[] emailTableViewColumns,  Iterable<EmailViewEntity> emailTableViewData) { 
-    		header = emailTableViewColumns;
-    		data   = (ArrayList<EmailViewEntity>)emailTableViewData;
-    		
+    	System.out.println(selNode);
+    	System.out.println(selPath);        	
+    	
+    	if(selNode != -1) {	  
+    		tree.setSelectionPath(selPath);
+            if (e.isPopupTrigger())
+            	Popup(e);
     	}
-    	
-    	public int getRowCount() {
-    		return data.size();
-		}
-    	
-        public int getColumnCount() { return 3; }
-        
-        public Object getValueAt(int row, int column){ 
-        	EmailViewEntity currentRow = data.get(row);
-        	String columnValue = "";
-        	switch (column) {
-				case 0:
-					columnValue = currentRow.getFrom();		
-					break;
-				case 1:
-					columnValue = currentRow.getSubject();
-					break;
-				case 2:
-					columnValue = currentRow.getLastModifiedTime();
-					break;
-				default:
-					break;
-			}   
-        	
-        	return columnValue;
-    	}        
-        
-        public String getColumnName(int i) {
-        	return header[i];
-    	}
-            
     }
 
+    public void mouseReleased(MouseEvent e){
+    	if(selNode != -1) {	  
+            if (e.isPopupTrigger())
+            	Popup(e);
+    	}
+    }
+
+    private void Popup(MouseEvent e){
+    	FoldersPopup menu = new FoldersPopup();
+        menu.show(e.getComponent(), e.getX()+7, e.getY());
+    }
+}
     
-        
