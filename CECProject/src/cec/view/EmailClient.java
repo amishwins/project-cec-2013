@@ -197,11 +197,15 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         JMenuItem newMessageItemNewUI = new JMenuItem("New Message New UI");
         fileMenuBarEntry.add(newMessageItemNewUI);
         
+        JMenuItem ExistingMessageItem = new JMenuItem("Existing Message");//EXISTING MESSA
+        fileMenuBarEntry.add(ExistingMessageItem); 
+        
         JMenuItem exitItem = new JMenuItem("Exit");
         fileMenuBarEntry.add(exitItem);           
         
         newMessageItem.addActionListener(new MenuFileNewMessage());   
         newMessageItemNewUI.addActionListener(new MenuFileNewMessageNewUI());
+        ExistingMessageItem.addActionListener(new MenuFileExistingMessage());
         exitItem.addActionListener(new MenuFileExit());
     }
 
@@ -260,6 +264,13 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         }
     }
     
+    class MenuFileExistingMessage implements ActionListener{
+        public void actionPerformed (ActionEvent e){
+            JFrame nm = new ExistingMessage();
+        }
+    }
+
+
     class PopupDeleteFolder implements ActionListener{
         public void actionPerformed (ActionEvent e){
         	
