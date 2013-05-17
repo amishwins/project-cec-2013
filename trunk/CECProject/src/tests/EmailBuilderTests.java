@@ -2,10 +2,7 @@ package tests;
 
 import static org.junit.Assert.*;
 
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
-import java.util.ArrayList;
 import java.util.UUID;
 
 import org.junit.After;
@@ -29,7 +26,7 @@ public class EmailBuilderTests {
 	public void setUp() throws Exception {
 		cut = new EmailBuilder();
 		emailId = UUID.randomUUID();	
-		myFolder = (new FolderFactory()).getFolder("test/folder");
+		myFolder = FolderFactory.getFolder("test/folder");
 	}
 
 	@After
@@ -39,7 +36,7 @@ public class EmailBuilderTests {
 	@Test
 	public void buildSimpleEmail() {
 		email = cut.withId(emailId)
-			.withFrom((new CECConfigurator()).get("ClientEmail"))
+			.withFrom(CECConfigurator.getReference().get("ClientEmail"))
 			.withTo("PankajKapania@yahoo.com")
 			.withCC("PankajKapania@gmail.com")
 			.withSubject("TestSubject1")

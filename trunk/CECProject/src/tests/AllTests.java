@@ -9,7 +9,8 @@ import org.junit.runners.Suite.SuiteClasses;
 	CECConfiguratorTests.class,
 	EmailBuilderTests.class, 
 	EmailSortingTests.class,
-	EmailTests.class })
+	EmailTests.class,
+	FolderFactoryTests.class })
 
 public class AllTests {
 }
