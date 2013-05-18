@@ -34,8 +34,8 @@ public abstract class Folder {
     
     public abstract void delete();
     
-    public void create(String newFolderName){
-    	folderDao.create(getPath(), newFolderName);
+    public void createSubFolder(String newFolderName){
+    	folderDao.createSubFolder(getPath(), newFolderName);
     }
 	
 	public Iterable<Email> loadEmails() {

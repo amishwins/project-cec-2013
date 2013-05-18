@@ -10,6 +10,6 @@ public interface FolderDao {
     public Iterable<Map<String,String>> loadEmails(String dir);
     //public Iterable<List<String>> loadFolders();
     public void delete(String folderPath);
-    public void create(String parentFolder, String newChildFolderName);
+    public void createSubFolder(String parentFolder, String newChildFolderName);
 }
  

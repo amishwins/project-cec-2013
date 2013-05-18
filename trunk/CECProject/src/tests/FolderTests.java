@@ -74,13 +74,13 @@ public class FolderTests {
 	
 	@Test 
 	public void createFolderInsideSystemFolder() {
-		systemFolder.create(newFolderName);
+		systemFolder.createSubFolder(newFolderName);
 		assertTrue(((FolderDaoStub)systemFolder.getFolderDao()).createWasCalled);
 	}
 
 	@Test 
 	public void createFolderInsideUserFolder() {
-		userFolder.create(newFolderName);
+		userFolder.createSubFolder(newFolderName);
 		assertTrue(((FolderDaoStub)userFolder.getFolderDao()).createWasCalled);
 	}
 	
@@ -147,7 +147,7 @@ class FolderDaoStub implements FolderDao {
 	}
     
 	@Override
-	public void create(String parentFolder, String newChildFolderName){
+	public void createSubFolder(String parentFolder, String newChildFolderName){
 		createWasCalled = true;
 	}
 }
