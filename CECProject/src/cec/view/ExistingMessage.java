@@ -44,7 +44,21 @@ public class ExistingMessage extends JFrame {
 		emailEntity = email;
 		
 		setExistingMessageFields();
+		initialize();
+		
+	}
 
+	public ExistingMessage() {
+		super("New Message");
+		//emailEntity = email;
+		
+		//SetNewMessageFields();
+		initialize();
+		
+	}
+	
+	private void initialize()
+	{
 		setSize(610, 440);
 		setLayout(new BorderLayout());
 		setResizable(false);
@@ -208,8 +222,9 @@ public class ExistingMessage extends JFrame {
 		add(bar, BorderLayout.NORTH);
 		add(mid, BorderLayout.LINE_START);
 		add(scroll, BorderLayout.SOUTH);
+		
+		
 	}
-
 	private void discardExistingMessage() {
 
 		this.dispose();
@@ -300,6 +315,29 @@ public class ExistingMessage extends JFrame {
 		deleteItem.setVisible(false);
 		sendItem.setVisible(true);
 		draftItem.setVisible(true);
+	}
+	private void SetNewMessage() {
+
+		// FIELD EDITABLE
+		toField.setEditable(false);
+		ccField.setEditable(false);
+		subjectField.setEditable(false);
+		bodyField.setEditable(false);
+
+		// OPTION AVAILABLE
+		reply.setVisible(true);
+		forward.setVisible(true);
+		delete.setVisible(true);
+		send.setVisible(false);
+		draft.setVisible(false);
+		discard.setVisible(false);
+
+		// OPTION AVAILABLE IN MENU
+		replyItem.setVisible(true);
+		forwardItem.setVisible(true);
+		deleteItem.setVisible(true);
+		sendItem.setVisible(false);
+		draftItem.setVisible(false);
 	}
 
 }
