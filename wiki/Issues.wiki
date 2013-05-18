@@ -13,7 +13,7 @@
 
   * Finalize interfaces
   * Unit tests
-  * {{{EmailImpl}}} currently checks if the date field LastModifiedDate is empty. If not, we get a runtime exception. But this might be the wrong approach. We basically cannot allow this field to ever be empty. It's an invariant! The sorting depends on it.
+  * {{{EmailImpl}}} currently checks if the date field {{{LastModifiedDate}}} is empty. If not, we get a runtime exception. But this might be the wrong approach. We basically cannot allow this field to ever be empty. It's an invariant! The sorting depends on it.
 
 == Persistence ==
 
