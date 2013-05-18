@@ -15,20 +15,20 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.io.FileDeleteStrategy;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 public class EmailXMLDao implements EmailDao {
 	
-	DocumentBuilderFactory documentFactory = null;
-	DocumentBuilder documentBuilder = null;
-	Document emailInXMLFormat = null;
+	final String FILE_EXTENSION=".xml";
+	
 
 	public Document buildXmlFile(UUID id, String from, String to, String cc,
 			String subject, String body, String lastModifiedTime,
 			String sentTime, String location) {
-		
+		DocumentBuilderFactory documentFactory = null;
+		DocumentBuilder documentBuilder = null;
+		Document emailInXMLFormat = null;
 		documentFactory = DocumentBuilderFactory.newInstance();
 		
 		try {
@@ -100,9 +100,8 @@ public class EmailXMLDao implements EmailDao {
 			String sentTime, String location) {
         String path = location;
 		String fileName = id.toString();
-        String extension = ".xml";
-		String pathToSaveFile = path + "/" + fileName
-				+ extension;
+       	String pathToSaveFile = path + "/" + fileName
+				+ FILE_EXTENSION;
 
 		try {
 			Document emailInXMLFormat = buildXmlFile(id, from, to, cc, subject,
@@ -129,14 +128,14 @@ public class EmailXMLDao implements EmailDao {
 	public void delete(String path, UUID fileName){
        FileDeleteStrategy file = FileDeleteStrategy.FORCE;
        try{
-    	   file.delete(new File(path+"/"+fileName.toString()+".xml"));
+    	   file.delete(new File(path+"/"+fileName.toString()+FILE_EXTENSION));
        }catch(IOException fileDeleteException){
     	   fileDeleteException.printStackTrace();
        }     		
 	}
 	
 	public void move(UUID fileName, String srcDir, String destDir){
-		File file = new File(srcDir+"/"+fileName.toString());
+		File file = new File(srcDir+"/"+fileName.toString()+FILE_EXTENSION);
 		File destinationDir = new File(destDir);
 		try {
 			FileUtils.moveFileToDirectory(file, destinationDir, false);
