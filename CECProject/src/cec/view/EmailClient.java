@@ -41,6 +41,7 @@ import javax.swing.tree.TreePath;
 import cec.persistence.FolderDaoImpl;
 import cec.service.Controller;
 import cec.service.FolderService;
+import cec.service.EmailService;
 import cec.service.TreeModelBuilder;
 
 public class EmailClient extends JFrame implements TreeSelectionListener {
@@ -51,7 +52,8 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	JTextArea emailBody;
 
 	Controller controller = new Controller(); 
-    FolderService folderService= new FolderService();
+    FolderService folderService = new FolderService();
+    EmailService emailService = new EmailService();
 
     String[] emailTableViewColumns = {"Sent From", "Subject", "Date Sent"};
     
@@ -101,7 +103,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         folders = new JTree(model);
         folders.setRootVisible(false);
         folders.addTreeSelectionListener(this);
-        folders.addMouseListener(new FoldersPopupListener(folders));
+        folders.addMouseListener(new FolderTreeMouseListener(folders));
                 
         
         // Show one level of folders displayed by default
@@ -142,6 +144,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
                                              JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         emailTable.setFillsViewportHeight(true);
         emailTable.getSelectionModel().addListSelectionListener(new RowListener());
+        emailTable.addMouseListener(new EmailTableMouseListener());
 
         rightPanelChildTop.setMaximumSize(new Dimension(1200, 150));
         rightPanelChildTop.setMinimumSize(new Dimension(550, 200));
@@ -178,6 +181,10 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         newEmail.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,InputEvent.CTRL_DOWN_MASK));
         fileMenuBarEntry.add(newEmail);
         
+        JMenuItem newSubfolder = new JMenuItem("New Sub-folder",KeyEvent.VK_F);
+        newSubfolder.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F,InputEvent.CTRL_DOWN_MASK));
+        fileMenuBarEntry.add(newSubfolder);        
+        
         JMenuItem openSelectedEmail = new JMenuItem("Open Selected Email");
         fileMenuBarEntry.add(openSelectedEmail); 
         
@@ -186,6 +193,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         
         // Add all the action listeners for the File menu
         newEmail.addActionListener(new MenuFileNewEmail());
+        newSubfolder.addActionListener(new MenuFileNewSubFolder());
         openSelectedEmail.addActionListener(new MenuFileOpenSelectedEmail());
         exitItem.addActionListener(new MenuFileExit());
         
@@ -256,15 +264,55 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     	}
     }
     
+    
+    //New Folder
+    private class MenuFileNewSubFolder implements ActionListener{
+    	public void actionPerformed (ActionEvent e){    	
+    		String folderName = JOptionPane.showInputDialog(null,"Folder Name", "", 1);	
+    		
+    		
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode)folders.getLastSelectedPathComponent(); 
+
+            if (node == null)  
+            	JOptionPane.showMessageDialog(null, "Select a folder to delete");
+            
+            Object[] pathComponents = folders.getSelectionPath().getPath();
+
+            StringBuilder sb = new StringBuilder();
+            for(Object o: pathComponents) {
+                sb.append(o);
+                sb.append("/");
+            }
+            sb.deleteCharAt(0);
+            sb.deleteCharAt(sb.length() - 1);
+            JOptionPane.showMessageDialog(null, sb.toString() +  folderName );    		
+            folderService.createSubFolder(sb.toString(), folderName);
+            
+            //Force Refresh - Making ROOT the selected node
+            folders.setSelectionRow(0);
+    		
+        }
+    } 
+    
+    
     // TODO: tie this into Pankaj's service layer classes 
     
     private class MenuEditDeleteEmail implements ActionListener {
     	public void actionPerformed (ActionEvent e) {
+    		
+    		
 			EmailViewEntity selectedEmailEntity = ((EmailListViewData)(emailTable.getModel()))
 					.getViewEntityAtIndex(emailTable.getSelectedRow());
 			String output;
+			
 			output = selectedEmailEntity.getId() + selectedEmailEntity.getFolder();
-			JOptionPane.showMessageDialog(null, output);
+			//JOptionPane.showMessageDialog(null, output);
+			
+			emailService.delete(selectedEmailEntity);
+			System.out.println(selectedEmailEntity.getId());
+			
+			
+			
     	}
     }
     
@@ -290,7 +338,66 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
             JOptionPane.showMessageDialog(null, sb.toString());
 			
 		}
-    }    
+    }  
+    
+    
+    
+    
+    
+    //Folder Tree Context Menu (Right-Click)
+    class FolderTreeContextMenu extends JPopupMenu {
+    	private static final long serialVersionUID = -5926440670627487856L;
+    	JMenuItem delFolder;
+        JMenuItem newFolder;        
+        public FolderTreeContextMenu(){
+            newFolder = new JMenuItem("New Folder");
+            add(newFolder);        	
+        	delFolder = new JMenuItem("Delete Folder");
+            add(delFolder);
+            
+            delFolder.addActionListener(new MenuEditDeleteFolder()); 
+            
+        }
+    }
+        
+    //Folder Tree Mouse Listener
+    class FolderTreeMouseListener extends MouseAdapter {
+    	
+    	JTree tree;
+    	int   selNode;
+    	
+    	public FolderTreeMouseListener(JTree foldersTree){
+    		this.tree = foldersTree;    		
+    	}    	
+    	
+        public void mousePressed(MouseEvent e){
+        	
+        	/** Checking if we are clicking on a valid JTree node - If so, we trigger the popup menu */
+        	selNode = tree.getRowForLocation(e.getX(), e.getY());
+        	TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
+        	
+        	System.out.println(selNode);
+        	System.out.println(selPath);        	
+        	
+        	if(selNode != -1) {	  
+        		tree.setSelectionPath(selPath);
+                if (e.isPopupTrigger())
+                	Popup(e);
+        	}
+        }
+
+        public void mouseReleased(MouseEvent e){
+        	if(selNode != -1) {	  
+                if (e.isPopupTrigger())
+                	Popup(e);
+        	}
+        }
+
+        private void Popup(MouseEvent e){
+        	FolderTreeContextMenu menu = new FolderTreeContextMenu();
+            menu.show(e.getComponent(), e.getX()+7, e.getY());
+        }
+    }  
     
 }
 
@@ -308,72 +415,18 @@ class MenuFileNewEmail implements ActionListener {
    
 class MenuFileOpenSelectedEmail implements ActionListener {
 	public void actionPerformed (ActionEvent e) {
-		JFrame nm = new ExistingMessage(new EmailViewEntity());
+		JFrame nm = new ExistingMessage(new EmailViewEntity());		
 	}
 }
 
-class PopupDeleteFolder implements ActionListener {
+/*class PopupDeleteFolder implements ActionListener {
 	public void actionPerformed (ActionEvent e) {
     	JOptionPane.showMessageDialog(null, "Operation not allowed");
     }
-}            
-
+} */           
 
 
     
-//Folders PopUp Menu (Right-Click)
-class FolderTreeContextMenu extends JPopupMenu {
-	private static final long serialVersionUID = -5926440670627487856L;
-	JMenuItem delFolder;
-    JMenuItem newFolder;        
-    public FolderTreeContextMenu(){
-        newFolder = new JMenuItem("New Folder");
-        add(newFolder);        	
-    	delFolder = new JMenuItem("Delete Folder");
-        add(delFolder);
-        
-        delFolder.addActionListener(new PopupDeleteFolder());   
-    }
-}
-    
-//Folders PopUp Menu Listener
-class FoldersPopupListener extends MouseAdapter {
-	
-	JTree tree;
-	int   selNode;
-	
-	public FoldersPopupListener(JTree foldersTree){
-		this.tree = foldersTree;    		
-	}    	
-	
-    public void mousePressed(MouseEvent e){
-    	
-    	/** Checking if we are clicking on a valid JTree node - If so, we trigger the popup menu */
-    	selNode = tree.getRowForLocation(e.getX(), e.getY());
-    	TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-    	
-    	System.out.println(selNode);
-    	System.out.println(selPath);        	
-    	
-    	if(selNode != -1) {	  
-    		tree.setSelectionPath(selPath);
-            if (e.isPopupTrigger())
-            	Popup(e);
-    	}
-    }
-
-    public void mouseReleased(MouseEvent e){
-    	if(selNode != -1) {	  
-            if (e.isPopupTrigger())
-            	Popup(e);
-    	}
-    }
-
-    private void Popup(MouseEvent e){
-    	FolderTreeContextMenu menu = new FolderTreeContextMenu();
-        menu.show(e.getComponent(), e.getX()+7, e.getY());
-    }
-}
 
 
     
