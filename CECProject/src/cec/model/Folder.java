@@ -15,29 +15,19 @@ import cec.persistence.FolderDaoFactory;
 
 public abstract class Folder {
 	
-	private String name;
 	private String path;
 	private List<Email> emailsInFolder;
 	protected FolderDao folderDao;
 	
     public Folder(String path) {
         this.path = path;
-        this.name = extractName(path);
         setFolderDao(FolderDaoFactory.getFolderDaoInstance());
     }
-    
-    public String getName() {
-		return name;
-	}
 
 	public String getPath() {
 		return path;
 	}
 	
-    private String extractName(String path) {
-        return path;
-    }
-    
     protected void setFolderDao(FolderDao folderDao){
     	this.folderDao = folderDao;    	
     }

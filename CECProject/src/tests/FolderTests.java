@@ -21,12 +21,18 @@ public class FolderTests {
 	String userFolderPath;
 	String systemFolderPath;
 	String newFolderName;
+	String systemFolderName;
+	String userFolderName;
 	
 
 	@Before
 	public void setUp() throws Exception {
+		
 		userFolderPath = "emails/Inbox/Jokes";
+		userFolderName = "Jokes";
 		systemFolderPath = "emails/Outbox";
+		systemFolderName = "Outbox";
+		
 		systemFolder = new SystemFolderCUT(systemFolderPath);
 		userFolder = new UserFolderCUT(userFolderPath);
 		newFolderName = "temp";
@@ -38,11 +44,8 @@ public class FolderTests {
 
 	@Test 
 	public void FolderToGetFields() {
-		
 		assertTrue(systemFolder.getPath().equals(systemFolderPath));
 		assertTrue(userFolder.getPath().equals(userFolderPath));
-		assertTrue(systemFolder.getName().equals(systemFolderPath));
-		assertTrue(userFolder.getName().equals(userFolderPath));
 	}
 	
 	@Test 
