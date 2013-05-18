@@ -2,6 +2,17 @@
 
 == Design Decisions ==
 
+=== Creation and Deletion of Folders ===
+
+We have decided that users can create folders anywhere. 
+
+We have decided that users can only delete user created folders. The following folders are considered "system" folders, and thus *cannot* be deleted:
+
+  * Inbox
+  * Drafts
+  * Outbox
+  * Sent
+
 === Formatting XML ===
 In EmailXMLDao, we are using a {{{StreamSource.xls}}} file to help us format the XML output:
 
