@@ -129,7 +129,7 @@ public class EmailXMLDao implements EmailDao {
 	public void delete(String path, UUID fileName){
        FileDeleteStrategy file = FileDeleteStrategy.FORCE;
        try{
-    	   file.delete(new File(path+"/"+fileName.toString()));
+    	   file.delete(new File(path+"/"+fileName.toString()+".xml"));
        }catch(IOException fileDeleteException){
     	   fileDeleteException.printStackTrace();
        }     		
