@@ -265,38 +265,49 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     }
     
     
-    //New Folder
+    //FILE > NEW SUB-FOLDER > 
     private class MenuFileNewSubFolder implements ActionListener{
     	public void actionPerformed (ActionEvent e){    	
-    		String folderName = JOptionPane.showInputDialog(null,"Folder Name", "", 1);	
     		
-    		
-            DefaultMutableTreeNode node = (DefaultMutableTreeNode)folders.getLastSelectedPathComponent(); 
-
-            if (node == null)  
-            	JOptionPane.showMessageDialog(null, "Select a folder to delete");
-            
-            Object[] pathComponents = folders.getSelectionPath().getPath();
-
-            StringBuilder sb = new StringBuilder();
-            for(Object o: pathComponents) {
-                sb.append(o);
-                sb.append("/");
-            }
-            sb.deleteCharAt(0);
-            sb.deleteCharAt(sb.length() - 1);
-            JOptionPane.showMessageDialog(null, sb.toString() +  folderName );    		
-            folderService.createSubFolder(sb.toString(), folderName);
-            
-            //Force Refresh - Making ROOT the selected node
-            folders.setSelectionRow(0);
+    		String folderName = JOptionPane.showInputDialog(null,"Folder Name");	
+  
+    		if(folderName!=null)    		
+    		{ 	
+    			if(folderName.trim().length()>0)
+    			{
+    				JOptionPane.showMessageDialog(null, "YOU DID - "+folderName+"--");
+    	    		// TODO: this is duplicate code - refactor!
+    	    		
+    	            DefaultMutableTreeNode node = (DefaultMutableTreeNode)folders.getLastSelectedPathComponent(); 
+    	
+    	            if (node == null)  
+    	            	JOptionPane.showMessageDialog(null, "Select a folder to delete");
+    	            
+    	            Object[] pathComponents = folders.getSelectionPath().getPath();
+    	
+    	            StringBuilder sb = new StringBuilder();
+    	            for(Object o: pathComponents) {
+    	                sb.append(o);
+    	                sb.append("/");
+    	            }
+    	            sb.deleteCharAt(0);
+    	            sb.deleteCharAt(sb.length() - 1);
+    	            JOptionPane.showMessageDialog(null, sb.toString() +  folderName );    		
+    	            folderService.createSubFolder(sb.toString(), folderName);
+    	            
+    	            //Force Refresh - Making ROOT the selected node
+    	            folders.setSelectionRow(0);    				
+    			}
+    			else
+        			JOptionPane.showMessageDialog(null, "Invalid Folder name!");    			
+    		}
     		
         }
     } 
     
     
-    // TODO: tie this into Pankaj's service layer classes 
-    
+     
+    //EDIT > DELETE EMAIL > 
     private class MenuEditDeleteEmail implements ActionListener {
     	public void actionPerformed (ActionEvent e) {
     		
@@ -309,13 +320,12 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 			//JOptionPane.showMessageDialog(null, output);
 			
 			emailService.delete(selectedEmailEntity);
-			System.out.println(selectedEmailEntity.getId());
-			
-			
+			System.out.println(selectedEmailEntity.getId());					
 			
     	}
     }
     
+    //EDIT > DELETE FOLDER > 
     private class MenuEditDeleteFolder implements ActionListener {
     	public void actionPerformed (ActionEvent e) {
     		
@@ -335,13 +345,12 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
             }
             sb.deleteCharAt(0);
             sb.deleteCharAt(sb.length() - 1);
-            JOptionPane.showMessageDialog(null, sb.toString());
+            //JOptionPane.showMessageDialog(null, sb.toString());
+            folderService.delete(sb.toString());
 			
 		}
-    }  
-    
-    
-    
+    }      
+        
     
     
     //Folder Tree Context Menu (Right-Click)
@@ -350,13 +359,13 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     	JMenuItem delFolder;
         JMenuItem newFolder;        
         public FolderTreeContextMenu(){
-            newFolder = new JMenuItem("New Folder");
+            newFolder = new JMenuItem("New Sub-folder...");
             add(newFolder);        	
         	delFolder = new JMenuItem("Delete Folder");
             add(delFolder);
             
             delFolder.addActionListener(new MenuEditDeleteFolder()); 
-            
+            newFolder.addActionListener(new MenuFileNewSubFolder());
         }
     }
         
