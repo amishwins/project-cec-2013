@@ -256,6 +256,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     	}
     }
     
+    // TODO: tie this into Pankaj's service layer classes 
     
     private class MenuEditDeleteEmail implements ActionListener {
     	public void actionPerformed (ActionEvent e) {
@@ -269,7 +270,24 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     
     private class MenuEditDeleteFolder implements ActionListener {
     	public void actionPerformed (ActionEvent e) {
+    		
+    		// TODO: this is duplicate code - refactor!
 
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode)folders.getLastSelectedPathComponent(); 
+
+            if (node == null)  
+            	JOptionPane.showMessageDialog(null, "Select a folder to delete");
+            
+            Object[] pathComponents = folders.getSelectionPath().getPath();
+
+            StringBuilder sb = new StringBuilder();
+            for(Object o: pathComponents) {
+                sb.append(o);
+                sb.append("/");
+            }
+            sb.deleteCharAt(0);
+            sb.deleteCharAt(sb.length() - 1);
+            JOptionPane.showMessageDialog(null, sb.toString());
 			
 		}
     }    
