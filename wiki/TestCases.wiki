@@ -16,7 +16,7 @@ Here are the requirements and test steps for each one.
 
 === 6. Have a send mail functionality that moves email to Outbox ===
 
-=== 7. Mmenu, right mouse click and hot keys exist for all features ===
+=== 7. Menu, right mouse click and hot keys exist for all features ===
 
 === 8. Delete an email from folders ===
 
