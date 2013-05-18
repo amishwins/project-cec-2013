@@ -2,8 +2,6 @@ package tests.integration;
 
 import static org.junit.Assert.*;
 
-import java.io.File;
-import java.util.Map;
 import java.util.UUID;
 
 import org.junit.After;

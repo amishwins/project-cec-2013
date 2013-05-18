@@ -3,7 +3,6 @@ package cec.model;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Map;
 import java.util.UUID;
 
 import cec.config.CECConfigurator;

@@ -47,7 +47,7 @@ public class EmailBuilderTests {
 			.build();
 		
 		assertTrue(email.getId().equals(emailId));
-		assertTrue(email.getFrom().equals("test.user@cec.com"));
+		assertTrue(email.getFrom().equals("cec.user@cec.com"));
 		assertTrue(email.getTo().equals("PankajKapania@yahoo.com"));
 		assertTrue(email.getCC().equals("PankajKapania@gmail.com"));
 		assertTrue(email.getSubject().equals("TestSubject1"));
