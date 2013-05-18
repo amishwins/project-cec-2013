@@ -1,13 +1,9 @@
-/**
- * @author Pankaj Kapania
- */
-
 package cec.model;
-
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 
 import cec.config.CECConfigurator;
@@ -37,7 +33,7 @@ public class EmailImpl implements Email {
 		this.lastModifiedTime=lastModifiedTime;
 		this.sentTime = sentTime;
 		this.parentFolder = parentFolder;
-		setEmailDao(EmailDaoFactory.getNewMessageDao());
+		setEmailDao(EmailDaoFactory.getEmailDaoInstance());
 	}
 	
 	protected void setEmailDao(EmailDao emailDao) {
@@ -117,8 +113,7 @@ public class EmailImpl implements Email {
 	
 	public void move(Folder destDir){
 		emailDao.move(id, parentFolder.getPath(), destDir.getPath());
-	}
-	
+	}	
 	
 	@Override
 	public String toString(){
@@ -152,11 +147,9 @@ public class EmailImpl implements Email {
 		}
 		
 		return anotherEmailDate.compareTo(currentEmailDate);
-
 	}
 	
 	protected void handleParseException(Exception e) {
 		e.printStackTrace();
 	}
-
 }

@@ -2,6 +2,7 @@ package cec.model;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 
 import cec.config.CECConfigurator;
@@ -87,6 +88,18 @@ public class EmailBuilder {
         SimpleDateFormat currentDateTime = new SimpleDateFormat(
         		CECConfigurator.getReference().get("DateFormat"));
         return currentDateTime.format(new Date());
+    }
+    
+    public EmailBuilder load(Map<String, String> fields) {
+    	return this.withId(UUID.fromString(fields.get("Id")))
+    			.withFrom(fields.get("From"))
+    			.withTo(fields.get("To"))
+    			.withCC(fields.get("CC"))
+    			.withSubject(fields.get("Subject"))
+    			.withBody(fields.get("Body"))
+    			.withLastModifiedTime(fields.get("LastModifiedTime"))
+    			.withSentTime(fields.get("SentTime"))
+    			.withParentFolder(FolderFactory.getFolder(fields.get("ParentFolder")));
     }
 
     public Email build() {

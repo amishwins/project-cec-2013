@@ -4,12 +4,9 @@
  */
 package cec.model;
 
+import java.util.Map;
 import java.util.UUID;
 
-/**
- *
- * @author Pankaj Kapania and the team
- */
 public interface Email extends Comparable<Email> {
     public void send();
     public void saveToDraftFolder();
