@@ -106,7 +106,7 @@ public class Message extends JFrame {
 
 		editItem.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				replyExistingMessage();
+				editExistingMessage();
 			}
 		});
 
@@ -168,7 +168,7 @@ public class Message extends JFrame {
 
 		edit.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				replyExistingMessage();
+				editExistingMessage();
 			}
 		});
 
@@ -239,20 +239,26 @@ public class Message extends JFrame {
 	}
 
 	// Actions - Reply
-	private void replyExistingMessage() {
+	/*private void replyExistingMessage() {
 		setNewMessage();
 		String auxSubject = subjectField.getText();
 		subjectField.setText("Re: " + auxSubject);
-	}
-
+	}*/
+	
+	// Actions - Edit
+		private void editExistingMessage() {
+			setNewMessage();
+			String auxSubject = subjectField.getText();
+			subjectField.setText(auxSubject);
+		}
 	// Actions - Forward
-	private void forwardExistingMessage() {
+	/*private void forwardExistingMessage() {
 		setNewMessage();
 
 		String auxSubject = subjectField.getText();
 		subjectField.setText("Fwd: " + auxSubject);
 
-	}
+	}*/
 
 	// Actions - Draft
 	private void draftExistingMessage() {
@@ -281,13 +287,13 @@ public class Message extends JFrame {
 	 * ); bodyField.setText(emailbody); }
 	 */
 
-	private void SetExistingMessageFields(String to, String cc, String subject,
+	/*private void SetExistingMessageFields(String to, String cc, String subject,
 			String emailbody) {
 		toField.setText(to);// emailEntity.getTo());
 		ccField.setText(cc);// emailEntity.getCC());
 		subjectField.setText(subject);// emailEntity.getSubject());
 		bodyField.setText(emailbody);// emailEntity.getBody());
-	}
+	}*/
 
 	private void setMessageFields() {
 		toField.setText(emailEntity.getTo());
