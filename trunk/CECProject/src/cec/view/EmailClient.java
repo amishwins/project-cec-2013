@@ -55,6 +55,9 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     FolderService folderService = new FolderService();
     EmailService emailService = new EmailService();
 
+    EmailViewEntity selectedEmailEntity;
+    String lastSelectedFolder;
+    
     String[] emailTableViewColumns = {"Sent From", "Subject", "Date Sent"};
     
     public EmailClient(String title){
@@ -213,6 +216,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         deleteSelectedFolder.addActionListener(new MenuEditDeleteFolder());
     }
 
+    //FOLDER TREE MAIN LISTENER 	
     @Override
     public void valueChanged(TreeSelectionEvent tse) {
     	
@@ -229,16 +233,14 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
             sb.append("/");
         }
         sb.deleteCharAt(0);
-        sb.deleteCharAt(sb.length() - 1);
-
-     
-        
-        System.out.println("Deyvid > " + sb.toString());
+        sb.deleteCharAt(sb.length() - 1);          
+        lastSelectedFolder = sb.toString();        
                     
-        Iterable<EmailViewEntity> emailsInEachFolder  = folderService.loadEmails(sb.toString());
+        Iterable<EmailViewEntity> emailsInEachFolder  = folderService.loadEmails(lastSelectedFolder);
         emailTable.setModel(new EmailListViewData(emailTableViewColumns, emailsInEachFolder)); 
     }
     
+    //EMAIL TABLE MAIN LISTENER 
     private class RowListener implements ListSelectionListener {
         public void valueChanged(ListSelectionEvent event) {
             if (event.getValueIsAdjusting()) {
@@ -246,78 +248,60 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
             }
             
             // What do we do if we are changing folders? 
-			EmailViewEntity selectedEmailEntity = ((EmailListViewData)(emailTable.getModel()))
+			 selectedEmailEntity = ((EmailListViewData)(emailTable.getModel()))
 					.getViewEntityAtIndex(emailTable.getSelectedRow());
             
             emailBody.setText(selectedEmailEntity.getBody());
         }
-    }
-    
-  //Email Table Mouse Events
-    private class EmailTableMouseListener extends MouseAdapter {
-    	
-    	public void mouseClicked(MouseEvent e) {
-    		if (e.getClickCount() == 2) {
-    			EmailViewEntity selectedEmailEntity = ((EmailListViewData)(emailTable.getModel()))
-    					.getViewEntityAtIndex(emailTable.getSelectedRow());
-    			JFrame nm = new ExistingMessage(selectedEmailEntity);
-			}	  
-    	}
-    }
-    
+    }        
     
     //FILE > NEW SUB-FOLDER > 
     private class MenuFileNewSubFolder implements ActionListener{
     	public void actionPerformed (ActionEvent e){    	
     		    				
-    	    		// TODO: this is duplicate code - refactor!
-    	    		
-    	            DefaultMutableTreeNode node = (DefaultMutableTreeNode)folders.getLastSelectedPathComponent(); 
-    	
-    	            if (node == null)  
-    	            	JOptionPane.showMessageDialog(null, "Select a parent folder");    	            
-    	            else {
-    	            	Object[] pathComponents = folders.getSelectionPath().getPath();
-	    	
-	    	            StringBuilder sb = new StringBuilder();
-	    	            for(Object o: pathComponents) {
-	    	                sb.append(o);
-	    	                sb.append("/");
-	    	            }
-	    	            sb.deleteCharAt(0);
-	    	            sb.deleteCharAt(sb.length() - 1);
-	
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode)folders.getLastSelectedPathComponent(); 
+
+            if (node == null)  
+            	JOptionPane.showMessageDialog(null, "Select a parent folder");    	            
+            else {
+            
+	    		String folderName = JOptionPane.showInputDialog(null,"Folder Name");	
+	    		
+	    		if(folderName!=null )    		
+	    		{ 	
+	    			if(folderName.trim().length()>0)
+	    			{    	    				
+	    	            folderService.createSubFolder(lastSelectedFolder, folderName);		
+	    	             
+	    	            // TODO: Make it refresh!
+	    	            //Force Refresh - Making ROOT the selected node - NOT WORKING
 	    	            
-	    	    		String folderName = JOptionPane.showInputDialog(null,"Folder Name");	
-	    	    		
-	    	    		if(folderName!=null )    		
-	    	    		{ 	
-	    	    			if(folderName.trim().length()>0)
-	    	    			{    	    				
-			    	            folderService.createSubFolder(sb.toString(), folderName);		
-			    	             
-			    	            // TODO: Make it refresh!
-			    	            //Force Refresh - Making ROOT the selected node - NOT WORKING
-			    	            
-			    	            folders.setSelectionRow(0);    				
-			    			}
-			    			else
-			        			JOptionPane.showMessageDialog(null, "Invalid Folder name");    			
-			    		}	    	    		
-    	     }	
+	    	            folders.setSelectionRow(0);    				
+	    			}
+	    			else
+	        			JOptionPane.showMessageDialog(null, "Invalid Folder name");    			
+	    		}	    	    		
+     }	
     		
         }
     } 
     
     
-     
+    //FILE > OPEN SELECTED EMAIL
+    class MenuFileOpenSelectedEmail implements ActionListener {
+    	public void actionPerformed (ActionEvent e) {    		
+			JFrame nm = new Message(selectedEmailEntity);				
+    	}
+    }
+    
     //EDIT > DELETE EMAIL > 
     private class MenuEditDeleteEmail implements ActionListener {
     	public void actionPerformed (ActionEvent e) {
     		
     		
-			EmailViewEntity selectedEmailEntity = ((EmailListViewData)(emailTable.getModel()))
-					.getViewEntityAtIndex(emailTable.getSelectedRow());
+			//EmailViewEntity selectedEmailEntity = ((EmailListViewData)(emailTable.getModel()))
+			//		.getViewEntityAtIndex(emailTable.getSelectedRow());
+    		
 			String output;
 			
 			output = selectedEmailEntity.getId() + selectedEmailEntity.getFolder();
@@ -333,47 +317,54 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     private class MenuEditDeleteFolder implements ActionListener {
     	public void actionPerformed (ActionEvent e) {
     		
-    		// TODO: this is duplicate code - refactor!
-
             DefaultMutableTreeNode node = (DefaultMutableTreeNode)folders.getLastSelectedPathComponent(); 
 
             if (node == null)  
             	JOptionPane.showMessageDialog(null, "Select a folder to delete");
             
-            Object[] pathComponents = folders.getSelectionPath().getPath();
-
-            StringBuilder sb = new StringBuilder();
-            for(Object o: pathComponents) {
-                sb.append(o);
-                sb.append("/");
-            }
-            sb.deleteCharAt(0);
-            sb.deleteCharAt(sb.length() - 1);
-            //JOptionPane.showMessageDialog(null, sb.toString());
-            folderService.delete(sb.toString());
+            folderService.delete(lastSelectedFolder);
 			
 		}
     }      
-        
-    
-    
-    //Folder Tree Context Menu (Right-Click)
+                
+    //FOLDER TREE CONTEXT MENU (Right-Click)
     class FolderTreeContextMenu extends JPopupMenu {
     	private static final long serialVersionUID = -5926440670627487856L;
-    	JMenuItem delFolder;
-        JMenuItem newFolder;        
+    	
+        JMenuItem newFolder;
+        JMenuItem delFolder;
+        
         public FolderTreeContextMenu(){
             newFolder = new JMenuItem("New Sub-folder...");
             add(newFolder);        	
         	delFolder = new JMenuItem("Delete Folder");
             add(delFolder);
             
-            delFolder.addActionListener(new MenuEditDeleteFolder()); 
             newFolder.addActionListener(new MenuFileNewSubFolder());
+            delFolder.addActionListener(new MenuEditDeleteFolder());           
         }
     }
+    
+    
+    //EMAIL TABLE CONTEXT MENU (Right-Click)
+    class EmailTableContextMenu extends JPopupMenu {    	
+		private static final long serialVersionUID = 1L;
+		JMenuItem movEmail;   
+    	JMenuItem delEmail;
+                    
+        public EmailTableContextMenu(){
+        	movEmail = new JMenuItem("Move Email...");
+            add(movEmail);        	
+            delEmail = new JMenuItem("Delete Email");
+            add(delEmail);
+            
+            //movEmail.addActionListener(); 
+            delEmail.addActionListener(new MenuEditDeleteEmail());
+        }
+    }
+    
         
-    //Folder Tree Mouse Listener
+    //FOLDER TREE MOUSE LISTENER
     class FolderTreeMouseListener extends MouseAdapter {
     	
     	JTree tree;
@@ -412,6 +403,46 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         }
     }  
     
+
+    //EMAIL TABLE MOUSE LISTENER
+    private class EmailTableMouseListener extends MouseAdapter {  
+    	
+    	int selRow; 
+    	
+    	
+    	public void mouseClicked(MouseEvent e) {
+    		if (e.getClickCount() == 2) {    			
+    			JFrame nm = new Message(selectedEmailEntity);
+			}	  
+    	}
+    	
+        public void mousePressed(MouseEvent e){ 
+        	
+        	selRow = emailTable.rowAtPoint(e.getPoint());
+        	
+        	if(selRow != -1) {	  
+        	  	emailTable.setRowSelectionInterval(selRow, selRow);     	        	
+	        	if (e.isPopupTrigger())
+	        	Popup(e);
+        	}
+        }
+    
+        public void mouseReleased(MouseEvent e){
+        	if(selRow != -1) {	  
+	        	if (e.isPopupTrigger())
+	        	Popup(e);
+        	}
+        }        	
+        
+        private void Popup(MouseEvent e){        	
+        	EmailTableContextMenu menu = new EmailTableContextMenu();
+        	menu.show(e.getComponent(), e.getX()+7, e.getY());
+        }     
+    	
+    	
+    }
+    
+    
 }
 
 class MenuFileExit implements ActionListener {
@@ -422,15 +453,11 @@ class MenuFileExit implements ActionListener {
 
 class MenuFileNewEmail implements ActionListener {
 	public void actionPerformed (ActionEvent e) {
-		JFrame nm = new NewMessage();
+		JFrame nm = new Message();
     }
 }
    
-class MenuFileOpenSelectedEmail implements ActionListener {
-	public void actionPerformed (ActionEvent e) {
-		JFrame nm = new ExistingMessage(new EmailViewEntity());		
-	}
-}
+
 
     
 
