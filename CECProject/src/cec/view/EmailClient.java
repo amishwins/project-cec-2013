@@ -122,12 +122,6 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         render.setOpenIcon(new ImageIcon("images/folder.gif"));
         render.setClosedIcon(new ImageIcon("images/folder.gif"));
 
-//        folders.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
-//            public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
-//                folderSelected(evt);
-//            }
-//        });
-
         
         //Adding components to the Left Panel
         JScrollPane leftPanel = new JScrollPane(folders, 
@@ -138,13 +132,15 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BorderLayout());                      
 
-        //Right-TOP
+        //Right-TOP        
+        //JTable
+        emailTable.setFillsViewportHeight(true);        
+        emailTable.getSelectionModel().addListSelectionListener(new RowListener());
+        emailTable.addMouseListener(new EmailTableMouseListener());
+        
         JScrollPane rightPanelChildTop = new JScrollPane(emailTable,
                                              JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                                              JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        emailTable.setFillsViewportHeight(true);
-        emailTable.getSelectionModel().addListSelectionListener(new RowListener());
-        emailTable.addMouseListener(new EmailTableMouseListener());
 
         rightPanelChildTop.setMaximumSize(new Dimension(1200, 150));
         rightPanelChildTop.setMinimumSize(new Dimension(550, 200));
@@ -185,8 +181,13 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         newSubfolder.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F,InputEvent.CTRL_DOWN_MASK));
         fileMenuBarEntry.add(newSubfolder);        
         
-        JMenuItem openSelectedEmail = new JMenuItem("Open Selected Email");
+        fileMenuBarEntry.addSeparator();
+        
+        JMenuItem openSelectedEmail = new JMenuItem("Open Selected Email",KeyEvent.VK_O);
+        openSelectedEmail.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,InputEvent.CTRL_DOWN_MASK));
         fileMenuBarEntry.add(openSelectedEmail); 
+        
+        fileMenuBarEntry.addSeparator();        
         
         JMenuItem exitItem = new JMenuItem("Exit");
         fileMenuBarEntry.add(exitItem);           
@@ -197,17 +198,17 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         openSelectedEmail.addActionListener(new MenuFileOpenSelectedEmail());
         exitItem.addActionListener(new MenuFileExit());
         
-        // TODO: Add the keyboard shortcuts
         JMenu editMenuBarEntry = new JMenu("Edit");
         menuBar.add(editMenuBarEntry);
-        
-        JMenuItem deleteSelectedEmail = new JMenuItem("Delete Selected Email");
+                
+        JMenuItem deleteSelectedEmail = new JMenuItem("Delete Selected Email",KeyEvent.VK_E);
+        deleteSelectedEmail.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,InputEvent.CTRL_DOWN_MASK));
         editMenuBarEntry.add(deleteSelectedEmail);
         
-        JMenuItem deleteSelectedFolder = new JMenuItem("Delete Selected Folder");
+        JMenuItem deleteSelectedFolder = new JMenuItem("Delete Selected Folder",KeyEvent.VK_R);
+        deleteSelectedFolder.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R,InputEvent.CTRL_DOWN_MASK));
         editMenuBarEntry.add(deleteSelectedFolder);
         
-        // TODO: Add all the action listeners for the Edit menu
         deleteSelectedEmail.addActionListener(new MenuEditDeleteEmail());
         deleteSelectedFolder.addActionListener(new MenuEditDeleteFolder());
     }
@@ -268,39 +269,42 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     //FILE > NEW SUB-FOLDER > 
     private class MenuFileNewSubFolder implements ActionListener{
     	public void actionPerformed (ActionEvent e){    	
-    		
-    		String folderName = JOptionPane.showInputDialog(null,"Folder Name");	
-  
-    		if(folderName!=null)    		
-    		{ 	
-    			if(folderName.trim().length()>0)
-    			{
-    				JOptionPane.showMessageDialog(null, "YOU DID - "+folderName+"--");
+    		    				
     	    		// TODO: this is duplicate code - refactor!
     	    		
     	            DefaultMutableTreeNode node = (DefaultMutableTreeNode)folders.getLastSelectedPathComponent(); 
     	
     	            if (node == null)  
-    	            	JOptionPane.showMessageDialog(null, "Select a folder to delete");
-    	            
-    	            Object[] pathComponents = folders.getSelectionPath().getPath();
-    	
-    	            StringBuilder sb = new StringBuilder();
-    	            for(Object o: pathComponents) {
-    	                sb.append(o);
-    	                sb.append("/");
-    	            }
-    	            sb.deleteCharAt(0);
-    	            sb.deleteCharAt(sb.length() - 1);
-    	            JOptionPane.showMessageDialog(null, sb.toString() +  folderName );    		
-    	            folderService.createSubFolder(sb.toString(), folderName);
-    	            
-    	            //Force Refresh - Making ROOT the selected node
-    	            folders.setSelectionRow(0);    				
-    			}
-    			else
-        			JOptionPane.showMessageDialog(null, "Invalid Folder name!");    			
-    		}
+    	            	JOptionPane.showMessageDialog(null, "Select a parent folder");    	            
+    	            else {
+    	            	Object[] pathComponents = folders.getSelectionPath().getPath();
+	    	
+	    	            StringBuilder sb = new StringBuilder();
+	    	            for(Object o: pathComponents) {
+	    	                sb.append(o);
+	    	                sb.append("/");
+	    	            }
+	    	            sb.deleteCharAt(0);
+	    	            sb.deleteCharAt(sb.length() - 1);
+	
+	    	            
+	    	    		String folderName = JOptionPane.showInputDialog(null,"Folder Name");	
+	    	    		
+	    	    		if(folderName!=null )    		
+	    	    		{ 	
+	    	    			if(folderName.trim().length()>0)
+	    	    			{    	    				
+			    	            folderService.createSubFolder(sb.toString(), folderName);		
+			    	             
+			    	            // TODO: Make it refresh!
+			    	            //Force Refresh - Making ROOT the selected node - NOT WORKING
+			    	            
+			    	            folders.setSelectionRow(0);    				
+			    			}
+			    			else
+			        			JOptionPane.showMessageDialog(null, "Invalid Folder name");    			
+			    		}	    	    		
+    	     }	
     		
         }
     } 
@@ -427,13 +431,6 @@ class MenuFileOpenSelectedEmail implements ActionListener {
 		JFrame nm = new ExistingMessage(new EmailViewEntity());		
 	}
 }
-
-/*class PopupDeleteFolder implements ActionListener {
-	public void actionPerformed (ActionEvent e) {
-    	JOptionPane.showMessageDialog(null, "Operation not allowed");
-    }
-} */           
-
 
     
 
