@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.*;
 
+import cec.config.CECConfigurator;
 import cec.service.EmailService;
 
 public class ExistingMessage extends JFrame {
@@ -253,7 +254,7 @@ public class ExistingMessage extends JFrame {
 
 	// Actions - Draft
 	private void draftExistingMessage() {
-		String from = "cec@cec.com";
+		String from = CECConfigurator.getReference().get("ClientEmail");
 		String auxTo = toField.getText();
 		String auxCc = ccField.getText();
 		String auxSubject = subjectField.getText();
@@ -262,7 +263,7 @@ public class ExistingMessage extends JFrame {
 	}
 
 	private void sendExistingMessage() {
-		String from = "cec@cec.com";
+		String from = CECConfigurator.getReference().get("ClientEmail");
 		String auxTo = toField.getText();
 		String auxCc = ccField.getText();
 		String auxSubject = subjectField.getText();
