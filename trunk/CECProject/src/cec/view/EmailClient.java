@@ -22,6 +22,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JButton;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -208,12 +209,17 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         deleteSelectedEmail.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,InputEvent.CTRL_DOWN_MASK));
         editMenuBarEntry.add(deleteSelectedEmail);
         
+        JMenuItem moveSelectedEmail = new JMenuItem("Move Selected Email",KeyEvent.VK_M);
+        moveSelectedEmail.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M,InputEvent.CTRL_DOWN_MASK));
+        editMenuBarEntry.add(moveSelectedEmail);
+        
         JMenuItem deleteSelectedFolder = new JMenuItem("Delete Selected Folder",KeyEvent.VK_R);
         deleteSelectedFolder.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R,InputEvent.CTRL_DOWN_MASK));
         editMenuBarEntry.add(deleteSelectedFolder);
         
         deleteSelectedEmail.addActionListener(new MenuEditDeleteEmail());
         deleteSelectedFolder.addActionListener(new MenuEditDeleteFolder());
+        moveSelectedEmail.addActionListener(new MenuEditMoveEmail());
     }
 
     //FOLDER TREE MAIN LISTENER 	
@@ -290,7 +296,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     //FILE > OPEN SELECTED EMAIL
     class MenuFileOpenSelectedEmail implements ActionListener {
     	public void actionPerformed (ActionEvent e) {    		
-			JFrame nm = new Message(selectedEmailEntity);				
+			JFrame nm = new Email(selectedEmailEntity);				
     	}
     }
     
@@ -363,6 +369,79 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         }
     }
     
+    
+    private class MenuEditMoveEmail implements ActionListener {
+    	public void actionPerformed (ActionEvent e) {
+    		
+    		/*EmailViewEntity selectedEmailEntity = ((EmailListViewData)(emailTable.getModel()))
+					.getViewEntityAtIndex(emailTable.getSelectedRow());*/
+			
+    		//String destinationfolderName="emails/Inbox";
+    		
+    		/*JOptionPane.showMessageDialog(null, destinationfolderName);
+			JOptionPane.showMessageDialog(null, selectedEmailEntity.getId());
+			JOptionPane.showMessageDialog(null, selectedEmailEntity.getFolder());*/
+    		
+    		
+    		//String destinationfolderName="emails/Inbox";	
+    		//emailService.move(selectedEmailEntity, destinationfolderName.toString());
+			
+    		
+    		TreeModel modelMove = folders.getModel();
+            final JTree foldersmodelMove=new JTree(modelMove);
+            
+    		JFrame moveFolder = new JFrame();
+    		JButton Bcreate = new JButton("OK");
+    		moveFolder.setLayout(new BorderLayout());
+    		JScrollPane Sp = new JScrollPane(foldersmodelMove);//(folders);       
+    		moveFolder.add(Sp,BorderLayout.NORTH);
+    		
+    		moveFolder.add(Bcreate,BorderLayout.SOUTH);
+    		moveFolder.setSize(200, 425);
+    		moveFolder.setVisible(true);
+    		  
+    		  
+    		Bcreate.addActionListener(new ActionListener() 
+    		{
+    			public void actionPerformed(ActionEvent click) 
+    			{    				
+    				Object[] pathComponents = foldersmodelMove.getSelectionPath().getPath();
+    	    		StringBuilder destinationfolderName = new StringBuilder();
+    	            for(Object o: pathComponents) {
+    	            	destinationfolderName.append(o);
+    	            	destinationfolderName.append("/");
+    	            }
+    	            destinationfolderName.deleteCharAt(0);
+    	            destinationfolderName.deleteCharAt(destinationfolderName.length() - 1);
+    	            JOptionPane.showMessageDialog(null, destinationfolderName.toString());
+    				JOptionPane.showMessageDialog(null, selectedEmailEntity.getId());
+    	    		
+    	    		
+    	    		
+    				emailService.move(selectedEmailEntity, destinationfolderName.toString());    				
+    	    		
+    			}
+    		});                   
+            			
+    	}
+    }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
         
     //FOLDER TREE MOUSE LISTENER
     class FolderTreeMouseListener extends MouseAdapter {
@@ -412,7 +491,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     	
     	public void mouseClicked(MouseEvent e) {
     		if (e.getClickCount() == 2) {    			
-    			JFrame nm = new Message(selectedEmailEntity);
+    			JFrame nm = new Email(selectedEmailEntity);
 			}	  
     	}
     	
@@ -453,7 +532,7 @@ class MenuFileExit implements ActionListener {
 
 class MenuFileNewEmail implements ActionListener {
 	public void actionPerformed (ActionEvent e) {
-		JFrame nm = new Message();
+		JFrame nm = new Email();
     }
 }
    
