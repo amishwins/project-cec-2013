@@ -18,6 +18,7 @@ public class CECConfigurator {
 		systemSettings = new HashMap<String, String>();
 		mapDefaultSystemFolders();
 		mapDefaultDateFormat();
+		mapDefaultClientEmailAddress();
 	}
 
 	public void put(String key, String value) {
@@ -53,6 +54,11 @@ public class CECConfigurator {
 	
 	private void mapDefaultDateFormat() {
 		systemSettings.put("DateFormat", "yyyy.MM.dd_'At'_HH.mm.ss.SSS");		
+	}
+	
+	private void mapDefaultClientEmailAddress() {
+		systemSettings.put("ClientEmail", "cec.user@cec.com");
+		
 	}
 	
 }

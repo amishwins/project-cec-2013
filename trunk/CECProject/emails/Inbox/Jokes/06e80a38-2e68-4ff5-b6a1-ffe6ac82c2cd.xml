@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?><E-Mail>
    <Id>06e80a38-2e68-4ff5-b6a1-ffe6ac82c2cd</Id>
-   <From>cec@cec.com</From>
-   <To>pankajkapania@gmail.com</To>
+   <From>amish.gala@gmail.com</From>
+   <To>cec.user@cec.com</To>
    <CC>amish.gala@gmail.com;dayevid@yahoo.com;romeo@gmail.com</CC>
    <Subject>test email</Subject>
-   <Body>email</Body>
+   <Body>What did one developer say to the other developer?</Body>
    <LastModifiedTime>2013.05.17_At_13.51.56.616</LastModifiedTime>
    <SentTime>2013.05.17_At_13.51.56.616</SentTime>
-   <ParentFolder>emails/Outbox</ParentFolder>
+   <ParentFolder>emails/Inbox/Jokes</ParentFolder>
 </E-Mail>
