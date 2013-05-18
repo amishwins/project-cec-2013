@@ -20,4 +20,4 @@ Here are the requirements and test steps for each one.
 
 === 8. Delete an email from folders ===
 
-=== 9. Delete folders except top level inbox ===
+=== 9. Delete folders except top level inbox (modified to disallow deleting any system folder) ===
