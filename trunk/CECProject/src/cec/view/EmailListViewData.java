@@ -17,7 +17,7 @@ public class EmailListViewData extends AbstractTableModel {
 	}
 	
 	public EmailViewEntity getViewEntityAtIndex(int index) {
-		// TODO: is this good? Should we throw and exception and catch it in the view?
+		// TODO: is this good? Should we throw an exception and catch it in the view?
 		if (index < 0)
 			return new EmailViewEntity();
 		
