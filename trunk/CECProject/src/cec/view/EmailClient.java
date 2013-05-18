@@ -141,11 +141,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
                                              JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                                              JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         emailTable.setFillsViewportHeight(true);
-        
         emailTable.getSelectionModel().addListSelectionListener(new RowListener());
-        emailTable.addMouseListener(new EmailTableMouseListener(emailTable));
-        
-        
 
         rightPanelChildTop.setMaximumSize(new Dimension(1200, 150));
         rightPanelChildTop.setMinimumSize(new Dimension(550, 200));
@@ -182,15 +178,15 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         newEmail.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,InputEvent.CTRL_DOWN_MASK));
         fileMenuBarEntry.add(newEmail);
         
-        JMenuItem showExistingEmail = new JMenuItem("Show Existing Email");
-        fileMenuBarEntry.add(showExistingEmail); 
+        JMenuItem openSelectedEmail = new JMenuItem("Open Selected Email");
+        fileMenuBarEntry.add(openSelectedEmail); 
         
         JMenuItem exitItem = new JMenuItem("Exit");
         fileMenuBarEntry.add(exitItem);           
         
         // Add all the action listeners for the File menu
-        newEmail.addActionListener(new MenuFileNewMessage());
-        showExistingEmail.addActionListener(new MenuFileExistingMessage());
+        newEmail.addActionListener(new MenuFileNewEmail());
+        openSelectedEmail.addActionListener(new MenuFileOpenSelectedEmail());
         exitItem.addActionListener(new MenuFileExit());
         
         // TODO: Add the keyboard shortcuts
@@ -204,13 +200,18 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         editMenuBarEntry.add(deleteSelectedFolder);
         
         // TODO: Add all the action listeners for the Edit menu
+        deleteSelectedEmail.addActionListener(new MenuEditDeleteEmail());
+        deleteSelectedFolder.addActionListener(new MenuEditDeleteFolder());
     }
 
     @Override
     public void valueChanged(TreeSelectionEvent tse) {
     	
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode)                            
-        folders.getLastSelectedPathComponent(); 
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode)folders.getLastSelectedPathComponent(); 
+
+        if (node == null) // if user ctrl-clicks on a folder, then it will no longer be selected 
+        	return;
+        
         Object[] pathComponents = folders.getSelectionPath().getPath();
 
         StringBuilder sb = new StringBuilder();
@@ -221,8 +222,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         sb.deleteCharAt(0);
         sb.deleteCharAt(sb.length() - 1);
 
-        // TODO do we need this check?
-        if (node == null) return;     
+     
         
         System.out.println("Deyvid > " + sb.toString());
                     
@@ -245,13 +245,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     }
     
   //Email Table Mouse Events
-    class EmailTableMouseListener extends MouseAdapter {
-    	
-    	JTable table;
-    	
-    	public EmailTableMouseListener(JTable emailTable){
-    		this.table = emailTable;    		
-    	}    	
+    private class EmailTableMouseListener extends MouseAdapter {
     	
     	public void mouseClicked(MouseEvent e) {
     		if (e.getClickCount() == 2) {
@@ -263,29 +257,45 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     }
     
     
+    private class MenuEditDeleteEmail implements ActionListener {
+    	public void actionPerformed (ActionEvent e) {
+			EmailViewEntity selectedEmailEntity = ((EmailListViewData)(emailTable.getModel()))
+					.getViewEntityAtIndex(emailTable.getSelectedRow());
+			String output;
+			output = selectedEmailEntity.getId() + selectedEmailEntity.getFolder();
+			JOptionPane.showMessageDialog(null, output);
+    	}
+    }
+    
+    private class MenuEditDeleteFolder implements ActionListener {
+    	public void actionPerformed (ActionEvent e) {
+
+			
+		}
+    }    
     
 }
 
-class MenuFileExit implements ActionListener{
-	public void actionPerformed (ActionEvent e){
+class MenuFileExit implements ActionListener {
+	public void actionPerformed (ActionEvent e) {
 		System.exit(0);
 	}
 }
 
-class MenuFileNewMessage implements ActionListener{
-	public void actionPerformed (ActionEvent e){
+class MenuFileNewEmail implements ActionListener {
+	public void actionPerformed (ActionEvent e) {
 		JFrame nm = new NewMessage();
     }
 }
    
-class MenuFileExistingMessage implements ActionListener{
-	public void actionPerformed (ActionEvent e){
+class MenuFileOpenSelectedEmail implements ActionListener {
+	public void actionPerformed (ActionEvent e) {
 		JFrame nm = new ExistingMessage(new EmailViewEntity());
 	}
 }
 
-class PopupDeleteFolder implements ActionListener{
-	public void actionPerformed (ActionEvent e){
+class PopupDeleteFolder implements ActionListener {
+	public void actionPerformed (ActionEvent e) {
     	JOptionPane.showMessageDialog(null, "Operation not allowed");
     }
 }            
