@@ -1,0 +1,23 @@
+#summary A list of tests we should do according to the spec
+
+= Test Cases =
+
+Here are the requirements and test steps for each one.
+
+=== 1. Compose New Email ===
+
+=== 2. Save Draft Email ===
+
+=== 3. Display Your inbox folder hierarchy ===
+
+=== 4. Create Sub folders ===
+
+=== 5. Move mail to sub folders ===
+
+=== 6. Have a send mail functionality that moves email to Outbox ===
+
+=== 7. All functionalities should have menu, right mouse click and hot keys ===
+
+=== 8. Delete an email from folders ===
+
+=== 9. Delete folders except top level inbox ===
