@@ -2,6 +2,8 @@ package tests;
 
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -103,6 +105,7 @@ class EmailDaoStub implements EmailDao {
 	public boolean saveWasCalled = false;
 	public boolean deleteWasCalled = false;
 	public boolean moveWasCalled = false;
+	public boolean loadEmailWasCalled = false;
 
 	@Override
 	public void save(UUID id, String from,  String to, String cc, String subject, String body,String lastModifiedTime,String sentTime, String location) {
@@ -119,5 +122,11 @@ class EmailDaoStub implements EmailDao {
 	@Override
 	public void move(UUID id, String srcDir, String destDir){
 		moveWasCalled = true;		
+	}
+
+	@Override
+	public Map<String, String> loadEmail(String folder, String xmlFileName) {
+		loadEmailWasCalled = true;
+		return new HashMap<String, String>();
 	}
 }

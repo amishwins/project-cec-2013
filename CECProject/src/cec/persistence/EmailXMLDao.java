@@ -2,6 +2,8 @@ package cec.persistence;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -17,6 +19,8 @@ import org.apache.commons.io.FileDeleteStrategy;
 import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class EmailXMLDao implements EmailDao {
 	
@@ -142,5 +146,36 @@ public class EmailXMLDao implements EmailDao {
 		} catch (IOException fileMoveException) {
 			fileMoveException.printStackTrace();
 		}
+	}
+
+	@Override
+	public Map<String, String> loadEmail(String folder, String xmlFileName) {
+		Map<String, String> emailData = new TreeMap<String, String>();
+		try {
+			File xmlFile = new File(folder + "/" + xmlFileName);
+			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+			Document email = documentBuilder.parse(xmlFile);
+			email.getDocumentElement().normalize();
+			NodeList listOfEmailFields = email.getElementsByTagName("E-Mail");
+			for (int index = 0; index < listOfEmailFields.getLength(); index++) {
+				Node emailField = listOfEmailFields.item(index);
+				if (emailField.getNodeType() == Node.ELEMENT_NODE) {
+					Element eElement = (Element) emailField;
+					emailData.put("Id", eElement.getElementsByTagName("Id").item(0).getTextContent());
+					emailData.put("From", eElement.getElementsByTagName("From").item(0).getTextContent());
+					emailData.put("To", eElement.getElementsByTagName("To").item(0).getTextContent());
+					emailData.put("CC", eElement.getElementsByTagName("CC").item(0).getTextContent());
+					emailData.put("Subject", eElement.getElementsByTagName("Subject").item(0).getTextContent());
+					emailData.put("Body", eElement.getElementsByTagName("Body").item(0).getTextContent());
+					emailData.put("LastModifiedTime", eElement.getElementsByTagName("LastModifiedTime").item(0).getTextContent());
+					emailData.put("SentTime", eElement.getElementsByTagName("SentTime").item(0).getTextContent());
+					emailData.put("ParentFolder", eElement.getElementsByTagName("ParentFolder").item(0).getTextContent());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return emailData;
 	}
 }
