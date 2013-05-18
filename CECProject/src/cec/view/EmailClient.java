@@ -306,16 +306,16 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     //EDIT > MOVE EMAIL > 
     private class MenuEditMoveEmail implements ActionListener {
     	public void actionPerformed (ActionEvent e) {
-    			
     		
     		TreeModel modelMove = folders.getModel();
-            final JTree foldersmodelMove=new JTree(modelMove);
+            final JTree foldersToMove=new JTree(modelMove);
+            foldersToMove.setRootVisible(false);
             
-    		JFrame moveFolder = new JFrame();
+    		final JFrame moveFolder = new JFrame();
     		moveFolder.setLocationRelativeTo(null);
     		JButton Bcreate = new JButton("OK");
     		moveFolder.setLayout(new BorderLayout());
-    		JScrollPane Sp = new JScrollPane(foldersmodelMove);//(folders);       
+    		JScrollPane Sp = new JScrollPane(foldersToMove);//(folders);       
     		moveFolder.add(Sp,BorderLayout.NORTH);    		
     		moveFolder.add(Bcreate,BorderLayout.SOUTH);
     		moveFolder.setSize(200, 425);
@@ -325,7 +325,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     		{
     			public void actionPerformed(ActionEvent click) 
     			{    				
-    				Object[] pathComponents = foldersmodelMove.getSelectionPath().getPath();
+    				Object[] pathComponents = foldersToMove.getSelectionPath().getPath();
     	    		StringBuilder destinationfolderName = new StringBuilder();
     	            for(Object o: pathComponents) {
     	            	destinationfolderName.append(o);
@@ -336,14 +336,13 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     	            //JOptionPane.showMessageDialog(null, destinationfolderName.toString());
     				//JOptionPane.showMessageDialog(null, selectedEmailEntity.getId());
     	    		
+    	            //Moving
     				emailService.move(selectedEmailEntity, destinationfolderName.toString());  
-    				
     				//Refreshing Email Table Content - Asking Controller
     		        Iterable<EmailViewEntity> emailsInEachFolder  = folderService.loadEmails(lastSelectedFolder);
     		        emailTable.setModel(new EmailListViewData(emailTableViewColumns, emailsInEachFolder)); 	    				
-    		        
-    		        
-    	    		
+    		        //Closing window
+    		        moveFolder.dispose();    	    		
     			}
     		});                   
             			
@@ -460,13 +459,6 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     	
     	int selRow; 
     	
-    	
-    	public void mouseClicked(MouseEvent e) {
-    		if (e.getClickCount() == 2) {    			
-    			JFrame nm = new Email(selectedEmailEntity);
-			}	  
-    	}
-    	
         public void mousePressed(MouseEvent e){ 
         	
         	selRow = emailTable.rowAtPoint(e.getPoint());
@@ -477,6 +469,12 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	        	Popup(e);
         	}
         }
+    	
+        public void mouseClicked(MouseEvent e) {
+    		if ((e.getClickCount() == 2) && (selRow != -1)) {    			
+    			JFrame nm = new Email(selectedEmailEntity);
+			}	  
+    	}        
     
         public void mouseReleased(MouseEvent e){
         	if(selRow != -1) {	  
