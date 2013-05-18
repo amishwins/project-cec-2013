@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.*;
 
+import cec.config.CECConfigurator;
 import cec.service.EmailService;
 
 
@@ -188,7 +189,7 @@ public class NewMessage extends JFrame{
       
       //Actions - Draft
       private void draftNewMessage() {   
-    	String auxFrom = "cec@cec.com";
+    	String auxFrom = CECConfigurator.getReference().get("ClientEmail");
         String auxTo = toField.getText();
         String auxCc = ccField.getText();
         String auxSubject = subjectField.getText();
@@ -198,7 +199,7 @@ public class NewMessage extends JFrame{
       
       //Actions - Send
       private void sendNewMessage() {                                
-        String auxFrom = "cec@cec.com";
+        String auxFrom = CECConfigurator.getReference().get("ClientEmail");
     	String auxTo = toField.getText();
         String auxCc = ccField.getText(); 
         String auxSubject = subjectField.getText();
