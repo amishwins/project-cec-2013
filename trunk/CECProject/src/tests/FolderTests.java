@@ -20,6 +20,7 @@ public class FolderTests {
 	UserFolderCUT userFolder;
 	String userFolderPath;
 	String systemFolderPath;
+	String newFolderName;
 	
 
 	@Before
@@ -28,6 +29,7 @@ public class FolderTests {
 		systemFolderPath = "emails/Outbox";
 		systemFolder = new SystemFolderCUT(systemFolderPath);
 		userFolder = new UserFolderCUT(userFolderPath);
+		newFolderName = "temp";
 	}
 
 	@After
@@ -69,13 +71,13 @@ public class FolderTests {
 	
 	@Test 
 	public void createFolderInsideSystemFolder() {
-		systemFolder.create();
+		systemFolder.create(newFolderName);
 		assertTrue(((FolderDaoStub)systemFolder.getFolderDao()).createWasCalled);
 	}
 
 	@Test 
 	public void createFolderInsideUserFolder() {
-		userFolder.create();
+		userFolder.create(newFolderName);
 		assertTrue(((FolderDaoStub)userFolder.getFolderDao()).createWasCalled);
 	}
 	

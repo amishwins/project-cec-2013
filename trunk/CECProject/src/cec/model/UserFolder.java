@@ -9,7 +9,7 @@ public class UserFolder extends Folder {
 	@Override
 	public void delete() {
 		// okay - do the delete
-       
+       folderDao.delete(getPath());
 	}
 
 }
