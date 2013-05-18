@@ -4,7 +4,6 @@
  */
 package cec.model;
 
-import java.util.Map;
 import java.util.UUID;
 
 public interface Email extends Comparable<Email> {
