@@ -70,6 +70,9 @@ public class EmailImpl implements Email {
 	
 	@Override
 	public String getLastModifiedTimeNicelyFormatted() {
+		if ( this.getLastModifiedTime() == null || this.lastModifiedTime.equals("") )
+			return "";
+		
         Date lastModified = new Date();
         
         SimpleDateFormat sourceFormat = new SimpleDateFormat(
