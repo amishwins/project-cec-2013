@@ -62,7 +62,7 @@ public class Email extends JFrame {
 	}
 
 	private void initialize() {
-		setSize(610, 440);
+		setSize(610, 470);
 		setLayout(new BorderLayout());
 		setResizable(false);
 		setVisible(true);
@@ -208,10 +208,10 @@ public class Email extends JFrame {
 		// Swing Components - Middle Panel
 		JLabel to = new JLabel("To:         ");
 		JLabel cc = new JLabel("Cc:         ");
-		JLabel subject = new JLabel("Subject:");
+		JLabel subject = new JLabel("Subject: ");
 
 		JPanel mid = new JPanel();
-		mid.setPreferredSize(new Dimension(320, 300));
+		mid.setPreferredSize(new Dimension(270, 300));
 		mid.add(to);
 		mid.add(toField);
 		mid.add(cc);
