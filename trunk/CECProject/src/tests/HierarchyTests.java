@@ -29,10 +29,10 @@ public class HierarchyTests {
 	@Test
 	public void showLoadHierarchyWorks() {
 		systemFolders = (List<Folder>)hierarchy.loadHierarchy();
-		 assertEquals(systemFolders.get(0).getPath(), "emails\\Inbox");
-		 assertEquals(systemFolders.get(1).getPath(), "emails\\Drafts");
-		 assertEquals(systemFolders.get(2).getPath(), "emails\\Outbox");
-		 assertEquals(systemFolders.get(3).getPath(), "emails\\Sent");
+		 assertEquals(systemFolders.get(0).getPath(), "emails/Inbox");
+		 assertEquals(systemFolders.get(1).getPath(), "emails/Drafts");
+		 assertEquals(systemFolders.get(2).getPath(), "emails/Outbox");
+		 assertEquals(systemFolders.get(3).getPath(), "emails/Sent");
 	}
 	
 }

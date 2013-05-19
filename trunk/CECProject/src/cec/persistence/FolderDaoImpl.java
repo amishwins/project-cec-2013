@@ -15,14 +15,15 @@ public class FolderDaoImpl implements FolderDao {
 		List<File> subFolders = new ArrayList<File>();
 	    subFolders = getSubFoldersRecursively(new File (folderName));
 	    for(File subFolder: subFolders){
-	    	subFoldersPath.add(subFolder.getPath());
+	    	subFoldersPath.add(subFolder.getPath().replace('\\','/'));
 	    }
 		return subFoldersPath;
 	}
-  
 	public void delete(String folderPath) {
 		FileDeleteStrategy file = FileDeleteStrategy.FORCE;
 		try {
+			 
+			System.out.println("Delete : "+folderPath); 
 			file.delete(new File(folderPath));
 		} catch (IOException fileDeleteException) {
 			fileDeleteException.printStackTrace();
@@ -45,12 +46,7 @@ public class FolderDaoImpl implements FolderDao {
 				return file.isDirectory();
 			}
 		}));
-        for(File subFolder: subFolders){
-        	System.out.println("Folders: "+subFolder.getPath());
-        	
-        }
 		subFolders = new ArrayList<File>(subFolders);
-
 		List<File> innerFoldersList = new ArrayList<File>();
 		for (File subFolder : subFolders) {
 			innerFoldersList.addAll(getSubFoldersRecursively(subFolder));

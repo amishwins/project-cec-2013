@@ -32,7 +32,7 @@ public class TreeModelBuilder {
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
 
         // Split the string around the delimiter
-        String [] strings = str.split("\\\\");
+        String [] strings = str.split("/");
 
         // Create a node object to use for traversing down the tree as it 
         // is being created
