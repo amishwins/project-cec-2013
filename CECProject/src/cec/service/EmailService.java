@@ -8,22 +8,32 @@ import cec.view.EmailViewEntity;
 
 public class EmailService {
 
-	public void sendEmail(String from, String to, String cc, String subject,
-			String body) {
+	public void sendEmail(EmailViewEntity emailInView) {
 		EmailBuilder mailBuilder = new EmailBuilder();
-		Email newEmail = mailBuilder.computeID().withFrom(from).withTo(to)
-				.withSubject(subject).withBody(body).withCC(cc)
-				.computelastModifiedTime().computeSentTime().build();
+		Email newEmail = mailBuilder.withId(emailInView.getId()).withFrom()
+				.withTo(emailInView.getTo())
+				.withSubject(emailInView.getSubject())
+				.withBody(emailInView.getBody()).withCC(emailInView.getCC())
+				.computelastModifiedTime().computeSentTime()
+				.withParentFolder(FolderFactory.getFolder(emailInView.getFolder()))
+				.build();
 		newEmail.send();
 	}
 
-	public void draftEmail(String from, String to, String cc, String subject,
-			String body) {
+	public void draftEmail(EmailViewEntity emailInView) {
 		EmailBuilder mailBuilder = new EmailBuilder();
-		Email email = mailBuilder.computeID().withFrom(from).withTo(to)
-				.withSubject(subject).withBody(body).withCC(cc)
-				.computelastModifiedTime().computeSentTime().build();
+		Email email = mailBuilder.withId(emailInView.getId()).withFrom()
+				.withTo(emailInView.getTo())
+				.withSubject(emailInView.getSubject())
+				.withBody(emailInView.getBody()).withCC(emailInView.getCC())
+				.computelastModifiedTime().computeSentTime()
+				.withDraftsParentFolder().build();
 		email.saveToDraftFolder();
+		updateEmailViewEntity(emailInView, email);
+	}
+
+	private void updateEmailViewEntity(EmailViewEntity emailInView, Email email) {
+	   emailInView.setFolder(email.getParentFolder().getPath());
 	}
 
 	public void delete(EmailViewEntity emailInView) {
@@ -45,7 +55,7 @@ public class EmailService {
 				.withId(emailInView.getId())
 				.withParentFolder(
 						FolderFactory.getFolder(emailInView.getFolder()))
-				.build();
+						.build();
 		return email;
 	}
 }

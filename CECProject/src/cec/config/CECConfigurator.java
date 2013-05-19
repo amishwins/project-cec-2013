@@ -45,10 +45,10 @@ public class CECConfigurator {
 	}
 	
 	private void mapDefaultSystemFolders() {
-		systemSettings.put("Inbox", "emails/Inbox");
-		systemSettings.put("Drafts", "emails/Drafts");
-		systemSettings.put("Outbox", "emails/Outbox");
-		systemSettings.put("Sent", "emails/Sent");
+		systemSettings.put("Inbox", "emails\\Inbox");
+		systemSettings.put("Drafts", "emails\\Drafts");
+		systemSettings.put("Outbox", "emails\\Outbox");
+		systemSettings.put("Sent", "emails\\Sent");
 	}
 	
 	private void mapDefaultDateFormat() {
@@ -58,6 +58,10 @@ public class CECConfigurator {
 	private void mapDefaultClientEmailAddress() {
 		systemSettings.put("ClientEmail", "cec.user@cec.com");
 		
+	}
+	
+	public String getClientEmailAddress(){
+		return systemSettings.get("ClientEmail");
 	}
 	
 }

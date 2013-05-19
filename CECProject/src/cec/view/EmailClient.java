@@ -12,8 +12,6 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -39,8 +37,6 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-import cec.persistence.FolderDaoImpl;
-import cec.service.Controller;
 import cec.service.FolderService;
 import cec.service.EmailService;
 import cec.service.TreeModelBuilder;
@@ -52,7 +48,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	JTable emailTable = new JTable();    
 	JTextArea emailBody;
 
-	Controller controller = new Controller(); 
+	//Controller controller = new Controller(); 
     FolderService folderService = new FolderService();
     EmailService emailService = new EmailService();
 
@@ -101,8 +97,9 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         TreeModelBuilder tmb = new TreeModelBuilder(new DefaultMutableTreeNode());
         
         // TODO: Move the code to get the subfolder list of paths into the Hierarchy Model object
-        List<File> listOfFiles = FolderDaoImpl.getSubFoldersRecursively(new File("emails"));
-        TreeModel model = tmb.buildTreeNodeFromFileList(listOfFiles);
+        //List<File> listOfFiles = FolderDaoImpl.getSubFoldersRecursively(new File("emails"));
+        Iterable<String> hierarchy = folderService.loadHierarchy();
+        TreeModel model = tmb.buildTreeNodeFromFileList(hierarchy);
   
         folders = new JTree(model);
         folders.setRootVisible(false);

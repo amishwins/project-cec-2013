@@ -7,11 +7,21 @@ import cec.model.Email;
 import cec.model.Folder;
 import cec.model.FolderFactory;
 import cec.view.EmailViewEntity;
+import cec.model.Hierarchy;
 
 public class FolderService {
 	
 	private Folder folder;
-	
+		
+	public Iterable<String> loadHierarchy(){
+		List<String> hierarchy = new ArrayList<String>();
+		Hierarchy cECHierarchy = new Hierarchy();
+		Iterable<Folder> folders = cECHierarchy.loadHierarchy();
+		for(Folder folder: folders){
+			hierarchy.add(folder.getPath());
+		}
+		return hierarchy;
+	}
 	public Iterable<EmailViewEntity> loadEmails(String folderPath){
 		List<EmailViewEntity> emailListInView = new ArrayList<EmailViewEntity>();
 		folder = FolderFactory.getFolder(folderPath);
