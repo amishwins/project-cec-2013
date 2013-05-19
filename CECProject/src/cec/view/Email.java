@@ -26,18 +26,21 @@ public class Email extends JFrame {
 	JTextField subjectField = new JTextField("", 22);
 	JTextArea bodyField = new JTextArea("", 15, 20);
 
-	JButton edit = new JButton(" Edit ");
-	// JButton forward = new JButton(" Forward ");
+	JButton reply = new JButton(" Reply ");
+	JButton forward = new JButton(" Forward ");
 	JButton draft = new JButton("Save as Draft ");
 	JButton send = new JButton(" Send >>   ");
-	JButton delete = new JButton("Delete ");
+	//JButton delete = new JButton("Delete ");
 	JButton discard = new JButton("Discard ");
+	
+	
+	
 
-	JMenuItem editItem = new JMenuItem("Edit", KeyEvent.VK_E);
+	JMenuItem replyItem = new JMenuItem("Edit", KeyEvent.VK_E);
 	// JMenuItem forwardItem = new JMenuItem("Fwd", KeyEvent.VK_F);
 	JMenuItem draftItem = new JMenuItem("Save as Draft", KeyEvent.VK_D);
 	JMenuItem sendItem = new JMenuItem("Send", KeyEvent.VK_S);
-	JMenuItem deleteItem = new JMenuItem("Delete", KeyEvent.VK_D);
+	//JMenuItem deleteItem = new JMenuItem("Delete", KeyEvent.VK_D);
 	JMenuItem exitItem = new JMenuItem("Exit");
 
 	EmailViewEntity emailView;
@@ -78,9 +81,9 @@ public class Email extends JFrame {
 		JMenu fileMenuBarEntry = new JMenu("File");
 		menuBar.add(fileMenuBarEntry);
 
-		editItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
+		replyItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
 				InputEvent.CTRL_DOWN_MASK));
-		fileMenuBarEntry.add(editItem);
+		fileMenuBarEntry.add(replyItem);
 
 		/*
 		 * forwardItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F,
@@ -97,15 +100,15 @@ public class Email extends JFrame {
 		fileMenuBarEntry.add(sendItem);
 		// sendItem.setVisible(false);
 
-		deleteItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D,
+		/*deleteItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D,
 				InputEvent.CTRL_DOWN_MASK));
-		fileMenuBarEntry.add(deleteItem);
+		fileMenuBarEntry.add(deleteItem);*/
 
 		exitItem.setAccelerator(KeyStroke.getKeyStroke("ESCAPE"));
 
 		fileMenuBarEntry.add(exitItem);
 
-		editItem.addActionListener(new java.awt.event.ActionListener() {
+		replyItem.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				editExistingMessage();
 			}
@@ -129,11 +132,11 @@ public class Email extends JFrame {
 			}
 		});
 
-		deleteItem.addActionListener(new java.awt.event.ActionListener() {
+		/*deleteItem.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				deleteExistingMessage();
 			}
-		});
+		});*/
 
 		exitItem.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -148,26 +151,26 @@ public class Email extends JFrame {
 		ImageIcon replyIcon = new ImageIcon("images/email_reply.png");
 		ImageIcon forwardIcon = new ImageIcon("images/email_forward.png");
 
-		edit.setIcon(replyIcon);
-		// forward.setIcon(forwardIcon);
+		reply.setIcon(replyIcon);
+		forward.setIcon(forwardIcon);
 		draft.setIcon(draftIcon);
 		send.setIcon(sendIcon);
-		delete.setIcon(discardIcon);
+		//delete.setIcon(discardIcon);
 		discard.setIcon(discardIcon);
 
 		JToolBar bar = new JToolBar();
 		bar.setFloatable(false);
-		bar.add(edit);
-		// bar.add(forward);
+		bar.add(reply);
+		bar.add(forward);
 		bar.add(draft);
 
 		bar.add(send);
 		// send.setVisible(false);
-		bar.add(delete);
+		//bar.add(delete);
 		bar.add(discard);
 		// discard.setVisible(false);
 
-		edit.addActionListener(new java.awt.event.ActionListener() {
+		reply.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				editExistingMessage();
 			}
@@ -193,11 +196,11 @@ public class Email extends JFrame {
 			}
 		});
 
-		delete.addActionListener(new java.awt.event.ActionListener() {
+		/*delete.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				deleteExistingMessage();
 			}
-		});
+		});*/
 
 		discard.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -266,14 +269,16 @@ public class Email extends JFrame {
 
 	// Actions - Draft
 	private void draftEmail() {
+		discard.setVisible(false);
 		buildEmailViewObject();
         emailService.draftEmail(emailView);
 	}
 
 	private void sendEmail() {
 		buildEmailViewObject();
-		System.out.println(emailView.getFolder());
+		//System.out.println(emailView.getFolder());
         emailService.sendEmail(emailView);
+        this.dispose();
 	}
 	
 	private void buildEmailViewObject(){
@@ -311,41 +316,91 @@ public class Email extends JFrame {
 	}
 
 	private void setOldMessage() {
+		
+		//Draft Email
+		discard.setVisible(false);
+		
+		
+		if (emailView.getFolder().equals(CECConfigurator.getReference().get("Drafts")))
+		{	
+			
+			reply.setVisible(false);
+			forward.setVisible(false);
+			
+			send.setVisible(true);
+			draft.setVisible(true);
+					
+			sendItem.setVisible(true);
+			draftItem.setVisible(true);
+			
+			
+			replyItem.setVisible(false);			
+			toField.setEditable(true);
+			ccField.setEditable(true);
+			subjectField.setEditable(true);
+			bodyField.setEditable(true);
+			//setNewMessage();			
+		}
+		else//if (emailView.getFolder().equals(CECConfigurator.getReference().get("Outbox")))
+		{
+			reply.setVisible(true);
+			reply.setEnabled(false);			
+			forward.setVisible(true);
+			forward.setEnabled(false);
+			
+			replyItem.setVisible(false);
+			
+			toField.setEditable(false);
+			ccField.setEditable(false);
+			subjectField.setEditable(false);
+			bodyField.setEditable(false);
+			
+			
+			send.setVisible(true);
+			draft.setVisible(true);
+			discard.setVisible(false);
+			
+			sendItem.setVisible(true);
+			draftItem.setVisible(true);
+			
+			
+		}
+		
 		// FIELD EDITABLE
-		toField.setEditable(false);
+		/*toField.setEditable(false);
 		ccField.setEditable(false);
 		subjectField.setEditable(false);
-		bodyField.setEditable(false);
+		bodyField.setEditable(false);*/
 
 		// OPTION AVAILABLE
-		draft.setVisible(false);
+		/*draft.setVisible(false);
 		send.setVisible(false);
 		discard.setVisible(false);
 
 		sendItem.setVisible(false);
-		draftItem.setVisible(false);
+		draftItem.setVisible(false);*/
 	}
 
 	private void setNewMessage() {
 
 		// FIELD EDITABLE
-		toField.setEditable(true);
+		/*toField.setEditable(true);
 		ccField.setEditable(true);
 		subjectField.setEditable(true);
-		bodyField.setEditable(true);
-
+		bodyField.setEditable(true);*/		
+		
 		// OPTION AVAILABLE
-		edit.setVisible(false);
-		// forward.setVisible(false);
-		delete.setVisible(false);
+		reply.setVisible(false);
+		forward.setVisible(false);
+		//delete.setVisible(false);
 		send.setVisible(true);
 		draft.setVisible(true);
 		discard.setVisible(true);
 
 		// OPTION AVAILABLE IN MENU
-		editItem.setVisible(false);
+		//editItem.setVisible(false);
 		// forwardItem.setVisible(false);
-		deleteItem.setVisible(false);
+		//deleteItem.setVisible(false);
 		sendItem.setVisible(true);
 		draftItem.setVisible(true);
 	}
