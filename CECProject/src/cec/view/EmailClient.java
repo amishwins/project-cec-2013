@@ -28,10 +28,12 @@ import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneLayout;
+import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeModel;
@@ -40,6 +42,8 @@ import javax.swing.tree.TreePath;
 import cec.service.FolderService;
 import cec.service.EmailService;
 import cec.service.TreeModelBuilder;
+
+
 
 public class EmailClient extends JFrame implements TreeSelectionListener {
 	private static final long serialVersionUID = 7366789547512037235L;
@@ -63,6 +67,16 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     }
     
     private void initialize() {
+    	
+    	 //Windows look and Feel
+    	 String lookAndFeel = null;
+         lookAndFeel = UIManager.getSystemLookAndFeelClassName();
+         try{
+         UIManager.setLookAndFeel(lookAndFeel);}
+         catch (Exception e) {
+             System.err.println("It was not possible to load Windows look and feel");}         
+         
+    	//Layout Settings
         setSize(1024, 768);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -118,10 +132,10 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         while (currentNode != null);
         
         folders.setPreferredSize(new java.awt.Dimension(200, 400));
-        DefaultTreeCellRenderer render = (DefaultTreeCellRenderer)folders.getCellRenderer();
+        /*DefaultTreeCellRenderer render = (DefaultTreeCellRenderer)folders.getCellRenderer();
         render.setLeafIcon(new ImageIcon("images/folder.gif"));
         render.setOpenIcon(new ImageIcon("images/folder.gif"));
-        render.setClosedIcon(new ImageIcon("images/folder.gif"));
+        render.setClosedIcon(new ImageIcon("images/folder.gif"));*/
 
         
         //Adding components to the Left Panel
@@ -138,6 +152,9 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         emailTable.setFillsViewportHeight(true);        
         emailTable.getSelectionModel().addListSelectionListener(new RowListener());
         emailTable.addMouseListener(new EmailTableMouseListener());
+
+     
+        
         
         JScrollPane rightPanelChildTop = new JScrollPane(emailTable,
                                              JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -149,6 +166,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 
         //Right-BOTTOM
         emailBody = new JTextArea(10,10);
+        emailBody.setEditable(false);
         JScrollPane rightPanelChildBottom = new JScrollPane(emailBody); 
         rightPanelChildBottom.setLayout(new ScrollPaneLayout());
 
@@ -244,6 +262,8 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
                     
         Iterable<EmailViewEntity> emailsInEachFolder  = folderService.loadEmails(lastSelectedFolder);
         emailTable.setModel(new EmailListViewData(emailTableViewColumns, emailsInEachFolder)); 
+       
+  
     }
     
     //EMAIL TABLE MAIN LISTENER 
@@ -304,18 +324,20 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     private class MenuEditMoveEmail implements ActionListener {
     	public void actionPerformed (ActionEvent e) {
     		
+    		if (selectedEmailEntity!= null){
+    			
     		TreeModel modelMove = folders.getModel();
             final JTree foldersToMove=new JTree(modelMove);
-            foldersToMove.setRootVisible(false);
+            foldersToMove.setRootVisible(false);          
             
-    		final JFrame moveFolder = new JFrame();
+    		final JFrame moveFolder = new JFrame("Destination");
     		moveFolder.setLocationRelativeTo(null);
     		JButton Bcreate = new JButton("OK");
     		moveFolder.setLayout(new BorderLayout());
     		JScrollPane Sp = new JScrollPane(foldersToMove);//(folders);       
     		moveFolder.add(Sp,BorderLayout.NORTH);    		
     		moveFolder.add(Bcreate,BorderLayout.SOUTH);
-    		moveFolder.setSize(200, 425);
+    		moveFolder.setSize(220, 405);
     		moveFolder.setVisible(true);    		  
     		  
     		Bcreate.addActionListener(new ActionListener() 
@@ -342,7 +364,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     		        moveFolder.dispose();    	    		
     			}
     		});                   
-            			
+    	} 			
     	}
     }    
     
@@ -350,13 +372,14 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     //EDIT > DELETE EMAIL > 
     private class MenuEditDeleteEmail implements ActionListener {
     	public void actionPerformed (ActionEvent e) {
-	
-			emailService.delete(selectedEmailEntity);
-			
-			//Refreshing Email Table Content - Asking Controller
-	        Iterable<EmailViewEntity> emailsInEachFolder  = folderService.loadEmails(lastSelectedFolder);
-	        emailTable.setModel(new EmailListViewData(emailTableViewColumns, emailsInEachFolder)); 			
-			
+    		
+    		if (selectedEmailEntity!= null){
+				emailService.delete(selectedEmailEntity);
+				
+				//Refreshing Email Table Content - Asking Controller
+		        Iterable<EmailViewEntity> emailsInEachFolder  = folderService.loadEmails(lastSelectedFolder);
+		        emailTable.setModel(new EmailListViewData(emailTableViewColumns, emailsInEachFolder)); 			
+    		}
     	}
     }
     
