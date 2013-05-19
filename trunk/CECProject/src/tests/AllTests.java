@@ -14,7 +14,8 @@ import tests.integration.EmailModelAndDaoIntegrationTests;
 	EmailTests.class,
 	FolderFactoryTests.class,
 	FolderTests.class,
-	EmailModelAndDaoIntegrationTests.class })
+	EmailModelAndDaoIntegrationTests.class,
+	HierarchyTests.class})
 
 public class AllTests {
 }

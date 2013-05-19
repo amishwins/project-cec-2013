@@ -150,4 +150,10 @@ class FolderDaoStub implements FolderDao {
 	public void createSubFolder(String parentFolder, String newChildFolderName){
 		createWasCalled = true;
 	}
+
+	@Override
+	public Iterable<String> loadSubFolders(String parentFolder) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -10,11 +10,16 @@ import org.apache.commons.io.filefilter.FileFileFilter;
 
 public class FolderDaoImpl implements FolderDao {
 
-	public/* Iterable<List<String>> */void loadFolders() {
-		// Collection<List<String>> folderIDs = new ArrayList<String>();
-
+	public Iterable<String>  loadSubFolders(String folderName) {
+		List<String> subFoldersPath = new ArrayList<String>();
+		List<File> subFolders = new ArrayList<File>();
+	    subFolders = getSubFoldersRecursively(new File (folderName));
+	    for(File subFolder: subFolders){
+	    	subFoldersPath.add(subFolder.getPath());
+	    }
+		return subFoldersPath;
 	}
-
+  
 	public void delete(String folderPath) {
 		FileDeleteStrategy file = FileDeleteStrategy.FORCE;
 		try {
@@ -34,13 +39,16 @@ public class FolderDaoImpl implements FolderDao {
 		}
 	}
 
-	public static List<File> getSubFoldersRecursively(File file) {
-		List<File> subFolders = Arrays.asList(file.listFiles(new FileFilter() {
+	public  List<File> getSubFoldersRecursively(File folder) {
+		List<File> subFolders = Arrays.asList(folder.listFiles(new FileFilter() {
 			public boolean accept(File file) {
 				return file.isDirectory();
 			}
 		}));
-
+        for(File subFolder: subFolders){
+        	System.out.println("Folders: "+subFolder.getPath());
+        	
+        }
 		subFolders = new ArrayList<File>(subFolders);
 
 		List<File> innerFoldersList = new ArrayList<File>();

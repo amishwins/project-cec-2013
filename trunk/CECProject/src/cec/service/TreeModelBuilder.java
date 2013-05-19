@@ -4,9 +4,7 @@
  */
 package cec.service;
 
-import java.io.File;
 import java.util.Enumeration;
-import java.util.List;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -21,16 +19,15 @@ public class TreeModelBuilder {
         model = new DefaultTreeModel(root);
     }
     
-    public DefaultTreeModel buildTreeNodeFromFileList(List<File> listOfFiles) {
+    public DefaultTreeModel buildTreeNodeFromFileList(Iterable<String> hierarchy) {
         
-        for(File file: listOfFiles) {
-            buildTreeFromString(file.getPath());
+        for(String folder: hierarchy) {
+            buildTreeFromFolders(folder);
         }
-        
         return model;
     }
     
-    private void buildTreeFromString(final String str) {
+    private void buildTreeFromFolders(final String str) {
         // Fetch the root node
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
 

@@ -1,41 +1,44 @@
 package cec.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Hierarchy {
-    private Object[] hierarchy;
-    private List<Folder> allFolders;
-    
-    
-    public Hierarchy() {
-        // code to get the hierarchy from the persistence 
-        Object[] h =    
-                { "Emails",
-                  "Inbox",
-                  new Object[] { "Jokes", "Quotes" },
-                  "Sent",
-                  "Drafts",
-                  new someStrangeObject()
-                };
-        hierarchy = h;
-    }
-    
-    public Object[] getHierarchy() {
-       return hierarchy;
-   }    
-}
+import cec.config.CECConfigurator;
+import cec.persistence.FolderDao;
+import cec.persistence.FolderDaoFactory;
 
-class someStrangeObject {
-    private String title;
+public class Hierarchy {
+    private List<Folder> hierarchy;
+    private FolderDao folderDao;
     
-    private String path;
-    
-    public someStrangeObject() {
-        title = "dog";
+    public Hierarchy (){
+    	hierarchy = new ArrayList<Folder>();
+    	folderDao = FolderDaoFactory.getFolderDaoInstance();
     }
-  
-    @Override
-    public String toString() {
-        return title;
+    public Iterable<Folder> loadHierarchy(){
+        List<Folder> systemFolders= getSystemFolders();
+        hierarchy.addAll(systemFolders);
+        for(Folder systemFolder:systemFolders){
+        	getSubFoldersFromSystemFolder(systemFolder);
+        }
+    	
+        return hierarchy;
+    }
+   
+    protected void getSubFoldersFromSystemFolder(Folder systemFolder){
+    	Iterable<String> subFolders = folderDao.loadSubFolders(systemFolder.getPath());
+    	for(String subfolder : subFolders){
+    		hierarchy.add(FolderFactory.getFolder(subfolder));
+    	}
+    }
+    private List<Folder> getSystemFolders(){
+    	CECConfigurator config = CECConfigurator.getReference();
+    	List<Folder> systemFolders = new ArrayList<Folder>();
+    	systemFolders.add(FolderFactory.getFolder(config.get("Inbox")));
+    	systemFolders.add(FolderFactory.getFolder(config.get("Drafts")));
+    	systemFolders.add(FolderFactory.getFolder(config.get("Outbox")));
+    	systemFolders.add(FolderFactory.getFolder(config.get("Sent")));
+    	return systemFolders;
     }
 }
+   

@@ -5,14 +5,14 @@ import java.util.UUID;
 public class EmailViewEntity {
 	
 	private UUID id;
-	private String from;
-	private String to;
-	private String cc;
-	private String subject;
-	private String body;
-	private String lastModifiedTime;
-	private String sentTime;
-	private String folder;
+	private String from = "";
+	private String to = "";
+	private String cc = "";
+	private String subject = "";
+	private String body = "";
+	private String lastModifiedTime = "";
+	private String sentTime = "";
+	private String folder = "";
     
 	public String getFrom() {
 		return from;
