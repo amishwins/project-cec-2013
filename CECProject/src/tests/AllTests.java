@@ -5,6 +5,8 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 import tests.integration.EmailModelAndDaoIntegrationTests;
+import tests.integration.EmailServiceModelAndDaoIntegrationTest;
+import tests.integration.FolderServiceModelAndDaoIntegrationTests;
 
 @RunWith(Suite.class)
 @SuiteClasses({ 
@@ -15,7 +17,10 @@ import tests.integration.EmailModelAndDaoIntegrationTests;
 	FolderFactoryTests.class,
 	FolderTests.class,
 	EmailModelAndDaoIntegrationTests.class,
-	HierarchyTests.class})
+	HierarchyTests.class,
+	EmailServiceModelAndDaoIntegrationTest.class,
+	FolderServiceModelAndDaoIntegrationTests.class
+	})
 
 public class AllTests {
 }
