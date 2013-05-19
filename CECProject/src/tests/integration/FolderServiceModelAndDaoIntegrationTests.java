@@ -3,15 +3,10 @@ package tests.integration;
 import static org.junit.Assert.*;
 
 import java.util.List;
-import java.util.UUID;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import cec.model.Folder;
-import cec.model.FolderFactory;
-import cec.model.Hierarchy;
 import cec.service.FolderService;
 
 public class FolderServiceModelAndDaoIntegrationTests {
