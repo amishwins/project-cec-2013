@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><E-Mail>
+   <Id>19e025bf-5159-4c4f-be03-e7a1371ea6aa</Id>
+   <From>cec.user@cec.com</From>
+   <To>send</To>
+   <CC>send</CC>
+   <Subject>send2</Subject>
+   <Body>send2</Body>
+   <LastModifiedTime>2013.05.20_At_17.36.17.596</LastModifiedTime>
+   <SentTime>2013.05.20_At_17.36.17.596</SentTime>
+   <ParentFolder>emails/Outbox</ParentFolder>
+</E-Mail>
