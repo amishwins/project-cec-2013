@@ -4,6 +4,8 @@
 
 == Priority ==
 
+  * System allows adding subfolders under "emails" root. But the tree doesn't display them. See {{{HierarchyImpl}}}
+
   * Move -> Persistence Layer should take care of Move (means, open the existing file for the email, set ParentFolder to new Destination, and then use the File.io cut/paste)
 
   * Create and delete subfolder -> decide on a refresh tree strategy
