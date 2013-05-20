@@ -63,6 +63,7 @@ public class FolderTests {
 	@Test 
 	public void deleteSystemFolder() {
 		systemFolder.delete();
+		assertTrue(systemFolder.exceptionWasThrown);
 		assertFalse(((FolderDaoStub)systemFolder.getFolderDao()).deleteWasCalled);
 	}
 
@@ -87,6 +88,8 @@ public class FolderTests {
 }
 
 class SystemFolderCUT extends SystemFolder{
+	public boolean exceptionWasThrown = false;
+	
 	public SystemFolderCUT(String path) {
 		super(path);
 		
@@ -96,6 +99,11 @@ class SystemFolderCUT extends SystemFolder{
 	
 	public FolderDao getFolderDao() {
 		return folderDao;
+	}
+	
+	@Override
+	protected void handleSystemDelete() {
+		exceptionWasThrown = true;
 	}
 }
 
