@@ -79,6 +79,7 @@ public class Email extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		JMenu fileMenuBarEntry = new JMenu("File");
+		fileMenuBarEntry.setMnemonic('F');
 		menuBar.add(fileMenuBarEntry);
 
 		replyItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R,
@@ -160,11 +161,11 @@ public class Email extends JFrame {
 		discard.setIcon(discardIcon);
 
 		JToolBar bar = new JToolBar();
-		bar.setFloatable(false);		
-		bar.add(draft);
+		bar.setFloatable(false);
 		bar.add(send);
-                bar.add(discard);
-                bar.add(reply);
+		bar.add(draft);
+        bar.add(discard);
+        bar.add(reply);
 		bar.add(forward);
 		// send.setVisible(false);
 		//bar.add(delete);
@@ -381,8 +382,8 @@ public class Email extends JFrame {
 		discard.setVisible(true);
 
 		// OPTION AVAILABLE IN MENU
-		//editItem.setVisible(false);
-		// forwardItem.setVisible(false);
+		replyItem.setVisible(false);
+		forwardItem.setVisible(false);
 		//deleteItem.setVisible(false);
 		sendItem.setVisible(true);
 		draftItem.setVisible(true);
