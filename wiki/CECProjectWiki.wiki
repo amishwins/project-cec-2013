@@ -2,6 +2,10 @@
 
 == Design Decisions ==
 
+=== Column Widths for JTable === 
+
+We manually call {{{defineEmailTableLayout}}} whenever the {{{updateJTable}}} is called. 
+
 === Error Messages for the User ===
 
 The following cases will display an error message:
