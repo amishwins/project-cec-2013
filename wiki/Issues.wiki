@@ -4,10 +4,7 @@
 
 == Priority ==
 
-  * Open the Drafts Folder. Create a new email. While working on it, Save as Draft. Issue is that we need to update the model, so the view behind the email is updated (automatically).
-
   * Move -> Persistence Layer should take care of Move (means, open the existing file for the email, set ParentFolder to new Destination, and then use the File.io cut/paste)
-
 
   * Create and delete subfolder -> decide on a refresh tree strategy
 
@@ -24,9 +21,10 @@
   * Can we make JTable columns 20%, 60%, 20% ? See http://stackoverflow.com/questions/953972/java-jtable-setting-column-width
 
   * New Email UI: Could we make the Send button first, and Save to Draft second? Also, can we extend the "To", "CC", and "Subject" fields to the whole width? 
-
   
   * Create Subfolder -> if subfolder already exists, prevent user from creating.
+
+  * (DONE) Open the Drafts Folder. Create a new email. While working on it, Save as Draft. Issue is that we need to update the model, so the view behind the email is updated (automatically).
 
 
   * (DONE) Alt-F should open up the File menu, and Alt-E should open up the Edit.
