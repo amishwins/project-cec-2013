@@ -20,13 +20,14 @@ public class EmailTests {
 	
 	EmailImplCUT myEmail;
 	//EmailDaoStub stubbedEmailPersistence;
-	Folder folderStub;
+	Folder folderStub,destinationFolderStub;
 	UUID id;
 
 	@Before
 	public void setUp() throws Exception {
 		id = UUID.randomUUID();
 		folderStub = FolderFactory.getFolder("test/name");
+		destinationFolderStub = FolderFactory.getFolder("test/other");
 		//stubbedEmailPersistence = new EmailDaoStub();
 		myEmail = new EmailImplCUT(id, "from@email.com", "to@email.com", 
 				"cc@email.com", "Subject", "Body", "20130516", "20130515", folderStub);
@@ -77,7 +78,7 @@ public class EmailTests {
 	
 	@Test
 	public void move() {
-		myEmail.move(folderStub);
+		myEmail.move(destinationFolderStub);
 		assertTrue(((EmailDaoStub)myEmail.getEmailDao()).moveWasCalled);
 	}
 }

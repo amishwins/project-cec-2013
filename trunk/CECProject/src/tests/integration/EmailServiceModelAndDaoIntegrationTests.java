@@ -12,6 +12,8 @@ import org.junit.Test;
 import cec.service.EmailService;
 import cec.service.FolderService;
 import cec.view.EmailViewEntity;
+import exceptions.FolderAlreadyExistsException;
+import exceptions.SourceAndDestinationFoldersAreSameException;
 
 public class EmailServiceModelAndDaoIntegrationTests {
 	String systemFolderName = "emails/Sent";
@@ -72,7 +74,12 @@ public class EmailServiceModelAndDaoIntegrationTests {
 		emailService.delete(emailViewEntity);	
 		folderService.delete(completePath);
 	}
-
+    
+	@Test (expected=SourceAndDestinationFoldersAreSameException.class)
+	public void ShouldThrowWhenDestinationFolderIsParentFolder() {
+		emailService.move(emailViewEntity,emailViewEntity.getFolder());
+		
+	}
 
 }
 

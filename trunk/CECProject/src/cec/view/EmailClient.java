@@ -41,6 +41,7 @@ import cec.service.EmailService;
 import cec.service.TreeModelBuilder;
 import exceptions.CannotDeleteSystemFolderException;
 import exceptions.FolderAlreadyExistsException;
+import exceptions.SourceAndDestinationFoldersAreSameException;
 
 public class EmailClient extends JFrame implements TreeSelectionListener {
 	private static final long serialVersionUID = 7366789547512037235L;
@@ -325,13 +326,13 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 
 				ArrayList<String> listOfFolders = (ArrayList<String>) folderService
 						.loadHierarchy();
-				String[] selValues = (String[]) listOfFolders.toArray();
-/*				int index = 0;
+				String[] selValues = new String[listOfFolders.size()];
+				int index = 0;
 				for (String folder : listOfFolders) {
 					selValues[index] = folder;
 					index++;					
 				}
-*/
+
 				int messageType = JOptionPane.QUESTION_MESSAGE;
 				Object mov = JOptionPane.showInputDialog(null,
 						"Select the destination folder", "Move Email",
@@ -343,7 +344,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 						emailService.move(selectedEmailEntity, mov.toString());
 						updateJTable();
 					}
-					catch (RuntimeException ex) {
+					catch (SourceAndDestinationFoldersAreSameException ex) {
 						// fail silently - don't tell the user anything.
 					}
 				}
