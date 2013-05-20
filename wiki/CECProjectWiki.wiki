@@ -117,29 +117,25 @@ All Icons used in our project are part of the "Primo icon set" provided freely b
 
 *Hot keys used in our application*
 
-(Main window)
-Alt+F - Open File Menu
-Alt+E - Open Edit Menu
 
-Ctrl+N - New Email
-Ctrl+F - New Sub-folder
-Ctrl+O - Open Selected Email
----
-Ctrl+M - Move Email
-Ctrl+E - Delete Email
-Ctrl+R - Delete Folder
+  * (Main window)
+    * Alt+F - Open File Menu
+    * Ctrl+N - New Email
+    * Ctrl+F - New Sub-folder
+    * Ctrl+O - Open Selected Email
+    * Alt+E - Open Edit Menu
+    * Ctrl+M - Move Email
+    * Ctrl+E - Delete Email
+    * Ctrl+R - Delete Folder
 
-(Mesage window)
-Alt+F - Open File Menu
-
-Ctrl+D - Save as Draft
-Ctrl+S - Send Email
-Escape - Exit
-
-
-
+  * (Email window)
+    * Alt+F - Open File Menu
+    * Ctrl+D - Save as Draft
+    * Ctrl+S - Send Email
+    * Escape - Exit
 
 ----
+
 
 == Some awesome links: ==
 
