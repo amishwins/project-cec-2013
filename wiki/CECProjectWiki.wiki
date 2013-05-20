@@ -97,9 +97,13 @@ Our assumption is that users will always want to see the most recent messages on
 
 === Refreshing policy ===
 
-Folder Structure 
+*Folder Structure Tree - Left Panel*
 
-We've decied to refresh the Folder Structure by rebuilting it entirely from the persistence layer  - that scans the Operating System File System - every time a subfolder is created or deleted. Considering that I/O and Memory overheads are not concerns as our Email application should not deal with complex directory structures or large number of subdirectories, this approach is interesting as ensures that the user is browsing a correct and updated structure and if an error occurs the user will see his update has not been properly performed.
+We've decided to refresh the Folder Structure by rebuilting it entirely from the persistence layer  - re-scaning the "emails" directory structure from Operating system's File System - every time *a subfolder is created or deleted*. Considering that I/O and Memory overheads are not concerns as our Email application should not deal with complex directory structures with large number of subdirectories, this approach is interesting as it ensures that the user is browsing a correct and updated tree and if an error occurs the user will see his update has not been properly performed.
+
+*Email Table - Top Panel*
+
+Likewise, the strategy adopted to refresh the Email table when *a Folder is selected* as well as *an email is Deleted/Moved* is to request the persistence layer to check the Operating system's File System and load an updated list of Email Entities (XML Files).
 
 
 == Some awesome links: ==
