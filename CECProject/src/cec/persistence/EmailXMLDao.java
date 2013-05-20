@@ -121,8 +121,6 @@ public class EmailXMLDao implements EmailDao {
 
 			transformer.transform(source, result);
 
-			System.out.println("File saved!");
-
 		} catch (TransformerException e) {
 			e.printStackTrace();
 		}
