@@ -277,7 +277,6 @@ public class Email extends JFrame {
 
 	private void sendEmail() {
 		buildEmailViewObject();
-		//System.out.println(emailView.getFolder());
         emailService.sendEmail(emailView);
         this.dispose();
 	}
