@@ -16,11 +16,11 @@ import tests.integration.FolderServiceModelAndDaoIntegrationTests;
 	EmailTests.class,
 	FolderFactoryTests.class,
 	FolderTests.class,
-	EmailModelAndDaoIntegrationTests.class,
 	HierarchyTests.class,
+	
+	EmailModelAndDaoIntegrationTests.class,
 	EmailServiceModelAndDaoIntegrationTest.class,
-	FolderServiceModelAndDaoIntegrationTests.class
-	})
+	FolderServiceModelAndDaoIntegrationTests.class 	})
 
 public class AllTests {
 }
