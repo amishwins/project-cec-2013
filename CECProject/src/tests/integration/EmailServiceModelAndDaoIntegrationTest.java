@@ -15,8 +15,10 @@ import cec.view.EmailViewEntity;
 
 public class EmailServiceModelAndDaoIntegrationTest {
 	String systemFolderName = "emails/Sent";
-	String userFolderLevel1 = "integrationtests";
-	String completePath = systemFolderName+"/"+userFolderLevel1;
+	String userFolder1 = "integrationtests";
+	String userFolder2 = "integrationtests2";
+	String firstPath = systemFolderName+"/"+userFolder1;
+	String secondPath = systemFolderName+"/"+userFolder2;
 
 	FolderService folderService;
 	EmailService emailService;
@@ -49,29 +51,54 @@ public class EmailServiceModelAndDaoIntegrationTest {
 
 	@Test
 	public void sendMoveLoadAndDeleteEmail() {
-		folderService.delete(completePath);
-		folderService.createSubFolder(systemFolderName,userFolderLevel1);
+		folderService.delete(firstPath);
+		folderService.createSubFolder(systemFolderName,userFolder1);
 		emailService.sendEmail(emailViewEntity);
-		emailService.move(emailViewEntity, completePath);
-		List<EmailViewEntity> eMVEList = (List<EmailViewEntity>) folderService.loadEmails(completePath);
+		emailService.move(emailViewEntity, firstPath);
+		List<EmailViewEntity> eMVEList = (List<EmailViewEntity>) folderService.loadEmails(firstPath);
 		assertEquals((eMVEList.get(0).getId()),emailId);
-		assertEquals((eMVEList.get(0).getFolder()),completePath);
+		assertEquals((eMVEList.get(0).getFolder()),firstPath);
 		emailService.delete(emailViewEntity);	
-		folderService.delete(completePath);
+		folderService.delete(firstPath);
 	}
 	
 	@Test
 	public void DraftMoveLoadAndDeleteEmail() {
-		folderService.delete(completePath);
-		folderService.createSubFolder(systemFolderName,userFolderLevel1);
+		folderService.delete(firstPath);
+		folderService.createSubFolder(systemFolderName,userFolder1);
 		emailService.draftEmail(emailViewEntity);
-		emailService.move(emailViewEntity, completePath);
-		List<EmailViewEntity> eMVEList = (List<EmailViewEntity>) folderService.loadEmails(completePath);
+		emailService.move(emailViewEntity, firstPath);
+		List<EmailViewEntity> eMVEList = (List<EmailViewEntity>) folderService.loadEmails(firstPath);
 		assertEquals((eMVEList.get(0).getId()),emailId);
-		assertEquals((eMVEList.get(0).getFolder()),completePath);
+		assertEquals((eMVEList.get(0).getFolder()),firstPath);
 		emailService.delete(emailViewEntity);	
-		folderService.delete(completePath);
+		folderService.delete(firstPath);
 	}
+	
+	@Test
+	public void MoveTo2DifferentFoldersAndDeleteEmail() {
+		folderService.delete(firstPath);
+		folderService.createSubFolder(systemFolderName,userFolder1);
+		folderService.createSubFolder(systemFolderName,userFolder2);
+		emailService.sendEmail(emailViewEntity);
+		
+		//To move email from defaultPath to firstPath
+		emailService.move(emailViewEntity, firstPath);
+		List<EmailViewEntity> eMVEList = (List<EmailViewEntity>) folderService.loadEmails(firstPath);
+		assertEquals((eMVEList.get(0).getId()),emailId);
+		assertEquals((eMVEList.get(0).getFolder()),firstPath);
+		
+		//To move email from defaultPath to secondPath
+		emailService.move(eMVEList.get(0), secondPath);
+		eMVEList = (List<EmailViewEntity>) folderService.loadEmails(secondPath);
+		assertEquals((eMVEList.get(0).getId()),emailId);
+		assertEquals((eMVEList.get(0).getFolder()),secondPath);
+		emailService.delete(eMVEList.get(0));	
+		folderService.delete(firstPath);
+		folderService.delete(secondPath);
+	}
+	
+	
 
 
 }

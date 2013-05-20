@@ -26,7 +26,6 @@ public class EmailXMLDao implements EmailDao {
 	
 	final String FILE_EXTENSION=".xml";
 	
-
 	public Document buildXmlFile(UUID id, String from, String to, String cc,
 			String subject, String body, String lastModifiedTime,
 			String sentTime, String location) {
