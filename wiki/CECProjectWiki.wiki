@@ -12,15 +12,16 @@ The following cases will display an error message:
 
 === Creation and Deletion of Folders ===
 
-We have decided that users can not create folders anywhere. 
-
-We have decided that users can only delete user created folders. The following folders are considered "system" folders, and thus *cannot* be deleted:
+We have decided that users can *not* create folders anywhere. They may only create them as subfolders of the four "system" folders (not the emails root):
 
   * emails
     * Inbox
     * Drafts
     * Outbox
     * Sent
+
+Users are also not allowed to delete any system folder. 
+
 
 === Formatting XML ===
 In EmailXMLDao, we are using a {{{StreamSource.xls}}} file to help us format the XML output:
