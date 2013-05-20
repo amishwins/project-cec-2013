@@ -2,11 +2,38 @@
 
 = Document Issues we Find (todos, etc.) =
 
+== Priority ==
+
+  * Open the Drafts Folder. Create a new email. While working on it, Save as Draft. Issue is that we need to update the model, so the view behind the email is updated (automatically).
+
+  * Move -> Persistence Layer should take care of Move (means, open the existing file for the email, set ParentFolder to new Destination, and then use the File.io cut/paste)
+
+  * Prevent deletion of the emails root folder. 
+
+  * Create and delete subfolder -> decide on a refresh tree strategy
+
+  * Using EmailViewEntity selectedEmailEntity in EmailClient isn't the best way. Look for alternatives.
+
+  * Javadocs (big points)
+
+  * Consistency of labels between right click and menu entries (Move Email vs. Move Selected Email)
+
+  * Robustness - do some basic input sanitization / validation. This is for: folder name, to address, subject, max length on certain fields. Should we allow moving emails which are in the Drafts folder? 
+
+  * EmailClient is too large (500+ lines). We need to have better naming for our variables (camelCase)
+
+  * Can we make JTable columns 20%, 60%, 20% ? See http://stackoverflow.com/questions/953972/java-jtable-setting-column-width
+
+  * New Email UI: Could we make the Send button first, and Save to Draft second? Also, can we extend the "To", "CC", and "Subject" fields to the whole width? 
+
+
+
 == UI ==
 
-  * Look and Feel for JTree of Folders
-  * Headings for JTable are different in Inbox (From, Subject, Time), and Drafts (To, Subject, Time)
-  * Should we sort the inbox and drafts differently? We should sort all folders?
+  * Look and Feel for Menu -> can we underline the hotkeys in the Menu.
+  * Alt-F should open up the File menu, and Alt-E should open up the Edit.
+  * Create Subfolder -> if subfolder already exists, prevent user from creating. 
+  * (Low) Headings for JTable are different in Inbox (From, Subject, Time), and Drafts (To, Subject, Time)
 
 
 == Model ==
