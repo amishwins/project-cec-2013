@@ -8,6 +8,8 @@ import java.util.UUID;
 import cec.config.CECConfigurator;
 import cec.persistence.EmailDao;
 import cec.persistence.EmailDaoFactory;
+import exceptions.FolderAlreadyExistsException;
+import exceptions.SourceAndDestinationFoldersAreSameException;
 
 public class EmailImpl implements Email {
 	private final UUID id;
@@ -124,9 +126,17 @@ public class EmailImpl implements Email {
 		emailDao.delete(parentFolder.getPath(), id);
 	}
 
-	public void move(Folder destDir) {
-		emailDao.move(id, parentFolder.getPath(), destDir.getPath());
+	public void move(Folder destFolder) {
+		checkDestinationFolderIsNotSourceFolder(destFolder);
+		emailDao.move(id, parentFolder.getPath(), destFolder.getPath());
 	}
+	
+	private void checkDestinationFolderIsNotSourceFolder(Folder destDir){
+		if(parentFolder.getPath().equals(destDir.getPath())){
+			throw new SourceAndDestinationFoldersAreSameException();
+		}
+	}
+	
 
 	@Override
 	public String toString() {
