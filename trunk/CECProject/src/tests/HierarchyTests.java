@@ -10,10 +10,11 @@ import org.junit.Test;
 
 import cec.model.Folder;
 import cec.model.Hierarchy;
+import cec.model.HierarchyImpl;
 
 public class HierarchyTests {
 
-	HierarchyCUT hierarchy;
+	Hierarchy hierarchy;
 	List<Folder> systemFolders;
 	
 	
@@ -27,7 +28,7 @@ public class HierarchyTests {
 	}
 
 	@Test
-	public void showLoadHierarchyWorks() {
+	public void loadHierarchyGivesAtLeastSystemFoldersInCorrectOrder() {
 		systemFolders = (List<Folder>)hierarchy.loadHierarchy();
 		 assertEquals(systemFolders.get(0).getPath(), "emails/Inbox");
 		 assertEquals(systemFolders.get(1).getPath(), "emails/Drafts");
@@ -36,10 +37,12 @@ public class HierarchyTests {
 	}
 	
 }
-class HierarchyCUT extends Hierarchy{
+class HierarchyCUT extends HierarchyImpl{
 	
 	@Override
 	protected void getSubFoldersFromSystemFolder(Folder systemFolder){
+		// for our test, we only need to return the first level folders. Therefore
+		// we don't need to get each of the subfolders.
 		return;
 	}
 }

@@ -4,23 +4,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import tests.integration.EmailModelAndDaoIntegrationTests;
-import tests.integration.EmailServiceModelAndDaoIntegrationTest;
-import tests.integration.FolderServiceModelAndDaoIntegrationTests;
+import tests.integration.IntegrationTests;
 
 @RunWith(Suite.class)
-@SuiteClasses({ 
-	CECConfiguratorTests.class,
-	EmailBuilderTests.class, 
-	EmailSortingTests.class,
-	EmailTests.class,
-	FolderFactoryTests.class,
-	FolderTests.class,
-	HierarchyTests.class,
-	
-	EmailModelAndDaoIntegrationTests.class,
-	EmailServiceModelAndDaoIntegrationTest.class,
-	FolderServiceModelAndDaoIntegrationTests.class 	})
+@SuiteClasses({
+	UnitTests.class,
+	IntegrationTests.class
+})
 
 public class AllTests {
 }

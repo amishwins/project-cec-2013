@@ -21,7 +21,7 @@ public class CECConfiguratorTests {
 	public void tearDown() throws Exception {
 	}
 
-	//@Test
+	@Test
 	public void addedValueCanBeRetrieved() {
 		cut.put("Dog", "Bark");
 		assertTrue(cut.get("Dog").equals("Bark"));
@@ -30,12 +30,15 @@ public class CECConfiguratorTests {
 	@Test(expected=NullPointerException.class)
 	public void valueNotFoundThrowsException() {
 		@SuppressWarnings("unused")
-		String meow = cut.get("Dog");
+		String meow = cut.get("Cat");
 	}
 	
-	//@Test
+	@Test
 	public void getDefaultValues() {
-		assertTrue(cut.get("ClientEmail").equals("test.user@cec.com"));
+		// two ways to retrieve the client email
+		assertTrue(cut.get("ClientEmail").equals("cec.user@cec.com"));
+		assertTrue(cut.getClientEmailAddress().equals("cec.user@cec.com"));
+		
 		assertTrue(cut.get("Inbox").equals("emails/Inbox"));
 		assertTrue(cut.get("Drafts").equals("emails/Drafts"));
 		assertTrue(cut.get("Outbox").equals("emails/Outbox"));

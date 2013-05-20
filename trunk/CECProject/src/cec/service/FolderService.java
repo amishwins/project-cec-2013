@@ -6,8 +6,9 @@ import java.util.List;
 import cec.model.Email;
 import cec.model.Folder;
 import cec.model.FolderFactory;
-import cec.view.EmailViewEntity;
 import cec.model.Hierarchy;
+import cec.view.EmailViewEntity;
+import cec.model.HierarchyImpl;
 
 public class FolderService {
 	
@@ -15,7 +16,7 @@ public class FolderService {
 		
 	public Iterable<String> loadHierarchy(){
 		List<String> hierarchy = new ArrayList<String>();
-		Hierarchy cECHierarchy = new Hierarchy();
+		Hierarchy cECHierarchy = new HierarchyImpl();
 		Iterable<Folder> folders = cECHierarchy.loadHierarchy();
 		for(Folder folder: folders){
 			hierarchy.add(folder.getPath());
