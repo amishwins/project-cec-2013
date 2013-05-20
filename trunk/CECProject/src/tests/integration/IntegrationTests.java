@@ -7,7 +7,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({ 
 	EmailModelAndDaoIntegrationTests.class,
-	EmailServiceModelAndDaoIntegrationTest.class,
+	EmailServiceModelAndDaoIntegrationTests.class,
 	FolderServiceModelAndDaoIntegrationTests.class })
 
 public class IntegrationTests {
