@@ -13,7 +13,7 @@ import cec.service.EmailService;
 import cec.service.FolderService;
 import cec.view.EmailViewEntity;
 
-public class EmailServiceModelAndDaoIntegrationTest {
+public class EmailServiceModelAndDaoIntegrationTests {
 	String systemFolderName = "emails/Sent";
 	String userFolderLevel1 = "integrationtests";
 	String completePath = systemFolderName+"/"+userFolderLevel1;
