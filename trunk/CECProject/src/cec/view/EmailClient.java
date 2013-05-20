@@ -352,7 +352,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	    	            	
 	    	            	
 	    	            }catch(FolderAlreadyExistsException folderAlreadyExistsException){
-	    	            	JOptionPane.showInputDialog(null,"A folder with that name already exists. Please enter another name.");
+	    	            	JOptionPane.showMessageDialog(null,"A folder with that name already exists. Please enter another name.");
 	    	            }
 	    				
 	    	            
