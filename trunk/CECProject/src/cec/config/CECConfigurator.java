@@ -34,7 +34,8 @@ public class CECConfigurator {
 	}
 	
 	public boolean isPathForASystemFolder(String path) {
-		if ( systemSettings.get("Inbox").equals(path) ||
+		if ( systemSettings.get("emails").equals(path) ||
+			 systemSettings.get("Inbox").equals(path) ||
 		     systemSettings.get("Drafts").equals(path) ||
 		     systemSettings.get("Sent").equals(path) ||
 		     systemSettings.get("Outbox").equals(path) )
@@ -45,6 +46,7 @@ public class CECConfigurator {
 	}
 	
 	private void mapDefaultSystemFolders() {
+		systemSettings.put("emails", "emails");
 		systemSettings.put("Inbox", "emails/Inbox");
 		systemSettings.put("Drafts", "emails/Drafts");
 		systemSettings.put("Outbox", "emails/Outbox");
