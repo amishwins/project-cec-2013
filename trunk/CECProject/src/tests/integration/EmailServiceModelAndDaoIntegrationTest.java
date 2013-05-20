@@ -55,6 +55,7 @@ public class EmailServiceModelAndDaoIntegrationTest {
 		emailService.move(emailViewEntity, completePath);
 		List<EmailViewEntity> eMVEList = (List<EmailViewEntity>) folderService.loadEmails(completePath);
 		assertEquals((eMVEList.get(0).getId()),emailId);
+		assertEquals((eMVEList.get(0).getFolder()),completePath);
 		emailService.delete(emailViewEntity);	
 		folderService.delete(completePath);
 	}
@@ -67,6 +68,7 @@ public class EmailServiceModelAndDaoIntegrationTest {
 		emailService.move(emailViewEntity, completePath);
 		List<EmailViewEntity> eMVEList = (List<EmailViewEntity>) folderService.loadEmails(completePath);
 		assertEquals((eMVEList.get(0).getId()),emailId);
+		assertEquals((eMVEList.get(0).getFolder()),completePath);
 		emailService.delete(emailViewEntity);	
 		folderService.delete(completePath);
 	}

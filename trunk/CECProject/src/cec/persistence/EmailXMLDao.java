@@ -33,9 +33,9 @@ public class EmailXMLDao implements EmailDao {
 		DocumentBuilderFactory documentFactory = null;
 		DocumentBuilder documentBuilder = null;
 		Document emailInXMLFormat = null;
-		documentFactory = DocumentBuilderFactory.newInstance();
 		
 		try {
+			documentFactory = DocumentBuilderFactory.newInstance();
 			documentBuilder = documentFactory.newDocumentBuilder();			
 			
 			// root element Email
@@ -141,11 +141,43 @@ public class EmailXMLDao implements EmailDao {
 	public void move(UUID fileName, String srcDir, String destDir){
 		File file = new File(srcDir+"/"+fileName.toString()+FILE_EXTENSION);
 		File destinationDir = new File(destDir);
+		updateXMLField(file.getPath(),destDir);
 		try {
 			FileUtils.moveFileToDirectory(file, destinationDir, false);
 		} catch (IOException fileMoveException) {
 			fileMoveException.printStackTrace();
 		}
+	}
+	
+	private void updateXMLField(String xmlFile, String destDir){
+		DocumentBuilderFactory documentFactory = null;
+		DocumentBuilder documentBuilder = null;
+		Document emailInXMLFormat = null;
+		
+		try {
+			documentFactory = DocumentBuilderFactory.newInstance();
+			documentBuilder = documentFactory.newDocumentBuilder();
+			 emailInXMLFormat = documentBuilder.parse(xmlFile);
+			 emailInXMLFormat.getDocumentElement().normalize();
+
+			NodeList email = emailInXMLFormat.getElementsByTagName("E-Mail");
+			Element	field = (Element) email.item(0);
+			Node parentFolder = field.getElementsByTagName("ParentFolder").item(0)
+						.getFirstChild();
+		    parentFolder.setNodeValue(destDir);
+
+			emailInXMLFormat.getDocumentElement().normalize();
+			TransformerFactory transformerFactory = TransformerFactory
+					.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+			DOMSource source = new DOMSource(emailInXMLFormat);
+			StreamResult result = new StreamResult(
+					new File(xmlFile));
+			transformer.transform(source, result);
+		} catch (Exception exception) {
+			exception.printStackTrace();
+		}
+		
 	}
 
 	@Override
