@@ -95,6 +95,13 @@ This is accomplished by modelling a parent abstract {{{Folder}}} class, which im
 Our assumption is that users will always want to see the most recent messages on top. Therefore, each folder is sorted in a descending order. We will not (at least for phase 1) provide another means to sort.
 
 
+=== Refreshing policy ===
+
+Folder Structure 
+
+We've decied to refresh the Folder Structure by rebuilting it entirely from the persistence layer  - that scans the Operating System File System - every time a subfolder is created or deleted. Considering that I/O and Memory overheads are not concerns as our Email application should not deal with complex directory structures or large number of subdirectories, this approach is interesting as ensures that the user is browsing a correct and updated structure and if an error occurs the user will see his update has not been properly performed.
+
+
 == Some awesome links: ==
 
   * http://oreilly.com/catalog/jfcnut/chapter/ch03.html#ch03_20.html
