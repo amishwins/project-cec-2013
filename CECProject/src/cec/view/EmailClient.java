@@ -106,9 +106,10 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         bottomPanel.setLayout(new BorderLayout(2,2));
 
         //Swing Components - Left Panel         
-        //Jtree >
+        //Jtree 
         
         TreeModelBuilder tmb = new TreeModelBuilder(new DefaultMutableTreeNode());
+        
         
         // TODO: Move the code to get the subfolder list of paths into the Hierarchy Model object
         //List<File> listOfFiles = FolderDaoImpl.getSubFoldersRecursively(new File("emails"));
@@ -185,6 +186,32 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         folders.setSelectionRow(1);
     }       
 
+    private void updateJTree(){
+    	 
+        TreePath node2= folders.getSelectionPath();
+        System.out.println("Node  :"+ node2.toString());
+        //folders.expandPath(node2);
+        Object [] nodes = node2.getPath();
+        int i = nodes.length;
+        
+        TreeModelBuilder tmb = new TreeModelBuilder(new DefaultMutableTreeNode());
+        Iterable<String> hierarchy = folderService.loadHierarchy();
+        TreeModel model = tmb.buildTreeNodeFromFileList(hierarchy);
+        folders.setModel(model);
+        
+        // Show one level of folders displayed by default
+        DefaultMutableTreeNode currentNode = ((DefaultMutableTreeNode)model.getRoot()).getNextNode();
+        do {
+            if (currentNode.getLevel()==(i-2)) 
+                folders.expandPath(new TreePath(currentNode.getPath()));
+            
+            currentNode = currentNode.getNextNode();
+        }
+        while (currentNode != null);
+        
+        folders.setPreferredSize(new java.awt.Dimension(200, 400));
+    }
+    
     private void setupMenuBar() {
         //Menu
         JMenuBar menuBar = new JMenuBar();
@@ -262,7 +289,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
                     
         Iterable<EmailViewEntity> emailsInEachFolder  = folderService.loadEmails(lastSelectedFolder);
         emailTable.setModel(new EmailListViewData(emailTableViewColumns, emailsInEachFolder)); 
-       
+        
   
     }
     
@@ -298,11 +325,17 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	    			if(folderName.trim().length()>0)
 	    			{    	    				
 	    	            folderService.createSubFolder(lastSelectedFolder, folderName);		
-	    	             
+	    	            updateJTree();
 	    	            // TODO: Make it refresh!
 	    	            //Force Refresh - Making ROOT the selected node - NOT WORKING
+	    	          
+	    	           // folders.setSelectionRow(0);  
+	
+	    	            // TODO: Move the code to get the subfolder list of paths into the Hierarchy Model object
+	    	            //List<File> listOfFiles = FolderDaoImpl.getSubFoldersRecursively(new File("emails"));
 	    	            
-	    	            folders.setSelectionRow(0);    				
+	    	           
+	    	 
 	    			}
 	    			else
 	        			JOptionPane.showMessageDialog(null, "Invalid Folder name");    			
@@ -393,6 +426,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
             	JOptionPane.showMessageDialog(null, "Select a folder to delete");
             
             folderService.delete(lastSelectedFolder);
+            updateJTree();
 			
 		}
     }      

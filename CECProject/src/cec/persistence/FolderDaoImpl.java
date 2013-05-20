@@ -23,7 +23,6 @@ public class FolderDaoImpl implements FolderDao {
 		FileDeleteStrategy file = FileDeleteStrategy.FORCE;
 		try {
 			 
-			System.out.println("Delete : "+folderPath); 
 			file.delete(new File(folderPath));
 		} catch (IOException fileDeleteException) {
 			fileDeleteException.printStackTrace();
