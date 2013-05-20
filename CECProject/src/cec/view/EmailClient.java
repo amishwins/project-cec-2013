@@ -12,6 +12,8 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -372,8 +374,43 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     	}
     }
 
-    //EDIT > MOVE EMAIL > 
-    private class MenuEditMoveEmail implements ActionListener {
+	// EDIT > MOVE EMAIL >
+	private class MenuEditMoveEmail implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+
+			if (selectedEmailEntity == null) {
+				JOptionPane.showMessageDialog(null, "Select an email first");
+			} else {
+
+				ArrayList<String> listOfFolders = (ArrayList<String>) folderService
+						.loadHierarchy();
+				String[] selValues = new String[listOfFolders.size()];
+				int index = 0;
+				for (String folder : listOfFolders) {
+					selValues[index] = folder;
+					index++;
+				}
+
+				int messageType = JOptionPane.QUESTION_MESSAGE;
+				Object mov = JOptionPane.showInputDialog(null,
+						"Select the destination folder", "Move Email",
+						messageType, null, selValues, null);
+
+				if (mov != null) {
+					// Moving
+					emailService.move(selectedEmailEntity, mov.toString());
+					// Refreshing Email Table Content - Asking Controller
+					Iterable<EmailViewEntity> emailsInEachFolder = folderService
+							.loadEmails(lastSelectedFolder);
+					emailTable.setModel(new EmailListViewData(
+							emailTableViewColumns, emailsInEachFolder));
+				}
+			}
+		}
+	}
+    
+    
+    /*private class MenuEditMoveEmail implements ActionListener {
     	public void actionPerformed (ActionEvent e) {
     		
     		if (selectedEmailEntity== null)
@@ -425,7 +462,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     	} 			
     	}
     }    
-    
+*/    
     
     //EDIT > DELETE EMAIL > 
     private class MenuEditDeleteEmail implements ActionListener {
