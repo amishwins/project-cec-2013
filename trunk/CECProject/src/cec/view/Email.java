@@ -46,7 +46,7 @@ public class Email extends JFrame {
 	EmailViewEntity emailView;
 
 	public Email(EmailViewEntity email) {
-		super("");//("Existing Message");
+		//super("");//("Existing Message");
 		emailView = email;
 		setExistingMessage();
 		setMessageFields();
@@ -55,7 +55,7 @@ public class Email extends JFrame {
 	}
 
 	public Email() {
-		super("New Message");
+		//super("New Message");
 		emailView = new EmailViewEntity();
 		id = UUID.randomUUID();
 		setNewMessage();
@@ -321,7 +321,8 @@ public class Email extends JFrame {
 		//Draft Email				
 		if (emailView.getFolder().equals(CECConfigurator.getReference().get("Drafts")))		
 		{	
-			discard.setVisible(true);
+			discard.setVisible(false); //remove?
+			
 			reply.setVisible(false);
 			forward.setVisible(false);
 			
@@ -338,18 +339,22 @@ public class Email extends JFrame {
 			subjectField.setEditable(true);
 			bodyField.setEditable(true);
 			//setNewMessage();			
+			
 		}
 		else
 		{
-            discard.setVisible(false);
+						
+			discard.setVisible(false); //remove?
 			
             reply.setVisible(true);
 			reply.setEnabled(false);			
 			forward.setVisible(true);
 			forward.setEnabled(false);
 			
-			/*replyItem.setVisible(true);
-            forwardItem.setVisible(true);*/
+			replyItem.setVisible(true);
+			replyItem.setEnabled(false);	
+            forwardItem.setVisible(true);
+            forwardItem.setEnabled(false);	
 						
 			send.setVisible(false);
 			draft.setVisible(false);
@@ -379,7 +384,8 @@ public class Email extends JFrame {
 		//delete.setVisible(false);
 		send.setVisible(true);
 		draft.setVisible(true);
-		discard.setVisible(true);
+		
+		discard.setVisible(false); //remove?
 
 		// OPTION AVAILABLE IN MENU
 		replyItem.setVisible(false);
