@@ -105,15 +105,22 @@ We've decided to refresh the Folder Structure by rebuilting it entirely from the
 
 Likewise, the strategy adopted to refresh the Email table when *a Folder is selected* as well as *an email is Deleted/Moved* is to request the persistence layer to check the Operating system's File System and load an updated list of Email Entities (XML Files).
 
+----
 
 === UI/User Experience ===
+
+* Icons/Images *
+
+
+All Icons used in our project are part of the "Primo icon set" provided freely by Double-J Design for for personal and commercial use in their website.
+
 
 *Hot keys used in our application*
 
 (Main window)
 Alt+F - Open File Menu
 Alt+E - Open Edit Menu
-----
+
 Ctrl+N - New Email
 Ctrl+F - New Sub-folder
 Ctrl+O - Open Selected Email
@@ -124,18 +131,15 @@ Ctrl+R - Delete Folder
 
 (Mesage window)
 Alt+F - Open File Menu
-----
+
 Ctrl+D - Save as Draft
 Ctrl+S - Send Email
 Escape - Exit
 
 
-* Icons/Images *
 
 
-All Icons used in our project are part of the "Primo icon set" provided freely by Double-J Design for for personal and commercial use in their website.
-
-
+----
 
 == Some awesome links: ==
 
