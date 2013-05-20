@@ -10,8 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import cec.config.CECConfigurator;
 import cec.persistence.FolderDao;
 import cec.persistence.FolderDaoFactory;
+import exceptions.RootFolderSubfolderCreationException;
 
 public abstract class Folder {
 	
@@ -35,6 +37,9 @@ public abstract class Folder {
     public abstract void delete();
     
     public void createSubFolder(String newFolderName){
+    	if (getPath().equals(CECConfigurator.getReference().get("emails"))) {
+    		throw new RootFolderSubfolderCreationException();
+    	}
     	folderDao.createSubFolder(getPath(), newFolderName);
     }
 	
