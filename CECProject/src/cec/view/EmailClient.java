@@ -27,6 +27,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
+import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneLayout;
 import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
@@ -55,7 +56,8 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	//Controller controller = new Controller(); 
     FolderService folderService = new FolderService();
     EmailService emailService = new EmailService();
-
+    Iterable<String> hierarchy;
+    
     EmailViewEntity selectedEmailEntity;
     String lastSelectedFolder;
     
@@ -113,14 +115,15 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         
         // TODO: Move the code to get the subfolder list of paths into the Hierarchy Model object
         //List<File> listOfFiles = FolderDaoImpl.getSubFoldersRecursively(new File("emails"));
-        Iterable<String> hierarchy = folderService.loadHierarchy();
-        TreeModel model = tmb.buildTreeNodeFromFileList(hierarchy);
-  
+        //Iterable<String> hierarchy = folderService.loadHierarchy();
+        hierarchy = folderService.loadHierarchy();
+        TreeModel model = tmb.buildTreeNodeFromFileList(hierarchy);     
+        
         folders = new JTree(model);
         folders.setRootVisible(false);
         folders.addTreeSelectionListener(this);
-        folders.addMouseListener(new FolderTreeMouseListener(folders));
-                
+        folders.addMouseListener(new FolderTreeMouseListener(folders));        
+       
         
         // Show one level of folders displayed by default
         DefaultMutableTreeNode currentNode = ((DefaultMutableTreeNode)model.getRoot()).getNextNode();
@@ -153,6 +156,8 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         emailTable.setFillsViewportHeight(true);        
         emailTable.getSelectionModel().addListSelectionListener(new RowListener());
         emailTable.addMouseListener(new EmailTableMouseListener());
+        emailTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
 
         
         JScrollPane rightPanelChildTop = new JScrollPane(emailTable,
@@ -215,6 +220,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
         JMenu fileMenuBarEntry = new JMenu("File");
+        fileMenuBarEntry.setMnemonic('F');
         menuBar.add(fileMenuBarEntry);    
         
         JMenuItem newEmail = new JMenuItem("New Email",KeyEvent.VK_N);
@@ -243,6 +249,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         exitItem.addActionListener(new MenuFileExit());
         
         JMenu editMenuBarEntry = new JMenu("Edit");
+        editMenuBarEntry.setMnemonic('E');
         menuBar.add(editMenuBarEntry);
         
         JMenuItem moveSelectedEmail = new JMenuItem("Move Selected Email",KeyEvent.VK_M);
@@ -285,6 +292,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         sb.deleteCharAt(sb.length() - 1);          
         lastSelectedFolder = sb.toString();        
                     
+        
         Iterable<EmailViewEntity> emailsInEachFolder  = folderService.loadEmails(lastSelectedFolder);
         emailTable.setModel(new EmailListViewData(emailTableViewColumns, emailsInEachFolder)); 
         
@@ -303,6 +311,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 			 selectedEmailEntity = ((EmailListViewData)(emailTable.getModel()))
 					.getViewEntityAtIndex(emailTable.getSelectedRow());
             
+			
             emailBody.setText(selectedEmailEntity.getBody());
         }
     }        
@@ -321,6 +330,17 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	    		
 	    		if(folderName!=null )    		
 	    		{ 	
+	    			
+	    			String tryingtocreate = lastSelectedFolder+"/"+folderName;
+    			 	for(String folder: hierarchy)
+    			 	{	    	              
+    	                if(tryingtocreate.equals(folder))
+    	                {
+    	                	JOptionPane.showInputDialog(null,"Already Exists!! ");	    	                	
+    	                }
+    	            }
+	    			
+	    			
 	    			if(folderName.trim().length()>0)
 	    			{    	    				
 	    	            folderService.createSubFolder(lastSelectedFolder, folderName);		
@@ -356,6 +376,12 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     private class MenuEditMoveEmail implements ActionListener {
     	public void actionPerformed (ActionEvent e) {
     		
+    		if (selectedEmailEntity== null)
+    		{
+    			JOptionPane.showMessageDialog(null, "SELECT EMAIL FIRST");    			
+    		}
+    		
+    		
     		if (selectedEmailEntity!= null){
     			
     		TreeModel modelMove = folders.getModel();
@@ -364,15 +390,15 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
             
     		final JFrame moveFolder = new JFrame("Destination");
     		moveFolder.setLocationRelativeTo(null);
-    		JButton Bcreate = new JButton("OK");
+    		JButton Bmove = new JButton("OK");
     		moveFolder.setLayout(new BorderLayout());
     		JScrollPane Sp = new JScrollPane(foldersToMove);//(folders);       
     		moveFolder.add(Sp,BorderLayout.NORTH);    		
-    		moveFolder.add(Bcreate,BorderLayout.SOUTH);
-    		moveFolder.setSize(220, 405);
+    		moveFolder.add(Bmove,BorderLayout.SOUTH);
+    		moveFolder.setSize(200,380);//(220, 405);
     		moveFolder.setVisible(true);    		  
     		  
-    		Bcreate.addActionListener(new ActionListener() 
+    		Bmove.addActionListener(new ActionListener() 
     		{
     			public void actionPerformed(ActionEvent click) 
     			{    				
@@ -404,6 +430,9 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
     //EDIT > DELETE EMAIL > 
     private class MenuEditDeleteEmail implements ActionListener {
     	public void actionPerformed (ActionEvent e) {
+    		
+    		if (selectedEmailEntity== null)
+    			JOptionPane.showMessageDialog(null, "SELECT EMAIL FIRST");
     		
     		if (selectedEmailEntity!= null){
 				emailService.delete(selectedEmailEntity);
