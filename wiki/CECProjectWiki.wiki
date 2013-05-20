@@ -4,7 +4,7 @@
 
 === Column Widths for JTable === 
 
-We manually call {{{defineEmailTableLayout}}} whenever the {{{updateJTable}}} is called. 
+We manually call {{{defineEmailTableLayout}}} whenever the {{{updateJTable}}} is called. Is this a good design decision?
 
 === Error Messages for the User ===
 
