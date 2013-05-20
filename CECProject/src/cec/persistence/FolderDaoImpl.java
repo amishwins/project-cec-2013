@@ -4,25 +4,27 @@ import java.util.*;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import exceptions.FolderAlreadyExistsException;
 
 import org.apache.commons.io.FileDeleteStrategy;
 import org.apache.commons.io.filefilter.FileFileFilter;
 
 public class FolderDaoImpl implements FolderDao {
 
-	public Iterable<String>  loadSubFolders(String folderName) {
+	public Iterable<String> loadSubFolders(String folderName) {
 		List<String> subFoldersPath = new ArrayList<String>();
 		List<File> subFolders = new ArrayList<File>();
-	    subFolders = getSubFoldersRecursively(new File (folderName));
-	    for(File subFolder: subFolders){
-	    	subFoldersPath.add(subFolder.getPath().replace('\\','/'));
-	    }
+		subFolders = getSubFoldersRecursively(new File(folderName));
+		for (File subFolder : subFolders) {
+			subFoldersPath.add(subFolder.getPath().replace('\\', '/'));
+		}
 		return subFoldersPath;
 	}
+
 	public void delete(String folderPath) {
 		FileDeleteStrategy file = FileDeleteStrategy.FORCE;
 		try {
-			 
+
 			file.delete(new File(folderPath));
 		} catch (IOException fileDeleteException) {
 			fileDeleteException.printStackTrace();
@@ -31,20 +33,24 @@ public class FolderDaoImpl implements FolderDao {
 	}
 
 	public void createSubFolder(String parentFolder, String newChildFolderName) {
+		File newFolder = new File(parentFolder + "/" + newChildFolderName);
+		if (newFolder.exists()) {
+			throw new FolderAlreadyExistsException();
+		}
 		try {
-			File newFolder = new File(parentFolder + "/" + newChildFolderName);
 			newFolder.mkdir();
 		} catch (Exception fileCreationException) {
 			fileCreationException.printStackTrace();
 		}
 	}
 
-	public  List<File> getSubFoldersRecursively(File folder) {
-		List<File> subFolders = Arrays.asList(folder.listFiles(new FileFilter() {
-			public boolean accept(File file) {
-				return file.isDirectory();
-			}
-		}));
+	public List<File> getSubFoldersRecursively(File folder) {
+		List<File> subFolders = Arrays.asList(folder
+				.listFiles(new FileFilter() {
+					public boolean accept(File file) {
+						return file.isDirectory();
+					}
+				}));
 		subFolders = new ArrayList<File>(subFolders);
 		List<File> innerFoldersList = new ArrayList<File>();
 		for (File subFolder : subFolders) {
@@ -62,7 +68,8 @@ public class FolderDaoImpl implements FolderDao {
 
 		String[] xmlFilesName = getFileNames(folder);
 		for (String xmlFileName : xmlFilesName) {
-			email = emailDao.loadEmail(folder, xmlFileName);//read(folder, xmlFileName);
+			email = emailDao.loadEmail(folder, xmlFileName);// read(folder,
+															// xmlFileName);
 			listOfEmails.add(email);
 		}
 		return listOfEmails;
