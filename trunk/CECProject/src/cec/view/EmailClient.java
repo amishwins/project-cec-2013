@@ -39,6 +39,8 @@ import javax.swing.tree.TreePath;
 import cec.service.FolderService;
 import cec.service.EmailService;
 import cec.service.TreeModelBuilder;
+import exceptions.CannotDeleteSystemFolderException;
+import exceptions.FolderAlreadyExistsException;
 
 public class EmailClient extends JFrame implements TreeSelectionListener {
 	private static final long serialVersionUID = 7366789547512037235L;
@@ -53,7 +55,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	EmailViewEntity selectedEmailEntity;
 	String lastSelectedFolder;
 
-	String[] emailTableViewColumns = { "Sent From", "Subject", "Date Sent" };
+	String[] emailTableViewColumns = { "Sent From", "Subject", "Date" };
 	
 	private static EmailClient instance;
 	
@@ -286,45 +288,30 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 
 				if (folderName != null) {
 
-					String tryingtocreate = lastSelectedFolder + "/"
-							+ folderName;
-					Iterable<String> hierarchy = folderService.loadHierarchy();
-					for (String folder : hierarchy) {
-						if (tryingtocreate.equals(folder)) {
-							JOptionPane.showInputDialog(null,
-									"Already Exists!! ");
-						}
-					}
-
 					if (folderName.trim().length() > 0) {
-						folderService.createSubFolder(lastSelectedFolder,
-								folderName);
-						updateJTree();
-						// TODO: Make it refresh!
-						// Force Refresh - Making ROOT the selected node - NOT
-						// WORKING
-
-						// folders.setSelectionRow(0);
-
-						// TODO: Move the code to get the subfolder list of
-						// paths into the Hierarchy Model object
-						// List<File> listOfFiles =
-						// FolderDaoImpl.getSubFoldersRecursively(new
-						// File("emails"));
-
-					} else
-						JOptionPane.showMessageDialog(null,
-								"Invalid Folder name");
+						try {
+							folderService.createSubFolder(lastSelectedFolder, folderName);
+							updateJTree();
+						} catch (FolderAlreadyExistsException folderAlreadyExistsException) { 	
+							JOptionPane.showMessageDialog(null, "A folder with that name already exists. Please enter another name.");
+						} 	
+					} else {
+						JOptionPane.showMessageDialog(null,	"Invalid Folder name");
+					}
 				}
 			}
-
 		}
 	}
 
 	// FILE > OPEN SELECTED EMAIL
 	class MenuFileOpenSelectedEmail implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			JFrame nm = new Email(selectedEmailEntity);
+			if (selectedEmailEntity == null) { 
+				JOptionPane.showMessageDialog(null,	"Select an email to display");
+			}
+			else {
+				JFrame nm = new Email(selectedEmailEntity);
+			}
 		}
 	}
 
@@ -338,21 +325,27 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 
 				ArrayList<String> listOfFolders = (ArrayList<String>) folderService
 						.loadHierarchy();
-				String[] selValues = new String[listOfFolders.size()];
-				int index = 0;
+				String[] selValues = (String[]) listOfFolders.toArray();
+/*				int index = 0;
 				for (String folder : listOfFolders) {
 					selValues[index] = folder;
 					index++;					
 				}
-
+*/
 				int messageType = JOptionPane.QUESTION_MESSAGE;
 				Object mov = JOptionPane.showInputDialog(null,
 						"Select the destination folder", "Move Email",
 						messageType, null, selValues, null);
 
 				if (mov != null) {
-					emailService.move(selectedEmailEntity, mov.toString());
-					updateJTable();
+					
+					try {
+						emailService.move(selectedEmailEntity, mov.toString());
+						updateJTable();
+					}
+					catch (RuntimeException ex) {
+						// fail silently - don't tell the user anything.
+					}
 				}
 			}
 		}
@@ -368,11 +361,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 			if (selectedEmailEntity != null) {
 				emailService.delete(selectedEmailEntity);
 
-				// Refreshing Email Table Content - Asking Controller
-				Iterable<EmailViewEntity> emailsInEachFolder = folderService
-						.loadEmails(lastSelectedFolder);
-				emailTable.setModel(new EmailListViewData(
-						emailTableViewColumns, emailsInEachFolder));
+				updateJTable();
 			}
 		}
 	}
@@ -385,12 +374,14 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 					.getLastSelectedPathComponent();
 
 			if (node == null)
-				JOptionPane
-						.showMessageDialog(null, "Select a folder to delete");
-
-			folderService.delete(lastSelectedFolder);
-			updateJTree();
-
+				JOptionPane.showMessageDialog(null, "Select a folder to delete");
+			
+			try {
+				folderService.delete(lastSelectedFolder);
+				updateJTree();
+			} catch (CannotDeleteSystemFolderException ex) { 
+				JOptionPane.showMessageDialog(null, "Cannot delete system folders");
+			}
 		}
 	}
 

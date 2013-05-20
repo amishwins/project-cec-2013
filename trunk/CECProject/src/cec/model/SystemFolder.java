@@ -1,5 +1,7 @@
 package cec.model;
 
+import exceptions.CannotDeleteSystemFolderException;
+
 public class SystemFolder extends Folder {
 
 	public SystemFolder(String path) {
@@ -8,7 +10,7 @@ public class SystemFolder extends Folder {
 
 	@Override
 	public void delete() {
-		// return an error
+		throw new CannotDeleteSystemFolderException();
 	}
 
 }
