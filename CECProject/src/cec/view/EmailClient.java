@@ -41,6 +41,7 @@ import cec.service.EmailService;
 import cec.service.TreeModelBuilder;
 import exceptions.CannotDeleteSystemFolderException;
 import exceptions.FolderAlreadyExistsException;
+import exceptions.RootFolderSubfolderCreationException;
 import exceptions.SourceAndDestinationFoldersAreSameException;
 
 public class EmailClient extends JFrame implements TreeSelectionListener {
@@ -293,7 +294,10 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 						try {
 							folderService.createSubFolder(lastSelectedFolder, folderName);
 							updateJTree();
-						} catch (FolderAlreadyExistsException folderAlreadyExistsException) { 	
+						} catch (RootFolderSubfolderCreationException ex) {
+							JOptionPane.showMessageDialog(null, "You may not create a subfolder under the root directory.");
+						}						
+						catch (FolderAlreadyExistsException folderAlreadyExistsException) { 	
 							JOptionPane.showMessageDialog(null, "A folder with that name already exists. Please enter another name.");
 						} 	
 					} else {
