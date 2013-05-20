@@ -25,7 +25,6 @@
 
   * New Email UI: Could we make the Send button first, and Save to Draft second? Also, can we extend the "To", "CC", and "Subject" fields to the whole width? 
 
-  * Look and Feel for Menu -> can we underline the hotkeys in the Menu.
   
   * Create Subfolder -> if subfolder already exists, prevent user from creating.
 
@@ -33,6 +32,8 @@
   * (DONE) Alt-F should open up the File menu, and Alt-E should open up the Edit.
 
   * (DONE) Prevent deletion of the emails root folder. 
+
+  * (DONE) Look and Feel for Menu -> can we underline the hotkeys in the Menu.
 
   * (DONE)(Low) see how we disabled multiple selection for JTable. Multiple selection is allowed with Shift and Keyboard up / down
 
