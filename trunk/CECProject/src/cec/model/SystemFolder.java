@@ -9,7 +9,11 @@ public class SystemFolder extends Folder {
 	}
 
 	@Override
-	public void delete() {
+	public void delete() {		
+		handleSystemDelete();
+	}
+
+	protected void handleSystemDelete() {
 		throw new CannotDeleteSystemFolderException();
 	}
 
