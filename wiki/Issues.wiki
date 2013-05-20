@@ -8,7 +8,6 @@
 
   * Move -> Persistence Layer should take care of Move (means, open the existing file for the email, set ParentFolder to new Destination, and then use the File.io cut/paste)
 
-  * Prevent deletion of the emails root folder. 
 
   * Create and delete subfolder -> decide on a refresh tree strategy
 
@@ -28,11 +27,14 @@
 
   * Look and Feel for Menu -> can we underline the hotkeys in the Menu.
   
-  * Alt-F should open up the File menu, and Alt-E should open up the Edit.
-
   * Create Subfolder -> if subfolder already exists, prevent user from creating.
 
-  * (Low) see how we disabled multiple selection for JTable. Multiple selection is allowed with Shift and Keyboard up / down
+
+  * (DONE) Alt-F should open up the File menu, and Alt-E should open up the Edit.
+
+  * (DONE) Prevent deletion of the emails root folder. 
+
+  * (DONE)(Low) see how we disabled multiple selection for JTable. Multiple selection is allowed with Shift and Keyboard up / down
 
 
 == UI ==
