@@ -43,7 +43,9 @@ public class FolderService {
 		return emailListInView;
 	}
 	
-	public void createSubFolder(String folderPath, String newSubFolderName){
+	public void createSubFolder(String folderPath, String newSubFolderName) {
+		
+		
 		folder = FolderFactory.getFolder(folderPath);
 		folder.createSubFolder(newSubFolderName);
 	}
@@ -52,5 +54,7 @@ public class FolderService {
 		folder = FolderFactory.getFolder(folderPath);
 		folder.delete();
 	}
+	
+	
 	
 }

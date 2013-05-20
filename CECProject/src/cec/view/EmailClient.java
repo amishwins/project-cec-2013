@@ -154,8 +154,6 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         emailTable.getSelectionModel().addListSelectionListener(new RowListener());
         emailTable.addMouseListener(new EmailTableMouseListener());
 
-     
-        
         
         JScrollPane rightPanelChildTop = new JScrollPane(emailTable,
                                              JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -188,21 +186,21 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 
     private void updateJTree(){
     	 
-        TreePath node2= folders.getSelectionPath();
+ /*       TreePath node2= folders.getSelectionPath();
         System.out.println("Node  :"+ node2.toString());
         //folders.expandPath(node2);
         Object [] nodes = node2.getPath();
-        int i = nodes.length;
+        int i = nodes.length;*/
         
         TreeModelBuilder tmb = new TreeModelBuilder(new DefaultMutableTreeNode());
         Iterable<String> hierarchy = folderService.loadHierarchy();
         TreeModel model = tmb.buildTreeNodeFromFileList(hierarchy);
         folders.setModel(model);
         
-        // Show one level of folders displayed by default
+/*        // Show one level of folders displayed by default
         DefaultMutableTreeNode currentNode = ((DefaultMutableTreeNode)model.getRoot()).getNextNode();
         do {
-            if (currentNode.getLevel()==(i-2)) 
+            if (currentNode.getLevel()==(i-1)) 
                 folders.expandPath(new TreePath(currentNode.getPath()));
             
             currentNode = currentNode.getNextNode();
@@ -210,7 +208,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         while (currentNode != null);
         
         folders.setPreferredSize(new java.awt.Dimension(200, 400));
-    }
+*/    }
     
     private void setupMenuBar() {
         //Menu
@@ -290,6 +288,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
         Iterable<EmailViewEntity> emailsInEachFolder  = folderService.loadEmails(lastSelectedFolder);
         emailTable.setModel(new EmailListViewData(emailTableViewColumns, emailsInEachFolder)); 
         
+        selectedEmailEntity = null;
   
     }
     
