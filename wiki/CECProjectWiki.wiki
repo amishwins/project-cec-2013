@@ -2,7 +2,7 @@
 
 == Design Decisions ==
 
-=== Errors to the User ===
+=== Error Messages for the User ===
 
 The following cases will display an error message:
 
