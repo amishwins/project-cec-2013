@@ -18,7 +18,7 @@ public class HierarchyImpl implements Hierarchy {
 
     @Override
 	public Iterable<Folder> loadHierarchy(){
-        List<Folder> systemFolders= getSystemFolders();
+        List<Folder> systemFolders = getSystemFolders();
         hierarchy.addAll(systemFolders);
         for(Folder systemFolder:systemFolders){
         	getSubFoldersFromSystemFolder(systemFolder);
@@ -26,13 +26,14 @@ public class HierarchyImpl implements Hierarchy {
     	
         return hierarchy;
     }
-   
+       
     protected void getSubFoldersFromSystemFolder(Folder systemFolder){
     	Iterable<String> subFolders = folderDao.loadSubFolders(systemFolder.getPath());
     	for(String subfolder : subFolders){
     		hierarchy.add(FolderFactory.getFolder(subfolder));
     	}
     }
+    
     private List<Folder> getSystemFolders(){
     	CECConfigurator config = CECConfigurator.getReference();
     	List<Folder> systemFolders = new ArrayList<Folder>();
@@ -40,7 +41,7 @@ public class HierarchyImpl implements Hierarchy {
     	systemFolders.add(FolderFactory.getFolder(config.get("Drafts")));
     	systemFolders.add(FolderFactory.getFolder(config.get("Outbox")));
     	systemFolders.add(FolderFactory.getFolder(config.get("Sent")));
-    	return systemFolders;
+       	return systemFolders;
     }
 }
    
