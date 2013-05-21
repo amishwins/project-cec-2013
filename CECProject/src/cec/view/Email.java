@@ -266,7 +266,8 @@ public class Email extends JFrame {
 	}
 
 	private void setExistingMessage() {
-
+		
+		subjectField.setDocument(new EntryFieldMaxLength(250));
 		// Draft Email
 		if (emailView.getFolder().equals(
 				CECConfigurator.getReference().get("Drafts"))) {
@@ -314,7 +315,7 @@ public class Email extends JFrame {
 	}
 
 	private void setNewMessage() {
-
+		subjectField.setDocument(new EntryFieldMaxLength(250));
 		// OPTION AVAILABLE
 		reply.setVisible(false);
 		forward.setVisible(false);
@@ -329,3 +330,27 @@ public class Email extends JFrame {
 	}
 
 }
+
+
+
+class EntryFieldMaxLength extends PlainDocument {
+	  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private int maxlength;
+	 
+	  EntryFieldMaxLength(int length) {
+	    //super();
+	    this.maxlength = length;
+	  }
+
+	  public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
+	    if (str == null)
+	      return;
+
+	    if ((getLength() + str.length()) <= maxlength) {
+	      super.insertString(offs, str, a);
+	    }
+	  }
+	}
