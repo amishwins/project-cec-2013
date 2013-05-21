@@ -57,8 +57,6 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	EmailViewEntity selectedEmailEntity;
 	String lastSelectedFolder;
 
-	String[] emailTableViewColumns = { "Sent From", "Subject", "Date" };
-	
 	private static EmailClient instance;
 	
 	public static EmailClient getReference() {
@@ -83,7 +81,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 
 	private void initialize() {
 
-		// Windows look and Feel
+		// OS look and Feel
 		String lookAndFeel = UIManager.getSystemLookAndFeelClassName();
 		try {
 			UIManager.setLookAndFeel(lookAndFeel);
@@ -224,7 +222,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		editMenuBarEntry.setMnemonic('E');
 		menuBar.add(editMenuBarEntry);
 
-		JMenuItem moveSelectedEmail = new JMenuItem("Move Email", KeyEvent.VK_M);
+		JMenuItem moveSelectedEmail = new JMenuItem("Move Email...", KeyEvent.VK_M);
 		moveSelectedEmail.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_DOWN_MASK));
 		editMenuBarEntry.add(moveSelectedEmail);
 
@@ -243,6 +241,12 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		deleteSelectedFolder.addActionListener(new MenuEditDeleteFolder());
 		moveSelectedEmail.addActionListener(new MenuEditMoveEmail());
 	}
+	
+	private void defineEmailTableLayout() {
+		emailTable.getColumnModel().getColumn(0).setPreferredWidth(100);		
+		emailTable.getColumnModel().getColumn(1).setPreferredWidth(300);
+		emailTable.getColumnModel().getColumn(2).setPreferredWidth(100);		
+	}	
 
     // Listener for tree changes
 	@Override
@@ -264,7 +268,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		sb.deleteCharAt(sb.length() - 1);
 		lastSelectedFolder = sb.toString();
 		
-		updateJTable();
+		updateEmailTable();
 		setSelectedEntity(null);
 	}
 
@@ -353,7 +357,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 					
 					try {
 						emailService.move(getSelectedEntity(), mov.toString());
-						updateJTable();
+						updateEmailTable();
 					}
 					catch (SourceAndDestinationFoldersAreSameException ex) {
 						// fail silently - don't tell the user anything.
@@ -372,7 +376,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 
 			if (getSelectedEntity() != null) {
 				emailService.delete(getSelectedEntity());
-				updateJTable();
+				updateEmailTable();
 			}
 		}
 	}
@@ -507,9 +511,11 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 
 	}
 	
-	public void updateJTable() {
+	public void updateEmailTable() {
+		String[] emailTableViewColumns = { "From", "Subject", "Date" };
 		Iterable<EmailViewEntity> emailsInEachFolder = folderService.loadEmails(lastSelectedFolder);
-		emailTable.setModel(new EmailListViewData(emailTableViewColumns, emailsInEachFolder));				
+		emailTable.setModel(new EmailListViewData(emailTableViewColumns, emailsInEachFolder));	
+		defineEmailTableLayout();
 	}
 	
 }
