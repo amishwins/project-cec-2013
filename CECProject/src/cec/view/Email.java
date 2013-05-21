@@ -60,7 +60,7 @@ public class Email extends JFrame {
 	JMenuItem exitItem = new JMenuItem("Exit");
 
 	EmailViewEntity emailView;
-
+	int max_Length = 250;
 	public Email(EmailViewEntity email) {
 		emailView = email;
 		setExistingMessage();
@@ -267,7 +267,7 @@ public class Email extends JFrame {
 
 	private void setExistingMessage() {
 		
-		subjectField.setDocument(new EntryFieldMaxLength(250));
+		subjectField.setDocument(new EntryFieldMaxLength(max_Length));
 		// Draft Email
 		if (emailView.getFolder().equals(
 				CECConfigurator.getReference().get("Drafts"))) {
@@ -315,7 +315,7 @@ public class Email extends JFrame {
 	}
 
 	private void setNewMessage() {
-		subjectField.setDocument(new EntryFieldMaxLength(250));
+		subjectField.setDocument(new EntryFieldMaxLength(max_Length));
 		// OPTION AVAILABLE
 		reply.setVisible(false);
 		forward.setVisible(false);
