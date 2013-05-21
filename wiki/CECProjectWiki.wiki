@@ -28,7 +28,9 @@ Users are also not allowed to delete any system folder.
 
 === Validation on Folder Names for Creation ===
 
-Users are only allowed to create folders with names which match our awesome regex pattern: {{{^[a-zA-Z0-9_]+$}}}
+Users are only allowed to create folders with names which match our awesome regex pattern: {{{^[a-zA-Z0-9_\\s]+$}}}
+
+YaY!
 
 
 
