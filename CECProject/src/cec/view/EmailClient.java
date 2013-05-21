@@ -66,6 +66,13 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		return instance;
 	}
 	
+	public void updateEmailTable() {
+		String[] emailTableViewColumns = { "From", "Subject", "Date" };
+		Iterable<EmailViewEntity> emailsInEachFolder = folderService.loadEmails(lastSelectedFolder);
+		emailTable.setModel(new EmailListViewData(emailTableViewColumns, emailsInEachFolder));	
+		defineEmailTableLayout();
+	}
+	
 	private void setSelectedEntity(EmailViewEntity emailViewEntity) {
 		selectedEmailEntity = emailViewEntity;
 	}
@@ -171,7 +178,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 			currentNode = currentNode.getNextNode();
 		} while (currentNode != null);
 	}
-
+	
 	private void updateJTree() {
 		TreeModelBuilder tmb = new TreeModelBuilder(new DefaultMutableTreeNode());
 		Iterable<String> hierarchy = folderService.loadHierarchy();
@@ -321,7 +328,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	}
 
 	// FILE > OPEN SELECTED EMAIL
-	class MenuFileOpenSelectedEmail implements ActionListener {
+	private class MenuFileOpenSelectedEmail implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if (getSelectedEntity() == null) { 
 				JOptionPane.showMessageDialog(null,	"Select an email to display");
@@ -402,7 +409,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	}
 
 	// FOLDER TREE CONTEXT MENU (Right-Click)
-	class FolderTreeContextMenu extends JPopupMenu {
+	private class FolderTreeContextMenu extends JPopupMenu {
 		private static final long serialVersionUID = -5926440670627487856L;
 
 		JMenuItem newFolder;
@@ -420,7 +427,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	}
 
 	// EMAIL TABLE CONTEXT MENU (Right-Click)
-	class EmailTableContextMenu extends JPopupMenu {
+	private class EmailTableContextMenu extends JPopupMenu {
 		private static final long serialVersionUID = 1L;
 		JMenuItem movEmail;
 		JMenuItem delEmail;
@@ -437,7 +444,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	}
 
 	// FOLDER TREE MOUSE LISTENER
-	class FolderTreeMouseListener extends MouseAdapter {
+	private class FolderTreeMouseListener extends MouseAdapter {
 
 		JTree tree;
 		int selNode;
@@ -512,23 +519,17 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 
 	}
 	
-	public void updateEmailTable() {
-		String[] emailTableViewColumns = { "From", "Subject", "Date" };
-		Iterable<EmailViewEntity> emailsInEachFolder = folderService.loadEmails(lastSelectedFolder);
-		emailTable.setModel(new EmailListViewData(emailTableViewColumns, emailsInEachFolder));	
-		defineEmailTableLayout();
+	private class MenuFileNewEmail implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			JFrame nm = new Email();
+		}
 	}
-	
+
+	private class MenuFileExit implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			System.exit(0);
+		}
+	}
+		
 }
 
-class MenuFileNewEmail implements ActionListener {
-	public void actionPerformed(ActionEvent e) {
-		JFrame nm = new Email();
-	}
-}
-
-class MenuFileExit implements ActionListener {
-	public void actionPerformed(ActionEvent e) {
-		System.exit(0);
-	}
-}
