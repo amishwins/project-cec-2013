@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -36,6 +37,7 @@ public class Email extends JFrame {
 	private static final long serialVersionUID = 6361797821203537189L;
 	private UUID id = null;
 	private EmailClient mainClient;
+	private Validator emailValidator = new Validator();
 
 	EmailService emailService = new EmailService();
 
@@ -224,6 +226,8 @@ public class Email extends JFrame {
 	// Actions - Send
 	private void sendEmail() {
 		buildEmailViewObject();
+		if (!validateEmailFields())
+			return;
 		emailService.sendEmail(emailView);
 		mainClient.updateJTable();
 		this.dispose();
@@ -236,13 +240,22 @@ public class Email extends JFrame {
 		mainClient.updateJTable();
 	}
 
+	private boolean validateEmailFields() {
+		if (!emailValidator.isValidSendees(emailView.getTo(), emailView.getCC())) {
+			JOptionPane.showMessageDialog(null, "One address is not properly formulated. Please recheck");
+			return false;
+		}
+		return true;
+	}
+
+	
 	private void buildEmailViewObject() {
 		if (null == emailView.getId()) {
 			emailView.setId(id);
 		}
 		
-		emailView.setTo(toField.getText());
-		emailView.setCC(ccField.getText());
+		emailView.setTo(toField.getText().trim());
+		emailView.setCC(ccField.getText().trim());
 		emailView.setSubject(subjectField.getText());
 		emailView.setBody(bodyField.getText());
 	}

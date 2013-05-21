@@ -4,13 +4,33 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Validator {
+	// right now only the view layer is using this class. consider moving 
+	// in case the functionality is extended
 	
 	Pattern pattern;
 	Matcher matcher;
+	
+	public boolean isValidSendees(String to, String cc) {
+		if (to.isEmpty() && cc.isEmpty())
+			return false;
+		
+		if (!to.isEmpty() && !cc.isEmpty())
+			return isValidTo(to) && isValidCC(cc);
+		
+		if (!to.isEmpty())
+			return isValidTo(to);
+		
+		if (!cc.isEmpty()) 
+			return isValidCC(cc);
+		
+		return true;
+	}
 
-	public boolean isValidTo(String emailString) {
+	private boolean isValidTo(String emailString) {
 		String[] emails = emailString.split(";");
-		pattern = Pattern.compile("(.*)@(.*)");
+		
+		// use the basic one that Troy gave us, slightly enhanced!
+		pattern = Pattern.compile("(.+)@(.+)(\\.)(.+)"); 
 		
 		for (String email: emails ) {
 			matcher = pattern.matcher(email);	
@@ -21,7 +41,7 @@ public class Validator {
 		return true;
 	}
 	
-	public boolean isValidCC(String emailString) {
+	private boolean isValidCC(String emailString) {
 		return isValidTo(emailString);
 	}
 
@@ -31,7 +51,6 @@ public class Validator {
 		if (matcher.find() == false) {
 			return false;
 		}
-		System.out.println(matcher.group());
 		return true;
 	}
 

@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import cec.service.FolderService;
 import exceptions.FolderAlreadyExistsException;
+import exceptions.RootFolderSubfolderCreationException;
 
 public class FolderServiceModelAndDaoIntegrationTests {
 	String rootFolder = "emails";
@@ -45,7 +46,7 @@ public class FolderServiceModelAndDaoIntegrationTests {
 		folderService.delete(completePath);
 	}
 	
-	@Test (expected=FolderAlreadyExistsException.class)
+	@Test (expected=RootFolderSubfolderCreationException.class)
 	public void ShouldThrowWhenUserTriesToCreateSystemFolder() {
 		folderService.createSubFolder(rootFolder,inboxFolder);		
 	}
