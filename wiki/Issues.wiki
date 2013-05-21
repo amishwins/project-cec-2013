@@ -4,17 +4,17 @@
 
 == Priority ==
 
-  * System allows adding subfolders under "emails" root. But the tree doesn't display them. See {{{HierarchyImpl}}}
+  * (DONE) System allows adding subfolders under "emails" root. But the tree doesn't display them. See {{{HierarchyImpl}}}
 
-  * Move -> Persistence Layer should take care of Move (means, open the existing file for the email, set ParentFolder to new Destination, and then use the File.io cut/paste)
+  * (DONE) Move -> Persistence Layer should take care of Move (means, open the existing file for the email, set ParentFolder to new Destination, and then use the File.io cut/paste)
 
-  * Create and delete subfolder -> decide on a refresh tree strategy
+  * Create and delete subfolder -> decide on a refresh tree strategy (decide to show at least 1 level only on create and delete - TODO
 
-  * Using EmailViewEntity selectedEmailEntity in EmailClient isn't the best way. Look for alternatives.
+  * (DONE) Using EmailViewEntity selectedEmailEntity in EmailClient isn't the best way. Look for alternatives.
 
   * Javadocs (big points)
 
-  * Consistency of labels between right click and menu entries (Move Email vs. Move Selected Email)
+  * (DONE) Consistency of labels between right click and menu entries (Move Email vs. Move Selected Email)
 
   * Robustness - do some basic input sanitization / validation. This is for: folder name, to address, subject, max length on certain fields. Should we allow moving emails which are in the Drafts folder? 
 
