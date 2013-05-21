@@ -10,8 +10,18 @@
 		<h2>Design</h2>
 		Use Object Aid to visualize our classes/packages
 		<ul>
-			<li>Tiers</li>
-			<li>Packages</li>
+			<li>N-Tiers and Package Structure</li>
+				<p>Highlighted in blue are the major CEC packages. As depicted, we deployed an 4-tier architecture 
+				which includes: View, Service, Model, and Persistence. We minimized coupling between layers by having
+				dependencies flow from top to bottom. The exception to this was that the service layer needed to communicate
+				with the view layer in order to ensure a consistent user experience. However, this coupling was restricted 
+				to a specific mechanism which was well encapsulated. More on this appear below. </p>
+				
+				<p>Certain cross-cutting concerns span multiple tiers and they were organized into separate packages:
+				Configuration, and Exceptions.</p>  
+			
+				<p><img src="PackageLayout.jpg" width=600></img><p>
+			
 			<li>Major classes</li>
 		</ul>		
 		
