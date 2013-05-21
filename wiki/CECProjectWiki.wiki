@@ -14,7 +14,7 @@ The following cases will display an error message:
   * Try to move an email to the same folder in which it already exists
 
 
-=== Creation and Deletion of Folders ===
+== Creation and Deletion of Folders ==
 
 We have decided that users can *not* create folders anywhere. They may only create them as subfolders of the four "system" folders (not the emails root):
 
@@ -25,6 +25,11 @@ We have decided that users can *not* create folders anywhere. They may only crea
     * Sent
 
 Users are also not allowed to delete any system folder. 
+
+=== Validation on Folder Names for Creation ===
+
+Users are only allowed to create folders with names which match our awesome regex pattern: {{{^[a-zA-Z0-9_]+$}}}
+
 
 
 === Formatting XML ===
