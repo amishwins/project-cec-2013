@@ -131,7 +131,7 @@ Likewise, the strategy adopted to refresh the Email table when *a Folder is sele
 
 * Look and Feel *
 
-Look and feel (L&F) refers to the appearance of GUI widgets and their behaviors. Swing's architecture enables multiple L&Fs that provide a concrete implementation for each of the ComponentUI subclasses. To improve user experience we decided to use the L&F *SystemLookAndFeel* that implements an UI that is native to the Operating System the application is running on.
+Look and feel (L&F) refers to the appearance of GUI widgets and their behaviors. Swing's architecture enables multiple L&Fs that provides a concrete implementation for each of the ComponentUI subclasses. To improve user experience we decided to use the L&F *SystemLookAndFeel* that implements an UI that is native to the Operating System the application is running on.
 
 
 * Icons/Images *
