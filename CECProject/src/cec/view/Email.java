@@ -198,11 +198,7 @@ public class Email extends JFrame {
 		mid.add(ccField);
 		mid.add(subject);
 		mid.add(subjectField);
-		add(mid, BorderLayout.LINE_START);
-		
-		
-		subjectField.setDocument(new EntryFieldMaxLength(250));
-		
+		add(mid, BorderLayout.LINE_START);				
 		
 		bodyField.setLineWrap(true);
 		bodyField.setWrapStyleWord(true);
@@ -229,7 +225,7 @@ public class Email extends JFrame {
 		if (!validateEmailFields())
 			return;
 		emailService.sendEmail(emailView);
-		mainClient.updateJTable();
+		mainClient.updateEmailTable();
 		this.dispose();
 	}
 
@@ -237,7 +233,7 @@ public class Email extends JFrame {
 	private void draftEmail() {
 		buildEmailViewObject();
 		emailService.draftEmail(emailView);
-		mainClient.updateJTable();
+		mainClient.updateEmailTable();
 	}
 
 	private boolean validateEmailFields() {
@@ -333,27 +329,3 @@ public class Email extends JFrame {
 	}
 
 }
-
-
-class EntryFieldMaxLength extends PlainDocument {
-	  /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private int maxlength;
-	 
-	  EntryFieldMaxLength(int length) {
-	    //super();
-	    this.maxlength = length;
-	  }
-
-	  public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
-	    if (str == null)
-	      return;
-
-	    if ((getLength() + str.length()) <= maxlength) {
-	      super.insertString(offs, str, a);
-	    }
-	  }
-	}
-
