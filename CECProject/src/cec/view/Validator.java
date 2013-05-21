@@ -46,7 +46,7 @@ public class Validator {
 	}
 
 	public boolean isValidFolderName(String folderName) {
-		pattern = Pattern.compile("^[a-zA-Z0-9_]+$");
+		pattern = Pattern.compile("^[a-zA-Z0-9_\\s]+$");  //(\\s?)[a-zA-Z0-9_]?
 		matcher = pattern.matcher(folderName);
 		if (matcher.find() == false) {
 			return false;
