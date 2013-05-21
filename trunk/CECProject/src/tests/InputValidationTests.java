@@ -72,11 +72,24 @@ public class InputValidationTests {
 		String emailString = "@";
 		assertFalse(v.isValidSendees(emailString, ""));
 	}
-	
+
 	@Test
 	public void validateFolderName() {
 		String folderName = "MyDocs";
 		assertTrue(v.isValidFolderName(folderName));
+	}
+
+	@Test
+	public void allowSomeSpacesInFolderName() {
+		String folderName = "Archive 2012";
+		assertTrue(v.isValidFolderName(folderName));
+	}
+	
+	//@Test: the empty spaces is handled by the EmailClient. 
+	// It was challenging to get this to work in REGEX.
+	public void testWhiteSpaces() {
+		String folderName = "  ";
+		assertFalse(v.isValidFolderName(folderName));
 	}
 	
 	@Test

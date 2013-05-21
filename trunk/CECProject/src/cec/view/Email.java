@@ -331,8 +331,6 @@ public class Email extends JFrame {
 
 }
 
-
-
 class EntryFieldMaxLength extends PlainDocument {
 	  /**
 	 * 

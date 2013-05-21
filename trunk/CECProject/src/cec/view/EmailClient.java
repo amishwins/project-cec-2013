@@ -177,6 +177,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		Iterable<String> hierarchy = folderService.loadHierarchy();
 		TreeModel treeModel = tmb.buildTreeNodeFromFileList(hierarchy);
 		folders.setModel(treeModel);
+		showOneLevelOfTreeDisplayed(treeModel);
 	}
 
 	private void setupMenuBar() {
