@@ -12,7 +12,7 @@
 
   * EmailClient is too large (500+ lines). We need to have better naming for our variables (camelCase)
 
-  * Can we make JTable columns 20%, 60%, 20% ? See http://stackoverflow.com/questions/953972/java-jtable-setting-column-width
+  * (DONE) Can we make JTable columns 20%, 60%, 20% ? See http://stackoverflow.com/questions/953972/java-jtable-setting-column-width
 
   * (DONE) New Email UI: Could we make the Send button first, and Save to Draft second? Also, can we extend the "To", "CC", and "Subject" fields to the whole width? 
   
