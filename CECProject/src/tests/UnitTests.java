@@ -12,6 +12,7 @@ import org.junit.runners.Suite.SuiteClasses;
 	EmailTests.class, 
 	FolderFactoryTests.class,
 	FolderTests.class, 
+	InputValidationTests.class,
 	HierarchyTests.class })
 
 public class UnitTests {

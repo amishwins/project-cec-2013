@@ -35,6 +35,40 @@
 		
 		</ul>
 		
+		<h2>Reused Libraries</h2>
+		
+		<ul>
+			<li>Apache commons IO: for File Utils and File Delete</li>
+			<li>W3C DOM: comes with JDK - to interact and interrogate DOM objects</li>
+		
+		</ul>
+		
+		
+		<h2>Design Patterns</h2>
+		
+		<ul>
+			<li>Builder: cec.model.EmailBuilder</li>
+			<li>Factory: cec.model.FolderFactory, cec.persistence.EmailDaoFactory, 
+			cec.persistence.FolderDaoFactory</li>
+			<li>Adapter/Wrapper: cec.view.Email, cec.view.EmailClient</li>
+			<li>Observer: cec.view.EmailClient (TreeSelectionListener), JTable for emails listens to 
+			model changes when an email is send, saved, or deleted.</li>
+			<li>Singleton: cec.view.EmailClient: <font color=red><b>explanation?</b></font></li>
+		</ul>
+		
+		<ul>
+			<li>Value object: cec.view.EmailViewEntity</li>
+			<li>Data Access Object (DAO) interfaces: cec.persistence.EmailDao, cec.persistence.FolderDao</li>
+			<li>Test Patterns: 
+				<ul>
+					<li>Stub objects: isolated model tests by injecting/stubbing dependencies to persistence</li>
+					<li>Integration: a few more-involved integration tests were written, on the back
+					bone one solid unit tests</li>
+				</ul>
+			</li>	
+		
+		</ul>
+		
 		<p>Code snippet</p>
 		
 		<code>

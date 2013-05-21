@@ -24,25 +24,53 @@ public class InputValidationTests {
 	@Test
 	public void validateWellFormedSingleEmail() {
 		String emailString = "a@b.com";
-		assertTrue(v.isValidTo(emailString));
+		assertTrue(v.isValidSendees(emailString, ""));
 	}
 	
 	@Test
 	public void validatePoorlyFormedSingleEmail() {
 		String emailString = "abc";
-		assertFalse(v.isValidTo(emailString));
+		assertFalse(v.isValidSendees(emailString, ""));
+	}
+	
+	@Test
+	public void validateAnotherPoorlyFormedSingleEmail() {
+		String emailString = "abc@.";
+		assertFalse(v.isValidSendees(emailString, ""));
 	}
 	
 	@Test
 	public void validateWellFormedMultipleEmails() {
 		String emailString = "a@b.com; b@d.com";
-		assertTrue(v.isValidTo(emailString ));
+		assertTrue(v.isValidSendees(emailString, ""));
 	}
 
 	@Test
 	public void validateWellFormedAndPoorlyFormedEmails() {
 		String emailString = "a@b.com; bad.com";
-		assertFalse(v.isValidTo(emailString));
+		assertFalse(v.isValidSendees(emailString, ""));
+	}
+
+	@Test
+	public void validateCCIsFilledAndToIsEmpty() {
+		assertTrue(v.isValidSendees("", "a@b.com"));
+	}
+	
+	@Test
+	public void validateBothToAndCCAreEmpty() {
+		assertFalse(v.isValidSendees("", ""));
+	}
+	
+	@Test
+	public void validateBothToAndCCAreFilledAndGood() {
+		assertTrue(v.isValidSendees("a@b.com", "c@d.com"));
+	}
+	
+
+	@Test
+	public void onlyAtSymbolFails() {
+		String emailString = "@";
+		assertFalse(v.isValidSendees(emailString, ""));
 	}
 	
 	@Test
@@ -75,7 +103,7 @@ public class InputValidationTests {
 		assertFalse(v.isValidFolderName(folderName));
 	}
 	
-	
+
 	
 
 }

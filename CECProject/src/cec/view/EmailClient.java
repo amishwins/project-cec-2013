@@ -203,7 +203,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 
 		fileMenuBarEntry.addSeparator();
 
-		JMenuItem openSelectedEmail = new JMenuItem("Open Selected Email", KeyEvent.VK_O);
+		JMenuItem openSelectedEmail = new JMenuItem("Open Email", KeyEvent.VK_O);
 		openSelectedEmail.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
 		fileMenuBarEntry.add(openSelectedEmail);
 
@@ -224,17 +224,17 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		editMenuBarEntry.setMnemonic('E');
 		menuBar.add(editMenuBarEntry);
 
-		JMenuItem moveSelectedEmail = new JMenuItem("Move Selected Email", KeyEvent.VK_M);
+		JMenuItem moveSelectedEmail = new JMenuItem("Move Email", KeyEvent.VK_M);
 		moveSelectedEmail.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_DOWN_MASK));
 		editMenuBarEntry.add(moveSelectedEmail);
 
 		editMenuBarEntry.addSeparator();
 
-		JMenuItem deleteSelectedEmail = new JMenuItem("Delete Selected Email", KeyEvent.VK_E);
+		JMenuItem deleteSelectedEmail = new JMenuItem("Delete Email", KeyEvent.VK_E);
 		deleteSelectedEmail.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK));
 		editMenuBarEntry.add(deleteSelectedEmail);
 
-		JMenuItem deleteSelectedFolder = new JMenuItem("Delete Selected Folder", KeyEvent.VK_R);
+		JMenuItem deleteSelectedFolder = new JMenuItem("Delete Folder", KeyEvent.VK_R);
 		deleteSelectedFolder.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK));
 		editMenuBarEntry.add(deleteSelectedFolder);
 
@@ -292,12 +292,12 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 				JOptionPane.showMessageDialog(null, "Select a parent folder");
 			else {
 
-				String folderName = JOptionPane.showInputDialog(null,
-						"Folder Name");
-
+				String folderName = JOptionPane.showInputDialog(null, "Folder Name");
+				Validator validator = new Validator();
+				
 				if (folderName != null) {
 
-					if (folderName.trim().length() > 0) {
+					if (folderName.trim().length() > 0 && validator.isValidFolderName(folderName)) {
 						try {
 							folderService.createSubFolder(lastSelectedFolder, folderName);
 							updateJTree();
