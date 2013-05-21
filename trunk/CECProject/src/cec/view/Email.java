@@ -39,7 +39,6 @@ public class Email extends JFrame {
 
 	EmailService emailService = new EmailService();
 
-	//JPanel mid = new JPanel();
 	JTextField toField = new JTextField("", 65);
 	JTextField ccField = new JTextField("", 65);
 	JTextField subjectField = new JTextField("", 65);
@@ -47,7 +46,6 @@ public class Email extends JFrame {
 	
 	List<JTextComponent> componentsToValidate;
 
-	//JToolBar bar = new JToolBar();
 	JButton reply = new JButton(" Reply ");
 	JButton forward = new JButton(" Forward ");
 	JButton draft = new JButton("Save as Draft ");
@@ -93,16 +91,7 @@ public class Email extends JFrame {
 		// Entry Fields
 		setupEntryFields();
 
-		// Swing Components - Bottom Panel
-		/*bodyField.setLineWrap(true);
-		bodyField.setWrapStyleWord(true);
-		JScrollPane scroll = new JScrollPane(bodyField);
-
-		// Finishing Panels Disposal
-		//add(bar, BorderLayout.NORTH);
-		//add(mid, BorderLayout.LINE_START);
-		add(scroll, BorderLayout.SOUTH);*/
-
+		
 	}
 
 	private void setupMenuBar() {
@@ -154,7 +143,6 @@ public class Email extends JFrame {
 	private void setupToolBar() {
 
 		JToolBar bar = new JToolBar();
-		// Swing Components - Top Panel
 		ImageIcon sendIcon = new ImageIcon("images/email_send.png");
 		ImageIcon draftIcon = new ImageIcon("images/email_draft.png");
 		ImageIcon replyIcon = new ImageIcon("images/email_reply.png");
@@ -201,7 +189,6 @@ public class Email extends JFrame {
 		JLabel cc = new JLabel("Cc:         ");
 		JLabel subject = new JLabel("Subject: ");
 
-		// JPanel mid = new JPanel();
 		mid.setPreferredSize(new Dimension(600, 00));
 		mid.add(to);
 		mid.add(toField);
@@ -219,9 +206,6 @@ public class Email extends JFrame {
 		bodyField.setWrapStyleWord(true);
 		JScrollPane scroll = new JScrollPane(bodyField);
 
-		// Finishing Panels Disposal
-		//add(bar, BorderLayout.NORTH);
-		//add(mid, BorderLayout.LINE_START);
 		add(scroll, BorderLayout.SOUTH);
 	}
 
@@ -339,7 +323,11 @@ public class Email extends JFrame {
 
 
 class EntryFieldMaxLength extends PlainDocument {
-	  private int maxlength;
+	  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private int maxlength;
 	 
 	  EntryFieldMaxLength(int length) {
 	    //super();
