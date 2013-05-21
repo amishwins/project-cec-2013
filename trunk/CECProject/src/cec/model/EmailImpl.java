@@ -11,6 +11,10 @@ import cec.persistence.EmailDaoFactory;
 import exceptions.FolderAlreadyExistsException;
 import exceptions.SourceAndDestinationFoldersAreSameException;
 
+/**
+ * @author a_gala
+ *
+ */
 public class EmailImpl implements Email {
 	private final UUID id;
 	private String from;

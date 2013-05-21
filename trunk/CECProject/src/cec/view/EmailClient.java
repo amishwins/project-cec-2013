@@ -67,6 +67,14 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		}
 		return instance;
 	}
+	
+	private void setSelectedEntity(EmailViewEntity emailViewEntity) {
+		selectedEmailEntity = emailViewEntity;
+	}
+	
+	private EmailViewEntity getSelectedEntity() {
+		return selectedEmailEntity; 
+	}
 
 	private EmailClient(String title) {
 		super(title);
@@ -257,7 +265,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		lastSelectedFolder = sb.toString();
 		
 		updateJTable();
-		selectedEmailEntity = null;
+		setSelectedEntity(null);
 	}
 
 	// EMAIL TABLE MAIN LISTENER
@@ -268,9 +276,8 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 			}
 
 			// What do we do if we are changing folders?
-			selectedEmailEntity = ((EmailListViewData) (emailTable.getModel())).getViewEntityAtIndex(emailTable.getSelectedRow());
-
-			emailBody.setText(selectedEmailEntity.getBody());
+			setSelectedEntity(((EmailListViewData) (emailTable.getModel())).getViewEntityAtIndex(emailTable.getSelectedRow()));
+			emailBody.setText(getSelectedEntity().getBody());
 		}
 	}
 
@@ -311,7 +318,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	// FILE > OPEN SELECTED EMAIL
 	class MenuFileOpenSelectedEmail implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if (selectedEmailEntity == null) { 
+			if (getSelectedEntity() == null) { 
 				JOptionPane.showMessageDialog(null,	"Select an email to display");
 			}
 			else {
@@ -324,7 +331,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	private class MenuEditMoveEmail implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 
-			if (selectedEmailEntity == null) {
+			if (getSelectedEntity() == null) {
 				JOptionPane.showMessageDialog(null, "Select an email first");
 			} else {
 
@@ -345,7 +352,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 				if (mov != null) {
 					
 					try {
-						emailService.move(selectedEmailEntity, mov.toString());
+						emailService.move(getSelectedEntity(), mov.toString());
 						updateJTable();
 					}
 					catch (SourceAndDestinationFoldersAreSameException ex) {
@@ -360,12 +367,11 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	private class MenuEditDeleteEmail implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 
-			if (selectedEmailEntity == null)
+			if (getSelectedEntity() == null)
 				JOptionPane.showMessageDialog(null, "SELECT EMAIL FIRST");
 
-			if (selectedEmailEntity != null) {
-				emailService.delete(selectedEmailEntity);
-
+			if (getSelectedEntity() != null) {
+				emailService.delete(getSelectedEntity());
 				updateJTable();
 			}
 		}
