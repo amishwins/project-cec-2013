@@ -8,6 +8,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.util.List;
 import java.util.UUID;
 
 import javax.swing.ImageIcon;
@@ -26,6 +27,7 @@ import javax.swing.KeyStroke;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
+import javax.swing.text.JTextComponent;
 
 import cec.config.CECConfigurator;
 import cec.service.EmailService;
@@ -42,6 +44,8 @@ public class Email extends JFrame {
 	JTextField ccField = new JTextField("", 65);
 	JTextField subjectField = new JTextField("", 65);
 	JTextArea bodyField = new JTextArea("", 15, 20);
+	
+	List<JTextComponent> componentsToValidate;
 
 	//JToolBar bar = new JToolBar();
 	JButton reply = new JButton(" Reply ");
@@ -252,11 +256,13 @@ public class Email extends JFrame {
 		if (null == emailView.getId()) {
 			emailView.setId(id);
 		}
+		
 		emailView.setTo(toField.getText());
 		emailView.setCC(ccField.getText());
 		emailView.setSubject(subjectField.getText());
 		emailView.setBody(bodyField.getText());
 	}
+
 
 	private void setMessageFields() {
 		this.id = emailView.getId();

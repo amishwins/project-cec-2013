@@ -6,6 +6,10 @@ package cec.model;
 
 import java.util.UUID;
 
+/**
+ * @author a_gala
+ *
+ */
 public interface Email extends Comparable<Email> {
     public void send();
     public void saveToDraftFolder();
