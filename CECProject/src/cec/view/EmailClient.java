@@ -372,7 +372,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 				JOptionPane.showMessageDialog(null,	"Select an email to display");
 			}
 			else {
-				JFrame nm = new Email(selectedEmailEntity);
+				new Email(selectedEmailEntity);
 			}
 		}
 	}
@@ -535,7 +535,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 
 		public void mouseClicked(MouseEvent e) {
 			if ((e.getClickCount() == 2) && (selRow != -1)) {
-				JFrame nm = new Email(selectedEmailEntity);
+				new Email(selectedEmailEntity);
 			}
 		}
 
@@ -555,7 +555,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	
 	private class MenuFileNewEmail implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			JFrame nm = new Email();
+			new Email();
 		}
 	}
 

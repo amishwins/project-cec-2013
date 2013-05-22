@@ -8,6 +8,38 @@
 		<h1>Collaborative Email Client Project Design - Phase 1</h1>
 		<p>Wednesday, May 22, 2013</p>
 		<p><b>Group 5: </b> Amish Gala, Deyvid William, Pankaj Kapania, and Romeo Honvo</p>
+
+		<p><b>Statistics:</b></p>
+		<table border=1>
+			<tr>
+				<th>Type</th>
+				<th>Measurement</th>
+			</tr>
+			<tr>
+				<td>Total LOC</td>
+				<td>3204</td>
+			</tr>
+			<tr>
+				<td>Total Production LOC</td>
+				<td>2477</td>
+			</tr>
+			<tr>
+				<td>Total Unit Test LOC</td>
+				<td>722</td>
+			</tr>
+			<tr>
+				<td>Code Coverage (ALL)</td>
+				<td>55.4%</td>
+			</tr>
+			<tr>
+				<td>Code Coverage (Unit)</td>
+				<td>31.0%</td>
+			</tr>
+			<tr>
+				<td>Code Coverage (Integration)</td>
+				<td>35.7%</td>
+			</tr>
+		</table>
 		
 		<h2>Architecture and Design</h2>
 		
@@ -244,6 +276,8 @@
 			<li>Factory: cec.model.FolderFactory, cec.persistence.EmailDaoFactory, 
 			cec.persistence.FolderDaoFactory</li>
 			<li>Adapter/Wrapper: cec.view.Email, cec.view.EmailClient</li>
+			<li>Facade: cec.persistence.EmailXMLDao, cec.persistence.FolderXMLDao (for the javax.xml.parser,
+			javax.xml.transform, apache.commons.io, and w3c.dom classes)</li>
 			<li>Observer: cec.view.EmailClient (TreeSelectionListener), JTable for emails listens to 
 			model changes when an email is send, saved, or deleted.</li>
 			<li>Singleton: cec.view.EmailClient</li>
