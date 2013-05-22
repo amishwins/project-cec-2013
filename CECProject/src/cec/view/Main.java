@@ -5,7 +5,7 @@ import javax.swing.SwingUtilities;
 
 /**
  * Collaborative Email Client Application's Entry Point
- * 
+ * <p>
  * Executes a new runnable on AWT Event thread - necessary because 
  * most Swing object methods are not "thread safe". 
  * According to Oracle documentation, SWING programs which ignore this rule

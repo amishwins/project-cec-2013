@@ -5,11 +5,12 @@ import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 
 /**
- * Auxiliary Class used by <code>EmailClient</code> class that receives trough
- * its construct a String containing headers and list of Email Entities
- * and returns the data in a Model that is compatible with the JTable
+ * Auxiliary Class used by <code>EmailClient</code> class to fill the JTable
  *  <code>emailTable</code> that shows the Emails of the selected folder.
- *  To do this, this class extends the AbstractTableModel class.
+ * It receives trough its constructor a String containing the columns
+ * and list of Email Entities and returns the data in a Model that is
+ * compatible with the JTable component. To do this, this class extends
+ * the AbstractTableModel class and it's default implementations.
  * */
 
 public class EmailListViewData extends AbstractTableModel {
