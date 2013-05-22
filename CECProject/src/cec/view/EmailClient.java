@@ -44,6 +44,28 @@ import exceptions.FolderAlreadyExistsException;
 import exceptions.RootFolderSubfolderCreationException;
 import exceptions.SourceAndDestinationFoldersAreSameException;
 
+/**
+* Implements SWING packages to create the main window of application's
+* user interface (UI) collecting user input and displaying output from lower layers.
+* Extends the JFRAME top-level container that represents a specialized window
+* with OS controls/event handlers and contains all Swing components.   
+* <p>
+* 
+* Main graphic components comprises: 
+* - JTree <code>folders</code> which shows Email Directory structure
+* - JTable <code>emailTable</code> which shows the Emails of each selected folder
+* - JTextArea <code>emailBody</code> which shows the content of selected Email 
+* 
+* Different methods and inner classes interact with these objects retrieving values 
+* and keeping them updated.
+* <p>
+* The class also implements a Tree Selection Listener interface to be notified 
+* when the user selects a node (folder) in the <code>folders</code> JTree. 
+* Thus, whenever the value of the selection changes the method 
+* <code>valueChanged()</code> is called.
+*/
+
+
 public class EmailClient extends JFrame implements TreeSelectionListener {
 	private static final long serialVersionUID = 7366789547512037235L;
 
@@ -455,10 +477,6 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 
 		public void mousePressed(MouseEvent e) {
 
-			/**
-			 * Checking if we are clicking on a valid JTree node - If so, we
-			 * trigger the popup menu
-			 */
 			selNode = tree.getRowForLocation(e.getX(), e.getY());
 			TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
 
