@@ -187,6 +187,9 @@ public class EmailBuilder {
 	 * @return the email builder
 	 */
 	public EmailBuilder load(Map<String, String> fields) {
+		if (fields.get("Id") == null) {
+			throw new RuntimeException();
+		}
 		return this
 				.withId(UUID.fromString(fields.get("Id")))
 				.withFrom(fields.get("From"))
