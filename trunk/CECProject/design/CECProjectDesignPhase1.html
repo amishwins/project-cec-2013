@@ -229,7 +229,9 @@
 		standard?</p>
 		<p>Our solution was to come up with a Validator class, which sits in the view package. The class has two 
 		public methods: isValidSendees(String), and isValidFolderName(String). The EmailClient and Email classes 
-		use the validator before invoking the service layer.</p>
+		use the validator before invoking the service layer. The validator uses some rudimentary regex patterns
+		to prevent the user from creating invalid folder names, and sending emails to addresses which 
+		are badly formed. This is acceptable for our application, but would not stand up to rigorous testing. </p>
 		
 		<h3>Creating and deleting folders</h3>
 		<p>We've decided to allow subfolder creation at any point in the tree <b>except for the root node</b>. As 
