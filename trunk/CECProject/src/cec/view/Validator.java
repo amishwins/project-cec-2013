@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 /**
  * Auxiliary Class used in the Presentation Layer that implements methods
- *  to validate user's input on Email fields and Folder names.
+ * to validate user's input on Email fields and Folder names.
  * */
 
 public class Validator {
