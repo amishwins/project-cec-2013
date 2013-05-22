@@ -82,10 +82,9 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	
 	/***
 	 * Returns a reference for the current Class instance to be used
-	 * by the Email Class to refresh the JTable <code>emailTable</code> 
-	 * when the user Send or Save as a Draft an Email.
-	 * If a reference doesn't exists it creates a new one.
-	 * 
+	 * by the <code>Email</code> class to refresh the JTable <code>emailTable</code> content 
+	 * when the user "Send" or "Save as a Draft" an Email.
+	 *  
 	 * @return	a reference for the current instance
 	 */	
 	public static EmailClient getReference() {
@@ -326,8 +325,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 			if (event.getValueIsAdjusting()) {
 				return;
 			}
-
-			// What do we do if we are changing folders?
+			
 			setSelectedEntity(((EmailListViewData) (emailTable.getModel())).getViewEntityAtIndex(emailTable.getSelectedRow()));
 			emailBody.setText(getSelectedEntity().getBody());
 		}
@@ -408,7 +406,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 						updateEmailTable();
 					}
 					catch (SourceAndDestinationFoldersAreSameException ex) {
-						// fail silently - don't tell the user anything.
+						
 					}
 				}
 			}

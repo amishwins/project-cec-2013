@@ -10,6 +10,7 @@ import javax.swing.SwingUtilities;
  * most Swing object methods are not "thread safe". 
  * According to Oracle documentation, SWING programs which ignore this rule
  * are subject to unpredictable errors difficult to reproduce.
+ * 
  * Source: http://docs.oracle.com/javase/tutorial/uiswing/concurrency/dispatch.html
  */
 
