@@ -418,7 +418,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		public void actionPerformed(ActionEvent e) {
 
 			if (getSelectedEntity() == null)
-				JOptionPane.showMessageDialog(null, "SELECT EMAIL FIRST");
+				JOptionPane.showMessageDialog(null, "Select Email First");
 
 			if (getSelectedEntity() != null) {
 				emailService.delete(getSelectedEntity());
