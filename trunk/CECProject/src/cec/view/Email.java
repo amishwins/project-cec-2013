@@ -1,8 +1,3 @@
-/*
- * NewMessage screen
- */
-
-
 package cec.view;
 
 import java.awt.BorderLayout;
@@ -113,7 +108,7 @@ public class Email extends JFrame {
 	 * Available fields are non empty<br>
 	 * <code>JTextField</code> with label <b>"To:"</b><br>
 	 * <code>JTextField</code> with label <b>"Cc:"</b><br>
-	 * <code>JTextField</code> with label <b>"Subject:" </b> with a maximum of 250 Characters <br>
+	 * <code>JTextField</code> with label <b>"Subject:" </b> with a maximum of 250 characters <br>
 	 * <code>JTextArea</code> with label <b>"Body"</b>
 	 */
 
@@ -125,8 +120,6 @@ public class Email extends JFrame {
 	}
 
 	private void initialize() {
-		// Is this the correct approach? Should Email get the running
-		// EmailClient? I think so!
 		mainClient = EmailClient.getReference();
 		setSize(610, 470);
 		setLayout(new BorderLayout());
@@ -139,9 +132,7 @@ public class Email extends JFrame {
 		// Button
 		setupToolBar();
 		// Entry Fields
-		setupEntryFields();
-
-		
+		setupEntryFields();		
 	}
 
 	private void setupMenuBar() {
