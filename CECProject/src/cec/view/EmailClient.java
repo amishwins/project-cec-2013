@@ -51,7 +51,7 @@ import exceptions.SourceAndDestinationFoldersAreSameException;
 * with OS controls/event handlers and contains all Swing components.   
 * <p> 
 * 
-* Main graphic components comprises: 
+* Most important graphic components comprises: 
 * - JTree <code>folders</code> which shows Email Directory structure
 * - JTable <code>emailTable</code> which shows the Emails of each selected folder
 * - JTextArea <code>emailBody</code> which shows the content of selected Email 
