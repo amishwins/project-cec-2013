@@ -22,11 +22,36 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+
+/**
+ * 
+ * EmailXMLDao is a class in the persistence layer responsible for handling 
+ * email life cycle events at a lower level. It saves each email in a XML file format.
+ * it is also responsible for deleting an XML file  and moving an XML file from one folder to 
+ * another folder.
+ * 
+ */
 public class EmailXMLDao implements EmailDao {
 	
-	final String FILE_EXTENSION=".xml";
+	/** Specifies the extension of file. */
+	private final String FILE_EXTENSION=".xml";
 	
-	public Document buildXmlFile(UUID id, String from, String to, String cc,
+	/**
+	 * Builds the XML file using the specified arguments.
+	 * Name of each file is its id field.
+	 * 
+	 * @param id the id
+	 * @param from the F
+	 * @param to the to
+	 * @param cc the cc
+	 * @param subject the subject
+	 * @param body the body
+	 * @param lastModifiedTime the last modified time
+	 * @param sentTime the sent time
+	 * @param location the location
+	 * @return the document
+	 */
+	private Document buildXmlFile(UUID id, String from, String to, String cc,
 			String subject, String body, String lastModifiedTime,
 			String sentTime, String location) {
 		DocumentBuilderFactory documentFactory = null;
@@ -98,6 +123,20 @@ public class EmailXMLDao implements EmailDao {
 
 	}
 
+	/** This method is responsible for building an XML file from the specified fields.
+	 * It is also responsible for saving that file on the file system.
+	 * Name of each file and Location where the file to be saved
+	 * is given by the argument id and location.
+	 * @param id the id
+	 * @param from the from
+	 * @param to the to
+	 * @param cc the CC
+	 * @param subject the subject
+	 * @param body the body
+	 * @param lastModifiedTime the last modified time
+	 * @param sentTime the sent time
+	 * @param location the location
+	 */
 	public void save(UUID id, String from, String to, String cc,
 			String subject, String body, String lastModifiedTime,
 			String sentTime, String location) {
@@ -126,6 +165,17 @@ public class EmailXMLDao implements EmailDao {
 		}
 	}
 	
+	/**
+	 * It deletes each file from the system.
+	 * specification of an email to be deleted is given by
+	 * argument path and filename respectively to identify each email before deleting it.
+	 *  
+	 * It deletes each file forcefully from the System just to avoid exceptions that generates if file
+	 * is being used by another programs.
+	 * 
+	 * @param path the path
+	 * @param fileName the file name
+	 */
 	public void delete(String path, UUID fileName){
        FileDeleteStrategy file = FileDeleteStrategy.FORCE;
        try{
@@ -134,7 +184,14 @@ public class EmailXMLDao implements EmailDao {
     	   fileDeleteException.printStackTrace();
        }     		
 	}
-	
+	/**
+	 * Moves an email from source folder to some different folder.
+	 * Other folder or destination folder is specified by an argument desDir.
+	 *
+	 * @param fileName the file name
+	 * @param srcDir the source  directory
+	 * @param destDir the destination  directory
+	 */
 	public void move(UUID fileName, String srcDir, String destDir){
 		File file = new File(srcDir+"/"+fileName.toString()+FILE_EXTENSION);
 		File destinationDir = new File(destDir);
@@ -146,6 +203,14 @@ public class EmailXMLDao implements EmailDao {
 		}
 	}
 	
+	/**
+	 * Updates the parentFolder tag value inside the xml file.
+	 * this method is called by move method so that before it moves the file to another folder, it 
+	 * should have the correct parentFolder tag value.
+	 *
+	 * @param xmlFile the xml file
+	 * @param destDir the dest dir
+	 */
 	private void updateXMLField(String xmlFile, String destDir){
 		DocumentBuilderFactory documentFactory = null;
 		DocumentBuilder documentBuilder = null;
@@ -176,8 +241,15 @@ public class EmailXMLDao implements EmailDao {
 		}
 		
 	}
-
-	@Override
+	/**
+	 * Loads an equivalent lower level representation of an email from a specific folder.
+	 * It basically loads the email field values and returns a Map of 
+	 * those values. 
+	 *
+	 * @param folder the folder
+	 * @param FileName the file name
+	 * @return the map
+	 */
 	public Map<String, String> loadEmail(String folder, String xmlFileName) {
 		Map<String, String> emailData = new TreeMap<String, String>();
 		try {
