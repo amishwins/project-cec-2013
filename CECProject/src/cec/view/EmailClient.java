@@ -45,11 +45,11 @@ import exceptions.RootFolderSubfolderCreationException;
 import exceptions.SourceAndDestinationFoldersAreSameException;
 
 /**
-* Implements SWING packages to create the main window of application's
-* user interface (UI) collecting user input and displaying output from lower layers.
+* Implements SWING packages to create the main window of C.E.C application's
+* user interface (UI) collecting user input and displaying output data from lower layers.
 * Extends the JFRAME top-level container that represents a specialized window
 * with OS controls/event handlers and contains all Swing components.   
-* <p>
+* <p> 
 * 
 * Main graphic components comprises: 
 * - JTree <code>folders</code> which shows Email Directory structure
@@ -59,12 +59,11 @@ import exceptions.SourceAndDestinationFoldersAreSameException;
 * Different methods and inner classes interact with these objects retrieving values 
 * and keeping them updated.
 * <p>
-* The class also implements a Tree Selection Listener interface to be notified 
+* The JFrame also implements a Tree Selection Listener interface to be notified 
 * when the user selects a node (folder) in the <code>folders</code> JTree. 
 * Thus, whenever the value of the selection changes the method 
 * <code>valueChanged()</code> is called.
 */
-
 
 public class EmailClient extends JFrame implements TreeSelectionListener {
 	private static final long serialVersionUID = 7366789547512037235L;
@@ -81,13 +80,26 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 
 	private static EmailClient instance;
 	
+	/***
+	 * Returns a reference for the current Class instance to be used
+	 * by the Email Class to refresh the JTable <code>emailTable</code> 
+	 * when the user Send or Save as a Draft an Email.
+	 * If a reference doesn't exists it creates a new one.
+	 * 
+	 * @return	a reference for the current instance
+	 */	
 	public static EmailClient getReference() {
 		if (instance == null) {
 			instance = new EmailClient("Collaborative Email Client");
 		}
 		return instance;
 	}
-	
+
+	/***
+	 * Refreshes the content of the JTable <code>emailTable</code> 
+	 * requesting the persistence layer to check the Operating
+	 * system's File System and load an updated list of Email Entities (XML Files). 
+	 */	
 	public void updateEmailTable() {
 		String[] emailTableViewColumns = { "From", "Subject", "Date" };
 		Iterable<EmailViewEntity> emailsInEachFolder = folderService.loadEmails(lastSelectedFolder);
@@ -201,7 +213,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		} while (currentNode != null);
 	}
 	
-	private void updateJTree() {
+	private void updateFolderTree() {
 		TreeModelBuilder tmb = new TreeModelBuilder(new DefaultMutableTreeNode());
 		Iterable<String> hierarchy = folderService.loadHierarchy();
 		TreeModel treeModel = tmb.buildTreeNodeFromFileList(hierarchy);
@@ -278,7 +290,13 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		emailTable.getColumnModel().getColumn(2).setPreferredWidth(100);		
 	}	
 
-    // Listener for tree changes
+	
+	/*** 
+	 * Tree Selection Listener for JTree <code>folders</code>.
+	 * It's responsible for identifying the path of the selected node (folder)
+	 * and calling the <code>updateEmailTable()</code> that refreshes the Email table.
+	 */	
+	
 	@Override
 	public void valueChanged(TreeSelectionEvent tse) {
 
@@ -334,7 +352,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 					if (folderName.trim().length() > 0 && validator.isValidFolderName(folderName)) {
 						try {
 							folderService.createSubFolder(lastSelectedFolder, folderName);
-							updateJTree();
+							updateFolderTree();
 						} catch (RootFolderSubfolderCreationException ex) {
 							JOptionPane.showMessageDialog(null, "You may not create a subfolder under the root directory.");
 						}						
@@ -423,7 +441,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 			
 			try {
 				folderService.delete(lastSelectedFolder);
-				updateJTree();
+				updateFolderTree();
 			} catch (CannotDeleteSystemFolderException ex) { 
 				JOptionPane.showMessageDialog(null, "Cannot delete system folders");
 			}
