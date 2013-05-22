@@ -5,47 +5,141 @@
 
 	<body>
 	
-		<h1>CECProject Design Phase 1</h1>
+		<h1>Collaborative Email Client Project Design - Phase 1</h1>
 		<p>Wednesday, May 22, 2013</p>
 		<p><b>Group 5: </b> Amish Gala, Deyvid William, Pankaj Kapania, and Romeo Honvo</p>
 		
-		<h2>Design</h2>
-		Use Object Aid to visualize our classes/packages
+		<h2>Architecture and Design</h2>
+		
+		<p>Collaborative Email Client is simple email client application in which we meet some user requirements:</p>
+		
+		<ol>
+			<li>Compose New Email</li>
+			<li>Save Draft Email</li>
+			<li>Display Inbox Folder Hierarchy</li>
+			<li>Create Sub Folders</li>
+			<li>Move Mail to Sub Folders</li>
+			<li>Have a Send Mail Functionality That Moves Email to Outbox</li>
+			<li>Include a Menu, Right Mouse Clicks and Hot Keys for all features</li>
+			<li>Delete an Email from Folders</li>
+			<li>Delete Folders Except Top Level Inbox (modified to disallow deleting <b>any</b> system folder)</li>
+		</ol>
+		
+		<p>We decided to focus on a few properties in terms of <b>internal</b> quality (e.g. code quality): </p>
 		<ul>
-			<li>N-Tiers and Package Structure</li>
-				<p>Highlighted in blue are the major CEC packages. As depicted, we deployed an 4-tier architecture 
-				which includes: View, Service, Model, and Persistence. We minimized coupling between layers by having
-				dependencies flow from top to bottom. The exception to this was that the service layer needed to communicate
-				with the view layer in order to ensure a consistent user experience. However, this coupling was restricted 
-				to a specific mechanism which was well encapsulated. More on this appear below. </p>
+			<li>Maintainability and Correctness</li>
+			<li>Testability (which essentially goes hand-in-hand with maintainability)</li>
+			<li>Usability (user-experience, robustness)</li>
+			<li>And to a lesser extent, Reusability, and Efficiency (although, if we encounter any performance issues,
+			we will surely profile our system and adjust)</li>
+		</ul>
+		
+		<p>To ensure these goals, we aggressively pursued a clean design, in which our code is simple, readable,
+		and decoupled as much as possible. Where necessary, we have hidden complexity. However, sometimes these
+		goals needed to be flexible in order to meet our targets (for example, making our EmailClient 
+		a singleton, as we will show below enabled us to provide a better user experience). </p>
+		
+		<p>We leveraged the power of Object Oriented Design (OOD) in order to help us meet 
+		our code quality goals. Each tier below the UI is coded using clearly defined interfaces, which allowed
+		us to write unit tests and stub out dependencies when needed (for example, the model tests stub out the 
+		dependency to the persistence layer). In addition, communication mechanisms between layers is strictly
+		controlled. The view and model layers communicate via the service layer, which is responsible for 
+		converting model objects into view-consumable entities, as shown here: </p>
+		
+		<p><a href="EmailViewEntity.png"><img src="EmailViewEntity.png" width=600 border=0></img></a></p>
+		
+		<p>This way, the view really does not know anything about the model.</p>
+		
+		<p>For the most part of the project, we ensured good communication between all team members, and even 
+		attempted pair-programming. This enabled us to establish a suitable naming convention to promote readabilty
+		of our class names, method names, and variable names. When designing and composing objects, we referred 
+		to the General Responsibility Assignment Software Patterns 
+		(<a href="http://en.wikipedia.org/wiki/GRASP_(object-oriented_design)" target="_top">GRASP</a>) which guided 
+		us in determining where to put methods and responsibility (e.g. creator pattern, ensuring <b>high cohesion </b>
+		and <b>low coupling </b>etc.)</p> 
+		
+		<p>Finally, to promote maintainability and flexibility, we followed well established conventions and 
+		used familiar "code beacons" where appropriate. For example, we utilized Java Collections Framework, and
+		Java Generics - the goal was to minimize the learning curve for future maintainers, and take advantage
+		of well-tested and well-documented functionality provided by the JDK.</p>
+		
+		<p>In the sections below the approach is described in detail. We start from the most abstract (the package
+		structure), and then go in-depth for the most prominent classes and interactions.</p>
+		
+		<h3>N-Tiers and Package Structure</h3>
+		
+		<p>Highlighted in blue are the major CEC packages. As depicted, we deployed an 4-tier architecture 
+		which includes: View, Service, Model, and Persistence. We minimized coupling between layers by having
+		dependencies flow from top to bottom. The exception to this was that the service layer needed to communicate
+		with the view layer in order to ensure a consistent user experience. However, this coupling was restricted 
+		to a specific mechanism which was well encapsulated. More on this appear below. </p>
+		
+		<p>Certain cross-cutting concerns span multiple tiers and they were organized into separate packages:
+		Configuration, and Exceptions.</p>  
+	
+		<p><a href="PackageLayout.jpg"><img src="PackageLayout.jpg" width=600 border=0></img></a><p>
+
+		<h3>Major classes</h3>
+
+		<p>The main view classes are shown and described here:</p>
+		<p><a href="ViewClasses.png"><img src="ViewClasses.png" width=900 border=0></img></a></p>
+		<p>The major UI classes are EmailClient and Email. EmailClient is created in the main runnable() of our 
+		application. It extends JFrame and implements a TreeSelectionListener interface, so that it can respond
+		to clicks on the Folders JTree. Email is the view which is used to create new emails, and to display
+		existing emails. It also extends JFrame, and is created as a response to user actions in the EmailClient.</p>
+		
+		<p>For simplicity, we implemented many ActionListeners as private internal classes within EmailClient. 
+		While this is perhaps not the most clean (speculative) design, it served our purposes nicely.
+		Certain events on the Email JFrame require actions to take place on the EmailClient. For example, if 
+		the user is currently looking at the Drafts folder, creates a new email, and saves it to drafts, the 
+		EmailClient view should automatically be updated. This is accomplished by providing a callback mechanism
+		which updates the model on which certain UI elements are based.  
+		</p> 
 				
-				<p>Certain cross-cutting concerns span multiple tiers and they were organized into separate packages:
-				Configuration, and Exceptions.</p>  
-			
-				<p><img src="PackageLayout.jpg" width=600></img><p>
-			
-			<li>Major classes</li>
-		</ul>		
+		<p>The main service classes are EmailService and FolderService. Their purpose is to decouple the 
+		View classes from the Model classes. They act as a controller and respond to events such as saving an 
+		email, moving an email, creating a folder, and deleting a folder.</p>
 		
-		<h2>Architecture</h2>
+		<p>The main model classes are shown and described here:</p>
+		<p><a href="ModelClasses.png"><img src="ModelClasses.png" width=900 border=0></img></a></p>
+		<p>The model classes are based on abstractions (Email Interface, Folder Abstract Class), and we 
+		implemented an EmailBuilder class to construct Emails in a fluent manner (see EmailBuilderTests). 
+		Additionally, a FolderFactory provides a convenient way to retrieve a folder object for a given
+		path. Folders can either be System Folders (e.g. Inbox, Drafts..), or User Folders (e.g. Jokes etc.). </p>
 		
-		<ul>
-			<li>Maintainability, testability</li>
-			<li>Usability (swing popups, error handling, logging.. )</li>
+		<p>The main persistence classes are shown and described here:</p>
+		<p><a href="PersistenceClasses.png"><img src="PersistenceClasses.png" width=900 border=0></img></a></p>
+		<p>The persistence classes are based on two main interfaces (EmailDao and FolderDao). Each 
+		object can be created using their respective factory (EmailDaoFactory and FolderDaoFactory). The 
+		only mode of persistence provided in this application is storage via XML files in the Windows file
+		system. Thus two concrete implementations are provided (EmailXMLDao and FolderXMLDao). The diagram 
+		shows very nicely that the model layer only knows about the interfaces, and the factories - it
+		has no clue about the XML files. 
 		
-		</ul>		
+		<p>Example of isolated unit tests:</p>
+		<p><a href="EmailTestsClasses.png"><img src="EmailTestsClasses.png" width=700 border=0></img></a></p>
+		<p>In this example, the class we wish to test is EmailImpl (the model class for Email). The issue 
+		is that EmailImpl depends on EmailDao (the interface for the persistence layer). In our tests, we did not 
+		want to actually save or delete files from the hard drive. Thus we designed our tests as shown above. 
+		EmailImplCUT extends EmailImpl, and injects the fake EmailDao. This fake simply logged calls which were 
+		made to it. This is only possible since EmailImpl depends on the EmailDao interface, and not directly 
+		on the concrete	EmailXMLDao class. We used a few XUnit test patterns 
+		here - we introduced sensing variables to check if stubbed classes were called, and we inherited
+		from the actual EmailImpl class so that we could inject the fake. Very cool! </p>
+
 		
 		<h2>Important Decisions</h2>
 		
-		<ul>
-			<li>Data format at each layer (+formatting XML)</li>
-			<li>Creating and deleting folders</li>
-			<li>Using the DateFormat parse method, and dealing with checked exceptions</li>
-			<li>Default sort for all folders</li>
-			<li>User is able to create an email, save as draft, and continue working on this
-			email </li>
+		<h3>Data format at each layer (+formatting XML)</h3>
+		<p>Each layer has it's own usable format. 
 		
-		</ul>
+		
+		<h3>Creating and deleting folders</h3>
+		<h3>Using the DateFormat parse method, and dealing with checked exceptions</h3>
+		<h3>Default sort for all folders</h3>
+		<h3>User is able to create an email, save as draft, and continue working on this
+		email </h3>
+	
 		
 		<h2>Reused Libraries</h2>
 		
@@ -89,4 +183,4 @@
 		</code>
 	
 	</body>
-<html>
+</html>
