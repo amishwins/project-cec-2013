@@ -3,6 +3,7 @@ package tests;
 import static org.junit.Assert.*;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.UUID;
 
 import org.junit.After;
@@ -21,6 +22,7 @@ public class EmailBuilderTests {
 	UUID emailId;
 	Folder myFolder;
 	Email email;
+	HashMap<String, String> fields;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -69,4 +71,21 @@ public class EmailBuilderTests {
 		assertNotSame(new Date(), email.getLastModifiedTime());
 		assertNotSame(new Date(), email.getSentTime());				
 	}
+	
+	@Test(expected=RuntimeException.class)
+	public void verifyLoadWithEmptyHashMap() {
+		fields = new HashMap<String, String>();
+		cut = cut.load(fields);
+	}
+	
+	@Test
+	public void verifyLoadWithSomeFields() {
+		fields = new HashMap<String, String>();
+		fields.put("Id", UUID.randomUUID().toString());
+		cut = cut.load(fields);
+		email = cut.build();
+		assertNotNull(email);
+	}
+	
+	// TODO: make a better test for the load method. Fill in a full HashMap.
 }

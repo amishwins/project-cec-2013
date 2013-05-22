@@ -17,27 +17,27 @@
 			</tr>
 			<tr>
 				<td>Total LOC</td>
-				<td>3204</td>
+				<td>3222 (43 classes)</td>
 			</tr>
 			<tr>
 				<td>Total Production LOC</td>
-				<td>2477</td>
+				<td>2477 (29 classes)</td>
 			</tr>
 			<tr>
 				<td>Total Unit Test LOC</td>
-				<td>722</td>
+				<td>742 (14 classes, 40 unit tests, 7 integration tests)</td>
 			</tr>
 			<tr>
 				<td>Code Coverage (ALL)</td>
-				<td>55.4%</td>
+				<td>55.6%</td>
 			</tr>
 			<tr>
 				<td>Code Coverage (Unit)</td>
-				<td>31.0%</td>
+				<td>32.2%</td>
 			</tr>
 			<tr>
 				<td>Code Coverage (Integration)</td>
-				<td>35.7%</td>
+				<td>35.5%</td>
 			</tr>
 		</table>
 		
@@ -224,6 +224,13 @@
 		reference to an actual Folder model object). And then the view uses EmailViewEntity which only has Strings.
 		</p>
 		
+		<h3>Input Validation</h3>
+		<p>Problem: how do we validate email addresses and folder names so that they conform to some pre-determined
+		standard?</p>
+		<p>Our solution was to come up with a Validator class, which sits in the view package. The class has two 
+		public methods: isValidSendees(String), and isValidFolderName(String). The EmailClient and Email classes 
+		use the validator before invoking the service layer.</p>
+		
 		<h3>Creating and deleting folders</h3>
 		<p>We've decided to allow subfolder creation at any point in the tree <b>except for the root node</b>. As 
 		specified by the professor, we will prevent the deletion of Inbox (and other System folders: Drafts, Outbox
@@ -296,6 +303,10 @@
 			</li>	
 		
 		</ul>
+		
+		<h2>Known Issues</h2>
+		<p>Something is wrong with opening "badly formatted" emails. We need to double check why sometimes
+		emails in the Drafts folder are read-only. </p>
 		
 		<p>Code snippet (if needed)</p>
 		
