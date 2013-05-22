@@ -2,6 +2,7 @@
  * NewMessage screen
  */
 
+
 package cec.view;
 
 import java.awt.BorderLayout;
@@ -33,6 +34,24 @@ import javax.swing.text.JTextComponent;
 import cec.config.CECConfigurator;
 import cec.service.EmailService;
 
+
+/**
+ * Email Class extends JFRAME <br>
+ * show a graphic windows allowing user to read or write an email.<br>
+ * uses <code>JTextField</code> and <code>JTextArea</code> components to set editable fields<br>
+ * uses <code>JButtons</code> and <code>JMenuItem </code>to provides options:<br>
+ * <b>sendEmail()</b> <br>
+ * <b>draftEmail()</b> <br>
+ * Provides <br>
+ * empty <code>JFrame</code> filled with existing<br> 
+ * <code>email</code> for the parameterized constructor<br>
+ * and empty <code>JFrame</code> for the default constructor<br>
+ * used for new <code>email<code>
+ * <p>
+ */
+
+
+
 public class Email extends JFrame {
 	private static final long serialVersionUID = 6361797821203537189L;
 	private UUID id = null;
@@ -61,6 +80,22 @@ public class Email extends JFrame {
 
 	EmailViewEntity emailView;
 	int max_Length = 250;
+
+	/**
+	 * Parameterized constructor of the Email Class.
+	 * <p>
+	 * Provides non Empty <code>JFrame</code> filled with existing<br> 
+	 * email that are editable only if it belongs to <br>
+	 * Draft folder.<br>
+	 * Available fields are Empty<br>
+	 * <code>JTextField</code> with label <b>"To:"</b><br>
+	 * <code>JTextField</code> with label <b>"Cc:"</b><br>
+	 * <code>JTextField</code> with label <b>"Subject:" </b> with a maximum of 250 Characters <br>
+	 * <code>JTextArea</code> with label <b>"Body"</b>
+	 * <p>
+	 * @param  email  an <code>email</code> object that provides the <br>
+	 * 				  values used to set the JFrame
+	 */
 	public Email(EmailViewEntity email) {
 		emailView = email;
 		setExistingMessage();
@@ -68,6 +103,19 @@ public class Email extends JFrame {
 		initialize();
 
 	}
+
+	/**
+	 * Default constructor of the Email Class.
+	 * <p>
+	 * Provides an Empty <code>JFrame</code> from which an email<br> 
+	 * can be written.
+	 * <p>
+	 * Available fields are non empty<br>
+	 * <code>JTextField</code> with label <b>"To:"</b><br>
+	 * <code>JTextField</code> with label <b>"Cc:"</b><br>
+	 * <code>JTextField</code> with label <b>"Subject:" </b> with a maximum of 250 Characters <br>
+	 * <code>JTextArea</code> with label <b>"Body"</b>
+	 */
 
 	public Email() {
 		emailView = new EmailViewEntity();
@@ -207,12 +255,18 @@ public class Email extends JFrame {
 		add(scroll, BorderLayout.SOUTH);
 	}
 
+	/**
+	 * Exit message.
+	 */
 	private void ExitMessage() {
 
 		this.dispose();
 	}
 
 	// Actions - Edit
+	/**
+	 * Edits the existing message.
+	 */
 	private void editExistingMessage() {
 		setNewMessage();
 		String auxSubject = subjectField.getText();
@@ -220,6 +274,9 @@ public class Email extends JFrame {
 	}
 
 	// Actions - Send
+	/**
+	 * Send email.
+	 */
 	private void sendEmail() {
 		buildEmailViewObject();
 		if (!validateEmailFields())
@@ -230,12 +287,20 @@ public class Email extends JFrame {
 	}
 
 	// Actions - Draft
+	/**
+	 * Draft email.
+	 */
 	private void draftEmail() {
 		buildEmailViewObject();
 		emailService.draftEmail(emailView);
 		mainClient.updateEmailTable();
 	}
 
+	/**
+	 * Validate email fields.
+	 * 
+	 * @return true, if successful
+	 */
 	private boolean validateEmailFields() {
 		if (!emailValidator.isValidSendees(emailView.getTo(), emailView.getCC())) {
 			JOptionPane.showMessageDialog(null, "One address is not properly formulated. Please recheck");
@@ -329,26 +394,34 @@ public class Email extends JFrame {
 		draftItem.setVisible(true);
 	}
 
+	
+	
+	/**
+	 * The only purpose of this private class<br>
+	 * is to provide in the JFRAME class <br>
+	 * a defined maximum length for the <br>
+	 * <code>JTextField</code> <b>SubjectField</b> <br>
+	 * <b>Source: </b><br>
+	 * "http://www.java-tips.org/java-se-tips/javax.swing/limit-jtextfield-input-to-a-maximum-length-3.html"
+	 */
+	
+	private class EntryFieldMaxLength extends PlainDocument {
+		private static final long serialVersionUID = 1L;
+		private int maxlength;
+		 
+		  EntryFieldMaxLength(int length) {
+		    //super();
+		    this.maxlength = length;
+		  }
+
+		  public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
+		    if (str == null)
+		      return;
+
+		    if ((getLength() + str.length()) <= maxlength) {
+		      super.insertString(offs, str, a);
+		    }
+		  }
+		}
 }
 
-class EntryFieldMaxLength extends PlainDocument {
-	  /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private int maxlength;
-	 
-	  EntryFieldMaxLength(int length) {
-	    //super();
-	    this.maxlength = length;
-	  }
-
-	  public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
-	    if (str == null)
-	      return;
-
-	    if ((getLength() + str.length()) <= maxlength) {
-	      super.insertString(offs, str, a);
-	    }
-	  }
-	}
