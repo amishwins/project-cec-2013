@@ -130,23 +130,110 @@
 		
 		<h2>Important Decisions</h2>
 		
-		<h3>Data format at each layer (+formatting XML)</h3>
-		<p>Each layer has it's own usable format. 
+		<h3>User Experience</h3>
+		<p><b>Look and Feel</b></p>
+		<p>Look and feel (L &amp; F) refers to the appearance of GUI widgets and their behaviors. Swing's architecture 
+		enables multiple L &amp; F's that provides a concrete implementation for each of the ComponentUI subclasses. 
+		To improve user experience we decided to use SystemLookAndFeel that implements an UI that is native to 
+		the Operating System the application is running on. </p>
+
+		<p><b>Icons/Images</b></p> 
+		<p>All Icons used in our project are part of the "Primo icon set" provided freely by Double-J Design for for 
+		personal and commercial use in their website.</p> 
+
+		<p><b>Hot keys used in our application</b></p> 
+		<ul>
+			<li>(Main window)</li> 
+				<ul>
+					<li>Alt+F - Open File Menu </li>
+					<li>Ctrl+N - New Email </li>
+					<li>Ctrl+F - New Sub-folder </li>
+					<li>Ctrl+O - Open Selected Email</li> 
+					<li>Alt+E - Open Edit Menu </li>
+					<li>Ctrl+M - Move Email </li>
+					<li>Ctrl+E - Delete Email </li>
+					<li>Ctrl+R - Delete Folder</li>
+				</ul> 
+			<li> (Email window) </li>
+				<ul> 
+					<li>Alt+F - Open File Menu</li> 
+					<li>Ctrl+D - Save as Draft </li>
+					<li>Ctrl+S - Send Email </li>
+					<li>Escape - Exit</li>
+				</ul>
+		</ul>
 		
+		<p><b>Refreshing Policy</b></p>
+		<p>The issue we faced here was that when the user created a new Email, we needed a mechanism
+		to update the EmailClient main window for certain changes. This was solved by allows the Email
+		window to retrieve the running instance of the EmailClient, and update the model. Since the 
+		JTree and JTable views were listeners on the model, the views got updated.</p>
+		
+		<p>Folder Structure Tree - Left Panel: whenever a change is made to the folder structure (adding or 
+		deleting a folder) the JTree view's model is set which triggers a rebuild of the view from the   
+		persistence layer. This was a safer approach than premature optimization at the view level (by buffering
+		a complex directory structures). </p>
+
+		<p>Email Table - Top Panel: Likewise, the strategy adopted to refresh the Email table when a Folder is 
+		selected as well as when an email is deleted/moved is to request the persistence layer to check the 
+		Operating system's File System and load an updated list of Email Entities (XML Files).	</p>
+		
+		<p><b>Sorting Folders</b></p>
+		<p> Our assumption is that users will always want to see the most recent messages on top. 
+		Therefore, each folder is sorted in a descending order. We will not (at least for phase 1) provide 
+		another means to sort. To solve this problem, the Email model object implements the Comparable 
+		interface, which allowed us to define a CompareTo method and sort by the Last Modified Time.</p> 
+		
+		
+		<h3>Data format at each layer (+formatting XML)</h3>
+		<p>Each layer has it's own usable format. For example, emails are persisted in the file system as XML:</p>
+		<p><img src="emailXMLformat.png"></img></p>
+		<p>The model has its own format (which is similar to this one, except the link to ParentFolder is a
+		reference to an actual Folder model object). And then the view uses EmailViewEntity which only has Strings.
+		</p>
 		
 		<h3>Creating and deleting folders</h3>
-		<h3>Using the DateFormat parse method, and dealing with checked exceptions</h3>
-		<h3>Default sort for all folders</h3>
-		<h3>User is able to create an email, save as draft, and continue working on this
-		email </h3>
-	
+		<p>We've decided to allow subfolder creation at any point in the tree <b>except for the root node</b>. As 
+		specified by the professor, we will prevent the deletion of Inbox (and other System folders: Drafts, Outbox
+		and Sent). This is accomplished by modelling a parent abstract Folder class, which implements the main 
+		create/updated/delete methods, and defining two subclasses: SystemFolder and UserFolder. Both subclasses 
+		override the delete method and act accordingly. A factory FolderFactor is responsible for creating the 
+		runtime model objects according the the rules stipulated above. </p>
 		
-		<h2>Reused Libraries</h2>
+		
+		<h3>Unit Testing Checked Exceptions</h3>
+		<p>The problem we faced was that when parsing and comparing dates in order to sort emails, the 
+		DateFormat class throws a ParseError which is a checked exception. This caused us issues because we had
+		to either add a "throws"" keyword into the signature, or surround by try/catch). </p>
+
+		<p>To circumvent this issue, we handle the exception in a protected method in the EmailImpl class, 
+		and then re-throw an unchecked (runtime) exception. The unit test code can catch it, and we can
+		correctly test the behavior (that an exception WAS thrown).</p>
+		
+		<p><img src="checked_exception.png"></img></p>		
+		
+		<h3>Formatting XML</h3>
+		<p> In EmailXMLDao, we are using a StreamSource.xls file to help us format the XML output:
+		<br><br>
+		<code> 
+			StreamSource stylesource = new StreamSource(getClass().getResourceAsStream("proper-indenting.xsl"));<br>
+			Transformer transformer = transformerFactory.newTransformer(stylesource);<br>
+		</code>
+		<br>
+		We used the following as inspiration: 
+		<a href="http://stackoverflow.com/questions/3273182/how-to-write-properly-formatted-xml">Stack Overflow link</a> 
+		
+		</p>
+		
+		<h2>Reused Libraries / Code Inspiration</h2>
 		
 		<ul>
 			<li>Apache commons IO: for File Utils and File Delete</li>
 			<li>W3C DOM: comes with JDK - to interact and interrogate DOM objects</li>
-		
+			<li>TreeModelBuilder: we used some code we found here in order to build a TreeModel from a collection
+			of strings. This was a real issue for us due to lack of experience working with the JTree and the 
+			DefaultTreeNode hierarchy: <a href="http://stackoverflow.com/questions/13931934/building-jtree-from-strings">
+			Stack Overflow link</a>.</li>		
 		</ul>
 		
 		
@@ -159,9 +246,10 @@
 			<li>Adapter/Wrapper: cec.view.Email, cec.view.EmailClient</li>
 			<li>Observer: cec.view.EmailClient (TreeSelectionListener), JTable for emails listens to 
 			model changes when an email is send, saved, or deleted.</li>
-			<li>Singleton: cec.view.EmailClient: <font color=red><b>explanation?</b></font></li>
+			<li>Singleton: cec.view.EmailClient</li>
 		</ul>
 		
+		<h2>OOD Honorable Mentions</h2>
 		<ul>
 			<li>Value object: cec.view.EmailViewEntity</li>
 			<li>Data Access Object (DAO) interfaces: cec.persistence.EmailDao, cec.persistence.FolderDao</li>
@@ -175,7 +263,7 @@
 		
 		</ul>
 		
-		<p>Code snippet</p>
+		<p>Code snippet (if needed)</p>
 		
 		<code>
 			TableCell tc = new TableCell(); <br>
