@@ -404,6 +404,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 					try {
 						emailService.move(getSelectedEntity(), mov.toString());
 						updateEmailTable();
+						setSelectedEntity(null);
 					}
 					catch (SourceAndDestinationFoldersAreSameException ex) {
 						
@@ -423,6 +424,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 			if (getSelectedEntity() != null) {
 				emailService.delete(getSelectedEntity());
 				updateEmailTable();
+				setSelectedEntity(null);
 			}
 		}
 	}
