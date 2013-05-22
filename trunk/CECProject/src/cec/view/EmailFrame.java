@@ -47,7 +47,7 @@ import cec.service.EmailService;
 
 
 
-public class Email extends JFrame {
+public class EmailFrame extends JFrame {
 	private static final long serialVersionUID = 6361797821203537189L;
 	private UUID id = null;
 	private EmailClient mainClient;
@@ -91,7 +91,7 @@ public class Email extends JFrame {
 	 * @param  email  an <code>email</code> object that provides the <br>
 	 * 				  values used to set the JFrame
 	 */
-	public Email(EmailViewEntity email) {
+	public EmailFrame(EmailViewEntity email) {
 		emailView = email;
 		setExistingMessage();
 		setMessageFields();
@@ -112,7 +112,7 @@ public class Email extends JFrame {
 	 * <code>JTextArea</code> with label <b>"Body"</b>
 	 */
 
-	public Email() {
+	public EmailFrame() {
 		emailView = new EmailViewEntity();
 		id = UUID.randomUUID();
 		setNewMessage();
