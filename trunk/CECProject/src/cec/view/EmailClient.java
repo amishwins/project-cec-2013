@@ -81,7 +81,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	private static EmailClient instance;
 	
 	/***
-	 * Returns a reference for the current Class instance to be used
+	 * Returns a reference for the current instance (Main Window) to be used
 	 * by the <code>Email</code> class to refresh the JTable <code>emailTable</code> content 
 	 * when the user "Send" or "Save as a Draft" an Email.
 	 *  
