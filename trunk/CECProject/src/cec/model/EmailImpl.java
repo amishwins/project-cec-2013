@@ -120,7 +120,7 @@ public class EmailImpl implements Email {
 	}
 	
 	/**
-	 * returns the last modified time value in a more readable format. 
+	 * It returns the last modified time value in a more readable format. 
 	 * Converts the LastModifiedTime field value from "yyyy.MM.dd_'At'_HH.mm.ss.SSS" format to 
 	 * "EEE, MMM d, yyyy" format.
 	 * 	 *
@@ -165,7 +165,7 @@ public class EmailImpl implements Email {
 	 * save the email object to Outbox folder. Currently it does not have the send functionality, 
 	 * it just saves the file assuming that file has reached its destination.
 	 *
-	 * @param destDir the dest dir
+	 * 
 	 */
 	public void send() {
 
@@ -177,8 +177,10 @@ public class EmailImpl implements Email {
 
 	/**
 	 * This method is responsible for deleting the existing copy of an email from the Drafts folder
-	 * after the email has been sent to its destination address. it makes sure that there are no two copies of same email
-	 * in two different folders. 
+	 * after the email has been sent to its destination address and saved to Outbox folder. 
+	 * it method ensures that there are no two copies of same email object
+	 * in two different folders(Outbox and Drafts). basically it prevents system to have email objects 
+	 * with the same id in 2 different folders.
 	 */
 	private void ifItWasInDraftFolderDeleteThatCopy() {
 		if (parentFolder.getPath().equals(
@@ -186,24 +188,34 @@ public class EmailImpl implements Email {
 			emailDao.delete(parentFolder.getPath(), id);
 		}
 	}
-
-	/* (non-Javadoc)
-	 * @see cec.model.Email#saveToDraftFolder()
+	
+	
+	/**
+	 * This method is responsible for communicating the persistence layer that 
+	 * save the email object to Drafts folder. it just saves the file 
+	 * to drafts folder.
+	 *
+	 * 
 	 */
 	public void saveToDraftFolder() {
 		emailDao.save(id, from, to, cc, subject, body, lastModifiedTime,
 				sentTime, CECConfigurator.getReference().get("Drafts"));
 	}
 
-	/* (non-Javadoc)
-	 * @see cec.model.Email#delete()
+	/**
+	 * This method is responsible for communicating the persistence layer that 
+	 * delete the email object from the System.
+	 *
 	 */
 	public void delete() {
 		emailDao.delete(parentFolder.getPath(), id);
 	}
 
-	/* (non-Javadoc)
-	 * @see cec.model.Email#move(cec.model.Folder)
+	
+	/**
+	 * This method is responsible for communicating the persistence layer that 
+	 * move the email object to destination folder.
+	 *
 	 */
 	public void move(Folder destFolder) {
 		checkDestinationFolderIsNotSourceFolder(destFolder);
@@ -221,10 +233,12 @@ public class EmailImpl implements Email {
 		}
 	}
 	
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
+	/**
+	 * Returns a string representation for this email object. 
+	 * move the email object to destination folder.
+	 *
 	 */
+	
 	@Override
 	public String toString() {
 		StringBuilder email = new StringBuilder();
@@ -241,8 +255,12 @@ public class EmailImpl implements Email {
 		return email.toString();
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	/**
+	 * It compares the this email object to another email object on 
+	 * the basis of lastModifiedTime field. 
+	 * it provides the basis for sorting the email objects. 
+	 * 
+	 *
 	 */
 	@Override
 	public int compareTo(Email anotherEmail) {
