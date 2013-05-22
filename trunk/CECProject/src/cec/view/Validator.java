@@ -3,10 +3,13 @@ package cec.view;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Auxiliary Class used in the Presentation Layer that implements methods
+ *  to validate user's input on Email fields and Folder names.
+ * */
+
 public class Validator {
-	// right now only the view layer is using this class. consider moving 
-	// in case the functionality is extended
-	
+		
 	Pattern pattern;
 	Matcher matcher;
 	
@@ -29,7 +32,6 @@ public class Validator {
 	private boolean isValidTo(String emailString) {
 		String[] emails = emailString.split(";");
 		
-		// use the basic one that Troy gave us, slightly enhanced!
 		pattern = Pattern.compile("(.+)@(.+)(\\.)(.+)"); 
 		
 		for (String email: emails ) {
@@ -46,7 +48,7 @@ public class Validator {
 	}
 
 	public boolean isValidFolderName(String folderName) {
-		pattern = Pattern.compile("^[a-zA-Z0-9_\\s]+$");  //(\\s?)[a-zA-Z0-9_]?
+		pattern = Pattern.compile("^[a-zA-Z0-9_\\s]+$");  
 		matcher = pattern.matcher(folderName);
 		if (matcher.find() == false) {
 			return false;

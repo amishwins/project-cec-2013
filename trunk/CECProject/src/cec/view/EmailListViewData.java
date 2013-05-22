@@ -4,6 +4,14 @@ import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
 
+/**
+ * Auxiliary Class used by <code>EmailClient</code> class that receives trough
+ * its construct a String containing headers and list of Email Entities
+ * and returns the data in a Model that is compatible with the JTable
+ *  <code>emailTable</code> that shows the Emails of the selected folder.
+ *  To do this, this class extends the AbstractTableModel class.
+ * */
+
 public class EmailListViewData extends AbstractTableModel {
 	
 	private static final long serialVersionUID = 5641320475551936954L;
@@ -17,7 +25,7 @@ public class EmailListViewData extends AbstractTableModel {
 	}
 	
 	public EmailViewEntity getViewEntityAtIndex(int index) {
-		// TODO: is this good? Should we throw an exception and catch it in the view?
+		
 		if (index < 0)
 			return new EmailViewEntity();
 		
