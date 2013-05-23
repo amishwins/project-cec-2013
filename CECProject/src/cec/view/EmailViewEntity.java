@@ -2,7 +2,6 @@ package cec.view;
 
 import java.util.UUID;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class EmailViewEntity.
  */
