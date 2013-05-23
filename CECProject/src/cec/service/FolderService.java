@@ -20,7 +20,8 @@ import cec.model.HierarchyImpl;
 public class FolderService {
 	
 	private Folder folder;
-		
+
+	/** Load the hierarchy of folders to build Folder Tree */
 	public Iterable<String> loadHierarchy(){
 		List<String> hierarchy = new ArrayList<String>();
 		Hierarchy cECHierarchy = new HierarchyImpl();
@@ -30,6 +31,8 @@ public class FolderService {
 		}
 		return hierarchy;
 	}
+	
+	/** Load all emails from a specific folder */
 	public Iterable<EmailViewEntity> loadEmails(String folderPath){
 		List<EmailViewEntity> emailListInView = new ArrayList<EmailViewEntity>();
 		folder = FolderFactory.getFolder(folderPath);
@@ -51,6 +54,7 @@ public class FolderService {
 		return emailListInView;
 	}
 	
+	/** Creates a subfolder once receiving the path of the parent folder and its own name */
 	public void createSubFolder(String folderPath, String newSubFolderName) {
 		
 		
@@ -58,6 +62,7 @@ public class FolderService {
 		folder.createSubFolder(newSubFolderName);
 	}
 	
+	/** Delete a specific subfolder once receiving its path */
 	public void delete(String folderPath){
 		folder = FolderFactory.getFolder(folderPath);
 		folder.delete();
