@@ -17,34 +17,34 @@ import exceptions.SourceAndDestinationFoldersAreSameException;
  */
 public class EmailImpl implements Email {
 	
-	/** The id. */
+	/** The id field. */
 	private final UUID id;
 	
-	/** The from. */
+	/** The from field. */
 	private String from;
 	
-	/** The to. */
+	/** The to field. */
 	private String to;
 	
-	/** The cc. */
+	/** The cc field. */
 	private String cc;
 	
-	/** The subject. */
+	/** The subject field. */
 	private String subject;
 	
-	/** The body. */
+	/** The body field. */
 	private String body;
 	
-	/** The last modified time. */
+	/** The lastModifiedTime field. */
 	private String lastModifiedTime;
 	
-	/** The sent time. */
+	/** The sentTime field. */
 	private String sentTime;
 	
-	/** The parent folder. */
+	/** The parentFolder field. */
 	private Folder parentFolder;
 
-	/** The email dao. */
+	/** The emailDao field. */
 	protected EmailDao emailDao;
 
 	/**
