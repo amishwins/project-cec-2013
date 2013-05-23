@@ -3,10 +3,21 @@ package cec.config;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A singleton convenience class to help us centralize some Collaborative 
+ * Email Client system settings. It essentially wraps a hash map and provides
+ * default settings when first instantiated. In addition, there's a method 
+ * to help determine if a folder is a system folder
+ *
+ */
 public class CECConfigurator {
 	private static Map<String, String> systemSettings;
 	private static CECConfigurator singleton;
 	
+	/**
+	 * Static getReference method in classic Singleton pattern
+	 * @return a reference to the configurator class
+	 */
 	public static CECConfigurator getReference() {
 		if (singleton == null) {
 			singleton = new CECConfigurator();
@@ -21,10 +32,20 @@ public class CECConfigurator {
 		mapDefaultClientEmailAddress();
 	}
 
+	/**
+	 * Wrapper to the Hash Map put method 
+	 * @param key 
+	 * @param value
+	 */
 	public void put(String key, String value) {
 		systemSettings.put(key, value);
 	}
 	
+	/**
+	 * Wrapper to the Hash Map get method
+	 * @param key
+	 * @return
+	 */
 	public String get(String key) {
 		String value = systemSettings.get(key); 
 		if (value == null) {
@@ -33,6 +54,10 @@ public class CECConfigurator {
 		return value;
 	}
 	
+	/**
+	 * @param path value which represents a path to a folder in the system
+	 * @return boolean whether the path is actually to a system folder
+	 */
 	public boolean isPathForASystemFolder(String path) {
 		if ( systemSettings.get("emails").equals(path) ||
 			 systemSettings.get("Inbox").equals(path) ||
@@ -59,11 +84,9 @@ public class CECConfigurator {
 	
 	private void mapDefaultClientEmailAddress() {
 		systemSettings.put("ClientEmail", "cec.user@cec.com");
-		
 	}
 	
 	public String getClientEmailAddress(){
 		return systemSettings.get("ClientEmail");
-	}
-	
+	}	
 }
