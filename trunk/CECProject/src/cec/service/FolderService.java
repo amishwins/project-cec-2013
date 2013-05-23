@@ -10,6 +10,13 @@ import cec.model.Hierarchy;
 import cec.view.EmailViewEntity;
 import cec.model.HierarchyImpl;
 
+/**
+ * Class that represents all the actions/methods that can be performed against a Folder from
+ * the Presentation Layer (cec.view) such as Creating/Deleting Subfolders and also
+ * retrieves information from model/persistence Layers to build
+ * the JTree <code>folders</code> and JTable <code>emailTable</code>. 
+ */
+
 public class FolderService {
 	
 	private Folder folder;
