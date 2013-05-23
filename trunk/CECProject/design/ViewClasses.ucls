@@ -28,8 +28,8 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="cec.view.Email" project="CECProjectAsJavaProject" 
-    file="/CECProjectAsJavaProject/src/cec/view/Email.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="4" language="java" name="cec.view.EmailFrame" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/view/EmailFrame.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1065" y="569"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
@@ -58,7 +58,8 @@
   <package id="7" language="java" name="cec.service" project="CECProjectAsJavaProject" 
     file="/CECProjectAsJavaProject/src/cec/service" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="49" y="554"/>    
-    <display autosize="true" stereotype="true" accessors="true"/>  
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true"/>  
   </package>  
   <dependency id="8">    
     <end type="SOURCE" refId="5"/>    
