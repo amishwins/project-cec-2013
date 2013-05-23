@@ -7,41 +7,43 @@ import java.util.UUID;
 
 import cec.config.CECConfigurator;
 
+
 /**
  * A builder of email instances. 
- * @author Pankaj Kapania
+ * 
  */
 public class EmailBuilder {
 
-	/** The id. */
+	/** Unique identifiers for each email. */
 	UUID id;
 	
-	/** The from. */
+	/** The From field */
 	String from = "";
 	
-	/** The to. */
+	/** The To field. */
 	String to = "";
 	
-	/** The cc. */
+	/** The CC field */
 	String cc = "";
 	
-	/** The subject. */
+	/** The subject field */
 	String subject = "";
 	
-	/** The body. */
+	/** The body field*/
 	String body = "";
 	
-	/** The last modified time. */
+	/** The lastModifiedTime field */
 	String lastModifiedTime = "";
 	
-	/** The sent time. */
+	/** The sent time field */
 	String sentTime = "";
 	
-	/** The parent folder. */
+	/** The parentFolder field. */
 	Folder parentFolder;
 
 	/**
-	 * 
+	 * sets the value of id based on what is 
+	 * specified in the argument id.
 	 *
 	 * @param id the id
 	 * @return the email builder
@@ -52,7 +54,8 @@ public class EmailBuilder {
 	}
 
 	/**
-	 * With from.
+	 * sets the value of from based on what is 
+	 * specified in the argument named from
 	 *
 	 * @param from the from
 	 * @return the email builder
@@ -63,7 +66,8 @@ public class EmailBuilder {
 	}
 
 	/**
-	 * With to.
+	 * sets the value of To field based on what is 
+	 * specified in the argument named to.
 	 *
 	 * @param to the to
 	 * @return the email builder
@@ -74,7 +78,8 @@ public class EmailBuilder {
 	}
 
 	/**
-	 * With cc.
+	 * sets the value of cc field based on what is 
+	 * specified in the argument named cc.
 	 *
 	 * @param cc the cc
 	 * @return the email builder
@@ -85,7 +90,8 @@ public class EmailBuilder {
 	}
 
 	/**
-	 * With subject.
+	 * sets the value of subject field based on what is 
+	 * specified in the argument named subject.
 	 *
 	 * @param subject the subject
 	 * @return the email builder
@@ -96,8 +102,9 @@ public class EmailBuilder {
 	}
 
 	/**
-	 * With body.
-	 *
+	 * sets the value of body field based on what is 
+	 * specified in the argument named body.
+	 * 
 	 * @param body the body
 	 * @return the email builder
 	 */
@@ -107,8 +114,9 @@ public class EmailBuilder {
 	}
 
 	/**
-	 * With last modified time.
-	 *
+	 * sets the value of lastModifiedTime field based on what is 
+	 * specified in the argument named lastModifiedTime
+	 * 
 	 * @param lastModifiedTime the last modified time
 	 * @return the email builder
 	 */
@@ -118,7 +126,8 @@ public class EmailBuilder {
 	}
 
 	/**
-	 * With sent time.
+	 * sets the value of sentTime field based on what is 
+	 * specified in the argument named sentTime.
 	 *
 	 * @param sentTime the sent time
 	 * @return the email builder
@@ -129,7 +138,8 @@ public class EmailBuilder {
 	}
 
 	/**
-	 * With parent folder.
+	 * sets the value of parentFolder field based on what is 
+	 * specified in the argument named parentFolder.
 	 *
 	 * @param parentFolder the parent folder
 	 * @return the email builder
@@ -140,7 +150,7 @@ public class EmailBuilder {
 	}
 
 	/**
-	 * Compute id.
+	 * Computes the id of the type UUID type.
 	 *
 	 * @return the email builder
 	 */
@@ -150,7 +160,7 @@ public class EmailBuilder {
 	}
 
 	/**
-	 * Computelast modified time.
+	 * Compute last modified time. 
 	 *
 	 * @return the email builder
 	 */
@@ -169,8 +179,10 @@ public class EmailBuilder {
 		return this;
 	}
 
+	
 	/**
-	 * Current date time.
+	 * Returns the current date time according to the 
+	 * format specified by the configurator.
 	 *
 	 * @return the string
 	 */
@@ -179,11 +191,14 @@ public class EmailBuilder {
 				.getReference().get("DateFormat"));
 		return currentDateTime.format(new Date());
 	}
+	
 
 	/**
-	 * Load.
+	 * returns the email builder object.
+	 * based on the values in the 
+	 * argument named fields.
 	 *
-	 * @param fields the fields
+	 * @param Map of the email fields. 
 	 * @return the email builder
 	 */
 	public EmailBuilder load(Map<String, String> fields) {
@@ -204,7 +219,7 @@ public class EmailBuilder {
 	}
 
 	/**
-	 * With drafts parent folder.
+	 * sets the value of PARENTFOLDER to Drafts.
 	 *
 	 * @return the email builder
 	 */
@@ -215,7 +230,7 @@ public class EmailBuilder {
 	}
 
 	/**
-	 * With outbox parent folder.
+	 * sets the value of PARENTFOLDER to Outbox .
 	 *
 	 * @return the email builder
 	 */
@@ -226,7 +241,7 @@ public class EmailBuilder {
 	}
 
 	/**
-	 * With from.
+	 * sets the value of FROM field to specified in the configurator object.
 	 *
 	 * @return the email builder
 	 */
@@ -236,7 +251,7 @@ public class EmailBuilder {
 	}
 
 	/**
-	 * Builds the.
+	 * returns the EmailImpl object.
 	 *
 	 * @return the email
 	 */
