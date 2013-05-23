@@ -5,9 +5,13 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 /**
- * 
- * @author a_gala
- */
+ * Auxiliary Class used by <code>EmailClient</code> class from Presentation Layer(cec.view)
+ * to fill the JTree <code>folders</code> that shows Email Directory structure.
+ * The constructor initializes a local variable and the method <code>buildTreeNodeFromFileList</code>
+ * iterates on a list of strings (folders) checking the hierarchy by analyzing the path/slashes 
+ * to create a Model that's compatible with the JTree component. 
+ * */
+
 public class TreeModelBuilder {
 	private DefaultTreeModel cecModel;
 
