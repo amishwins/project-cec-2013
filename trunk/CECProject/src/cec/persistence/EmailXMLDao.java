@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -22,6 +23,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import exceptions.StackTrace;
+
 
 /**
  * 
@@ -35,6 +38,12 @@ public class EmailXMLDao implements EmailDao {
 	
 	/** Specifies the extension of file. */
 	private final String FILE_EXTENSION=".xml";
+	
+	static Logger logger = Logger.getLogger(EmailXMLDao.class.getName()); 
+
+    static { 
+        logger.setParent( Logger.getLogger( EmailXMLDao.class.getPackage().getName() ) );
+    }
 	
 	/**
 	 * Builds the XML file using the specified arguments.
@@ -148,7 +157,7 @@ public class EmailXMLDao implements EmailDao {
 		try {
 			Document emailInXMLFormat = buildXmlFile(id, from, to, cc, subject,
 					body, lastModifiedTime, sentTime, location);
-			// write the content into xml file
+			
 			TransformerFactory transformerFactory = TransformerFactory
 					.newInstance();
 			StreamSource stylesource = new StreamSource(getClass()
@@ -161,7 +170,7 @@ public class EmailXMLDao implements EmailDao {
 			transformer.transform(source, result);
 
 		} catch (TransformerException e) {
-			e.printStackTrace();
+			logger.severe(StackTrace.asString(e));
 		}
 	}
 	
@@ -180,8 +189,8 @@ public class EmailXMLDao implements EmailDao {
        FileDeleteStrategy file = FileDeleteStrategy.FORCE;
        try{
     	   file.delete(new File(path+"/"+fileName.toString()+FILE_EXTENSION));
-       }catch(IOException fileDeleteException){
-    	   fileDeleteException.printStackTrace();
+       }catch(Exception fileDeleteException){
+    	   logger.severe(StackTrace.asString(fileDeleteException));;
        }     		
 	}
 	/**
@@ -193,13 +202,13 @@ public class EmailXMLDao implements EmailDao {
 	 * @param destDir the destination  directory
 	 */
 	public void move(UUID fileName, String srcDir, String destDir){
-		File file = new File(srcDir+"/"+fileName.toString()+FILE_EXTENSION);
-		File destinationDir = new File(destDir);
-		updateXMLField(file.getPath(),destDir);
 		try {
+			File file = new File(srcDir+"/"+fileName.toString()+FILE_EXTENSION);
+			File destinationDir = new File(destDir);
+			updateXMLField(file.getPath(),destDir);
 			FileUtils.moveFileToDirectory(file, destinationDir, false);
-		} catch (IOException fileMoveException) {
-			fileMoveException.printStackTrace();
+		} catch (Exception fileMoveException) {
+			logger.severe(StackTrace.asString(fileMoveException));
 		}
 	}
 	
@@ -237,7 +246,7 @@ public class EmailXMLDao implements EmailDao {
 					new File(xmlFile));
 			transformer.transform(source, result);
 		} catch (Exception exception) {
-			exception.printStackTrace();
+			logger.severe(StackTrace.asString(exception));
 		}
 		
 	}
@@ -257,6 +266,7 @@ public class EmailXMLDao implements EmailDao {
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 			Document email = documentBuilder.parse(xmlFile);
+			logger.info("loading Email(s) from folder: "+folder+ " and from file: "+xmlFileName+" " );
 			email.getDocumentElement().normalize();
 			NodeList listOfEmailFields = email.getElementsByTagName("E-Mail");
 			for (int index = 0; index < listOfEmailFields.getLength(); index++) {
@@ -272,10 +282,20 @@ public class EmailXMLDao implements EmailDao {
 					emailData.put("LastModifiedTime", eElement.getElementsByTagName("LastModifiedTime").item(0).getTextContent());
 					emailData.put("SentTime", eElement.getElementsByTagName("SentTime").item(0).getTextContent());
 					emailData.put("ParentFolder", eElement.getElementsByTagName("ParentFolder").item(0).getTextContent());
+					logger.info("Id: " + eElement.getElementsByTagName("Id").item(0).getTextContent());
+					logger.info("From: " + eElement.getElementsByTagName("From").item(0).getTextContent());
+					logger.info("To: " + eElement.getElementsByTagName("To").item(0).getTextContent());
+					logger.info("CC: " + eElement.getElementsByTagName("CC").item(0).getTextContent());
+					logger.info("Subject: " + eElement.getElementsByTagName("Subject").item(0).getTextContent());
+					logger.info("Body: " + eElement.getElementsByTagName("Body").item(0).getTextContent());
+					logger.info("LastModifiedTime: " + eElement.getElementsByTagName("LastModifiedTime").item(0).getTextContent());
+					logger.info("SentTime: " + eElement.getElementsByTagName("SentTime").item(0).getTextContent());
+					logger.info("ParentFolder: " + eElement.getElementsByTagName("ParentFolder").item(0).getTextContent());
+					
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.severe(StackTrace.asString(e));
 		}
 		return emailData;
 	}
