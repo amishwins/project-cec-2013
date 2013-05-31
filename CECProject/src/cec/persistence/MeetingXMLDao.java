@@ -1,7 +1,6 @@
 package cec.persistence;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
@@ -17,7 +16,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.io.FileDeleteStrategy;
-import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -76,103 +74,103 @@ public class MeetingXMLDao implements MeetingDao {
 			String lastModifiedTime, String sentTime, String location) {
 		DocumentBuilderFactory documentFactory = null;
 		DocumentBuilder documentBuilder = null;
-		Document emailInXMLFormat = null;
+		Document meetingInXMLFormat = null;
 
 		try {
 			documentFactory = DocumentBuilderFactory.newInstance();
 			documentBuilder = documentFactory.newDocumentBuilder();
 
 			// root element Meeting
-			emailInXMLFormat = documentBuilder.newDocument();
-			Element emailRootElement = emailInXMLFormat
+			meetingInXMLFormat = documentBuilder.newDocument();
+			Element meetingRootElement = meetingInXMLFormat
 					.createElement("Meeting");
-			emailInXMLFormat.appendChild(emailRootElement);
+			meetingInXMLFormat.appendChild(meetingRootElement);
 
 			// id
-			Element idLabel = emailInXMLFormat.createElement("Id");
-			idLabel.appendChild(emailInXMLFormat.createTextNode(id.toString()));
-			emailRootElement.appendChild(idLabel);
+			Element idLabel = meetingInXMLFormat.createElement("Id");
+			idLabel.appendChild(meetingInXMLFormat.createTextNode(id.toString()));
+			meetingRootElement.appendChild(idLabel);
 
 			// from
-			Element fromLabel = emailInXMLFormat.createElement("From");
-			fromLabel.appendChild(emailInXMLFormat.createTextNode(from));
-			emailRootElement.appendChild(fromLabel);
+			Element fromLabel = meetingInXMLFormat.createElement("From");
+			fromLabel.appendChild(meetingInXMLFormat.createTextNode(from));
+			meetingRootElement.appendChild(fromLabel);
 
 			// attendees
-			Element attendeesLabel = emailInXMLFormat
+			Element attendeesLabel = meetingInXMLFormat
 					.createElement("Attendees");
-			attendeesLabel.appendChild(emailInXMLFormat
+			attendeesLabel.appendChild(meetingInXMLFormat
 					.createTextNode(attendees));
-			emailRootElement.appendChild(attendeesLabel);
+			meetingRootElement.appendChild(attendeesLabel);
 
 			// meetingStartDate
-			Element meetingStartDateLabel = emailInXMLFormat
+			Element meetingStartDateLabel = meetingInXMLFormat
 					.createElement("MeetingStartDate");
-			meetingStartDateLabel.appendChild(emailInXMLFormat
+			meetingStartDateLabel.appendChild(meetingInXMLFormat
 					.createTextNode(meetingStartDate));
-			emailRootElement.appendChild(meetingStartDateLabel);
+			meetingRootElement.appendChild(meetingStartDateLabel);
 
 			// meetingEndDate
-			Element meetingEndDateLabel = emailInXMLFormat
+			Element meetingEndDateLabel = meetingInXMLFormat
 					.createElement("MeetingEndDate");
-			meetingEndDateLabel.appendChild(emailInXMLFormat
+			meetingEndDateLabel.appendChild(meetingInXMLFormat
 					.createTextNode(meetingEndDate));
-			emailRootElement.appendChild(meetingEndDateLabel);
+			meetingRootElement.appendChild(meetingEndDateLabel);
 
 			// meetingStartTime
-			Element meetingStartTimeLabel = emailInXMLFormat
+			Element meetingStartTimeLabel = meetingInXMLFormat
 					.createElement("MeetingStartTime");
-			meetingStartTimeLabel.appendChild(emailInXMLFormat
+			meetingStartTimeLabel.appendChild(meetingInXMLFormat
 					.createTextNode(meetingStartTime));
-			emailRootElement.appendChild(meetingStartTimeLabel);
+			meetingRootElement.appendChild(meetingStartTimeLabel);
 
 			// meetingEndTime
-			Element meetingEndTimeLabel = emailInXMLFormat
+			Element meetingEndTimeLabel = meetingInXMLFormat
 					.createElement("MeetingEndTime");
-			meetingEndTimeLabel.appendChild(emailInXMLFormat
+			meetingEndTimeLabel.appendChild(meetingInXMLFormat
 					.createTextNode(meetingEndTime));
-			emailRootElement.appendChild(meetingEndTimeLabel);
+			meetingRootElement.appendChild(meetingEndTimeLabel);
 
 			// meetingPlace
-			Element meetingPlaceLabel = emailInXMLFormat
+			Element meetingPlaceLabel = meetingInXMLFormat
 					.createElement("MeetingPlace");
-			meetingPlaceLabel.appendChild(emailInXMLFormat
+			meetingPlaceLabel.appendChild(meetingInXMLFormat
 					.createTextNode(meetingPlace));
-			emailRootElement.appendChild(meetingPlaceLabel);
+			meetingRootElement.appendChild(meetingPlaceLabel);
 
 			// subject
-			Element subjectLabel = emailInXMLFormat.createElement("Subject");
-			subjectLabel.appendChild(emailInXMLFormat.createTextNode(subject));
-			emailRootElement.appendChild(subjectLabel);
+			Element subjectLabel = meetingInXMLFormat.createElement("Subject");
+			subjectLabel.appendChild(meetingInXMLFormat.createTextNode(subject));
+			meetingRootElement.appendChild(subjectLabel);
 
 			// body
-			Element bodyLabel = emailInXMLFormat.createElement("Body");
-			bodyLabel.appendChild(emailInXMLFormat.createTextNode(body));
-			emailRootElement.appendChild(bodyLabel);
+			Element bodyLabel = meetingInXMLFormat.createElement("Body");
+			bodyLabel.appendChild(meetingInXMLFormat.createTextNode(body));
+			meetingRootElement.appendChild(bodyLabel);
 
 			// lastModifiedTime
-			Element lastModifiedTimeLabel = emailInXMLFormat
+			Element lastModifiedTimeLabel = meetingInXMLFormat
 					.createElement("LastModifiedTime");
-			lastModifiedTimeLabel.appendChild(emailInXMLFormat
+			lastModifiedTimeLabel.appendChild(meetingInXMLFormat
 					.createTextNode(lastModifiedTime));
-			emailRootElement.appendChild(lastModifiedTimeLabel);
+			meetingRootElement.appendChild(lastModifiedTimeLabel);
 
 			// sentTime
-			Element sentTimeLabel = emailInXMLFormat.createElement("SentTime");
+			Element sentTimeLabel = meetingInXMLFormat.createElement("SentTime");
 			sentTimeLabel
-					.appendChild(emailInXMLFormat.createTextNode(sentTime));
-			emailRootElement.appendChild(sentTimeLabel);
+					.appendChild(meetingInXMLFormat.createTextNode(sentTime));
+			meetingRootElement.appendChild(sentTimeLabel);
 
 			// parent folder
-			Element parentFolder = emailInXMLFormat
+			Element parentFolder = meetingInXMLFormat
 					.createElement("ParentFolder");
-			parentFolder.appendChild(emailInXMLFormat.createTextNode(location));
-			emailRootElement.appendChild(parentFolder);
+			parentFolder.appendChild(meetingInXMLFormat.createTextNode(location));
+			meetingRootElement.appendChild(parentFolder);
 
 		} catch (ParserConfigurationException pce) {
 			pce.printStackTrace();
 		}
-		return emailInXMLFormat;
+		return meetingInXMLFormat;
 
 	}
 
@@ -211,7 +209,7 @@ public class MeetingXMLDao implements MeetingDao {
 		String pathToSaveFile = path + "/" + fileName + FILE_EXTENSION;
 
 		try {
-			Document emailInXMLFormat = buildXmlFile(id, from, attendees,
+			Document meetingInXMLFormat = buildXmlFile(id, from, attendees,
 					meetingStartDate, meetingEndDate, meetingStartTime,
 					meetingEndTime, meetingPlace, subject, body,
 					lastModifiedTime, sentTime, location);
@@ -222,7 +220,7 @@ public class MeetingXMLDao implements MeetingDao {
 					.getResourceAsStream("proper-indenting.xsl"));
 			Transformer transformer = transformerFactory
 					.newTransformer(stylesource);
-			DOMSource source = new DOMSource(emailInXMLFormat);
+			DOMSource source = new DOMSource(meetingInXMLFormat);
 			StreamResult result = new StreamResult(new File(pathToSaveFile));
 
 			transformer.transform(source, result);
@@ -274,15 +272,15 @@ public class MeetingXMLDao implements MeetingDao {
 					.newInstance();
 			DocumentBuilder documentBuilder = documentBuilderFactory
 					.newDocumentBuilder();
-			Document email = documentBuilder.parse(xmlFile);
+			Document meeting = documentBuilder.parse(xmlFile);
 			logger.info("loading Meeting(s) Data from folder: " + folder
 					+ " and from file: " + xmlFileName + " ");
-			email.getDocumentElement().normalize();
-			NodeList listOfEmailFields = email.getElementsByTagName("Meeting");
-			for (int index = 0; index < listOfEmailFields.getLength(); index++) {
-				Node emailField = listOfEmailFields.item(index);
-				if (emailField.getNodeType() == Node.ELEMENT_NODE) {
-					Element eElement = (Element) emailField;
+			meeting.getDocumentElement().normalize();
+			NodeList listOfMeetingFields = meeting.getElementsByTagName("Meeting");
+			for (int index = 0; index < listOfMeetingFields.getLength(); index++) {
+				Node meetingField = listOfMeetingFields.item(index);
+				if (meetingField.getNodeType() == Node.ELEMENT_NODE) {
+					Element eElement = (Element) meetingField;
 					meetingData.put("Id", eElement.getElementsByTagName("Id")
 							.item(0).getTextContent());
 					meetingData.put("From", eElement.getElementsByTagName("From")
