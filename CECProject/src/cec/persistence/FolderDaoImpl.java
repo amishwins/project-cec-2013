@@ -1,13 +1,15 @@
 package cec.persistence;
 
 import java.util.*;
+import java.util.logging.Logger;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.IOException;
 import exceptions.FolderAlreadyExistsException;
+import exceptions.StackTrace;
 
 import org.apache.commons.io.FileDeleteStrategy;
 import org.apache.commons.io.filefilter.FileFileFilter;
+
 
 /**
  * 
@@ -16,6 +18,15 @@ import org.apache.commons.io.filefilter.FileFileFilter;
  * 
  */
 public class FolderDaoImpl implements FolderDao {
+	
+	static Logger logger = Logger.getLogger(FolderDaoImpl.class.getName()); 
+
+    static { 
+        logger.setParent( Logger.getLogger( FolderDaoImpl.class.getPackage().getName() ) );
+    }
+
+	
+	
 	 /**
      * It loads all the sub folders under the given folder specified by the 
      * argument folderName.
@@ -29,6 +40,7 @@ public class FolderDaoImpl implements FolderDao {
 		subFolders = getSubFoldersRecursively(new File(folderName));
 		for (File subFolder : subFolders) {
 			subFoldersPath.add(subFolder.getPath().replace('\\', '/'));
+			logger.info("SubFolder(s) under Folder name "+folderName + " are  : " + subFolder.getPath());
 		}
 		return subFoldersPath;
 	}
@@ -45,8 +57,8 @@ public class FolderDaoImpl implements FolderDao {
 		try {
 
 			file.delete(new File(folderPath));
-		} catch (IOException fileDeleteException) {
-			fileDeleteException.printStackTrace();
+		} catch (Exception fileDeleteException) {
+			logger.severe(StackTrace.asString(fileDeleteException));
 		}
 
 	}
@@ -70,7 +82,7 @@ public class FolderDaoImpl implements FolderDao {
 		try {
 			newFolder.mkdir();
 		} catch (Exception fileCreationException) {
-			fileCreationException.printStackTrace();
+			logger.severe(StackTrace.asString(fileCreationException));
 		}
 	}
 
