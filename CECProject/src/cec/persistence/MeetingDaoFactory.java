@@ -11,7 +11,7 @@ public class MeetingDaoFactory {
      *
      * @return the email dao instance
      */
-    public static MeetingDao getEmailDaoInstance() {
+    public static MeetingDao getMeetingDaoInstance() {
         return new MeetingXMLDao();
     }
 }
