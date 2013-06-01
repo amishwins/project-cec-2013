@@ -17,6 +17,17 @@ public interface FolderDao {
      */
     public Iterable<Map<String,String>> loadEmails(String folder);
     
+    
+    /**
+     * It loads all meetings objects from the folder specified by argument folder.
+     *
+     * @param folder the folder
+     * @return the iterable
+     */
+    public Iterable<Map<String,String>> loadMeetings(String folder);
+    
+    
+    
     /**
      * It loads all the sub folders under the given folder specified by the 
      * argument parentFolder.
@@ -26,12 +37,14 @@ public interface FolderDao {
      */
     public Iterable<String> loadSubFolders(String parentFolder);
     
+    
     /**
      * It deletes the given folder whose path is given by the argument folderPath.
      *
      * @param folderPath the folder path
      */
     public void delete(String folderPath);
+    
     
     /**
      * Creates  a new sub folder with name specified by argument newChildFolderName
