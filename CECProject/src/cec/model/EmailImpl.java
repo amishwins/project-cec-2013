@@ -294,17 +294,7 @@ public boolean isMatch(String pattern) {
 		entireEmail.append(space+cc);
 		entireEmail.append(space+subject);
 		entireEmail.append(space+body);
-		
-		
-		/*Pattern pattern = Pattern.compile(toFind);
-		Matcher matcher = pattern.matcher(entireEmail);
-		return matcher.find();*/
-		
-		
-		
-		//Search emailSearcher = new Search(this,toFind);
-		//match = emailSearcher.isEmailMatch();
-		
+
 		Search emailSearcher = new Search(entireEmail.toString(),pattern);	
 		return emailSearcher.isEmailStringMatch();
 			
