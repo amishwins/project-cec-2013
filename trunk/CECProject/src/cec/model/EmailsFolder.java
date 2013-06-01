@@ -74,5 +74,29 @@ public abstract class EmailsFolder extends Folder {
 		Collections.sort(emailsInFolder);
 		return emailsInFolder;
 	}
+   public Iterable<Email> searchEmails(String toFind) {
+		emailsInFolder = new LinkedList<Email>();
+		Iterable<Map<String,String>> emailsData = folderDao.loadEmails(getPath());
+				//CECConfigurator.getReference().get("Inbox"));
+		
+		for(Map<String,String> emailData: emailsData) {
+			EmailBuilder emailBuilder = new EmailBuilder();
+			Email email = emailBuilder.withId(UUID.fromString(emailData.get("Id")))
+				.withFrom(emailData.get("From"))
+				.withTo(emailData.get("To"))
+				.withCC(emailData.get("CC"))
+				.withSubject(emailData.get("Subject"))
+				.withBody(emailData.get("Body"))
+				.withLastModifiedTime(emailData.get("LastModifiedTime"))
+				.withSentTime(emailData.get("SentTime"))
+				.withParentFolder(FolderFactory.getFolder(emailData.get("ParentFolder")))
+				.build();
+			
+			if(email.isMatch(toFind))
+				emailsInFolder.add(email);
+		}	
+		Collections.sort(emailsInFolder);
+		return emailsInFolder;
+	}
 	
 }

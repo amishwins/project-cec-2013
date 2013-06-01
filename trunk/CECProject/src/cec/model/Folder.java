@@ -49,5 +49,8 @@ public abstract class Folder {
 	 */
 	public abstract Iterable<Email> loadEmails();
 	
-	public abstract Iterable<Meeting> loadMeetings();
+	public abstract Iterable<Email> searchEmails(String toFind);
+	
+	public abstract Iterable<Meeting> loadMeetings();	
+		
 }

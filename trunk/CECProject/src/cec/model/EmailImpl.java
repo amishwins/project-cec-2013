@@ -4,6 +4,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.swing.JOptionPane;
 
 import cec.config.CECConfigurator;
 import cec.persistence.EmailDao;
@@ -281,6 +285,30 @@ public class EmailImpl implements Email {
 		return anotherEmailDate.compareTo(currentEmailDate);
 	}
 
+public boolean isMatch(String pattern) {
+	
+		boolean match;// = false;
+		StringBuilder entireEmail = new StringBuilder();
+		String space = " ";
+		entireEmail.append(from);
+		entireEmail.append(space+cc);
+		entireEmail.append(space+subject);
+		entireEmail.append(space+body);
+		
+		
+		/*Pattern pattern = Pattern.compile(toFind);
+		Matcher matcher = pattern.matcher(entireEmail);
+		return matcher.find();*/
+		
+		
+		
+		//Search emailSearcher = new Search(this,toFind);
+		//match = emailSearcher.isEmailMatch();
+		
+		Search emailSearcher = new Search(entireEmail.toString(),pattern);	
+		return emailSearcher.isEmailStringMatch();
+			
+	}
 	/**
 	 * Handle parse exception.
 	 *
