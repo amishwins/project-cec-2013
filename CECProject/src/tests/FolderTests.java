@@ -164,4 +164,10 @@ class FolderDaoStub implements FolderDao {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public Iterable<Map<String,String>> loadMeetings(String parentFolder) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
