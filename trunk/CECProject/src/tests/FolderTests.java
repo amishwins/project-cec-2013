@@ -12,17 +12,22 @@ import org.junit.Test;
 
 import cec.model.EmailsSystemFolder;
 import cec.model.EmailsUserFolder;
+import cec.model.MeetingsFolder;
 import cec.persistence.FolderDao;
+import exceptions.CannotDeleteSystemFolderException;
+import exceptions.RootFolderSubfolderCreationException;
 
 public class FolderTests {
 	
 	SystemFolderCUT systemFolder;
 	UserFolderCUT userFolder;
+	MeetingsFolderCUT meetingFolder;
 	String userFolderPath;
 	String systemFolderPath;
 	String newFolderName;
 	String systemFolderName;
 	String userFolderName;
+	String meetingFolderPath;
 	
 
 	@Before
@@ -32,9 +37,11 @@ public class FolderTests {
 		userFolderName = "Jokes";
 		systemFolderPath = "emails/Outbox";
 		systemFolderName = "Outbox";
+		meetingFolderPath = "meetings";
 		
 		systemFolder = new SystemFolderCUT(systemFolderPath);
 		userFolder = new UserFolderCUT(userFolderPath);
+		meetingFolder = new MeetingsFolderCUT(meetingFolderPath);
 		newFolderName = "temp";
 	}
 
@@ -61,13 +68,6 @@ public class FolderTests {
 	}
 
 	@Test 
-	public void deleteSystemFolder() {
-		systemFolder.delete();
-		assertTrue(systemFolder.exceptionWasThrown);
-		assertFalse(((FolderDaoStub)systemFolder.getFolderDao()).deleteWasCalled);
-	}
-
-	@Test 
 	public void deleteUserFolder() {
 		userFolder.delete();
 		assertTrue(((FolderDaoStub)userFolder.getFolderDao()).deleteWasCalled);
@@ -85,6 +85,42 @@ public class FolderTests {
 		assertTrue(((FolderDaoStub)userFolder.getFolderDao()).createWasCalled);
 	}
 	
+	@Test
+	(expected = UnsupportedOperationException.class)
+	public void shouldThrowExceptionWhenTryToLoadMeetingsFromUserEmailsFolders(){
+		userFolder.loadMeetings();
+	}
+	
+	@Test
+	(expected = UnsupportedOperationException.class)
+	public void shouldThrowExceptionWhenTryToLoadMeetingsFromSystemEmailsFolders(){
+		systemFolder.loadMeetings();
+	}
+	
+	@Test
+	(expected = CannotDeleteSystemFolderException.class)
+	public void shouldThrowExceptionWhenTryToDeleteSystemEmailsFolders(){
+		systemFolder.delete();
+	}
+	
+	@Test
+	(expected = CannotDeleteSystemFolderException.class)
+	public void shouldThrowExceptionWhenTryToDeleteMeetingsFolder(){
+		meetingFolder.delete();
+	}
+	
+	@Test
+	(expected = UnsupportedOperationException.class)
+	public void shouldThrowExceptionWhenTryToLoadEmailsFromMeetingsFolder(){
+		meetingFolder.loadEmails();
+	}
+	
+	@Test
+	(expected = RootFolderSubfolderCreationException.class)
+	public void shouldThrowExceptionWhenTryToCreateSubFoldersInsideMeetingsFolder(){
+		meetingFolder.createSubFolder(meetingFolderPath);
+	}
+	
 }
 
 class SystemFolderCUT extends EmailsSystemFolder{
@@ -100,15 +136,23 @@ class SystemFolderCUT extends EmailsSystemFolder{
 	public FolderDao getFolderDao() {
 		return folderDao;
 	}
-	
-	@Override
-	protected void handleSystemDelete() {
-		exceptionWasThrown = true;
-	}
 }
 
 class UserFolderCUT extends EmailsUserFolder {
 	public UserFolderCUT(String path) {
+		super(path);
+		
+		// inject test double
+		setFolderDao(new FolderDaoStub());
+	}
+	
+	public FolderDao getFolderDao() {
+		return folderDao;
+	}
+}
+
+class MeetingsFolderCUT extends MeetingsFolder {
+	public MeetingsFolderCUT(String path) {
 		super(path);
 		
 		// inject test double
