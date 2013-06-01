@@ -133,6 +133,29 @@ public class FolderDaoImpl implements FolderDao {
 		}
 		return listOfEmails;
 	}
+	
+	/**
+     * It returns the equivalent low level representation of email object under given 
+     *  folder specified by the argument folder. It basically returns data pertaining 
+     *  to all the emails under a given folder in the form of a collection of 
+     *  Map<String,String>.
+     * 
+     * @param meetingFolder the folder
+     * @return the iterable
+     */
+	public Iterable<Map<String, String>> loadMeetings(String meetingFolder) {
+		Collection<Map<String, String>> listOfMeetings = new ArrayList<>();
+		Map<String, String> meeting;
+		MeetingDao meetingDao = new MeetingXMLDao();
+
+		String[] xmlFilesName = getFileNames(meetingFolder);
+		for (String xmlFileName : xmlFilesName) {
+			meeting = meetingDao.loadMeeting(meetingFolder, xmlFileName);// read(folder,
+															// xmlFileName);
+			listOfMeetings.add(meeting);
+		}
+		return listOfMeetings;
+	}
 
 	/**
 	 * It returns only the file names under a given directory specified by argument 
