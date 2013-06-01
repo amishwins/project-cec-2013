@@ -44,6 +44,7 @@ import javax.swing.tree.TreePath;
 
 import cec.service.FolderService;
 import cec.service.EmailService;
+import cec.service.TemplateService;
 import cec.service.TreeModelBuilder;
 import exceptions.CannotDeleteSystemFolderException;
 import exceptions.FolderAlreadyExistsException;
@@ -255,6 +256,10 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		newEmail.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
 		fileMenuBarEntry.add(newEmail);
 
+		JMenuItem newTemplate = new JMenuItem("New Template", KeyEvent.VK_T);
+		newTemplate.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_DOWN_MASK));
+		fileMenuBarEntry.add(newTemplate);
+		
 		JMenuItem newSubfolder = new JMenuItem("New Sub-folder", KeyEvent.VK_F);
 		newSubfolder.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK));
 		fileMenuBarEntry.add(newSubfolder);
@@ -272,6 +277,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 
 		// Add all the action listeners for the File menu
 		newEmail.addActionListener(new MenuFileNewEmail());
+		newTemplate.addActionListener(new MenuFileNewTemplate());
 		newSubfolder.addActionListener(new MenuFileNewSubFolder());
 		openSelectedEmail.addActionListener(new MenuFileOpenSelectedEmail());
 		exitItem.addActionListener(new MenuFileExit());
@@ -580,6 +586,13 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		}
 	}
 
+	private class MenuFileNewTemplate implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			TemplateService ts = new TemplateService();
+			new EmailFrame(ts);
+		}
+	}
+	
 	private class MenuFileExit implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			System.exit(0);
