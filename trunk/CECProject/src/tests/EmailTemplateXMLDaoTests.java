@@ -11,20 +11,20 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import cec.persistence.EmailTemplateDao;
-import cec.persistence.EmailTemplateDaoFactory;
+import cec.persistence.TemplateDao;
+import cec.persistence.TemplateDaoFactory;
 
 public class EmailTemplateXMLDaoTests {
 	
 	// Dangerous test, which actually creates files in the file system and then deletes them
-	EmailTemplateDao emailTemplateDao;
+	TemplateDao emailTemplateDao;
 	Map<String,String> templateFromFS;
 	UUID templateID;
 	String name, to, cc, subject, body;
 
 	@Before
 	public void setUp() throws Exception {
-		emailTemplateDao = EmailTemplateDaoFactory.getEmailTemplateDaoInstance();
+		emailTemplateDao = TemplateDaoFactory.getEmailTemplateDaoInstance();
 		templateFromFS = new TreeMap<>();
 		name = "Birthday";
 		to = "a@b.com";

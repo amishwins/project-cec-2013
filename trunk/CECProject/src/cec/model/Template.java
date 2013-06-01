@@ -4,14 +4,14 @@ import java.util.UUID;
 
 /**
  * The Interface Email exposes the life cycle methods 
- * of an email that service layer should call.
+ * of an email template that service layer should call.
  * 
  * Service layer classes are coupled to Model layer 
  * through this interface. 
  *
  * 
  */
-public interface EmailTemplate extends Comparable<EmailTemplate> {
+public interface Template extends Comparable<Template> {
     
     /**
      * Sends the email object to its destination address.
@@ -22,21 +22,6 @@ public interface EmailTemplate extends Comparable<EmailTemplate> {
      * Deletes the email from the System.
      */
     public void delete();
-    
-    /**
-     * Moves the email from the source folder to destination 
-     * folder.
-     *
-     * @param destination folder of an email.
-     */
-    public void move(Folder destDir);
-    
-    /**
-     * Gets the id.
-     *
-     * @return the id
-     */
-    public UUID getId();
     
     /**
      * Gets the name of the template
@@ -71,9 +56,6 @@ public interface EmailTemplate extends Comparable<EmailTemplate> {
      *
      * @return the body
      */
-    public String getBody();
-    
-    
-    public Iterable<EmailTemplate> loadTemplates();
+    public String getBody();   
     
 }
