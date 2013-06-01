@@ -1,16 +1,7 @@
 package cec.model;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.UUID;
-
-import cec.config.CECConfigurator;
-import cec.persistence.EmailDao;
-import cec.persistence.EmailDaoFactory;
 import cec.persistence.TemplateDao;
 import cec.persistence.TemplateDaoFactory;
-import exceptions.SourceAndDestinationFoldersAreSameException;
 
 /**
  * EmailImpl is the concrete implementation of the email interface.
@@ -26,7 +17,7 @@ public class TemplateImpl implements Template {
 	private String subject;	
 	private String body;
 	
-	protected TemplateDao emailTemplateDao;
+	protected TemplateDao templateDao;
 
 	/**
 	 * Instantiates a new email impl.
@@ -43,16 +34,16 @@ public class TemplateImpl implements Template {
 		this.subject = subject;
 		this.body = body;
 
-		setEmailTemplateDao(TemplateDaoFactory.getEmailTemplateDaoInstance());
+		setTemplateDao(TemplateDaoFactory.getTemplateDaoInstance());
 	}
 
 	/**
 	 * Sets the email dao.
 	 *
-	 * @param emailTemplateDao the new email template dao
+	 * @param templateDao the new email template dao
 	 */
-	protected void setEmailTemplateDao(TemplateDao emailTemplateDao) {
-		this.emailTemplateDao = emailTemplateDao;
+	protected void setTemplateDao(TemplateDao templateDao) {
+		this.templateDao = templateDao;
 	}
 
 	/**
@@ -64,7 +55,7 @@ public class TemplateImpl implements Template {
 	 */
 	@Override
 	public void save() {
-		emailTemplateDao.saveAsTemplate(templateName, to, cc, subject, body);
+		templateDao.saveAsTemplate(templateName, to, cc, subject, body);
 	}
 
 	/**
@@ -74,7 +65,7 @@ public class TemplateImpl implements Template {
 	 */
 	@Override
 	public void delete() {
-		emailTemplateDao.deleteTemplate(templateName);
+		templateDao.deleteTemplate(templateName);
 	}
 
 	@Override
