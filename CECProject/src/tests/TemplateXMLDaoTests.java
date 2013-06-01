@@ -14,7 +14,7 @@ import org.junit.Test;
 import cec.persistence.TemplateDao;
 import cec.persistence.TemplateDaoFactory;
 
-public class EmailTemplateXMLDaoTests {
+public class TemplateXMLDaoTests {
 	
 	// Dangerous test, which actually creates files in the file system and then deletes them
 	TemplateDao emailTemplateDao;
