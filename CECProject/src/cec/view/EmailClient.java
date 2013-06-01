@@ -596,7 +596,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	{
 		String toFind = searchField.getText();			
 		if(toFind.trim().length()>0)			
-			updateEmailTableFound(toFind);		
+			updateEmailTableFound(toFind);	
 			
 	}
 	private class BarSearchEmails implements ActionListener {
