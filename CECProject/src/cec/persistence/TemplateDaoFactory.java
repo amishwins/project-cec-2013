@@ -11,7 +11,7 @@ public class TemplateDaoFactory {
      *
      * @return the email template DAO instance
      */
-    public static TemplateDao getEmailTemplateDaoInstance() {
+    public static TemplateDao getTemplateDaoInstance() {
         return new TemplateXMLDao();
     }
 }
