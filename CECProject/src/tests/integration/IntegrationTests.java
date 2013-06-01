@@ -8,7 +8,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({ 
 	EmailModelAndDaoIntegrationTests.class,
 	EmailServiceModelAndDaoIntegrationTests.class,
-	FolderServiceModelAndDaoIntegrationTests.class })
+	FolderServiceModelAndDaoIntegrationTests.class,
+	MeetingServiceModelAndDaoIntegrationTests.class})
 
 public class IntegrationTests {
 
