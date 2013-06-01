@@ -14,7 +14,9 @@ import org.junit.runners.Suite.SuiteClasses;
 	FolderTests.class, 
 	InputValidationTests.class,
 	HierarchyTests.class,
-	MeetingBuilderTests.class})
+	MeetingBuilderTests.class,
+    TemplateXMLDaoTests.class,	
+})
 
 public class UnitTests {
 
