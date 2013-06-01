@@ -7,7 +7,9 @@ import cec.model.Email;
 import cec.model.Folder;
 import cec.model.FolderFactory;
 import cec.model.Hierarchy;
+import cec.model.Meeting;
 import cec.view.EmailViewEntity;
+import cec.view.MeetingViewEntity;
 import cec.model.HierarchyImpl;
 
 /**
@@ -53,6 +55,33 @@ public class FolderService {
 		}
 		return emailListInView;
 	}
+	
+	/** Load all emails from a specific folder */
+	public Iterable<MeetingViewEntity> loadMeetings(String folderPath){
+		List<MeetingViewEntity> meetingListInView = new ArrayList<MeetingViewEntity>();
+		folder = FolderFactory.getFolder(folderPath);
+		Iterable<Meeting> meetingListInModel = folder.loadMeetings();
+		for(Meeting meetingInModel: meetingListInModel){
+			MeetingViewEntity meetingInView = new MeetingViewEntity();
+			meetingInView.setId(meetingInModel.getId());
+			meetingInView.setFrom(meetingInModel.getFrom());
+			meetingInView.setAttendees(meetingInModel.getAttendees());
+			meetingInView.setStartDate(meetingInModel.getStartDate());
+			meetingInView.setEndDate(meetingInModel.getEndDate());
+			meetingInView.setStartTime(meetingInModel.getStartTime());
+			meetingInView.setEndTime(meetingInModel.getEndTime());
+			meetingInView.setPlace(meetingInModel.getPlace());
+			meetingInView.setSubject(meetingInModel.getSubject());
+			meetingInView.setBody(meetingInModel.getBody());
+			meetingInView.setLastModifiedTime(meetingInModel.getLastModifiedTimeNicelyFormatted());
+			meetingInView.setSentTime(meetingInModel.getSentTime());
+			meetingInView.setFolder(meetingInModel.getParentFolder().getPath());
+		
+			meetingListInView.add(meetingInView);
+		}
+		return meetingListInView;
+	}
+	
 	
 	/** Creates a subfolder once receiving the path of the parent folder and its own name */
 	public void createSubFolder(String folderPath, String newSubFolderName) {
