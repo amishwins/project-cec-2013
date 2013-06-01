@@ -146,12 +146,12 @@ public class FolderDaoImpl implements FolderDao {
 	public Iterable<Map<String, String>> loadMeetings(String meetingFolder) {
 		Collection<Map<String, String>> listOfMeetings = new ArrayList<>();
 		Map<String, String> meeting;
-		MeetingDao meetingDao = new MeetingXMLDao();
+		MeetingDao meetingDao = MeetingDaoFactory.getMeetingDaoInstance();
 
 		String[] xmlFilesName = getFileNames(meetingFolder);
 		for (String xmlFileName : xmlFilesName) {
-			meeting = meetingDao.loadMeeting(meetingFolder, xmlFileName);// read(folder,
-															// xmlFileName);
+			meeting = meetingDao.loadMeeting(meetingFolder, xmlFileName);
+			// read(folder,	// xmlFileName);
 			listOfMeetings.add(meeting);
 		}
 		return listOfMeetings;
