@@ -2,7 +2,6 @@ package tests;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
@@ -24,7 +23,7 @@ public class TemplateXMLDaoTests {
 
 	@Before
 	public void setUp() throws Exception {
-		templateDao = TemplateDaoFactory.getEmailTemplateDaoInstance();
+		templateDao = TemplateDaoFactory.getTemplateDaoInstance();
 		templateFromFS = new TreeMap<>();
 		name = "Birthday";
 		to = "a@b.com";
