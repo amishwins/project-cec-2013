@@ -287,7 +287,7 @@ public class EmailImpl implements Email {
 
 public boolean isMatch(String pattern) {
 	
-		boolean match;// = false;
+		//boolean match;// = false;
 		StringBuilder entireEmail = new StringBuilder();
 		String space = " ";
 		entireEmail.append(from);
@@ -296,7 +296,7 @@ public boolean isMatch(String pattern) {
 		entireEmail.append(space+body);
 
 		Search emailSearcher = new Search(entireEmail.toString(),pattern);	
-		return emailSearcher.isEmailStringMatch();
+		return emailSearcher.isMatch();
 			
 	}
 	/**
