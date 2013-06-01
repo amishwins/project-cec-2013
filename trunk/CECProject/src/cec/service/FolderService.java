@@ -3,6 +3,7 @@ package cec.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import cec.config.CECConfigurator;
 import cec.model.Email;
 import cec.model.Folder;
 import cec.model.FolderFactory;
@@ -53,6 +54,29 @@ public class FolderService {
 		
 			emailListInView.add(emailInView);
 		}
+		return emailListInView;
+	}
+	/** Load all emails from a Inbox folder */
+	public Iterable<EmailViewEntity> searchEmails(String toFind){
+		List<EmailViewEntity> emailListInView = new ArrayList<EmailViewEntity>();
+		//folder = FolderFactory.getFolder(folderPath);
+		folder = FolderFactory.getFolder(CECConfigurator.getReference().get("Inbox"));
+		Iterable<Email> emailListInModel = folder.searchEmails(toFind);
+		for(Email emailInModel: emailListInModel){
+			EmailViewEntity emailInView = new EmailViewEntity();
+			emailInView.setId(emailInModel.getId());
+			emailInView.setFrom(emailInModel.getFrom());
+			emailInView.setTo(emailInModel.getTo());
+			emailInView.setCC(emailInModel.getCC());
+			emailInView.setSubject(emailInModel.getSubject());
+			emailInView.setBody(emailInModel.getBody());
+			emailInView.setLastModifiedTime(emailInModel.getLastModifiedTimeNicelyFormatted());
+			emailInView.setSentTime(emailInModel.getSentTime());
+			emailInView.setFolder(emailInModel.getParentFolder().getPath());
+		
+			emailListInView.add(emailInView);
+		}		
+			
 		return emailListInView;
 	}
 	
