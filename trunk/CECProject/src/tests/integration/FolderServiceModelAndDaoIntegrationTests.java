@@ -8,11 +8,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cec.service.FolderService;
+import exceptions.CannotDeleteSystemFolderException;
 import exceptions.FolderAlreadyExistsException;
 import exceptions.RootFolderSubfolderCreationException;
 
 public class FolderServiceModelAndDaoIntegrationTests {
 	String rootFolder = "emails";
+	String meetingSystemFolder = "meetings";
 	String inboxFolder = "Inbox";
 	String systemFolderName = "emails/Inbox";
 	String userFolder = "integrationtests";
@@ -50,6 +52,17 @@ public class FolderServiceModelAndDaoIntegrationTests {
 	public void ShouldThrowWhenUserTriesToCreateSystemFolder() {
 		folderService.createSubFolder(rootFolder,inboxFolder);		
 	}
+	
+	@Test (expected=CannotDeleteSystemFolderException.class)
+	public void ShouldThrowWhenUserTriesToDeleteEmailSystemFolder() {
+		folderService.delete(rootFolder);		
+	}
+	
+	@Test (expected=CannotDeleteSystemFolderException.class)
+	public void ShouldThrowWhenUserTriesToDeleteMeetingSystemFolder() {
+		folderService.delete(meetingSystemFolder);		
+	}
+	
 	
 	
 

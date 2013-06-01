@@ -12,7 +12,6 @@ import org.junit.Test;
 import cec.service.EmailService;
 import cec.service.FolderService;
 import cec.view.EmailViewEntity;
-import exceptions.FolderAlreadyExistsException;
 import exceptions.SourceAndDestinationFoldersAreSameException;
 
 public class EmailServiceModelAndDaoIntegrationTests {
