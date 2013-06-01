@@ -28,6 +28,7 @@ import javax.swing.text.JTextComponent;
 
 import cec.config.CECConfigurator;
 import cec.service.EmailService;
+import cec.service.TemplateService;
 
 
 /**
@@ -54,6 +55,7 @@ public class EmailFrame extends JFrame {
 	private Validator emailValidator = new Validator();
 
 	EmailService emailService = new EmailService();
+	TemplateService templateService;
 
 	JTextField toField = new JTextField("", 65);
 	JTextField ccField = new JTextField("", 65);
@@ -66,14 +68,18 @@ public class EmailFrame extends JFrame {
 	JButton forward = new JButton(" Forward ");
 	JButton draft = new JButton("Save as Draft ");
 	JButton send = new JButton(" Send >>   ");
+	
+	JButton saveTemplate = new JButton(" Save Template ");
 
 	JMenuItem replyItem = new JMenuItem("Reply", KeyEvent.VK_R);
 	JMenuItem forwardItem = new JMenuItem("Fwd", KeyEvent.VK_F);
 	JMenuItem draftItem = new JMenuItem("Save as Draft", KeyEvent.VK_D);
 	JMenuItem sendItem = new JMenuItem("Send", KeyEvent.VK_S);
+	JMenuItem saveTemplateItem = new JMenuItem("Save Template", KeyEvent.VK_T);
 	JMenuItem exitItem = new JMenuItem("Exit");
 
 	EmailViewEntity emailView;
+	TemplateViewEntity templateView;
 	int max_Length = 250;
 
 	/**
@@ -96,7 +102,13 @@ public class EmailFrame extends JFrame {
 		setExistingMessage();
 		setMessageFields();
 		initialize();
-
+	}
+	
+	public EmailFrame(TemplateService ts) {
+		templateView = new TemplateViewEntity();
+		templateService = ts;
+		setNewTemplate();
+		initialize();
 	}
 
 	/**
@@ -193,12 +205,14 @@ public class EmailFrame extends JFrame {
 		draft.setIcon(draftIcon);
 		reply.setIcon(replyIcon);
 		forward.setIcon(forwardIcon);
+		saveTemplate.setIcon(draftIcon);
 
 		bar.setFloatable(false);
 		bar.add(send);
 		bar.add(draft);
 		bar.add(reply);
 		bar.add(forward);
+		bar.add(saveTemplate);
 
 		send.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -220,7 +234,12 @@ public class EmailFrame extends JFrame {
 				editExistingMessage();
 			}
 		});
-
+		saveTemplate.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				saveTemplate();
+			}
+		});		
+		
 		add(bar, BorderLayout.NORTH);
 	}
 
@@ -277,6 +296,12 @@ public class EmailFrame extends JFrame {
 		this.dispose();
 	}
 
+	private void saveTemplate() {
+		buildTemplateViewObject();
+		templateService.saveTemplate(templateView);
+		this.dispose();
+	}
+	
 	// Actions - Draft
 	/**
 	 * Draft email.
@@ -312,6 +337,16 @@ public class EmailFrame extends JFrame {
 		emailView.setBody(bodyField.getText());
 	}
 
+	private void buildTemplateViewObject() {
+		String name = JOptionPane.showInputDialog(null, "Enter name of template");
+		templateView.setName(name);
+		templateView.setTo(toField.getText().trim());
+		templateView.setCC(ccField.getText().trim());
+		templateView.setSubject(subjectField.getText());
+		templateView.setBody(bodyField.getText());
+	}
+
+	
 
 	private void setMessageFields() {
 		this.id = emailView.getId();
@@ -377,14 +412,32 @@ public class EmailFrame extends JFrame {
 		forward.setVisible(false);
 		send.setVisible(true);
 		draft.setVisible(true);
-
+		saveTemplate.setVisible(false);
+		
 		// OPTION AVAILABLE IN MENU
 		replyItem.setVisible(false);
 		forwardItem.setVisible(false);
 		sendItem.setVisible(true);
-		draftItem.setVisible(true);
+		draftItem.setVisible(true);		
+		saveTemplateItem.setVisible(false);
 	}
-
+	
+	private void setNewTemplate() {
+		subjectField.setDocument(new EntryFieldMaxLength(max_Length));
+		// OPTION AVAILABLE
+		reply.setVisible(false);
+		forward.setVisible(false);
+		send.setVisible(false);
+		draft.setVisible(false);
+		saveTemplate.setVisible(true);
+		
+		// OPTION AVAILABLE IN MENU
+		replyItem.setVisible(false);
+		forwardItem.setVisible(false);
+		sendItem.setVisible(false);
+		draftItem.setVisible(false);		
+		saveTemplateItem.setVisible(true);		
+	}
 	
 	
 	/**
