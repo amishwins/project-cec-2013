@@ -11,7 +11,7 @@ import java.util.UUID;
  *
  * 
  */
-public interface Email extends Comparable<Email> {
+public interface Email extends Comparable<Email>, Searchable {
     
     /**
      * Sends the email object to its destination address.
@@ -106,5 +106,6 @@ public interface Email extends Comparable<Email> {
 	 * 	 *
 	 * @return the last modified time nicely formatted
 	 */
+    
 	public String getLastModifiedTimeNicelyFormatted();
 }

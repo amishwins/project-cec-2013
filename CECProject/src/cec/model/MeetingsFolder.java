@@ -60,6 +60,10 @@ public class MeetingsFolder extends Folder {
 	public Iterable<Email> loadEmails() {
 		throw new UnsupportedOperationException();
 	}
+	@Override
+	public Iterable<Email> searchEmails(String toFind) {
+		throw new UnsupportedOperationException();
+	}
 	
 	@Override
 	public void createSubFolder(String newFolderName) {
