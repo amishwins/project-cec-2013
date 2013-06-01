@@ -141,7 +141,7 @@ public class FolderDaoImpl implements FolderDao {
 	 * @param dir the dir
 	 * @return the file names
 	 */
-	private String[] getFileNames(String dir) {
+	protected static String[] getFileNames(String dir) {
 		File folder = new File(dir);
 		String[] xmlFiles = folder.list(FileFileFilter.FILE);
 		return xmlFiles;
