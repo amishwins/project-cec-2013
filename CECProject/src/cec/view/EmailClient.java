@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -150,12 +151,12 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		
 		//Search Panel
 		JPanel searchPanel = new JPanel();
-		JButton searchBT = new JButton("Search");
-		searchBT.addActionListener(new BarSearchEmails());		
+		JButton searchBT = new JButton("Search");			
 		searchField.setFont(new Font("Arial", Font.PLAIN, 12));			
 		searchPanel.add(searchField, BorderLayout.CENTER);
 		searchPanel.add(searchBT, BorderLayout.EAST);
-		
+		searchBT.addActionListener(new BarSearchEmails());	
+		searchField.addKeyListener(new KeySearchEmails());		
 		
 		//Top Panel
 		topPanel.setPreferredSize(new Dimension(1024, 45));
@@ -588,9 +589,22 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	private class BarSearchEmails implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 		//	folderService.searchEmails(searchField.getText());
+			//System.out.println("OK");
 		}
 	}
 	
-		
+	private class KeySearchEmails implements KeyListener {
+	    public void keyPressed(KeyEvent e) 
+	    {
+	        if ( e.getKeyCode() == KeyEvent.VK_ENTER ){
+	        	System.out.println("OK");
+	        	new BarSearchEmails();
+	         
+	        }
+	        	
+	    }
+	    public void keyReleased(KeyEvent e) {}	    
+	    public void keyTyped(KeyEvent e) {}
+	}		
 }
 
