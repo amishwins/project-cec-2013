@@ -1,8 +1,11 @@
 package cec.view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -12,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -23,6 +27,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
@@ -77,6 +82,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 
 	EmailViewEntity selectedEmailEntity;
 	String lastSelectedFolder;
+	JTextField searchField = new JTextField(null, 22);
 
 	private static EmailClient instance;
 	
@@ -140,10 +146,22 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		JPanel topPanel = new JPanel();
 		ImageIcon emailIcon = new ImageIcon("images/email_at.png");
 		JLabel titleLabel = new JLabel("CEC - Collaborative Email Client", emailIcon, JLabel.LEFT);
-
+		titleLabel.setFont(new Font("Arial", Font.BOLD, 12));
+		
+		//Search Panel
+		JPanel searchPanel = new JPanel();
+		JButton searchBT = new JButton("Search");
+		searchBT.addActionListener(new BarSearchEmails());		
+		searchField.setFont(new Font("Arial", Font.PLAIN, 12));			
+		searchPanel.add(searchField, BorderLayout.CENTER);
+		searchPanel.add(searchBT, BorderLayout.EAST);
+		
+		
+		//Top Panel
 		topPanel.setPreferredSize(new Dimension(1024, 45));
 		topPanel.setLayout(new BorderLayout(5, 5));
-		topPanel.add(titleLabel);
+		topPanel.add(titleLabel, BorderLayout.WEST);		
+		topPanel.add(searchPanel, BorderLayout.EAST);		
 
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.setLayout(new BorderLayout(2, 2));
@@ -566,6 +584,13 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 			System.exit(0);
 		}
 	}
+	
+	private class BarSearchEmails implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+		//	folderService.searchEmails(searchField.getText());
+		}
+	}
+	
 		
 }
 
