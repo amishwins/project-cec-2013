@@ -17,14 +17,14 @@ import cec.persistence.TemplateDaoFactory;
 public class TemplateXMLDaoTests {
 	
 	// Dangerous test, which actually creates files in the file system and then deletes them
-	TemplateDao emailTemplateDao;
+	TemplateDao templateDao;
 	Map<String,String> templateFromFS;
 	UUID templateID;
 	String name, to, cc, subject, body;
 
 	@Before
 	public void setUp() throws Exception {
-		emailTemplateDao = TemplateDaoFactory.getEmailTemplateDaoInstance();
+		templateDao = TemplateDaoFactory.getEmailTemplateDaoInstance();
 		templateFromFS = new TreeMap<>();
 		name = "Birthday";
 		to = "a@b.com";
@@ -39,8 +39,8 @@ public class TemplateXMLDaoTests {
 
 	@Test
 	public void saveActuallySavesFileAndThenDeletesIt() {
-		emailTemplateDao.saveAsTemplate(name, to, cc, subject, body);
-		templateFromFS = emailTemplateDao.loadTemplate(name);
+		templateDao.saveAsTemplate(name, to, cc, subject, body);
+		templateFromFS = templateDao.loadTemplate(name);
 		assertEquals(templateFromFS.get("Name").toString(), name);
 		assertEquals(templateFromFS.get("To").toString(), to);
 		assertEquals(templateFromFS.get("CC").toString(), cc);
@@ -51,8 +51,8 @@ public class TemplateXMLDaoTests {
 	
 	@Test
 	public void saveAndLoadAll() {
-		emailTemplateDao.saveAsTemplate(name, to, cc, subject, body);
-		Iterable<Map<String,String>> templates = emailTemplateDao.loadAllTemplates();
+		templateDao.saveAsTemplate(name, to, cc, subject, body);
+		Iterable<Map<String,String>> templates = templateDao.loadAllTemplates();
 		for(Map<String,String> entry: templates) {
 			templateFromFS = entry;
 			assertNotNull(templateFromFS);
