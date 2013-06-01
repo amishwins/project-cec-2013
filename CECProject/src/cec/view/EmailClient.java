@@ -586,10 +586,22 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		}
 	}
 	
+	private void updateEmailTableFound(String toFind) {
+		String[] emailTableViewColumns = { "From", "Subject", "Date" };			
+		Iterable<EmailViewEntity> emailsFoundInFolder=folderService.searchEmails(toFind);		
+		emailTable.setModel(new EmailListViewData(emailTableViewColumns, emailsFoundInFolder));			
+		defineEmailTableLayout();
+	}
+	private void search()
+	{
+		String toFind = searchField.getText();			
+		if(toFind.trim().length()>0)			
+			updateEmailTableFound(toFind);		
+			
+	}
 	private class BarSearchEmails implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-		//	folderService.searchEmails(searchField.getText());
-			//System.out.println("OK");
+			search();
 		}
 	}
 	
@@ -597,11 +609,8 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	    public void keyPressed(KeyEvent e) 
 	    {
 	        if ( e.getKeyCode() == KeyEvent.VK_ENTER ){
-	        	System.out.println("OK");
-	        	new BarSearchEmails();
-	         
-	        }
-	        	
+	        	search();	         
+	        }	        	
 	    }
 	    public void keyReleased(KeyEvent e) {}	    
 	    public void keyTyped(KeyEvent e) {}
