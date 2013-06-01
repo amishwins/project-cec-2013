@@ -8,13 +8,10 @@ public class Search {
 	String source;
 	String patternToFind;
 	
-	Search(String source, String patternToFind)
+	public Search(String source, String patternToFind)
 	{		
 		this.patternToFind=modifiedString(patternToFind.toUpperCase());
 		this.source=modifiedString(source.toUpperCase());
-		
-		//this.patternToFind = patternToFind.toUpperCase();
-		//this.source = source.toUpperCase();
 	}
 	
 	
