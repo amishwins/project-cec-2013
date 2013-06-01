@@ -6,7 +6,7 @@ package cec.model;
  * delete method communicates with the persistence layer
  *
  */
-public class UserFolder extends Folder {
+public class UserFolder extends EmailsFolder {
 
 	public UserFolder(String path) {
 		super(path);
