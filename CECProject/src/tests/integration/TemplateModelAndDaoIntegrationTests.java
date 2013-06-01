@@ -12,12 +12,12 @@ import cec.persistence.EmailDaoFactory;
 import cec.persistence.TemplateDao;
 import cec.persistence.TemplateDaoFactory;
 
-public class EmailTemplateModelAndDaoIntegrationTests {
-	Template emailTemplateModel;
+public class TemplateModelAndDaoIntegrationTests {
+	Template templateModel;
 
 	@Before
 	public void setUp() throws Exception {
-		emailTemplateModel = new TemplateImpl("Birthday!", "a@b.com", "c@d.com", "This is a subject!", "This is a body");
+		templateModel = new TemplateImpl("Birthday!", "a@b.com", "c@d.com", "This is a subject!", "This is a body");
 	}
 
 	@After
@@ -26,7 +26,7 @@ public class EmailTemplateModelAndDaoIntegrationTests {
 
 	@Test
 	public void saveNewEmailFromModel() {
-		emailTemplateModel.save();
+		templateModel.save();
 		Template emailTemplateLoadedFromPersistence;
 	}
 
