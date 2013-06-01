@@ -10,8 +10,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import cec.model.SystemFolder;
-import cec.model.UserFolder;
+import cec.model.EmailsSystemFolder;
+import cec.model.EmailsUserFolder;
 import cec.persistence.FolderDao;
 
 public class FolderTests {
@@ -87,7 +87,7 @@ public class FolderTests {
 	
 }
 
-class SystemFolderCUT extends SystemFolder{
+class SystemFolderCUT extends EmailsSystemFolder{
 	public boolean exceptionWasThrown = false;
 	
 	public SystemFolderCUT(String path) {
@@ -107,7 +107,7 @@ class SystemFolderCUT extends SystemFolder{
 	}
 }
 
-class UserFolderCUT extends UserFolder {
+class UserFolderCUT extends EmailsUserFolder {
 	public UserFolderCUT(String path) {
 		super(path);
 		

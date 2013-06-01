@@ -25,7 +25,13 @@ public class FolderFactoryTests {
 	@Test
 	public void createEmailSystemFolder() {
 		folder = FolderFactory.getFolder(CECConfigurator.getReference().get("Inbox"));
-		assertTrue(folder.getClass().getName().equals("cec.model.SystemFolder"));		
+		assertTrue(folder.getClass().getName().equals("cec.model.EmailsSystemFolder"));		
+	}
+	
+	@Test
+	public void createEmailsUserFolder() {
+		folder = FolderFactory.getFolder("BobSinclair");
+		assertTrue(folder.getClass().getName().equals("cec.model.EmailsUserFolder"));		
 	}
 	
 	@Test
@@ -34,11 +40,4 @@ public class FolderFactoryTests {
 		assertTrue(folder.getClass().getName().equals("cec.model.MeetingsFolder"));		
 	}
 	
-	
-	@Test
-	public void createUserFolder() {
-		folder = FolderFactory.getFolder("BobSinclair");
-		assertTrue(folder.getClass().getName().equals("cec.model.UserFolder"));		
-	}
-
 }

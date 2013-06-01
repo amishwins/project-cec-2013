@@ -13,7 +13,8 @@ import org.junit.runners.Suite.SuiteClasses;
 	FolderFactoryTests.class,
 	FolderTests.class, 
 	InputValidationTests.class,
-	HierarchyTests.class })
+	HierarchyTests.class,
+	MeetingBuilderTests.class})
 
 public class UnitTests {
 

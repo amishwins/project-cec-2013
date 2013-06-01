@@ -19,13 +19,14 @@ import cec.service.MeetingService;
 import cec.view.MeetingViewEntity;
 
 public class MeetingServiceModelAndDaoIntegrationTests {
-	String systemFolderName = "meetings";
+	
     String MEETING_FILE_EXTENSION = ".xml";
     
-	MeetingService meetingService;
+    MeetingService meetingService;
 	MeetingDao meetingDao;
 	MeetingViewEntity meetingViewEntity;
 	
+	String systemFolderName;
 	UUID meetingId;
 	String from;
 	String attendees;
@@ -42,6 +43,7 @@ public class MeetingServiceModelAndDaoIntegrationTests {
 	
 	@Before
 	public void setUp() throws Exception {
+		systemFolderName = "meetings";
 		meetingId = UUID.randomUUID();
 		from = CECConfigurator.getReference()
 				.getClientEmailAddress();
