@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import cec.persistence.FolderDao;
 import exceptions.CannotDeleteSystemFolderException;
 import exceptions.RootFolderSubfolderCreationException;
 
