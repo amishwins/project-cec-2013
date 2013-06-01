@@ -1,6 +1,6 @@
 package tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
@@ -23,10 +23,17 @@ public class FolderFactoryTests {
 	}
 
 	@Test
-	public void createSystemFolder() {
+	public void createEmailSystemFolder() {
 		folder = FolderFactory.getFolder(CECConfigurator.getReference().get("Inbox"));
 		assertTrue(folder.getClass().getName().equals("cec.model.SystemFolder"));		
 	}
+	
+	@Test
+	public void createMeetingSystemFolder() {
+		folder = FolderFactory.getFolder(CECConfigurator.getReference().get("meetings"));
+		assertTrue(folder.getClass().getName().equals("cec.model.MeetingsFolder"));		
+	}
+	
 	
 	@Test
 	public void createUserFolder() {
