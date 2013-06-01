@@ -58,7 +58,7 @@ public class CECConfigurator {
 	 * @param path value which represents a path to a folder in the system
 	 * @return boolean whether the path is actually to a system folder
 	 */
-	public boolean isPathForASystemFolder(String path) {
+	public boolean isPathForAEmailSystemFolder(String path) {
 		if ( systemSettings.get("emails").equals(path) ||
 			 systemSettings.get("Inbox").equals(path) ||
 		     systemSettings.get("Drafts").equals(path) ||
@@ -70,12 +70,20 @@ public class CECConfigurator {
 		
 	}
 	
+	public boolean isPathForAMeetingSystemFolder(String path){
+		if ( systemSettings.get("meetings").equals(path) ){
+			return true;
+		}
+		return false;
+	}
+	
 	private void mapDefaultSystemFolders() {
 		systemSettings.put("emails", "emails");
 		systemSettings.put("Inbox", "emails/Inbox");
 		systemSettings.put("Drafts", "emails/Drafts");
 		systemSettings.put("Outbox", "emails/Outbox");
 		systemSettings.put("Sent", "emails/Sent");
+		systemSettings.put("meetings", "meetings");
 	}
 	
 	private void mapDefaultDateFormat() {
