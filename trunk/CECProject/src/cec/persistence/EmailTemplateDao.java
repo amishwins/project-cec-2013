@@ -1,6 +1,9 @@
 package cec.persistence;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * The Interface EmailTemplateDao exposes the lower level methods to
