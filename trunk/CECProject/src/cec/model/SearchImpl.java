@@ -5,11 +5,15 @@ import java.util.regex.Matcher;
 
 /**
  * SearchImpl is the concrete implementation of the Search interface.
- * It has the methods to search for a specific text inside a given text.
+ * It has the methods to search for a specific string inside another given string.
  * 
  * It considers only letters from A-Z, numbers and the character "@".
  * It checks every word separately and return true if at least one matches.
  * Special characters are removed and words concatenated with them are treated separately.
+ * 
+ * @param  source
+ * @param  patternToFind  
+ * @return boolean returns true if the string source contains the string patternToFind 
  * 
  */
 
@@ -18,6 +22,7 @@ public class SearchImpl implements Search {
 	String source;
 	String patternToFind;
 	
+	/** Constructor, fill the local variables an convert both strings to uppercase */
 	public SearchImpl(String source, String patternToFind)
 	{		
 		
@@ -25,7 +30,7 @@ public class SearchImpl implements Search {
 		this.source=modifiedString(source.trim().toUpperCase());	
 	}
 	
-	
+	/** Find and removes special characters */
 	private String modifiedString(String originalString)
 	{
 		String modifiedString=originalString;	
@@ -39,7 +44,7 @@ public class SearchImpl implements Search {
 		return modifiedString;			
 	}
 		
-	
+	/** Return true if both strings match*/	
 	public boolean isMatch()
 	{		
 		if(patternToFind.isEmpty())
