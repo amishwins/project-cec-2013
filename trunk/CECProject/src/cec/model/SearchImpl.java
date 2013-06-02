@@ -3,7 +3,15 @@ package cec.model;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-import javax.swing.JOptionPane;
+/**
+ * SearchImpl is the concrete implementation of the Search interface.
+ * It has the methods to search for a specific text inside a given text.
+ * 
+ * It considers only letters from A-Z, numbers and the character "@".
+ * It checks every word separately and return true if at least one matches.
+ * Special characters are removed and words concatenated with them are treated separately.
+ * 
+ */
 
 public class SearchImpl implements Search {
 
@@ -20,22 +28,17 @@ public class SearchImpl implements Search {
 	
 	private String modifiedString(String originalString)
 	{
-		String modifiedString=originalString;
-		
-		//String toRemove="[[^A-Z]&&[^0-9]&&[^@]&&[^-]&&[^_]&&\\^p{Punct}]";
+		String modifiedString=originalString;	
 		String toRemove="[[^A-Z]&&[^0-9]&&[^@]]";
 		Pattern pattern = Pattern.compile(toRemove);
 		Matcher matcher = pattern.matcher(originalString);		
 		
-		
 		if(matcher.find())	
 			modifiedString=matcher.replaceAll(" ");	
 	
-		return modifiedString;	
-		
+		return modifiedString;			
 	}
-	
-	
+		
 	
 	public boolean isMatch()
 	{		
@@ -51,8 +54,7 @@ public class SearchImpl implements Search {
 				Matcher matcher = pattern.matcher(source);
 				
 				if(matcher.find())
-					return true;
-				
+					return true;				
 			}			
 		}		
 		return false;			
