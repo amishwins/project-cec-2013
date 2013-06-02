@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import cec.service.PlaceholderHelper;
 
-public class PlaceholderHelperTest {
+public class PlaceholderHelperTests {
 	
 	PlaceholderHelper phh;
 	String text;
@@ -22,6 +22,7 @@ public class PlaceholderHelperTest {
 	public void setUp() throws Exception {
 		text = "Hi ${friend} ${feeling}. ";
 		phh = new PlaceholderHelper(text);
+		phh.findNext();
 	}
 
 	@After
@@ -50,7 +51,7 @@ public class PlaceholderHelperTest {
 		Map<Integer,Integer> results = phh.positionsOfAllPlaceHolders();
 		
 		for(Map.Entry<Integer, Integer> entry: results.entrySet()) {
-			System.out.println(entry.getKey() + " " + entry.getValue());
+			assertNotNull(entry);
 		}
 	}
 }
