@@ -81,6 +81,7 @@ public class EmailFrame extends JFrame implements DocumentListener {
 	JMenuItem draftItem = new JMenuItem("Save as Draft", KeyEvent.VK_D);
 	JMenuItem sendItem = new JMenuItem("Send", KeyEvent.VK_S);
 	JMenuItem saveTemplateItem = new JMenuItem("Save Template", KeyEvent.VK_T);
+	JMenuItem overwriteTemplateItem = new JMenuItem("Overwrite Template", KeyEvent.VK_T);
 	JMenuItem exitItem = new JMenuItem("Exit");
 
 	EmailViewEntity emailView;
@@ -213,33 +214,52 @@ public class EmailFrame extends JFrame implements DocumentListener {
 		fileMenuBarEntry.setMnemonic('F');
 		menuBar.add(fileMenuBarEntry);
 
-		sendItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
-				InputEvent.CTRL_DOWN_MASK));
+		sendItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 		fileMenuBarEntry.add(sendItem);
-		draftItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D,
-				InputEvent.CTRL_DOWN_MASK));
+
+		draftItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK));
 		fileMenuBarEntry.add(draftItem);
-		replyItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R,
-				InputEvent.CTRL_DOWN_MASK));
+		
+		replyItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK));
 		fileMenuBarEntry.add(replyItem);
-		forwardItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F,
-				InputEvent.CTRL_DOWN_MASK));
+		
+		forwardItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK));
 		fileMenuBarEntry.add(forwardItem);
+		
+		saveTemplateItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_J, InputEvent.CTRL_DOWN_MASK));
+		fileMenuBarEntry.add(saveTemplateItem);
+		
+		overwriteTemplateItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_J, InputEvent.CTRL_DOWN_MASK));
+		fileMenuBarEntry.add(overwriteTemplateItem);
+
+
 		exitItem.setAccelerator(KeyStroke.getKeyStroke("ESCAPE"));
-
 		fileMenuBarEntry.add(exitItem);
-
+			
 		sendItem.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				sendEmail();
 			}
 		});
+
 		draftItem.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				draftEmail();
 			}
 		});
+		
+		saveTemplateItem.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				saveTemplate();
+			}
+		});
 
+		overwriteTemplateItem.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				overwriteTemplate();
+			}
+		});
+		
 		exitItem.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				ExitMessage();
@@ -296,12 +316,11 @@ public class EmailFrame extends JFrame implements DocumentListener {
 				saveTemplate();
 			}
 		});
-		overwriteTemplate
-				.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent evt) {
-						overwriteTemplate();
-					}
-				});
+		overwriteTemplate.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				overwriteTemplate();
+			}
+		});
 
 		add(bar, BorderLayout.NORTH);
 	}
@@ -435,25 +454,44 @@ public class EmailFrame extends JFrame implements DocumentListener {
 		this.subjectField.setText(templateView.getSubject());
 		this.bodyField.setText(templateView.getBody());
 	}
+	
+	private void hideAllButtonsAndMenuItems() {
+		reply.setVisible(false);
+		forward.setVisible(false);
+		send.setVisible(false);
+		draft.setVisible(false);
+		saveTemplate.setVisible(false);
+		overwriteTemplate.setVisible(false);
+
+		sendItem.setVisible(false);
+		draftItem.setVisible(false);
+		replyItem.setVisible(false);
+		forwardItem.setVisible(false);
+		saveTemplateItem.setVisible(false);
+		overwriteTemplateItem.setVisible(false);
+
+		toField.setEditable(true);
+		ccField.setEditable(true);
+		subjectField.setEditable(true);
+		bodyField.setEditable(true);
+		
+		reply.setEnabled(false);
+		forward.setEnabled(false);
+		replyItem.setEnabled(false);
+		forwardItem.setEnabled(false);
+	}
 
 	private void setVisibilityOfButtonsAndMenuItemsForExistingEmail() {
+		hideAllButtonsAndMenuItems();
 
 		subjectField.setDocument(new EntryFieldMaxLength(max_Length));
 
 		// Draft Email
-		if (emailView.getFolder().equals(
-				CECConfigurator.getReference().get("Drafts"))) {
-
-			reply.setVisible(false);
-			forward.setVisible(false);
-
+		if (emailView.getFolder().equals(CECConfigurator.getReference().get("Drafts"))) {
 			send.setVisible(true);
 			draft.setVisible(true);
-
 			sendItem.setVisible(true);
 			draftItem.setVisible(true);
-			replyItem.setVisible(false);
-			forwardItem.setVisible(false);
 
 			toField.setEditable(true);
 			ccField.setEditable(true);
@@ -461,84 +499,41 @@ public class EmailFrame extends JFrame implements DocumentListener {
 			bodyField.setEditable(true);
 
 		} else {
-
 			reply.setVisible(true);
-			reply.setEnabled(false);
 			forward.setVisible(true);
-			forward.setEnabled(false);
-
 			replyItem.setVisible(true);
-			replyItem.setEnabled(false);
 			forwardItem.setVisible(true);
-			forwardItem.setEnabled(false);
-
-			send.setVisible(false);
-			draft.setVisible(false);
-
-			sendItem.setVisible(false);
-			draftItem.setVisible(false);
-
 			toField.setEditable(false);
 			ccField.setEditable(false);
 			subjectField.setEditable(false);
 			bodyField.setEditable(false);
 		}
-		saveTemplate.setVisible(false);
-		overwriteTemplate.setVisible(false);
 	}
 
 	private void setVisibilityOfButtonsAndMenuItemsForNewEmail() {
+		hideAllButtonsAndMenuItems();
 		subjectField.setDocument(new EntryFieldMaxLength(max_Length));
-		// OPTION AVAILABLE
-		reply.setVisible(false);
-		forward.setVisible(false);
+
 		send.setVisible(true);
 		draft.setVisible(true);
-		saveTemplate.setVisible(false);
-		overwriteTemplate.setVisible(false);
-
-		// OPTION AVAILABLE IN MENU
-		replyItem.setVisible(false);
-		forwardItem.setVisible(false);
 		sendItem.setVisible(true);
 		draftItem.setVisible(true);
-		saveTemplateItem.setVisible(false);
 	}
 
 	private void setVisibilityOfButtonsAndMenuItemsForNewTemplate() {
+		hideAllButtonsAndMenuItems();
 		subjectField.setDocument(new EntryFieldMaxLength(max_Length));
-		// OPTION AVAILABLE
-		reply.setVisible(false);
-		forward.setVisible(false);
-		send.setVisible(false);
-		draft.setVisible(false);
-		saveTemplate.setVisible(true);
-		overwriteTemplate.setVisible(false);
 
-		// OPTION AVAILABLE IN MENU
-		replyItem.setVisible(false);
-		forwardItem.setVisible(false);
-		sendItem.setVisible(false);
-		draftItem.setVisible(false);
+		saveTemplate.setVisible(true);
 		saveTemplateItem.setVisible(true);
 	}
 
 	private void setVisibilityOfButtonsAndMenuItemsForExistingTemplate() {
+		hideAllButtonsAndMenuItems();
 		subjectField.setDocument(new EntryFieldMaxLength(max_Length));
-		// OPTION AVAILABLE
-		reply.setVisible(false);
-		forward.setVisible(false);
-		send.setVisible(false);
-		draft.setVisible(false);
-		saveTemplate.setVisible(false);
-		overwriteTemplate.setVisible(true);
 
-		// OPTION AVAILABLE IN MENU
-		replyItem.setVisible(false);
-		forwardItem.setVisible(false);
-		sendItem.setVisible(false);
-		draftItem.setVisible(false);
-		saveTemplateItem.setVisible(false);
+		overwriteTemplate.setVisible(true);
+		overwriteTemplateItem.setVisible(true);
 	}
 
 	/**
