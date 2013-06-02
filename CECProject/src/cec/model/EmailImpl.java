@@ -295,7 +295,7 @@ public boolean isMatch(String pattern) {
 		entireEmail.append(space+subject);
 		entireEmail.append(space+body);
 
-		Search emailSearcher = new Search(entireEmail.toString(),pattern);	
+		SearchImpl emailSearcher = new SearchImpl(entireEmail.toString(),pattern);	
 		return emailSearcher.isMatch();
 			
 	}
