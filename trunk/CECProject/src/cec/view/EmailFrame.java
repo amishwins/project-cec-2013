@@ -70,6 +70,7 @@ public class EmailFrame extends JFrame {
 	JButton send = new JButton(" Send >>   ");
 	
 	JButton saveTemplate = new JButton(" Save Template ");
+	JButton overwriteTemplate = new JButton(" Save Template ");
 
 	JMenuItem replyItem = new JMenuItem("Reply", KeyEvent.VK_R);
 	JMenuItem forwardItem = new JMenuItem("Fwd", KeyEvent.VK_F);
@@ -103,47 +104,41 @@ public class EmailFrame extends JFrame {
 		setMessageFields();
 		initialize();
 	}
-	
-	// New Template
-	public EmailFrame(TemplateService ts) {
-		templateView = new TemplateViewEntity();
-		templateService = ts;
-		setNewTemplate();
-		initialize();
-	}
-	
-	// Apply Template
-	public EmailFrame(TemplateViewEntity templateViewEntity) {
-		this();
-		// overwrite template view
-		templateView = templateViewEntity;		
-		setTemplateFields();
-	}
-	
-	// Edit Template 
 
 	public EmailFrame(TemplateContext context) {
-		TemplateService ts = new TemplateService();
+		templateService = new TemplateService();
 		switch (context) {
 		case APPLY:
 			// get the selected template, create an email normally
-			templateView = ts.getTemplateEntity(EmailClient.getReference().getSelectedTemplateFromDialog().toString());
+			templateView = templateService.getTemplateEntity(EmailClient.getReference().getSelectedTemplateFromDialog().toString());
 			emailView = new EmailViewEntity();
 			id = UUID.randomUUID();
 			setNewMessage();
 			initialize();
-			setTemplateFields();			
+			setTemplateFields();
+			createHandlerForSpecialFields();
 			break;
 		case NEW:
+			templateView = new TemplateViewEntity();
+			setNewTemplate();
+			initialize();
 			break;
 		case EDIT:
+			templateView = templateService.getTemplateEntity(EmailClient.getReference().getSelectedTemplateFromDialog().toString());
+			setOverwriteTemplate();
+			initialize();
+			setTemplateFields();
 			break;
 		default:
-			throw new RuntimeException("Cannot handle this type of context");
-				
+			throw new RuntimeException("Cannot handle this type of context");				
 		}
 	}
 	
+	private void createHandlerForSpecialFields() {
+		
+		
+	}
+
 	/**
 	 * Default constructor of the Email Class.
 	 * <p>
@@ -235,6 +230,7 @@ public class EmailFrame extends JFrame {
 		reply.setIcon(replyIcon);
 		forward.setIcon(forwardIcon);
 		saveTemplate.setIcon(draftIcon);
+		overwriteTemplate.setIcon(draftIcon);
 
 		bar.setFloatable(false);
 		bar.add(send);
@@ -242,6 +238,7 @@ public class EmailFrame extends JFrame {
 		bar.add(reply);
 		bar.add(forward);
 		bar.add(saveTemplate);
+		bar.add(overwriteTemplate);
 
 		send.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -268,6 +265,12 @@ public class EmailFrame extends JFrame {
 				saveTemplate();
 			}
 		});		
+		overwriteTemplate.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				overwriteTemplate();
+			}
+		});		
+		
 		
 		add(bar, BorderLayout.NORTH);
 	}
@@ -331,6 +334,12 @@ public class EmailFrame extends JFrame {
 		this.dispose();
 	}
 	
+	private void overwriteTemplate() {
+		setTemplateViewFields();
+		templateService.saveTemplate(templateView);
+		this.dispose();
+	}
+	
 	// Actions - Draft
 	/**
 	 * Draft email.
@@ -369,12 +378,17 @@ public class EmailFrame extends JFrame {
 	private void buildTemplateViewObject() {
 		String name = JOptionPane.showInputDialog(null, "Enter name of template");
 		templateView.setName(name);
+		setTemplateViewFields();
+	}
+
+	private void setTemplateViewFields() {
 		templateView.setTo(toField.getText().trim());
 		templateView.setCC(ccField.getText().trim());
 		templateView.setSubject(subjectField.getText());
 		templateView.setBody(bodyField.getText());
 	}
-
+	
+	
 	private void setMessageFields() {
 		this.id = emailView.getId();
 		this.toField.setText(emailView.getTo());
@@ -451,6 +465,7 @@ public class EmailFrame extends JFrame {
 		send.setVisible(true);
 		draft.setVisible(true);
 		saveTemplate.setVisible(false);
+		overwriteTemplate.setVisible(false);
 		
 		// OPTION AVAILABLE IN MENU
 		replyItem.setVisible(false);
@@ -468,6 +483,7 @@ public class EmailFrame extends JFrame {
 		send.setVisible(false);
 		draft.setVisible(false);
 		saveTemplate.setVisible(true);
+		overwriteTemplate.setVisible(false);
 		
 		// OPTION AVAILABLE IN MENU
 		replyItem.setVisible(false);
@@ -475,6 +491,24 @@ public class EmailFrame extends JFrame {
 		sendItem.setVisible(false);
 		draftItem.setVisible(false);		
 		saveTemplateItem.setVisible(true);		
+	}
+	
+	private void setOverwriteTemplate() {
+		subjectField.setDocument(new EntryFieldMaxLength(max_Length));
+		// OPTION AVAILABLE
+		reply.setVisible(false);
+		forward.setVisible(false);
+		send.setVisible(false);
+		draft.setVisible(false);
+		saveTemplate.setVisible(false);
+		overwriteTemplate.setVisible(true);
+		
+		// OPTION AVAILABLE IN MENU
+		replyItem.setVisible(false);
+		forwardItem.setVisible(false);
+		sendItem.setVisible(false);
+		draftItem.setVisible(false);		
+		saveTemplateItem.setVisible(false);		
 	}
 	
 	

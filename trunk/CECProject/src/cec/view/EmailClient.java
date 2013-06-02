@@ -403,6 +403,12 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		}
 	}
 
+	private class MenuEditEditTemplate implements ActionListener {
+		public void actionPerformed(ActionEvent e) { 
+			new EmailFrame(TemplateContext.EDIT);
+		}
+	}
+
 	// FILE > OPEN SELECTED EMAIL
 	private class MenuFileOpenSelectedEmail implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
@@ -486,14 +492,6 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		}
 	}
 
-	// EDIT > EDIT TEMPLATE >
-	private class MenuEditEditTemplate implements ActionListener {
-		public void actionPerformed(ActionEvent e) {			
-			TemplateService ts = new TemplateService();
-			TemplateViewEntity templateViewEntity = ts.getTemplateEntity(getSelectedTemplateFromDialog().toString()); 
-			new EmailFrame(templateViewEntity);
-		}
-	}
 
 	// FOLDER TREE CONTEXT MENU (Right-Click)
 	private class FolderTreeContextMenu extends JPopupMenu {
@@ -608,18 +606,17 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		}
 	}
 
+	// FILE -> NEW EMAIL FROM TEMPLATE
 	private class MenuFileNewEmailFromTemplate implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			TemplateService ts = new TemplateService();
-			TemplateViewEntity templateViewEntity = ts.getTemplateEntity(getSelectedTemplateFromDialog().toString()); 
 			new EmailFrame(TemplateContext.APPLY);
 		}
 	}
 	
+	// FILE -> NEW TEMPLATE
 	private class MenuFileNewTemplate implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			TemplateService ts = new TemplateService();
-			new EmailFrame(ts);
+			new EmailFrame(TemplateContext.NEW);
 		}
 	}
 	
@@ -641,7 +638,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 
 		int messageType = JOptionPane.QUESTION_MESSAGE;
 		Object mov = JOptionPane.showInputDialog(null,
-				"Select the template to edit", "Edit Template",
+				"Select the template", "Choose Template",
 				messageType, null, selValues, null);
 
 		return mov;
