@@ -42,6 +42,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
+import cec.config.CECConfigurator;
 import cec.service.FolderService;
 import cec.service.EmailService;
 import cec.service.MeetingService;
@@ -77,8 +78,8 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	private static final long serialVersionUID = 7366789547512037235L;
 
 	JTree folders;
-	JTable emailTable = new JTable();
-	JTextArea emailBody;
+	JTable emailOrMeetingTable = new JTable();
+	JTextArea emailOrMeetingBody;
 
 	FolderService folderService = new FolderService();
 	EmailService emailService = new EmailService();
@@ -114,18 +115,34 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	public void updateEmailTable() {
 		String[] emailTableViewColumns = { "From", "Subject", "Date" };
 		Iterable<EmailViewEntity> emailsInEachFolder = folderService.loadEmails(lastSelectedFolder);
-		emailTable.setModel(new EmailListViewData(emailTableViewColumns, emailsInEachFolder));	
-		defineEmailTableLayout();
+		emailOrMeetingTable.setModel(new EmailListViewData(emailTableViewColumns, emailsInEachFolder));	
+		defineEmailsOrMeetingsTableLayout();
 	}
 	
-	private void setSelectedEntity(EmailViewEntity emailViewEntity) {
+	public void updateMeetingsTable() {
+		String[] meetingsTableViewColumns = { "From", "Subject", "Date" };
+		Iterable<MeetingViewEntity> meetingsInEachFolder = folderService.loadMeetings(lastSelectedFolder);
+		emailOrMeetingTable.setModel(new MeetingListViewData(meetingsTableViewColumns, meetingsInEachFolder));	
+		defineEmailsOrMeetingsTableLayout();
+	}
+	
+	private void setSelectedEmailEntity(EmailViewEntity emailViewEntity) {
 		selectedEmailEntity = emailViewEntity;
 	}
 	
-	private EmailViewEntity getSelectedEntity() {
+	private EmailViewEntity getSelectedEmailEntity() {
 		return selectedEmailEntity; 
 	}
 
+	private void setSelectedMeetingEntity(MeetingViewEntity meetingViewEntity) {
+		selectedMeetingViewEntity = meetingViewEntity;
+	}
+	
+	private MeetingViewEntity getSelectedMeetingEntity() {
+		return selectedMeetingViewEntity; 
+	}
+	
+	
 	private EmailClient(String title) {
 		super(title);
 		initialize();
@@ -191,12 +208,12 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		JPanel rightPanel = new JPanel();
 		rightPanel.setLayout(new BorderLayout());
 
-		emailTable.setFillsViewportHeight(true);
-		emailTable.getSelectionModel().addListSelectionListener(new RowListener());
-		emailTable.addMouseListener(new EmailTableMouseListener());
-		emailTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		emailOrMeetingTable.setFillsViewportHeight(true);
+		emailOrMeetingTable.getSelectionModel().addListSelectionListener(new RowListener());
+		emailOrMeetingTable.addMouseListener(new EmailTableMouseListener());
+		emailOrMeetingTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		JScrollPane rightPanelChildTop = new JScrollPane(emailTable,
+		JScrollPane rightPanelChildTop = new JScrollPane(emailOrMeetingTable,
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
@@ -204,9 +221,9 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		rightPanelChildTop.setMinimumSize(new Dimension(550, 200));
 		rightPanelChildTop.setPreferredSize(new Dimension(550, 200));
 
-		emailBody = new JTextArea(10, 10);
-		emailBody.setEditable(false);
-		JScrollPane rightPanelChildBottom = new JScrollPane(emailBody);
+		emailOrMeetingBody = new JTextArea(10, 10);
+		emailOrMeetingBody.setEditable(false);
+		JScrollPane rightPanelChildBottom = new JScrollPane(emailOrMeetingBody);
 		rightPanelChildBottom.setLayout(new ScrollPaneLayout());
 
 		rightPanel.add(rightPanelChildTop, BorderLayout.BEFORE_FIRST_LINE);
@@ -331,10 +348,10 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		editTemplate.addActionListener(new MenuEditEditTemplate());
 	}
 	
-	private void defineEmailTableLayout() {
-		emailTable.getColumnModel().getColumn(0).setPreferredWidth(100);		
-		emailTable.getColumnModel().getColumn(1).setPreferredWidth(300);
-		emailTable.getColumnModel().getColumn(2).setPreferredWidth(100);		
+	private void defineEmailsOrMeetingsTableLayout() {
+		emailOrMeetingTable.getColumnModel().getColumn(0).setPreferredWidth(100);		
+		emailOrMeetingTable.getColumnModel().getColumn(1).setPreferredWidth(300);
+		emailOrMeetingTable.getColumnModel().getColumn(2).setPreferredWidth(100);		
 	}	
 
 	
@@ -363,8 +380,17 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		sb.deleteCharAt(sb.length() - 1);
 		lastSelectedFolder = sb.toString();
 		
-		updateEmailTable();
-		setSelectedEntity(null);
+		selectEmailsOrMeetings();
+		
+		setSelectedEmailEntity(null);
+	}
+	
+	public void selectEmailsOrMeetings(){
+		if(lastSelectedFolder.equals(CECConfigurator.getReference().get("meetings"))){
+			updateMeetingsTable();
+		}else{
+			updateEmailTable();
+		}
 	}
 
 	// EMAIL TABLE MAIN LISTENER
@@ -374,8 +400,16 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 				return;
 			}
 			
-			setSelectedEntity(((EmailListViewData) (emailTable.getModel())).getViewEntityAtIndex(emailTable.getSelectedRow()));
-			emailBody.setText(getSelectedEntity().getBody());
+			if(emailOrMeetingTable.getModel() instanceof MeetingListViewData){
+				setSelectedMeetingEntity(((MeetingListViewData) (emailOrMeetingTable.getModel())).getViewEntityAtIndex(emailOrMeetingTable.getSelectedRow()));
+				emailOrMeetingBody.setText(getSelectedMeetingEntity().getBody());
+			} else{
+				setSelectedEmailEntity(((EmailListViewData) (emailOrMeetingTable.getModel())).getViewEntityAtIndex(emailOrMeetingTable.getSelectedRow()));
+				emailOrMeetingBody.setText(getSelectedEmailEntity().getBody());
+				
+			}
+			
+			
 		}
 	}
 
@@ -422,7 +456,8 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	// FILE > OPEN SELECTED EMAIL
 	private class MenuFileOpenSelectedEmail implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if (getSelectedEntity() == null) { 
+			
+			if (getSelectedEmailEntity() == null) { 
 				JOptionPane.showMessageDialog(null,	"Select an email to display");
 			}
 			else {
@@ -435,7 +470,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	private class MenuEditMoveEmail implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 
-			if (getSelectedEntity() == null) {
+			if (getSelectedEmailEntity() == null) {
 				JOptionPane.showMessageDialog(null, "Select an email first");
 			} else {
 
@@ -456,9 +491,9 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 				if (mov != null) {
 					
 					try {
-						emailService.move(getSelectedEntity(), mov.toString());
+						emailService.move(getSelectedEmailEntity(), mov.toString());
 						updateEmailTable();
-						setSelectedEntity(null);
+						setSelectedEmailEntity(null);
 					}
 					catch (SourceAndDestinationFoldersAreSameException ex) {
 						
@@ -472,13 +507,13 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	private class MenuEditDeleteEmail implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 
-			if (getSelectedEntity() == null)
+			if (getSelectedEmailEntity() == null)
 				JOptionPane.showMessageDialog(null, "Select Email First");
 
-			if (getSelectedEntity() != null) {
-				emailService.delete(getSelectedEntity());
+			if (getSelectedEmailEntity() != null) {
+				emailService.delete(getSelectedEmailEntity());
 				updateEmailTable();
-				setSelectedEntity(null);
+				setSelectedEmailEntity(null);
 			}
 		}
 	}
@@ -581,10 +616,10 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 
 		public void mousePressed(MouseEvent e) {
 
-			selRow = emailTable.rowAtPoint(e.getPoint());
+			selRow = emailOrMeetingTable.rowAtPoint(e.getPoint());
 
 			if (selRow != -1) {
-				emailTable.setRowSelectionInterval(selRow, selRow);
+				emailOrMeetingTable.setRowSelectionInterval(selRow, selRow);
 				if (e.isPopupTrigger())
 					Popup(e);
 			}
@@ -592,7 +627,12 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 
 		public void mouseClicked(MouseEvent e) {
 			if ((e.getClickCount() == 2) && (selRow != -1)) {
-				new EmailFrame(selectedEmailEntity);
+				if(emailOrMeetingTable.getModel() instanceof MeetingListViewData){
+					new MeetingFrame(selectedMeetingViewEntity);
+				}else{
+					new EmailFrame(selectedEmailEntity);
+				}
+				
 			}
 		}
 
@@ -644,8 +684,8 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	private void updateEmailTableFound(String toFind) {
 		String[] emailTableViewColumns = { "From", "Subject", "Date" };			
 		Iterable<EmailViewEntity> emailsFoundInFolder=folderService.searchEmails(toFind);		
-		emailTable.setModel(new EmailListViewData(emailTableViewColumns, emailsFoundInFolder));			
-		defineEmailTableLayout();
+		emailOrMeetingTable.setModel(new EmailListViewData(emailTableViewColumns, emailsFoundInFolder));			
+		defineEmailsOrMeetingsTableLayout();
 	}
 	
 	public Object getSelectedTemplateFromDialog() {
