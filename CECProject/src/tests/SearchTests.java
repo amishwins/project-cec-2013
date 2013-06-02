@@ -260,6 +260,15 @@ public class SearchTests {
 		assertTrue(searchObj.isMatch());
 	}	
 
+	//Text with @ symbol that doesn't match
+	@Test 
+	public void searchTextWithAtNotMatch() {
+		this.source = "Hi dear, send the reports to mary@f1.com ";
+		this.searchFor = "mari@f1";
+		Search searchObj = new SearchImpl(source, searchFor);
+		assertFalse(searchObj.isMatch());
+	}	
+
 	//Only @symbol
 	@Test 
 	public void searchAt() {
