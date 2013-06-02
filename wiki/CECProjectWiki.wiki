@@ -7,9 +7,9 @@
 === Search ===
 
 CEC Application will not perform the search, ignoring user command, in the following cases:
--Term searched is empty
--              contains only spaces
--              contains only special characters
+ * Term searched is empty
+ * contains only spaces
+ * contains only special characters
 
 "@" symbol is not considered as a special character
 
