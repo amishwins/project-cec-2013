@@ -69,9 +69,8 @@ public class EmailFrame extends JFrame {
 	JButton forward = new JButton(" Forward ");
 	JButton draft = new JButton("Save as Draft ");
 	JButton send = new JButton(" Send >>   ");
-
 	JButton saveTemplate = new JButton(" Save Template ");
-	JButton overwriteTemplate = new JButton(" Save Template ");
+	JButton overwriteTemplate = new JButton(" Overwrite Template ");
 
 	JMenuItem replyItem = new JMenuItem("Reply", KeyEvent.VK_R);
 	JMenuItem forwardItem = new JMenuItem("Fwd", KeyEvent.VK_F);
@@ -104,7 +103,7 @@ public class EmailFrame extends JFrame {
 	 */
 	public EmailFrame(EmailViewEntity email) {
 		emailView = email;
-		setExistingMessage();
+		setVisibilityOfButtonsAndMenuItemsForExistingEmail();
 		setMessageFields();
 		initialize();
 	}
@@ -118,20 +117,20 @@ public class EmailFrame extends JFrame {
 					.getReference().getSelectedTemplateFromDialog().toString());
 			emailView = new EmailViewEntity();
 			id = UUID.randomUUID();
-			setNewMessage();
+			setVisibilityOfButtonsAndMenuItemsForNewEmail();
 			initialize();
 			setTemplateFields();
 			createHandlerForSpecialFields();
 			break;
 		case NEW:
 			templateView = new TemplateViewEntity();
-			setNewTemplate();
+			setVisibilityOfButtonsAndMenuItemsForNewTemplate();
 			initialize();
 			break;
 		case EDIT:
 			templateView = templateService.getTemplateEntity(EmailClient
 					.getReference().getSelectedTemplateFromDialog().toString());
-			setOverwriteTemplate();
+			setVisibilityOfButtonsAndMenuItemsForExistingTemplate();
 			initialize();
 			setTemplateFields();
 			break;
@@ -188,7 +187,7 @@ public class EmailFrame extends JFrame {
 	public EmailFrame() {
 		emailView = new EmailViewEntity();
 		id = UUID.randomUUID();
-		setNewMessage();
+		setVisibilityOfButtonsAndMenuItemsForNewEmail();
 		initialize();
 	}
 
@@ -344,7 +343,7 @@ public class EmailFrame extends JFrame {
 	 * Edits the existing message.
 	 */
 	private void editExistingMessage() {
-		setNewMessage();
+		setVisibilityOfButtonsAndMenuItemsForNewEmail();
 		String auxSubject = subjectField.getText();
 		subjectField.setText(auxSubject);
 	}
@@ -439,7 +438,7 @@ public class EmailFrame extends JFrame {
 		this.bodyField.setText(templateView.getBody());
 	}
 
-	private void setExistingMessage() {
+	private void setVisibilityOfButtonsAndMenuItemsForExistingEmail() {
 
 		subjectField.setDocument(new EntryFieldMaxLength(max_Length));
 
@@ -489,7 +488,7 @@ public class EmailFrame extends JFrame {
 		saveTemplate.setVisible(false);
 	}
 
-	private void setNewMessage() {
+	private void setVisibilityOfButtonsAndMenuItemsForNewEmail() {
 		subjectField.setDocument(new EntryFieldMaxLength(max_Length));
 		// OPTION AVAILABLE
 		reply.setVisible(false);
@@ -507,7 +506,7 @@ public class EmailFrame extends JFrame {
 		saveTemplateItem.setVisible(false);
 	}
 
-	private void setNewTemplate() {
+	private void setVisibilityOfButtonsAndMenuItemsForNewTemplate() {
 		subjectField.setDocument(new EntryFieldMaxLength(max_Length));
 		// OPTION AVAILABLE
 		reply.setVisible(false);
@@ -525,7 +524,7 @@ public class EmailFrame extends JFrame {
 		saveTemplateItem.setVisible(true);
 	}
 
-	private void setOverwriteTemplate() {
+	private void setVisibilityOfButtonsAndMenuItemsForExistingTemplate() {
 		subjectField.setDocument(new EntryFieldMaxLength(max_Length));
 		// OPTION AVAILABLE
 		reply.setVisible(false);

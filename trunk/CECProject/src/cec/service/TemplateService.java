@@ -8,7 +8,6 @@ import cec.view.TemplateViewEntity;
 public class TemplateService {
 	
 	public void saveTemplate(TemplateViewEntity templateInView) {
-		// TODO: how to get the name? 
 		Template newTemplate = new TemplateImpl(templateInView.getName(), templateInView.getTo(), 
 				templateInView.getCC(), templateInView.getSubject(), templateInView.getBody());
 		newTemplate.save();
