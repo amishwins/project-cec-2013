@@ -44,6 +44,7 @@ import javax.swing.tree.TreePath;
 
 import cec.service.FolderService;
 import cec.service.EmailService;
+import cec.service.MeetingService;
 import cec.service.TemplateService;
 import cec.service.TreeModelBuilder;
 import exceptions.CannotDeleteSystemFolderException;
@@ -82,8 +83,10 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	FolderService folderService = new FolderService();
 	EmailService emailService = new EmailService();
 	TemplateService templateService = new TemplateService();
+	MeetingService meetingService = new MeetingService();
 
 	EmailViewEntity selectedEmailEntity;
+	MeetingViewEntity selectedMeetingViewEntity;
 	String lastSelectedFolder;
 	JTextField searchField = new JTextField(null, 22);
 
@@ -256,19 +259,25 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		JMenuItem newEmail = new JMenuItem("New Email", KeyEvent.VK_N);
 		newEmail.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
 		fileMenuBarEntry.add(newEmail);
-
+				
 		JMenuItem newEmailFromTemplate = new JMenuItem("New Email From Template", KeyEvent.VK_C);
 		newEmailFromTemplate.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
 		fileMenuBarEntry.add(newEmailFromTemplate);
+		fileMenuBarEntry.addSeparator();
+		
+		JMenuItem newMeeting = new JMenuItem("New Meeting", KeyEvent.VK_A);
+		newMeeting.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK));
+		fileMenuBarEntry.add(newMeeting);
+		fileMenuBarEntry.addSeparator();
 		
 		JMenuItem newTemplate = new JMenuItem("New Template", KeyEvent.VK_T);
 		newTemplate.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_DOWN_MASK));
 		fileMenuBarEntry.add(newTemplate);
+		fileMenuBarEntry.addSeparator();
 		
 		JMenuItem newSubfolder = new JMenuItem("New Sub-folder", KeyEvent.VK_F);
 		newSubfolder.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK));
 		fileMenuBarEntry.add(newSubfolder);
-
 		fileMenuBarEntry.addSeparator();
 
 		JMenuItem openSelectedEmail = new JMenuItem("Open Email", KeyEvent.VK_O);
@@ -283,6 +292,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		// Add all the action listeners for the File menu
 		newEmail.addActionListener(new MenuFileNewEmail());
 		newEmailFromTemplate.addActionListener(new MenuFileNewEmailFromTemplate());
+		newMeeting.addActionListener(new MenuFileNewMeeting());
 		newTemplate.addActionListener(new MenuFileNewTemplate());
 		newSubfolder.addActionListener(new MenuFileNewSubFolder());
 		openSelectedEmail.addActionListener(new MenuFileOpenSelectedEmail());
@@ -613,7 +623,12 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		}
 	}
 	
-	// FILE -> NEW TEMPLATE
+	private class MenuFileNewMeeting implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			new MeetingFrame();
+		}
+	}
+	
 	private class MenuFileNewTemplate implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			new EmailFrame(TemplateContext.NEW);
