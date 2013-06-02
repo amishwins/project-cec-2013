@@ -162,10 +162,10 @@ public class EmailFrame extends JFrame implements DocumentListener {
 		subjectIm.put(KeyStroke.getKeyStroke("ENTER"), "GoToNextPlaceHolder");
 		subjectAm.put("GoToNextPlaceHolder", new CommitAction(subjectField));		
 		
-		InputMap im = bodyField.getInputMap();
-		ActionMap am = bodyField.getActionMap();
-		im.put(KeyStroke.getKeyStroke("TAB"), "GoToNextPlaceHolder");
-		am.put("GoToNextPlaceHolder", new CommitAction(bodyField));	
+		InputMap bodyIm = bodyField.getInputMap();
+		ActionMap bodyAm = bodyField.getActionMap();
+		bodyIm.put(KeyStroke.getKeyStroke("TAB"), "GoToNextPlaceHolder");
+		bodyAm.put("GoToNextPlaceHolder", new CommitAction(bodyField));	
 	}
 
 	/**
@@ -578,7 +578,6 @@ public class EmailFrame extends JFrame implements DocumentListener {
 
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-		// if changes are made, then I guess we should reset the placeholderhelper?
 		
 	}
 
@@ -597,12 +596,17 @@ public class EmailFrame extends JFrame implements DocumentListener {
 		public CommitAction(JTextComponent field) {
 			this.field = field;
 			this.field.select(0,0);
+			execute();
 		}
 
 		public void actionPerformed(ActionEvent ev) {
 			// Design decision: always only select the FIRST placeholder. This 
 			// is to circumvent the issue of how to reset the placeholderhelper if
 			// the user types something.
+			execute();
+		}
+		
+		private void execute() {
 			ph = new PlaceholderHelper(field.getText());
 			if (ph.findNext()) {
 				field.select(ph.getStartPositionOfNextMatch(),
