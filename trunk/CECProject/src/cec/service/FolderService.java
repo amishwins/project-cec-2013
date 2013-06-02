@@ -57,11 +57,10 @@ public class FolderService {
 		return emailListInView;
 	}
 	/** Load all emails from a Inbox folder */
-	public Iterable<EmailViewEntity> searchEmails(String toFind){
+	public Iterable<EmailViewEntity> searchEmails(String searchString){
 		List<EmailViewEntity> emailListInView = new ArrayList<EmailViewEntity>();
-		//folder = FolderFactory.getFolder(folderPath);
-		folder = FolderFactory.getFolder(CECConfigurator.getReference().get("Inbox"));
-		Iterable<Email> emailListInModel = folder.searchEmails(toFind);
+		folder = FolderFactory.getFolder(CECConfigurator.getReference().get("Sent"));
+		Iterable<Email> emailListInModel = folder.searchEmails(searchString,folder);
 		for(Email emailInModel: emailListInModel){
 			EmailViewEntity emailInView = new EmailViewEntity();
 			emailInView.setId(emailInModel.getId());

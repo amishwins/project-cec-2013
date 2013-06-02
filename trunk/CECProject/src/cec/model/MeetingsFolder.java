@@ -61,7 +61,7 @@ public class MeetingsFolder extends Folder {
 		throw new UnsupportedOperationException();
 	}
 	@Override
-	public Iterable<Email> searchEmails(String toFind) {
+	public Iterable<Email> searchEmails(String searchString, Folder folderToSearchIn) {
 		throw new UnsupportedOperationException();
 	}
 	
