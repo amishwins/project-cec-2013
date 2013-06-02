@@ -236,7 +236,7 @@ public class SearchTests {
 	//Special Chars with Text concatenated, words treated separately
 	@Test 
 	public void searchSpecialCharsWithText() {
-		this.source = "Hi dear, a+b=c ";
+		this.source = "Hi mom, a+b=c ";
 		this.searchFor = "c+a";
 		Search searchObj = new SearchImpl(source, searchFor);
 		assertTrue(searchObj.isMatch());
