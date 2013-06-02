@@ -6,6 +6,7 @@
 === Phase 2 ===
   * When changing meeting by adding/removing attendees, how should we handle the removed attendees?
   * Can we cancel a meeting completely?
+  * Currently using 2 separate strategies for the placeholders and tab behavior. One strategy for To, CC, and Subject, and a more complex one for the Body. Is this okay?
   * Clean up Email Client and Email Frame
 
 === Phase 1 ===
