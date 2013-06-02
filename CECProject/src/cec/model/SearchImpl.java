@@ -12,16 +12,9 @@ public class SearchImpl implements Search {
 	
 	public SearchImpl(String source, String patternToFind)
 	{		
-		//source = "Email Content - This is the content of an email";
-		//patternToFind = "This.+?content";
-		
 		
 		this.patternToFind=modifiedString(patternToFind.trim().toUpperCase());
-		this.source=modifiedString(source.trim().toUpperCase());
-		
-		//this.patternToFind ="{";
-		//this.patternToFind = patternToFind.trim().toUpperCase();
-		//this.source = source.trim().toUpperCase();
+		this.source=modifiedString(source.trim().toUpperCase());	
 	}
 	
 	
@@ -30,7 +23,7 @@ public class SearchImpl implements Search {
 		String modifiedString=originalString;
 		
 		//String toRemove="[[^A-Z]&&[^0-9]&&[^@]&&[^-]&&[^_]&&\\^p{Punct}]";
-		String toRemove="[[^A-Z]&&[^0-9]&&[^@]&&[^-]&&[^_]]";
+		String toRemove="[[^A-Z]&&[^0-9]&&[^@]]";
 		Pattern pattern = Pattern.compile(toRemove);
 		Matcher matcher = pattern.matcher(originalString);		
 		
@@ -52,32 +45,18 @@ public class SearchImpl implements Search {
 		String[] patternArrayToFind = patternToFind.split(" ");
 		for(String eachpattern:patternArrayToFind) 
 		{
-			//JOptionPane.showMessageDialog(null,	eachpattern);
 			if(!eachpattern.trim().isEmpty())
 			{
-				/*JOptionPane.showMessageDialog(null,	"pattern "+eachpattern);
-				JOptionPane.showMessageDialog(null,	"source "+source);*/
-				Pattern pattern = Pattern.compile(eachpattern);
-				
-				//JOptionPane.showMessageDialog(null,	"patterncompiled "+pattern);
+				Pattern pattern = Pattern.compile(eachpattern);				
 				Matcher matcher = pattern.matcher(source);
 				
-				//JOptionPane.showMessageDialog(null,	"matcher "+matcher);
 				if(matcher.find())
 					return true;
 				
 			}			
 		}
 		JOptionPane.showMessageDialog(null,	"End For ");
-		return false;
-		
-		//Pattern pattern = Pattern.compile(patternToFind);
-		//Matcher matcher = pattern.matcher(source);			
-		/*
-		if(matcher.find()==true)
-			JOptionPane.showMessageDialog(null,	"OK");
-			
-		return matcher.find();		*/
+		return false;			
 	}
 	
 }
