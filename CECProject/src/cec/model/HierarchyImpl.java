@@ -54,7 +54,8 @@ public class HierarchyImpl implements Hierarchy {
     	systemFolders.add(FolderFactory.getFolder(config.get("Inbox")));
     	systemFolders.add(FolderFactory.getFolder(config.get("Drafts")));
     	systemFolders.add(FolderFactory.getFolder(config.get("Outbox")));
-    	systemFolders.add(FolderFactory.getFolder(config.get("Sent")));   	
+    	systemFolders.add(FolderFactory.getFolder(config.get("Sent")));
+    	systemFolders.add(FolderFactory.getFolder(config.get("meetings")));
        	return systemFolders;
     }
 }
