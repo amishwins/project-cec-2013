@@ -5,6 +5,7 @@
 == Priority ==
 === Phase 2 ===
   * When changing meeting by adding/removing attendees, how should we handle the removed attendees?
+  * Can we cancel a meeting completely?
   * Clean up Email Client and Email Frame
 
 === Phase 1 ===
