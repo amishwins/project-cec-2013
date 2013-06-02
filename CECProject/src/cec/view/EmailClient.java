@@ -351,12 +351,17 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		editTemplate.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK));
 		editMenuBarEntry.add(editTemplate);
 
+		JMenuItem deleteTemplate = new JMenuItem("Delete Template", KeyEvent.VK_P);
+		deleteTemplate.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_DOWN_MASK));
+		editMenuBarEntry.add(deleteTemplate);
+		
 		// Add all the action listeners for the Edit menu
 		moveSelectedEmail.addActionListener(new MenuEditMoveEmail());
 		deleteSelectedEmail.addActionListener(new MenuEditDeleteEmail());
 		deleteSelectedMeeting.addActionListener(new MenuEditDeleteMeeting());
 		deleteSelectedFolder.addActionListener(new MenuEditDeleteFolder());
 		editTemplate.addActionListener(new MenuEditEditTemplate());
+		deleteTemplate.addActionListener(new MenuEditDeleteTemplate());
 	}
 	
 	private void defineEmailsOrMeetingsTableLayout() {
@@ -458,12 +463,6 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		}
 	}
 
-	private class MenuEditEditTemplate implements ActionListener {
-		public void actionPerformed(ActionEvent e) { 
-			new EmailFrame(TemplateContext.EDIT);
-		}
-	}
-
 	// FILE > OPEN SELECTED EMAIL
 	private class MenuFileOpenSelectedEmail implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
@@ -475,6 +474,21 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 				new EmailFrame(selectedEmailEntity);
 			}
 		}
+	}
+
+	// EDIT > EDIT TEMPLATE
+	private class MenuEditEditTemplate implements ActionListener {
+		public void actionPerformed(ActionEvent e) { 
+			new EmailFrame(TemplateContext.EDIT);
+		}
+	}
+	
+	// EDIT > DELETE TEMPLATE
+	private class MenuEditDeleteTemplate implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			 templateService.delete(getSelectedTemplateFromDialog().toString());
+		 }		
 	}
 
 	// EDIT > MOVE EMAIL >

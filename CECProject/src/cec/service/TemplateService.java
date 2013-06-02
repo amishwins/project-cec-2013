@@ -6,6 +6,7 @@ import cec.model.TemplateImpl;
 import cec.view.TemplateViewEntity;
 
 public class TemplateService {
+	private TemplateFolder tf = new TemplateFolder();
 	
 	public void saveTemplate(TemplateViewEntity templateInView) {
 		Template newTemplate = new TemplateImpl(templateInView.getName(), templateInView.getTo(), 
@@ -14,27 +15,16 @@ public class TemplateService {
 	}
 	
 	public String [] getTemplateNames() {
-		TemplateFolder tf = new TemplateFolder();
 		return tf.loadTemplateNames();
 	}
 
-	public void delete(TemplateViewEntity templateInView) {
-		Template template = convertEmailInViewToTemplateModel(templateInView);
+	public void delete(String templateName) {
+		Template template = getTemplateEntityFromName(templateName);
 		template.delete();
-	}
-	
-	public void applyTemplateToEmail(TemplateViewEntity templateInView) {
-		// take the selected template, and apply it to a new Email 
-		// need to handle all the tabbing and placeholders
-	}
-	
-	private Template convertEmailInViewToTemplateModel(TemplateViewEntity emailInView) {
-		return null;
 	}
 
 	public TemplateViewEntity getTemplateEntity(String selectedTemplate) {
-		TemplateFolder tf = new TemplateFolder();
-		Template template = tf.getTemplate(selectedTemplate);
+		Template template = getTemplateEntityFromName(selectedTemplate);
 		TemplateViewEntity templateEntity = new TemplateViewEntity();
 		templateEntity.setName(template.getName());
 		templateEntity.setTo(template.getTo());
@@ -43,4 +33,9 @@ public class TemplateService {
 		templateEntity.setBody(template.getBody());
 		return templateEntity;
 	}
+
+	protected Template getTemplateEntityFromName(String templateName) {
+		return tf.getTemplate(templateName);
+	}
+
 }
