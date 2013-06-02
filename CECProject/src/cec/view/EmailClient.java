@@ -265,8 +265,8 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		fileMenuBarEntry.add(newEmailFromTemplate);
 		fileMenuBarEntry.addSeparator();
 		
-		JMenuItem newMeeting = new JMenuItem("New Meeting", KeyEvent.VK_A);
-		newMeeting.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK));
+		JMenuItem newMeeting = new JMenuItem("New Meeting", KeyEvent.VK_M);
+		newMeeting.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_DOWN_MASK));
 		fileMenuBarEntry.add(newMeeting);
 		fileMenuBarEntry.addSeparator();
 		
