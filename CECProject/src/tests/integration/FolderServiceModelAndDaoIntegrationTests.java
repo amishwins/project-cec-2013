@@ -23,7 +23,7 @@ import exceptions.RootFolderSubfolderCreationException;
 
 public class FolderServiceModelAndDaoIntegrationTests {
 	String rootFolder = "emails";
-	String meetingSystemFolder = "meetings";
+	String meetingSystemFolder = "Meetings";
 	String inboxFolder = "Inbox";
 	String systemFolderName = "emails/Inbox";
 	String userFolder = "integrationtests";
@@ -107,7 +107,7 @@ class HelperFolderServiceModelAndDaoIntegrationTest{
 
       public void setUpTestData() {
 	  
-    	    systemFolderName = "meetings";
+    	    systemFolderName = "Meetings";
     	    
     	    meetingService = new MeetingService();
     		folderService = new FolderService();

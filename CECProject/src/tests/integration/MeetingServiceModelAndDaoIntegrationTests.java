@@ -43,7 +43,7 @@ public class MeetingServiceModelAndDaoIntegrationTests {
 	
 	@Before
 	public void setUp() throws Exception {
-		systemFolderName = "meetings";
+		systemFolderName = "Meetings";
 		meetingId = UUID.randomUUID();
 		from = CECConfigurator.getReference()
 				.getClientEmailAddress();

@@ -37,7 +37,7 @@ public class FolderTests {
 		userFolderName = "Jokes";
 		systemFolderPath = "emails/Outbox";
 		systemFolderName = "Outbox";
-		meetingFolderPath = "meetings";
+		meetingFolderPath = "Meetings";
 		
 		systemFolder = new SystemFolderCUT(systemFolderPath);
 		userFolder = new UserFolderCUT(userFolderPath);

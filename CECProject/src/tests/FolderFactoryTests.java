@@ -36,7 +36,7 @@ public class FolderFactoryTests {
 	
 	@Test
 	public void createMeetingSystemFolder() {
-		folder = FolderFactory.getFolder(CECConfigurator.getReference().get("meetings"));
+		folder = FolderFactory.getFolder(CECConfigurator.getReference().get("Meetings"));
 		assertTrue(folder.getClass().getName().equals("cec.model.MeetingsFolder"));		
 	}
 	
