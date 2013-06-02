@@ -2,14 +2,16 @@ package cec.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -23,6 +25,8 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
@@ -49,7 +53,7 @@ import cec.service.TemplateService;
  * <p>
  */
 
-public class EmailFrame extends JFrame {
+public class EmailFrame extends JFrame implements DocumentListener {
 	private static final long serialVersionUID = 6361797821203537189L;
 	private UUID id = null;
 	private EmailClient mainClient;
@@ -140,34 +144,28 @@ public class EmailFrame extends JFrame {
 	}
 
 	private void createHandlerForSpecialFields() {
+		
+		bodyField.getDocument().addDocumentListener(this);
+		
+		InputMap toIm = toField.getInputMap();
+		ActionMap toAm = toField.getActionMap();
+		toIm.put(KeyStroke.getKeyStroke("ENTER"), "GoToNextPlaceHolder");
+		toAm.put("GoToNextPlaceHolder", new CommitAction(toField));		
 
-		// extract the ${} placeholders for each one.
-		// add object and positions to linked list<object, start, end>
-		// tab will set the selection to the next one?
-
-		// how do we refresh to remove the thingy?
-
-		String toFieldText = toField.getText();
-		String ccFieldText = ccField.getText();
-		String subjectFieldText = subjectField.getText();
-		String bodyFieldText = bodyField.getText();
-
-		PlaceholderHelper ph = new PlaceholderHelper(toFieldText);
-		toField.select(ph.getStartPositionOfNextMatch(),
-				ph.getEndPositionOfNextMatch());
-
-		ph = new PlaceholderHelper(ccFieldText);
-		ccField.select(ph.getStartPositionOfNextMatch(),
-				ph.getEndPositionOfNextMatch());
-
-		ph = new PlaceholderHelper(subjectFieldText);
-		subjectField.select(ph.getStartPositionOfNextMatch(),
-				ph.getEndPositionOfNextMatch());
-
-		ph = new PlaceholderHelper(bodyFieldText);
-		bodyField.select(ph.getStartPositionOfNextMatch(),
-				ph.getEndPositionOfNextMatch());
-
+		InputMap ccIm = ccField.getInputMap();
+		ActionMap ccAm = ccField.getActionMap();
+		ccIm.put(KeyStroke.getKeyStroke("ENTER"), "GoToNextPlaceHolder");
+		ccAm.put("GoToNextPlaceHolder", new CommitAction(ccField));		
+		
+		InputMap subjectIm = subjectField.getInputMap();
+		ActionMap subjectAm = subjectField.getActionMap();
+		subjectIm.put(KeyStroke.getKeyStroke("ENTER"), "GoToNextPlaceHolder");
+		subjectAm.put("GoToNextPlaceHolder", new CommitAction(subjectField));		
+		
+		InputMap im = bodyField.getInputMap();
+		ActionMap am = bodyField.getActionMap();
+		im.put(KeyStroke.getKeyStroke("TAB"), "GoToNextPlaceHolder");
+		am.put("GoToNextPlaceHolder", new CommitAction(bodyField));	
 	}
 
 	/**
@@ -568,6 +566,50 @@ public class EmailFrame extends JFrame {
 
 			if ((getLength() + str.length()) <= maxlength) {
 				super.insertString(offs, str, a);
+			}
+		}
+	}
+
+	@Override
+	public void changedUpdate(DocumentEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void insertUpdate(DocumentEvent e) {
+		// if changes are made, then I guess we should reset the placeholderhelper?
+		
+	}
+
+	@Override
+	public void removeUpdate(DocumentEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	private class CommitAction extends AbstractAction {
+		PlaceholderHelper ph;
+		JTextComponent field;
+
+		private static final long serialVersionUID = 1L;		
+
+		public CommitAction(JTextComponent field) {
+			this.field = field;
+			this.field.select(0,0);
+		}
+
+		public void actionPerformed(ActionEvent ev) {
+			// Design decision: always only select the FIRST placeholder. This 
+			// is to circumvent the issue of how to reset the placeholderhelper if
+			// the user types something.
+			ph = new PlaceholderHelper(field.getText());
+			if (ph.findNext()) {
+				field.select(ph.getStartPositionOfNextMatch(),
+						ph.getEndPositionOfNextMatch());
+			}
+			else {
+				ph.reset();
 			}
 		}
 	}

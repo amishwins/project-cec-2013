@@ -14,7 +14,6 @@ public class PlaceholderHelper {
 	public PlaceholderHelper(String text) {
 		placeHolderRegex = Pattern.compile("\\$\\{.*?\\}");	
 		placeHolderMatcher = placeHolderRegex.matcher(text);
-		placeHolderMatcher.find();
 	}
 	
 	public Map<Integer, Integer> positionsOfAllPlaceHolders() {
@@ -28,15 +27,32 @@ public class PlaceholderHelper {
 	}
 
 	public Integer getStartPositionOfNextMatch() {
-		return placeHolderMatcher.start();
+		Integer startPosition;
+		try {
+			startPosition = placeHolderMatcher.start();
+		} catch (IllegalStateException e) {
+			startPosition = -1;
+		}
+		return startPosition;
 	}
 	
 	public Integer getEndPositionOfNextMatch() {
-		return placeHolderMatcher.end();
+		Integer endPosition;
+		try {
+			return placeHolderMatcher.end();
+		} catch (IllegalStateException e) {
+			endPosition = -1;
+		}
+		return endPosition;
 	}
 	
-	public void findNext() {
-		placeHolderMatcher.find();
+	public boolean findNext() {
+		return placeHolderMatcher.find();
+	}
+
+	public void reset() {
+		placeHolderMatcher.reset();
+		
 	}
 	
 }

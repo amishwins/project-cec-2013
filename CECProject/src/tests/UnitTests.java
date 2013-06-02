@@ -16,7 +16,8 @@ import org.junit.runners.Suite.SuiteClasses;
 	HierarchyTests.class,
 	MeetingBuilderTests.class,
     TemplateXMLDaoTests.class,
-    SearchTests.class
+    SearchTests.class,
+    PlaceholderHelperTests.class
 })
 
 public class UnitTests {
