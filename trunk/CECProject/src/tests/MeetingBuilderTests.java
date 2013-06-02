@@ -36,11 +36,11 @@ public class MeetingBuilderTests {
 	String body;
     String sentTime;
     String lastModifiedTime;
-    String systemFolderName = "meetings";;
+    String systemFolderName = "Meetings";
 	
 	@Before
 	public void setUp() throws Exception {
-		systemFolderName = "meetings";
+		systemFolderName = "Meetings";
 		meetingId = UUID.randomUUID();
 		from = CECConfigurator.getReference()
 				.getClientEmailAddress();
