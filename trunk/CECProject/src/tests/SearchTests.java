@@ -28,21 +28,22 @@ public class SearchTests {
 		firstEmailId = UUID.randomUUID();
 		secondEmailId = UUID.randomUUID();
 				
-		Email firstEmail = emailBuilder.withId(firstEmailId)
+		firstEmail = emailBuilder.withId(firstEmailId)
 				.withFrom("troy@encs.concordia.ca")
 				.withTo("deyvid1@gmail.com")
-				.withCC("CCPankajKapania1@gmail.com")
+				.withCC("pankaj1@gmail.com")
 				.withSubject("TestSubject1")
 				.withBody("Body1")
-				.withLastModifiedTime("2013.05.12_At_14.07.56.874")
+				.withLastModifiedTime("2013.05.12_At_14.07.56.800")
 			    .build();
 
-		Email secondEmail = emailBuilder.withId(secondEmailId)
-				.withFrom("deyvid2@gmail.com")
+		secondEmail = emailBuilder.withId(secondEmailId)
+				.withFrom("pierre1@gmail.com")
 				.withTo("romeo2@gmail.com")
+				.withCC("amish2@gmail.com")
 				.withSubject("TestSubject2")
 				.withBody("Body2")
-				.withLastModifiedTime("2013.05.12_At_14.07.56.874")
+				.withLastModifiedTime("2013.05.12_At_14.07.56.900")
 			    .build();		
 	}	
 	
@@ -94,6 +95,24 @@ public class SearchTests {
 		Search searchObj = new SearchImpl(source, searchFor);
 		assertTrue(searchObj.isMatch());
 	}
+	
+	///Separated words inside the text
+	@Test 
+	public void searchSeparatedWordsInTheText() {
+		this.source = "Email Content - This is the content of Paul's email";
+		this.searchFor = "content paul";
+		Search searchObj = new SearchImpl(source, searchFor);
+		assertTrue(searchObj.isMatch());
+	}
+	
+	///Separated words only one inside the text
+	@Test 
+	public void searchSeparatedWordsOneInTheText() {
+		this.source = "Email Content - This is the content of Paul's email";
+		this.searchFor = "content deyvid";
+		Search searchObj = new SearchImpl(source, searchFor);
+		assertTrue(searchObj.isMatch());
+	}		
 	
 	///Exact phrase with case differences
 	@Test 
@@ -200,20 +219,65 @@ public class SearchTests {
 	@Test 
 	public void searchSpecialCharsOneBrace() {
 		this.source = "Hi dear, I like [brackets], /slashes/, -dashes- ans {braces} ";
-		this.searchFor = "{";//braces}";
+		this.searchFor = "{";
+		Search searchObj = new SearchImpl(source, searchFor);
+		assertFalse(searchObj.isMatch());
+	}
+	
+	//Special Chars with Text - Exact Search
+	@Test 
+	public void searchSpecialCharsWithTextExact() {
+		this.source = "Hi dear, new formula a+b=c ";
+		this.searchFor = "a+b=c";
 		Search searchObj = new SearchImpl(source, searchFor);
 		assertTrue(searchObj.isMatch());
 	}
+
+	//Special Chars with Text concatenated, words treated separately
+	@Test 
+	public void searchSpecialCharsWithText() {
+		this.source = "Hi dear, a+b=c ";
+		this.searchFor = "c+a";
+		Search searchObj = new SearchImpl(source, searchFor);
+		assertTrue(searchObj.isMatch());
+	}	
+
+	//Special Chars with Text concatenated, no matches
+	@Test 
+	public void searchSpecialCharsWithTextFalse() {
+		this.source = "Hi dear, a+b=c";
+		this.searchFor = "z+y";
+		Search searchObj = new SearchImpl(source, searchFor);
+		assertFalse(searchObj.isMatch());
+	}	
+	
+	//Text with @ symbol
+	@Test 
+	public void searchTextWithAt() {
+		this.source = "Hi dear, send the reports to mary@f1.com ";
+		this.searchFor = "mary@f1";
+		Search searchObj = new SearchImpl(source, searchFor);
+		assertTrue(searchObj.isMatch());
+	}	
+
+	//Only @symbol
+	@Test 
+	public void searchAt() {
+		this.source = "Hi dear, send the reports to mary@f1.com ";
+		this.searchFor = "@";
+		Search searchObj = new SearchImpl(source, searchFor);
+		assertTrue(searchObj.isMatch());
+	}		
+		
 	
 	//Searching on Email Entity
 	@Test
 	public void searchEmailFromMatch() {
-		result = firstEmail.isMatch("troy");
-		assertTrue(result);
+		assertTrue(firstEmail.isMatch("encs"));
 	}
 	@Test
 	public void searchEmailFromMisMatch() {
-		assertFalse(secondEmail.isMatch("troy"));
+		assertFalse(secondEmail.isMatch("encs"));
 	}	
 	@Test
 	public void searchEmailToMatch() {
@@ -233,12 +297,12 @@ public class SearchTests {
 	}
 	@Test
 	public void searchEmailCCMatch() {
-		assertTrue(firstEmail.isMatch("CCPankajKapania1"));		
+		assertTrue(firstEmail.isMatch("pankaj1"));		
 	}
 	@Test
 	public void searchEmailCCMisMatch() {
-		assertFalse(secondEmail.isMatch("CCPankajKapania1"));
-	}
+		assertFalse(secondEmail.isMatch("pankaj1"));
+	}			
 	@Test
 	public void searchEmailBodyMatch() {
 		assertTrue(secondEmail.isMatch("body2"));

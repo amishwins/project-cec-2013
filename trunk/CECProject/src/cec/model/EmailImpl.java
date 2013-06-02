@@ -287,17 +287,16 @@ public class EmailImpl implements Email {
 
 public boolean isMatch(String pattern) {
 	
-		//boolean match;// = false;
 		StringBuilder entireEmail = new StringBuilder();
 		String space = " ";
+		entireEmail.append(to);
 		entireEmail.append(from);
 		entireEmail.append(space+cc);
 		entireEmail.append(space+subject);
 		entireEmail.append(space+body);
 
 		SearchImpl emailSearcher = new SearchImpl(entireEmail.toString(),pattern);	
-		return emailSearcher.isMatch();
-			
+		return emailSearcher.isMatch();			
 	}
 	/**
 	 * Handle parse exception.
