@@ -87,7 +87,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	MeetingService meetingService = new MeetingService();
 
 	EmailViewEntity selectedEmailEntity;
-	MeetingViewEntity selectedMeetingViewEntity;
+	MeetingViewEntity selectedMeetingEntity;
 	String lastSelectedFolder;
 	JTextField searchField = new JTextField(null, 22);
 
@@ -112,7 +112,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	 * requesting the persistence layer to check the Operating
 	 * system's File System and load an updated list of Email Entities (XML Files). 
 	 */	
-	public void updateEmailTable() {
+	public void updateEmailsTable() {
 		String[] emailTableViewColumns = { "From", "Subject", "Date" };
 		Iterable<EmailViewEntity> emailsInEachFolder = folderService.loadEmails(lastSelectedFolder);
 		emailOrMeetingTable.setModel(new EmailListViewData(emailTableViewColumns, emailsInEachFolder));	
@@ -135,11 +135,11 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	}
 
 	private void setSelectedMeetingEntity(MeetingViewEntity meetingViewEntity) {
-		selectedMeetingViewEntity = meetingViewEntity;
+		selectedMeetingEntity = meetingViewEntity;
 	}
 	
 	private MeetingViewEntity getSelectedMeetingEntity() {
-		return selectedMeetingViewEntity; 
+		return selectedMeetingEntity; 
 	}
 	
 	
@@ -389,7 +389,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		if(lastSelectedFolder.equals(CECConfigurator.getReference().get("meetings"))){
 			updateMeetingsTable();
 		}else{
-			updateEmailTable();
+			updateEmailsTable();
 		}
 	}
 
@@ -469,7 +469,15 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	// EDIT > MOVE EMAIL >
 	private class MenuEditMoveEmail implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-
+          
+			if(emailOrMeetingTable.getModel() instanceof MeetingListViewData){
+				if (getSelectedMeetingEntity() != null) {
+					JOptionPane.showMessageDialog(null, "You Cannot move meeting to any other folder!");
+					setSelectedMeetingEntity(null);
+					return;
+				}
+			}
+            
 			if (getSelectedEmailEntity() == null) {
 				JOptionPane.showMessageDialog(null, "Select an email first");
 			} else {
@@ -492,7 +500,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 					
 					try {
 						emailService.move(getSelectedEmailEntity(), mov.toString());
-						updateEmailTable();
+						updateEmailsTable();
 						setSelectedEmailEntity(null);
 					}
 					catch (SourceAndDestinationFoldersAreSameException ex) {
@@ -506,15 +514,26 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	// EDIT > DELETE EMAIL >
 	private class MenuEditDeleteEmail implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			if(emailOrMeetingTable.getModel() instanceof MeetingListViewData){
+				if (getSelectedMeetingEntity() == null)
+					JOptionPane.showMessageDialog(null, "Select Meeting First");
 
-			if (getSelectedEmailEntity() == null)
-				JOptionPane.showMessageDialog(null, "Select Email First");
+				if (getSelectedMeetingEntity() != null) {
+					meetingService.delete(getSelectedMeetingEntity());
+					updateMeetingsTable();
+					setSelectedMeetingEntity(null);
+				}
+			}else{
+				if (getSelectedEmailEntity() == null)
+					JOptionPane.showMessageDialog(null, "Select Email First");
 
-			if (getSelectedEmailEntity() != null) {
-				emailService.delete(getSelectedEmailEntity());
-				updateEmailTable();
-				setSelectedEmailEntity(null);
+				if (getSelectedEmailEntity() != null) {
+					emailService.delete(getSelectedEmailEntity());
+					updateEmailsTable();
+					setSelectedEmailEntity(null);
+				}
 			}
+			
 		}
 	}
 
@@ -628,7 +647,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		public void mouseClicked(MouseEvent e) {
 			if ((e.getClickCount() == 2) && (selRow != -1)) {
 				if(emailOrMeetingTable.getModel() instanceof MeetingListViewData){
-					new MeetingFrame(selectedMeetingViewEntity);
+					new MeetingFrame(selectedMeetingEntity);
 				}else{
 					new EmailFrame(selectedEmailEntity);
 				}

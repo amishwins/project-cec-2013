@@ -275,7 +275,7 @@ public class MeetingFrame extends JFrame {
 		//if (!validateEmailFields())
 		//	return;
 		meetingService.sendMeeting(meetingView);
-		mainClient.updateEmailTable();
+		mainClient.updateEmailsTable();
 		this.dispose();
 	}
 
