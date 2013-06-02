@@ -27,10 +27,10 @@ public class SearchImpl implements Search {
 		Pattern pattern = Pattern.compile(toRemove);
 		Matcher matcher = pattern.matcher(originalString);		
 		
+		
 		if(matcher.find())	
 			modifiedString=matcher.replaceAll(" ");	
-		
-
+	
 		return modifiedString;	
 		
 	}
@@ -54,8 +54,7 @@ public class SearchImpl implements Search {
 					return true;
 				
 			}			
-		}
-		JOptionPane.showMessageDialog(null,	"End For ");
+		}		
 		return false;			
 	}
 	
