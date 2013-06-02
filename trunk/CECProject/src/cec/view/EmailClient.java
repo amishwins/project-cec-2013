@@ -701,6 +701,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	}
 	
 	private void updateEmailTableFound(String toFind) {
+		selectInboxByDefault(); //? Keep? (Deyvid) it moves the cursor to Inbox folder, but loads its emails
 		String[] emailTableViewColumns = { "From", "Subject", "Date" };			
 		Iterable<EmailViewEntity> emailsFoundInFolder=folderService.searchEmails(toFind);		
 		emailOrMeetingTable.setModel(new EmailListViewData(emailTableViewColumns, emailsFoundInFolder));			
