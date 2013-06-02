@@ -358,7 +358,7 @@ public class EmailFrame extends JFrame {
 		if (!validateEmailFields())
 			return;
 		emailService.sendEmail(emailView);
-		mainClient.updateEmailTable();
+		mainClient.updateEmailsTable();
 		this.dispose();
 	}
 
@@ -381,7 +381,7 @@ public class EmailFrame extends JFrame {
 	private void draftEmail() {
 		buildEmailViewObject();
 		emailService.draftEmail(emailView);
-		mainClient.updateEmailTable();
+		mainClient.updateEmailsTable();
 	}
 
 	/**
