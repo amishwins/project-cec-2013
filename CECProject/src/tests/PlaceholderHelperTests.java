@@ -47,6 +47,29 @@ public class PlaceholderHelperTests {
 	}
 	
 	@Test
+	public void noPlaceHoldersReturnsMinusOne() {
+		text = "There are simply no placeholders here!";
+		phh = new PlaceholderHelper(text);
+		phh.findNext();
+		expectedStart = -1;
+		expectedEnd = -1;
+		assertEquals(expectedStart, phh.getStartPositionOfNextMatch());
+		assertEquals(expectedEnd, phh.getEndPositionOfNextMatch());
+	}
+	
+	@Test
+	public void resetBringsItBack() {
+		phh.findNext();
+		phh.reset();
+		phh.findNext();
+		expectedStart = 3;
+		expectedEnd = 12;
+		assertEquals(expectedStart, phh.getStartPositionOfNextMatch());
+		assertEquals(expectedEnd, phh.getEndPositionOfNextMatch());
+	}
+	
+	
+	@Test
 	public void getPositionsOfAllPlaceHolders() {
 		Map<Integer,Integer> results = phh.positionsOfAllPlaceHolders();
 		
