@@ -75,9 +75,16 @@ public class Validator {
 		return true;
 	}
 	
-	public boolean isValidSearched(String originalString) {
+	/**
+	 * Verify that what the user is searching for is not empty and does not contain any special 
+	 * character except the symbol "@" 
+	 *  
+	 * @param folderName the name which was supplied by the user
+	 * @return boolean returns true if the string does not contain any special characters
+	 */
+	public boolean isValidSearched(String stringToFind) {
 				
-		String modifiedString=originalString.toUpperCase();
+		String modifiedString=stringToFind.toUpperCase();
 		
 		String toRemove="[[^A-Z]&&[^0-9]&&[^@]]";
 		pattern = Pattern.compile(toRemove);
