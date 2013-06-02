@@ -116,7 +116,42 @@ public class InputValidationTests {
 		assertFalse(v.isValidFolderName(folderName));
 	}
 	
+	//Validation - Search Feature
 
-	
+	@Test
+	public void validateSearchEmpty() {
+		String searchFor = "";
+		assertFalse(v.isValidSearched(searchFor));
+	}
+	@Test
+	public void validateSearchSpaces() {
+		String searchFor = "    ";
+		assertFalse(v.isValidSearched(searchFor));
+	}	
+	@Test
+	public void validateSearchOnlySpecialChars() {
+		String searchFor = "$#%^/*-";
+		assertFalse(v.isValidSearched(searchFor));
+	}	
+	@Test
+	public void validateSearchTextWithSpecialChars() {
+		String searchFor = "mary#*&$";
+		assertTrue(v.isValidSearched(searchFor));
+	}
+	@Test
+	public void validateSearchOnlyText() {
+		String searchFor = "text";
+		assertTrue(v.isValidSearched(searchFor));
+	}			
+	@Test
+	public void validateSearchNumbers() {
+		String searchFor = "99874521";
+		assertTrue(v.isValidSearched(searchFor));
+	}		
+	@Test
+	public void validateAtSymbol() {
+		String searchFor = "$#%^/*-@";
+		assertTrue(v.isValidSearched(searchFor));
+	}		
 
 }
