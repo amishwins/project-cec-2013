@@ -767,10 +767,10 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 
 	private void search()
 	{
-		String toFind = searchField.getText();			
-		if(toFind.trim().length()>0)			
-			updateEmailTableFound(toFind);	
-			
+		String toFind = searchField.getText();	
+		Validator v =new Validator();
+		if(v.isValidSearched(toFind))//if(toFind.trim().length()>0)					
+			updateEmailTableFound(toFind);					
 	}
 	private class BarSearchEmails implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
