@@ -3,6 +3,8 @@ package cec.view;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.JOptionPane;
+
 /**
  * Auxiliary Class used in the Presentation Layer that implements methods
  * to validate user's input on Email fields and Folder names.
@@ -72,5 +74,20 @@ public class Validator {
 		}
 		return true;
 	}
+	
+	public boolean isValidSearched(String originalString) {
+				
+		String modifiedString=originalString.toUpperCase();
+		
+		String toRemove="[[^A-Z]&&[^0-9]&&[^@]]";
+		pattern = Pattern.compile(toRemove);
+		matcher = pattern.matcher(modifiedString);		
+		
+		if(matcher.find())		
+			modifiedString=matcher.replaceAll(" ").trim();
+		return modifiedString.length()>0;	
+		
+	}
+	
 
 }
