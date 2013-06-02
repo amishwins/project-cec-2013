@@ -4,10 +4,13 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.UUID;
+import java.util.Vector;
 
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -16,11 +19,13 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
+import javax.swing.SwingConstants;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
@@ -28,6 +33,7 @@ import javax.swing.text.JTextComponent;
 
 import cec.config.CECConfigurator;
 import cec.service.EmailService;
+import cec.service.MeetingService;
 import cec.service.TemplateService;
 
 
@@ -54,13 +60,17 @@ public class MeetingFrame extends JFrame {
 	private EmailClient mainClient;
 	private Validator emailValidator = new Validator();
 
-	EmailService emailService = new EmailService();
-	TemplateService templateService;
-
+	MeetingService meetingService = new MeetingService();
+	
 	JTextField toTextField = new JTextField("", 65);
 	JTextField subjectTextField = new JTextField("", 65);
 	JTextField locationTextField = new JTextField("", 65);
-	JTextArea bodyTextField = new JTextArea("", 15, 20);
+	JTextField startDateTextField = new JTextField("YYYY-MM-DD", 15);
+	JTextField endDateTextField = new JTextField("YYYY-MM-DD", 15);
+	JComboBox startTimeComboBox;
+	JComboBox endTimeComboBox;
+	JTextArea bodyTextField = new JTextArea("", 14, 20);
+	
 	
 	List<JTextComponent> componentsToValidate;
 
@@ -69,8 +79,7 @@ public class MeetingFrame extends JFrame {
 	JMenuItem sendItem = new JMenuItem("Send", KeyEvent.VK_S);
 	JMenuItem exitItem = new JMenuItem("Exit");
 
-	EmailViewEntity emailView;
-	TemplateViewEntity templateView;
+	MeetingViewEntity meetingView;
 	int max_Length = 250;
 
 	/**
@@ -88,8 +97,8 @@ public class MeetingFrame extends JFrame {
 	 * @param  email  an <code>email</code> object that provides the <br>
 	 * 				  values used to set the JFrame
 	 */
-	public MeetingFrame(EmailViewEntity email) {
-		emailView = email;
+	public MeetingFrame(MeetingViewEntity email) {
+		meetingView = email;
 		setExistingMessage();
 		setMessageFields();
 		initialize();
@@ -110,7 +119,7 @@ public class MeetingFrame extends JFrame {
 	 */
 
 	public MeetingFrame() {
-		emailView = new EmailViewEntity();
+		meetingView = new MeetingViewEntity();
 		id = UUID.randomUUID();
 		setNewMessage();
 		initialize();
@@ -190,16 +199,25 @@ public class MeetingFrame extends JFrame {
 		JLabel toLabel = new JLabel("To:         ");
 		JLabel subjectLabel = new JLabel("Subject: ");
 		JLabel locationLabel = new JLabel("Location:");
-        
-		
+		JLabel startDateLabel = new JLabel("Start time: ");
+		JLabel endDateLabel = new JLabel("      End time: ");
+		startTimeComboBox = new JComboBox(buildTimeArrayForJComboBoxes());
+		endTimeComboBox= new JComboBox(buildTimeArrayForJComboBoxes());
 		meetingPanel.setPreferredSize(new Dimension(600, 00));
 		
 		meetingPanel.add(toLabel);
 		meetingPanel.add(toTextField);
-		meetingPanel.add(locationLabel);
-		meetingPanel.add(locationTextField);
 		meetingPanel.add(subjectLabel);
 		meetingPanel.add(subjectTextField);
+		meetingPanel.add(locationLabel);
+		meetingPanel.add(locationTextField);
+		//meetingPanel.add(new JSeparator(SwingConstants.HORIZONTAL),BorderLayout.LINE_START);
+		meetingPanel.add(startDateLabel);
+		meetingPanel.add(startDateTextField);
+		meetingPanel.add(startTimeComboBox);
+		meetingPanel.add(endDateLabel);
+		meetingPanel.add(endDateTextField);
+		meetingPanel.add(endTimeComboBox);
 		
 		add(meetingPanel, BorderLayout.LINE_START);				
 		
@@ -208,6 +226,26 @@ public class MeetingFrame extends JFrame {
 		JScrollPane scroll = new JScrollPane(bodyTextField);
 
 		add(scroll, BorderLayout.SOUTH);
+	}
+	
+	private Vector<String> buildTimeArrayForJComboBoxes(){
+		DecimalFormat df = new DecimalFormat("00.00");
+		Vector<String> timeArray = new Vector<>();
+		String am = " AM";
+		String pm = " PM";
+		timeArray.add(df.format(new Double(12.00))+am);
+		timeArray.add(df.format(new Double(12.30))+am);
+		for(double i = 01.00;i<12.00;i=i+1.00){
+			timeArray.add(df.format(new Double(i))+am);
+			timeArray.add(df.format(new Double(i+ 0.30))+am);
+		}
+		timeArray.add(df.format(new Double(12.00))+pm);
+		timeArray.add(df.format(new Double(12.30))+pm);
+		for(double i = 01.00;i<12.00;i=i+1.00){
+			timeArray.add(df.format(new Double(i))+pm);
+			timeArray.add(df.format(new Double(i+ 0.30))+pm);
+		}
+		return timeArray;
 	}
 
 	/**
@@ -233,23 +271,27 @@ public class MeetingFrame extends JFrame {
 	 * Send email.
 	 */
 	private void sendEmail() {
-		buildEmailViewObject();
-		if (!validateEmailFields())
-			return;
-		emailService.sendEmail(emailView);
+		buildMeetingViewObject();
+		//if (!validateEmailFields())
+		//	return;
+		meetingService.sendMeeting(meetingView);
 		mainClient.updateEmailTable();
 		this.dispose();
 	}
 
-	private void buildEmailViewObject() {
-		if (null == emailView.getId()) {
-			emailView.setId(id);
+	private void buildMeetingViewObject() {
+		if (null == meetingView.getId()) {
+			meetingView.setId(id);
 		}
 		
-		emailView.setTo(toTextField.getText().trim());
-		emailView.setSubject(subjectTextField.getText());
-		emailView.setCC(locationTextField.getText().trim());
-		emailView.setBody(bodyTextField.getText());
+		meetingView.setAttendees(toTextField.getText().trim());
+		meetingView.setSubject(subjectTextField.getText());
+		meetingView.setPlace(locationTextField.getText().trim());
+		meetingView.setStartDate(startDateTextField.getText().trim());
+		meetingView.setEndDate(endDateTextField.getText().trim());
+		meetingView.setStartTime(startTimeComboBox.getSelectedItem().toString());
+		meetingView.setEndTime(endTimeComboBox.getSelectedItem().toString());
+		meetingView.setBody(bodyTextField.getText());
 	}
 		
 	/**
@@ -258,7 +300,7 @@ public class MeetingFrame extends JFrame {
 	 * @return true, if successful
 	 */
 	private boolean validateEmailFields() {
-		if (!emailValidator.isValidSendees(emailView.getTo(), emailView.getCC())) {
+		if (!emailValidator.isValidSendees(meetingView.getAttendees(), meetingView.getAttendees())) {
 			JOptionPane.showMessageDialog(null, "One address is not properly formulated. Please recheck");
 			return false;
 		}
@@ -267,18 +309,22 @@ public class MeetingFrame extends JFrame {
 
 	
 	private void setMessageFields() {
-		this.id = emailView.getId();
-		this.toTextField.setText(emailView.getTo());
-		this.locationTextField.setText(emailView.getCC());
-		this.subjectTextField.setText(emailView.getSubject());
-		this.bodyTextField.setText(emailView.getBody());
+		this.id = meetingView.getId();
+		this.toTextField.setText(meetingView.getAttendees());
+		this.locationTextField.setText(meetingView.getPlace());
+		this.subjectTextField.setText(meetingView.getSubject());
+		this.startDateTextField.setText(meetingView.getStartDate());
+		this.endDateTextField.setText(meetingView.getEndDate());
+		//this.startTimeComboBox.set(meetingView.getStartTime());
+		//this.endTimeComboBox.setText(meetingView.getEndTime());
+		this.bodyTextField.setText(meetingView.getBody());
 	}
 
 	private void setExistingMessage() {
 		
 		subjectTextField.setDocument(new EntryFieldMaxLength(max_Length));
 		// Draft Email
-		if (emailView.getFolder().equals(
+		if (meetingView.getFolder().equals(
 				CECConfigurator.getReference().get("Drafts"))) {
 
 			sendButton.setVisible(true);
