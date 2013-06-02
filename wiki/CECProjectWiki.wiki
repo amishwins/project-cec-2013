@@ -2,6 +2,11 @@
 
 == Design Decisions ==
 
+=== Phase 2 ===
+
+placeholder for design decisions
+
+
 === Column Widths for JTable === 
 
 We manually call {{{defineEmailTableLayout}}} whenever the {{{updateJTable}}} is called. Is this a good design decision?
