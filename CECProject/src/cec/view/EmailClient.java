@@ -81,6 +81,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 
 	FolderService folderService = new FolderService();
 	EmailService emailService = new EmailService();
+	TemplateService templateService = new TemplateService();
 
 	EmailViewEntity selectedEmailEntity;
 	String lastSelectedFolder;
@@ -256,6 +257,10 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		newEmail.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
 		fileMenuBarEntry.add(newEmail);
 
+		JMenuItem newEmailFromTemplate = new JMenuItem("New Email From Template", KeyEvent.VK_C);
+		newEmailFromTemplate.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
+		fileMenuBarEntry.add(newEmailFromTemplate);
+		
 		JMenuItem newTemplate = new JMenuItem("New Template", KeyEvent.VK_T);
 		newTemplate.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_DOWN_MASK));
 		fileMenuBarEntry.add(newTemplate);
@@ -277,6 +282,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 
 		// Add all the action listeners for the File menu
 		newEmail.addActionListener(new MenuFileNewEmail());
+		newEmailFromTemplate.addActionListener(new MenuFileNewEmailFromTemplate());
 		newTemplate.addActionListener(new MenuFileNewTemplate());
 		newSubfolder.addActionListener(new MenuFileNewSubFolder());
 		openSelectedEmail.addActionListener(new MenuFileOpenSelectedEmail());
@@ -293,7 +299,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		editMenuBarEntry.add(moveSelectedEmail);
 
 		editMenuBarEntry.addSeparator();
-
+		
 		JMenuItem deleteSelectedEmail = new JMenuItem("Delete Email", KeyEvent.VK_E);
 		deleteSelectedEmail.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK));
 		editMenuBarEntry.add(deleteSelectedEmail);
@@ -302,10 +308,17 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		deleteSelectedFolder.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK));
 		editMenuBarEntry.add(deleteSelectedFolder);
 
+		editMenuBarEntry.addSeparator();
+		
+		JMenuItem editTemplate = new JMenuItem("Edit Template", KeyEvent.VK_Z);
+		editTemplate.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK));
+		editMenuBarEntry.add(editTemplate);
+
 		// Add all the action listeners for the Edit menu
+		moveSelectedEmail.addActionListener(new MenuEditMoveEmail());
 		deleteSelectedEmail.addActionListener(new MenuEditDeleteEmail());
 		deleteSelectedFolder.addActionListener(new MenuEditDeleteFolder());
-		moveSelectedEmail.addActionListener(new MenuEditMoveEmail());
+		editTemplate.addActionListener(new MenuEditEditTemplate());
 	}
 	
 	private void defineEmailTableLayout() {
@@ -473,6 +486,15 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		}
 	}
 
+	// EDIT > EDIT TEMPLATE >
+	private class MenuEditEditTemplate implements ActionListener {
+		public void actionPerformed(ActionEvent e) {			
+			TemplateService ts = new TemplateService();
+			TemplateViewEntity templateViewEntity = ts.getTemplateEntity(getSelectedTemplateFromDialog().toString()); 
+			new EmailFrame(templateViewEntity);
+		}
+	}
+
 	// FOLDER TREE CONTEXT MENU (Right-Click)
 	private class FolderTreeContextMenu extends JPopupMenu {
 		private static final long serialVersionUID = -5926440670627487856L;
@@ -586,6 +608,14 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		}
 	}
 
+	private class MenuFileNewEmailFromTemplate implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			TemplateService ts = new TemplateService();
+			TemplateViewEntity templateViewEntity = ts.getTemplateEntity(getSelectedTemplateFromDialog().toString()); 
+			new EmailFrame(TemplateContext.APPLY);
+		}
+	}
+	
 	private class MenuFileNewTemplate implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			TemplateService ts = new TemplateService();
@@ -605,6 +635,18 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		emailTable.setModel(new EmailListViewData(emailTableViewColumns, emailsFoundInFolder));			
 		defineEmailTableLayout();
 	}
+	
+	public Object getSelectedTemplateFromDialog() {
+		String[] selValues = templateService.getTemplateNames();			
+
+		int messageType = JOptionPane.QUESTION_MESSAGE;
+		Object mov = JOptionPane.showInputDialog(null,
+				"Select the template to edit", "Edit Template",
+				messageType, null, selValues, null);
+
+		return mov;
+	}
+
 	private void search()
 	{
 		String toFind = searchField.getText();			

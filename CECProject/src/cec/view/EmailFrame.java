@@ -104,13 +104,46 @@ public class EmailFrame extends JFrame {
 		initialize();
 	}
 	
+	// New Template
 	public EmailFrame(TemplateService ts) {
 		templateView = new TemplateViewEntity();
 		templateService = ts;
 		setNewTemplate();
 		initialize();
 	}
+	
+	// Apply Template
+	public EmailFrame(TemplateViewEntity templateViewEntity) {
+		this();
+		// overwrite template view
+		templateView = templateViewEntity;		
+		setTemplateFields();
+	}
+	
+	// Edit Template 
 
+	public EmailFrame(TemplateContext context) {
+		TemplateService ts = new TemplateService();
+		switch (context) {
+		case APPLY:
+			// get the selected template, create an email normally
+			templateView = ts.getTemplateEntity(EmailClient.getReference().getSelectedTemplateFromDialog().toString());
+			emailView = new EmailViewEntity();
+			id = UUID.randomUUID();
+			setNewMessage();
+			initialize();
+			setTemplateFields();			
+			break;
+		case NEW:
+			break;
+		case EDIT:
+			break;
+		default:
+			throw new RuntimeException("Cannot handle this type of context");
+				
+		}
+	}
+	
 	/**
 	 * Default constructor of the Email Class.
 	 * <p>
@@ -156,17 +189,13 @@ public class EmailFrame extends JFrame {
 		fileMenuBarEntry.setMnemonic('F');
 		menuBar.add(fileMenuBarEntry);
 
-		sendItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
-				InputEvent.CTRL_DOWN_MASK));
+		sendItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 		fileMenuBarEntry.add(sendItem);
-		draftItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D,
-				InputEvent.CTRL_DOWN_MASK));
+		draftItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK));
 		fileMenuBarEntry.add(draftItem);
-		replyItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R,
-				InputEvent.CTRL_DOWN_MASK));
+		replyItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK));
 		fileMenuBarEntry.add(replyItem);
-		forwardItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F,
-				InputEvent.CTRL_DOWN_MASK));
+		forwardItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK));
 		fileMenuBarEntry.add(forwardItem);
 		exitItem.setAccelerator(KeyStroke.getKeyStroke("ESCAPE"));
 
@@ -346,8 +375,6 @@ public class EmailFrame extends JFrame {
 		templateView.setBody(bodyField.getText());
 	}
 
-	
-
 	private void setMessageFields() {
 		this.id = emailView.getId();
 		this.toField.setText(emailView.getTo());
@@ -356,9 +383,20 @@ public class EmailFrame extends JFrame {
 		this.bodyField.setText(emailView.getBody());
 	}
 
+	private void setTemplateFields() {
+		this.toField.setText(templateView.getTo());
+		this.ccField.setText(templateView.getCC());
+		this.subjectField.setText(templateView.getSubject());
+		this.bodyField.setText(templateView.getBody());
+	}
+
+	
 	private void setExistingMessage() {
 		
 		subjectField.setDocument(new EntryFieldMaxLength(max_Length));
+		
+		
+		
 		// Draft Email
 		if (emailView.getFolder().equals(
 				CECConfigurator.getReference().get("Drafts"))) {
@@ -401,8 +439,8 @@ public class EmailFrame extends JFrame {
 			ccField.setEditable(false);
 			subjectField.setEditable(false);
 			bodyField.setEditable(false);
-
 		}
+		saveTemplate.setVisible(false);
 	}
 
 	private void setNewMessage() {

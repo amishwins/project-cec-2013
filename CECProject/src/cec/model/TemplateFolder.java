@@ -18,7 +18,11 @@ public class TemplateFolder {
 
 	public String[] loadTemplateNames() {
 		refresh(); // TODO: determine if refresh is a good strategy
-		String[] templateNames = (String[]) templates.toArray();
+		String[] templateNames = new String[templates.size()];
+		int index = 0;
+		for (Template t: templates) {
+			templateNames[index++] = t.getName();
+		}
 		return templateNames;
 	}
 
