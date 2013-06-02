@@ -199,7 +199,7 @@ public class MeetingImpl implements Meeting {
 		// Assumption that meeting email has been sent successfully..
 		meetingDao.save(id, from, attendees, startDate, endDate, startTime,
 				endTime, place, subject, body, lastModifiedTime, sentTime,
-				parentFolder.getPath());
+				CECConfigurator.getReference().get("meetings"));
 	}
 
 	/**
