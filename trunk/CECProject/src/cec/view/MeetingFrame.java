@@ -189,7 +189,7 @@ public class MeetingFrame extends JFrame {
 		JPanel meetingPanel = new JPanel();
 		JLabel toLabel = new JLabel("To:         ");
 		JLabel subjectLabel = new JLabel("Subject: ");
-		JLabel locationLabel = new JLabel("Location:        ");
+		JLabel locationLabel = new JLabel("Location:");
         
 		
 		meetingPanel.setPreferredSize(new Dimension(600, 00));
