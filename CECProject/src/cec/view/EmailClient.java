@@ -90,7 +90,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	MeetingViewEntity selectedMeetingEntity;
 	String lastSelectedFolder;
 	JTextField searchField = new JTextField(null, 22);
-
+	
 	private static EmailClient instance;
 	
 	/***
@@ -113,13 +113,15 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	 * system's File System and load an updated list of Email Entities (XML Files). 
 	 */	
 	public void updateEmailsTable() {
+		if (CECConfigurator.getReference().isPathForAMeetingSystemFolder(lastSelectedFolder)) return;		
 		String[] emailTableViewColumns = { "From", "Subject", "Date" };
 		Iterable<EmailViewEntity> emailsInEachFolder = folderService.loadEmails(lastSelectedFolder);
 		emailOrMeetingTable.setModel(new EmailListViewData(emailTableViewColumns, emailsInEachFolder));	
 		defineEmailsOrMeetingsTableLayout();
 	}
-	
+
 	public void updateMeetingsTable() {
+		if (CECConfigurator.getReference().isPathForAEmailSystemFolder(lastSelectedFolder)) return;
 		String[] meetingsTableViewColumns = { "From", "Subject", "Date" };
 		Iterable<MeetingViewEntity> meetingsInEachFolder = folderService.loadMeetings(lastSelectedFolder);
 		emailOrMeetingTable.setModel(new MeetingListViewData(meetingsTableViewColumns, meetingsInEachFolder));	
@@ -282,8 +284,8 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		fileMenuBarEntry.add(newEmailFromTemplate);
 		fileMenuBarEntry.addSeparator();
 		
-		JMenuItem newMeeting = new JMenuItem("New Meeting", KeyEvent.VK_M);
-		newMeeting.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_DOWN_MASK));
+		JMenuItem newMeeting = new JMenuItem("New Meeting", KeyEvent.VK_G);
+		newMeeting.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, InputEvent.CTRL_DOWN_MASK));
 		fileMenuBarEntry.add(newMeeting);
 		fileMenuBarEntry.addSeparator();
 		
@@ -330,7 +332,15 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		JMenuItem deleteSelectedEmail = new JMenuItem("Delete Email", KeyEvent.VK_E);
 		deleteSelectedEmail.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK));
 		editMenuBarEntry.add(deleteSelectedEmail);
-
+		
+		editMenuBarEntry.addSeparator();
+		
+		JMenuItem deleteSelectedMeeting = new JMenuItem("Delete Meeting", KeyEvent.VK_B);
+		deleteSelectedMeeting.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_B, InputEvent.CTRL_DOWN_MASK));
+		editMenuBarEntry.add(deleteSelectedMeeting);
+		
+		editMenuBarEntry.addSeparator();
+		
 		JMenuItem deleteSelectedFolder = new JMenuItem("Delete Folder", KeyEvent.VK_R);
 		deleteSelectedFolder.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK));
 		editMenuBarEntry.add(deleteSelectedFolder);
@@ -344,6 +354,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		// Add all the action listeners for the Edit menu
 		moveSelectedEmail.addActionListener(new MenuEditMoveEmail());
 		deleteSelectedEmail.addActionListener(new MenuEditDeleteEmail());
+		deleteSelectedMeeting.addActionListener(new MenuEditDeleteMeeting());
 		deleteSelectedFolder.addActionListener(new MenuEditDeleteFolder());
 		editTemplate.addActionListener(new MenuEditEditTemplate());
 	}
@@ -514,16 +525,6 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	// EDIT > DELETE EMAIL >
 	private class MenuEditDeleteEmail implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if(emailOrMeetingTable.getModel() instanceof MeetingListViewData){
-				if (getSelectedMeetingEntity() == null)
-					JOptionPane.showMessageDialog(null, "Select Meeting First");
-
-				if (getSelectedMeetingEntity() != null) {
-					meetingService.delete(getSelectedMeetingEntity());
-					updateMeetingsTable();
-					setSelectedMeetingEntity(null);
-				}
-			}else{
 				if (getSelectedEmailEntity() == null)
 					JOptionPane.showMessageDialog(null, "Select Email First");
 
@@ -533,9 +534,21 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 					setSelectedEmailEntity(null);
 				}
 			}
-			
-		}
 	}
+	// EDIT > DELETE Meeting >
+	private class MenuEditDeleteMeeting implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+				if (getSelectedMeetingEntity() == null)
+					JOptionPane.showMessageDialog(null, "Select Meeting First");
+
+				if (getSelectedMeetingEntity() != null) {
+					meetingService.delete(getSelectedMeetingEntity());
+					updateMeetingsTable();
+					setSelectedMeetingEntity(null);
+				}
+			}
+	}
+	
 
 	// EDIT > DELETE FOLDER >
 	private class MenuEditDeleteFolder implements ActionListener {
@@ -580,17 +593,50 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		private static final long serialVersionUID = 1L;
 		JMenuItem movEmail;
 		JMenuItem delEmail;
-
+		String moveEmailOrMeetingLabelContextMenu ="Move Email..." ;
+		String deletEmailOrMeetingLabelContextMenu ="Delete Email" ;
 		public EmailTableContextMenu() {
-			movEmail = new JMenuItem("Move Email...");
-			add(movEmail);
-			delEmail = new JMenuItem("Delete Email");
+			if(emailOrMeetingTable.getModel() instanceof MeetingListViewData){
+				if (getSelectedMeetingEntity() != null){
+					deletEmailOrMeetingLabelContextMenu = "Delete Meeting";
+				}
+			}else{
+				movEmail = new JMenuItem(moveEmailOrMeetingLabelContextMenu);
+				add(movEmail);
+				movEmail.addActionListener(new MenuEditMoveEmail());
+			}
+			
+			delEmail = new JMenuItem(deletEmailOrMeetingLabelContextMenu);
 			add(delEmail);
-
-			movEmail.addActionListener(new MenuEditMoveEmail());
-			delEmail.addActionListener(new MenuEditDeleteEmail());
+			delEmail.addActionListener(new MouseContextMenuDeleteEmail());
 		}
 	}
+	
+	private class MouseContextMenuDeleteEmail implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			if(emailOrMeetingTable.getModel() instanceof MeetingListViewData){
+				if (getSelectedMeetingEntity() == null)
+					JOptionPane.showMessageDialog(null, "Select Meeting First");
+
+				if (getSelectedMeetingEntity() != null) {
+					meetingService.delete(getSelectedMeetingEntity());
+					updateMeetingsTable();
+					setSelectedMeetingEntity(null);
+				}
+			}else{
+				if (getSelectedEmailEntity() == null)
+					JOptionPane.showMessageDialog(null, "Select Email First");
+
+				if (getSelectedEmailEntity() != null) {
+					emailService.delete(getSelectedEmailEntity());
+					updateEmailsTable();
+					setSelectedEmailEntity(null);
+				}
+			}
+			
+		}
+	}
+	
 
 	// FOLDER TREE MOUSE LISTENER
 	private class FolderTreeMouseListener extends MouseAdapter {
