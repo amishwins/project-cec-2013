@@ -7,17 +7,18 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cec.model.Search;
+import cec.model.SearchImpl;
 
 public class SearchTests {
 
 	String source;
 	String searchFor;	
 	
-	@Before
+	/*@Before
 	public void setUp() throws Exception {
 		Search newSearch = new Search(source, searchFor);
-	}
-
+		}
+*/
 	@After
 	public void tearDown() throws Exception {
 	}
@@ -25,19 +26,26 @@ public class SearchTests {
 
 	//Empty Space
 	@Test
-	public void searchEmptySpace() {
+	public void searchEmptyString() {
 		this.source = "Email Content - This is the content of an email";
-		this.searchFor = " ";
-		Search searchObj = new Search(source, searchFor);
+		this.searchFor = "";
+		Search searchObj = new SearchImpl(source, searchFor);
 		assertFalse(searchObj.isMatch());
 	}	
+	@Test
+	public void searchSpace() {
+		this.source = "Email Content - This is the content of an email";
+		this.searchFor = " ";
+		Search searchObj = new SearchImpl(source, searchFor);
+		assertFalse(searchObj.isMatch());
+	}
 	
 	//Single word
 	@Test
 	public void searchSingleWord() {
 		this.source = "Email Content - This is the content of an email";
 		this.searchFor = "Email";
-		Search searchObj = new Search(source, searchFor);
+		Search searchObj = new SearchImpl(source, searchFor);
 		assertTrue(searchObj.isMatch());
 	}
 	
@@ -46,7 +54,7 @@ public class SearchTests {
 	public void searchSingleWordCaseDiffs() {
 		this.source = "Email Content - This is the content of an email";
 		this.searchFor = "eMaIl";
-		Search searchObj = new Search(source, searchFor);
+		Search searchObj = new SearchImpl(source, searchFor);
 		assertTrue(searchObj.isMatch());
 	}
 	
@@ -55,16 +63,16 @@ public class SearchTests {
 	public void searchExactPhrase() {
 		this.source = "Email Content - This is the content of an email";
 		this.searchFor = "content of an email";
-		Search searchObj = new Search(source, searchFor);
+		Search searchObj = new SearchImpl(source, searchFor);
 		assertTrue(searchObj.isMatch());
 	}
-
+	
 	///Exact phrase with case differences
 	@Test 
 	public void searchExactPhrasetWithCaseDiffs() {
 		this.source = "Email Content - This is the content of an email";
 		this.searchFor = "conTent Of aN emAiL";
-		Search searchObj = new Search(source, searchFor);
+		Search searchObj = new SearchImpl(source, searchFor);
 		assertTrue(searchObj.isMatch());
 	}
 
@@ -73,7 +81,7 @@ public class SearchTests {
 	public void searchPhrasetWithRegexInj() {
 		this.source = "Email Content - This is the content of an email";
 		this.searchFor = "This.+?content";
-		Search searchObj = new Search(source, searchFor);
+		Search searchObj = new SearchImpl(source, searchFor);
 		assertTrue(searchObj.isMatch());
 	}
 	
@@ -82,16 +90,16 @@ public class SearchTests {
 	public void searchNumbers() {
 		this.source = "Hi dear, my phone number is 514-547-9877";
 		this.searchFor = "514-547";
-		Search searchObj = new Search(source, searchFor);
+		Search searchObj = new SearchImpl(source, searchFor);
 		assertTrue(searchObj.isMatch());
-	}	
+	}
 	
 	///Special Chars Brackets Part
 	@Test 
 	public void searchSpecialCharsBrackets() {
 		this.source = "Hi dear, I like [brackets], /slashes/, -dashes- ans {braces} ";
 		this.searchFor = "[brack";
-		Search searchObj = new Search(source, searchFor);
+		Search searchObj = new SearchImpl(source, searchFor);
 		assertTrue(searchObj.isMatch());
 	}	
 	
@@ -100,7 +108,7 @@ public class SearchTests {
 	public void searchSpecialCharsBracketsFull() {
 		this.source = "Hi dear, I like [brackets], /slashes/, -dashes- ans {braces} ";
 		this.searchFor = "[brackets]";
-		Search searchObj = new Search(source, searchFor);
+		Search searchObj = new SearchImpl(source, searchFor);
 		assertTrue(searchObj.isMatch());
 	}	
 	
@@ -110,7 +118,7 @@ public class SearchTests {
 	public void searchSpecialCharsSlashes() {
 		this.source = "Hi dear, I like [brackets], /slashes/, -dashes- ans {braces} ";
 		this.searchFor = "/slash";
-		Search searchObj = new Search(source, searchFor);
+		Search searchObj = new SearchImpl(source, searchFor);
 		assertTrue(searchObj.isMatch());
 	}
 
@@ -119,7 +127,7 @@ public class SearchTests {
 	public void searchSpecialCharsSlashesFull() {
 		this.source = "Hi dear, I like [brackets], /slashes/, -dashes- ans {braces} ";
 		this.searchFor = "/slashes/";
-		Search searchObj = new Search(source, searchFor);
+		Search searchObj = new SearchImpl(source, searchFor);
 		assertTrue(searchObj.isMatch());
 	}	
 
@@ -128,7 +136,7 @@ public class SearchTests {
 	public void searchSpecialCharsDashes() {
 		this.source = "Hi dear, I like [brackets], /slashes/, -dashes- ans {braces} ";
 		this.searchFor = "-dash";
-		Search searchObj = new Search(source, searchFor);
+		Search searchObj = new SearchImpl(source, searchFor);
 		assertTrue(searchObj.isMatch());
 	}
 
@@ -137,7 +145,7 @@ public class SearchTests {
 	public void searchSpecialCharsDashesFull() {
 		this.source = "Hi dear, I like [brackets], /slashes/, -dashes- ans {braces} ";
 		this.searchFor = "-dashes-";
-		Search searchObj = new Search(source, searchFor);
+		Search searchObj = new SearchImpl(source, searchFor);
 		assertTrue(searchObj.isMatch());
 	}		
 	
@@ -147,7 +155,7 @@ public class SearchTests {
 	public void searchSpecialCharsBraces() {
 		this.source = "Hi dear, I like [brackets], /slashes/, -dashes- ans {braces} ";
 		this.searchFor = "{brace";
-		Search searchObj = new Search(source, searchFor);
+		Search searchObj = new SearchImpl(source, searchFor);
 		assertTrue(searchObj.isMatch());
 	}
 	
@@ -156,9 +164,18 @@ public class SearchTests {
 	public void searchSpecialCharsBracesFull() {
 		this.source = "Hi dear, I like [brackets], /slashes/, -dashes- ans {braces} ";
 		this.searchFor = "{braces}";
-		Search searchObj = new Search(source, searchFor);
+		Search searchObj = new SearchImpl(source, searchFor);
 		assertTrue(searchObj.isMatch());
-	}		
+	}	
+	/*
+	///Special Chars Braces Full
+	@Test 
+	public void searchSpecialCharsOneBrace() {
+		this.source = "Hi dear, I like [brackets], /slashes/, -dashes- ans {braces} ";
+		this.searchFor = "{";//braces}";
+		Search searchObj = new SearchImpl(source, searchFor);
+		assertTrue(searchObj.isMatch());
+	}	*/
 	 	
 }
 
