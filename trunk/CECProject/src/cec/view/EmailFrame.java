@@ -486,6 +486,7 @@ public class EmailFrame extends JFrame {
 			bodyField.setEditable(false);
 		}
 		saveTemplate.setVisible(false);
+		overwriteTemplate.setVisible(false);
 	}
 
 	private void setVisibilityOfButtonsAndMenuItemsForNewEmail() {
