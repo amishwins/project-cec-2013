@@ -71,7 +71,7 @@ public class CECConfigurator {
 	}
 	
 	public boolean isPathForAMeetingSystemFolder(String path){
-		if ( systemSettings.get("meetings").equals(path) ){
+		if ( systemSettings.get("Meetings").equals(path) ){
 			return true;
 		}
 		return false;
@@ -83,7 +83,7 @@ public class CECConfigurator {
 		systemSettings.put("Drafts", "emails/Drafts");
 		systemSettings.put("Outbox", "emails/Outbox");
 		systemSettings.put("Sent", "emails/Sent");
-		systemSettings.put("meetings", "meetings");
+		systemSettings.put("Meetings", "Meetings");
 	}
 	
 	private void mapDefaultDateFormat() {

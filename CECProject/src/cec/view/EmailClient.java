@@ -386,7 +386,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	}
 	
 	public void selectEmailsOrMeetings(){
-		if(lastSelectedFolder.equals(CECConfigurator.getReference().get("meetings"))){
+		if(lastSelectedFolder.equals(CECConfigurator.getReference().get("Meetings"))){
 			updateMeetingsTable();
 		}else{
 			updateEmailsTable();
