@@ -3,7 +3,11 @@
 = Document Issues we Find (todos, etc.) =
 
 == Priority ==
+=== Phase 2 ===
+  * When changing meeting by adding/removing attendees, how should we handle the removed attendees?
+  * Clean up Email Client and Email Frame
 
+=== Phase 1 ===
   * Create and delete subfolder -> decide on a refresh tree strategy (decide to show at least 1 level only on create and delete - TODO
 
   * Javadocs (big points)
