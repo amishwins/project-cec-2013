@@ -6,18 +6,19 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({ 
-	CECConfiguratorTests.class, 
+	CECConfiguratorTests.class,
 	EmailBuilderTests.class,
-	EmailSortingTests.class, 
-	EmailTests.class, 
+	EmailSortingTests.class,
+	EmailTests.class,
 	FolderFactoryTests.class,
-	FolderTests.class, 
-	InputValidationTests.class,
+	FolderTests.class,
 	HierarchyTests.class,
+	InputValidationTests.class,
 	MeetingBuilderTests.class,
-    TemplateXMLDaoTests.class,
-    SearchTests.class,
-    PlaceholderHelperTests.class
+	PlaceholderHelperTests.class,
+	SearchTests.class,
+	TemplateServiceTests.class,
+	TemplateXMLDaoTests.class
 })
 
 public class UnitTests {
