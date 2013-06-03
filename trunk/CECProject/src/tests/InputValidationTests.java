@@ -66,7 +66,74 @@ public class InputValidationTests {
 		assertTrue(v.isValidSendees("a@b.com", "c@d.com"));
 	}
 	
-
+	@Test
+	public void validateBothStartDateAndEndDateAreFilledAndGood() {
+		assertTrue(v.isValidDates("2013-04-05", "2013-04-05"));
+	}
+	
+	@Test
+	public void validateStartDateIsIllFormed() {
+		assertFalse(v.isValidDates("1013-04-05", "2013-04-05"));
+	}
+	
+	@Test
+	public void validateStartDateIsEmpty() {
+		assertFalse(v.isValidDates("", "2013-04-05"));
+	}
+	
+	@Test
+	public void validateBothStartDateAndEndDatesAreEmpty() {
+		assertFalse(v.isValidDates("", ""));
+	}
+	
+	@Test
+	public void validateEndDateIsEmpty() {
+		assertFalse(v.isValidDates("2013-04-05", ""));
+	}
+	
+	@Test
+	public void validateEndDateIsIllFormed() {
+		assertFalse(v.isValidDates("2013-04-05", "xxxx"));
+	}
+	
+	@Test
+	public void validateEndDateIsNotWellFormed() {
+		assertFalse(v.isValidDates("2013-04-05", "2013#04#05"));
+	}
+	
+	@Test
+	public void validateEndDateHasIllegalValuesForMonthField() {
+		assertFalse(v.isValidDates("2013-04-05", "2013-20-05"));
+	}
+	
+	@Test
+	public void validateStartDateHasIllegalValuesForDateField() {
+		assertFalse(v.isValidDates("2013-04-40", "2013-20-05"));
+	}
+	
+	@Test
+	public void validateNumberOfCharactersInStartDate() {
+		assertFalse(v.isValidDates("2014443-04-40", "2013-2044-05"));
+	}
+	
+	@Test
+	public void validateBothDatesArePassedDates() {
+		assertFalse(v.hasNotPassedDates("2013-06-02", "2013-06-02"));
+	}
+	
+	@Test
+	public void validateBothDatesAreFutureDates() {
+		assertTrue(v.hasNotPassedDates("2222-06-04", "2222-06-04"));
+	}
+	
+	//this  test is very brittle...
+	/*
+	@Test
+	public void validateBothCurrentDatesAreNotPassedDates() {
+		assertTrue(v.hasNotPassedDates("2013-06-03", "2013-06-03"));
+	}
+	*/
+	
 	@Test
 	public void onlyAtSymbolFails() {
 		String emailString = "@";
