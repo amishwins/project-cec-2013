@@ -86,7 +86,7 @@ public class Validator {
 				
 		String modifiedString=stringToFind.toUpperCase();
 		
-		String toRemove="[[^A-Z]&&[^0-9]&&[^@]]";
+		String toRemove="[[^A-Z]&&[^0-9]&&[^@._]]";
 		pattern = Pattern.compile(toRemove);
 		matcher = pattern.matcher(modifiedString);		
 		
