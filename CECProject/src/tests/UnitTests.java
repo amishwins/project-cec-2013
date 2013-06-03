@@ -18,7 +18,8 @@ import org.junit.runners.Suite.SuiteClasses;
 	PlaceholderHelperTests.class,
 	SearchTests.class,
 	TemplateServiceTests.class,
-	TemplateXMLDaoTests.class
+	TemplateXMLDaoTests.class,
+	RuleXMLDaoTests.class
 })
 
 public class UnitTests {
