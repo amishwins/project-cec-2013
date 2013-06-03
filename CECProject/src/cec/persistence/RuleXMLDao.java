@@ -249,13 +249,11 @@ public class RuleXMLDao implements RuleDao {
 	@Override
 	public Iterable<Map<String, String>> loadAllRules(String pathToRuleFolder) {
 		Collection<Map<String, String>> listOfRules = new ArrayList<>();
-		Map<String, String> template;
-		
+		Map<String, String> rule;
 		String[] xmlFileNames = FolderDaoImpl.getFileNames(pathToRuleFolder);
 		for (String xmlFileName : xmlFileNames) {
-			xmlFileName = FilenameUtils.removeExtension(xmlFileName);
-			template = loadRule(pathToRuleFolder, xmlFileName);
-				listOfRules.add(template);
+			rule = loadRule(pathToRuleFolder, xmlFileName);
+				listOfRules.add(rule);
 		}
 		return listOfRules;
 	}
