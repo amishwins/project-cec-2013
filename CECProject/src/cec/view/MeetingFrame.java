@@ -127,8 +127,7 @@ public class MeetingFrame extends JFrame {
 		}
 		return timeArray;
 	}
-	
-	
+
 	/**
 	 * Default constructor of the Email Class.
 	 * <p>
@@ -238,8 +237,6 @@ public class MeetingFrame extends JFrame {
 		add(scroll, BorderLayout.SOUTH);
 	}
 
-	
-
 	/**
 	 * Exit message.
 	 */
@@ -264,8 +261,8 @@ public class MeetingFrame extends JFrame {
 	 */
 	private void sendMeeting() {
 		buildMeetingViewObject();
-		// if (!validateEmailFields())
-		// return;
+		if (!validateEmailFields())
+			return;
 		meetingService.sendMeeting(meetingView);
 		mainClient.updateMeetingsTable();
 		this.dispose();
@@ -296,7 +293,21 @@ public class MeetingFrame extends JFrame {
 		if (!emailValidator.isValidSendees(meetingView.getAttendees(),
 				meetingView.getAttendees())) {
 			JOptionPane.showMessageDialog(null,
-					"One address is not properly formulated. Please recheck");
+					"One address is not properly formatted. Please recheck");
+			return false;
+		}
+
+		if (!emailValidator.isValidDates(meetingView.getStartDate(),
+				meetingView.getEndDate())) {
+			JOptionPane.showMessageDialog(null,
+					"One of the Date is not properly formatted. Please recheck");
+			return false;
+		}
+		
+		if (!emailValidator.hasNotPassedDates(meetingView.getStartDate(),
+				meetingView.getEndDate())) {
+			JOptionPane.showMessageDialog(null,
+					"One of the Date is past date. Please recheck");
 			return false;
 		}
 		return true;
