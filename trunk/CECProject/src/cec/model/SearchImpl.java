@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
  * SearchImpl is the concrete implementation of the Search interface.
  * It has the methods to search for a specific string inside another given string.
  * 
- * It considers only letters from A-Z, numbers and the character "@".
+ * It considers only letters from A-Z, numbers and the characters "@", ".", "_"
  * It checks every word separately and return true if at least one matches.
  * Special characters are removed and words concatenated with them are treated separately.
  * 
