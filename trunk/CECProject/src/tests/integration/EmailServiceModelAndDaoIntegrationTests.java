@@ -34,7 +34,7 @@ public class EmailServiceModelAndDaoIntegrationTests {
 		emailViewEntity.setFrom("user@cec.com");
 		emailViewEntity.setTo("Pankaj@yahoo.com");
 		emailViewEntity.setCC("Pankaj@yahoo.com");
-		emailViewEntity.setSubject("Subject");
+		emailViewEntity.setSubject("Subject@IntegrationTests"+emailId);
 		emailViewEntity.setBody("Body");
 		emailViewEntity.setSentTime("2013.05.19_At_05.08.28.457");
 		emailViewEntity.setLastModifiedTime("2013.05.19_At_05.08.28.457");
@@ -73,6 +73,23 @@ public class EmailServiceModelAndDaoIntegrationTests {
 		emailService.delete(emailViewEntity);	
 		folderService.delete(completePath);
 	}
+	
+	@Test
+	public void DraftMoveToInboxSubfolderSearchAndDeleteEmail() {
+		systemFolderName = "emails/Inbox";
+		userFolderLevel1 = "integrationtests";
+		completePath = systemFolderName+"/"+userFolderLevel1;
+		
+		folderService.delete(completePath);
+		folderService.createSubFolder(systemFolderName,userFolderLevel1);
+		emailService.draftEmail(emailViewEntity);
+		emailService.move(emailViewEntity, completePath);		
+		List<EmailViewEntity> eMVEList = (List<EmailViewEntity>) folderService.searchEmails("Subject@IntegrationTests"+emailId);
+		assertEquals((eMVEList.get(0).getId()),emailId);
+		assertEquals((eMVEList.get(0).getFolder()),completePath);
+		emailService.delete(emailViewEntity);	
+		folderService.delete(completePath);
+	}	
     
 	@Test (expected=SourceAndDestinationFoldersAreSameException.class)
 	public void ShouldThrowWhenDestinationFolderIsParentFolder() {

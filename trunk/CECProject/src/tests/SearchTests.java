@@ -215,7 +215,7 @@ public class SearchTests {
 		assertTrue(searchObj.isMatch());
 	}	
 	
-	//Special Chars Braces Full
+	//Special Chars Single Brace 
 	@Test 
 	public void searchSpecialCharsOneBrace() {
 		this.source = "Hi dear, I like [brackets], /slashes/, -dashes- ans {braces} ";
@@ -268,6 +268,25 @@ public class SearchTests {
 		Search searchObj = new SearchImpl(source, searchFor);
 		assertFalse(searchObj.isMatch());
 	}	
+	
+	//Text with @ symbol and dot (.)
+	@Test 
+	public void searchTextWithAtDot() {
+		this.source = "Hi dear, send the reports to mary@f1.com ";
+		this.searchFor = "mary@f1.com";
+		Search searchObj = new SearchImpl(source, searchFor);
+		assertTrue(searchObj.isMatch());
+	}		
+	
+	
+	//Text with @ symbol and dot (.) that doesn't match
+	@Test 
+	public void searchTextWithAtDotNotMatch() {
+		this.source = "Hi dear, send the reports to mary@f1.com ";
+		this.searchFor = "mari@f1.com";
+		Search searchObj = new SearchImpl(source, searchFor);
+		assertFalse(searchObj.isMatch());
+	}		
 
 	//Only @symbol
 	@Test 
