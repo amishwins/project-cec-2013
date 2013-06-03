@@ -34,7 +34,7 @@ public class SearchImpl implements Search {
 	private String modifiedString(String originalString)
 	{
 		String modifiedString=originalString;	
-		String toRemove="[[^A-Z]&&[^0-9]&&[^@]]";
+		String toRemove="[[^A-Z]&&[^0-9]&&[^@._]]";
 		Pattern pattern = Pattern.compile(toRemove);
 		Matcher matcher = pattern.matcher(originalString);		
 		
