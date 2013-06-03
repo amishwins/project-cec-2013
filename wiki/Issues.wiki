@@ -16,6 +16,7 @@
     * Check for poorly formated placeholders 
     * If edit template, and make no changes, we can still "overwrite"
   * Unit test gaps: Service Layer for Template, and Search
+  * Clean up warnings in all classes (mostly unused imports)
   * Clean up Email Client and Email Frame
 
 === Phase 1 ===
