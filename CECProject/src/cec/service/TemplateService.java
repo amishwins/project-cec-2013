@@ -6,11 +6,14 @@ import cec.model.TemplateImpl;
 import cec.view.TemplateViewEntity;
 
 public class TemplateService {
-	private TemplateFolder tf = new TemplateFolder();
+	private TemplateFolder tf;
+	
+	public TemplateService() {
+		tf = new TemplateFolder();
+	}
 	
 	public void saveTemplate(TemplateViewEntity templateInView) {
-		Template newTemplate = new TemplateImpl(templateInView.getName(), templateInView.getTo(), 
-				templateInView.getCC(), templateInView.getSubject(), templateInView.getBody());
+		Template newTemplate = buildTemplateFromEntity(templateInView);
 		newTemplate.save();
 	}
 	
@@ -18,7 +21,7 @@ public class TemplateService {
 		return tf.loadTemplateNames();
 	}
 
-	public void delete(String templateName) {
+	public void deleteTemplate(String templateName) {
 		Template template = getTemplateEntityFromName(templateName);
 		template.delete();
 	}
@@ -33,9 +36,15 @@ public class TemplateService {
 		templateEntity.setBody(template.getBody());
 		return templateEntity;
 	}
-
+	
+	protected Template buildTemplateFromEntity(TemplateViewEntity templateInView) {
+		Template newTemplate = new TemplateImpl(templateInView.getName(), templateInView.getTo(), 
+				templateInView.getCC(), templateInView.getSubject(), templateInView.getBody());
+		return newTemplate;
+	}
+	
 	protected Template getTemplateEntityFromName(String templateName) {
 		return tf.getTemplate(templateName);
 	}
-
+	
 }

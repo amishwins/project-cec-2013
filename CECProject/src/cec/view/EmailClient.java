@@ -514,7 +514,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	private class MenuEditDeleteTemplate implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			 templateService.delete(getSelectedTemplateFromDialog().toString());
+			 templateService.deleteTemplate(getSelectedTemplateFromDialog().toString());
 		 }		
 	}
 
