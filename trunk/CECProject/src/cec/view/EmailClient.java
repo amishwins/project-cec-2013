@@ -268,6 +268,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		setJMenuBar(menuBar);
 		setupFileMenu(menuBar);
 		setupEditMenu(menuBar);
+		setupRulesMenu(menuBar);
 	}
 	
 	private void setupFileMenu(JMenuBar menuBar) {
@@ -369,6 +370,19 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		deleteSelectedFolder.addActionListener(new MenuEditDeleteFolder());
 		editTemplate.addActionListener(new MenuEditEditTemplate());
 		deleteTemplate.addActionListener(new MenuEditDeleteTemplate());
+	}
+	
+	private void setupRulesMenu(JMenuBar menuBar) {
+		JMenu rulesMenuBarEntry = new JMenu("Rules");
+		rulesMenuBarEntry.setMnemonic('R');
+		menuBar.add(rulesMenuBarEntry);
+
+		JMenuItem newRule = new JMenuItem("New Rule", KeyEvent.VK_U);
+		newRule.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, InputEvent.CTRL_DOWN_MASK));
+		rulesMenuBarEntry.add(newRule);
+		
+		// Add all the action listeners for the Rules menu
+		newRule.addActionListener(new MenuRulesNewRule());
 	}
 	
 	private void defineEmailsOrMeetingsTableLayout() {
@@ -782,6 +796,13 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	private class MenuFileExit implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			System.exit(0);
+		}
+	}
+	
+	//RULES -> NEW RULE
+	private class MenuRulesNewRule implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			new RuleFrame();
 		}
 	}
 	
