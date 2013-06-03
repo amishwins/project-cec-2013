@@ -10,7 +10,7 @@
   * Robustness for Meeting:
     * Send empty meeting? 
     * Email recipient validation
-    * Date and time validation
+    * Date and time validation (might have to refactor the date time to use a single Java Date object for DateTime, as opposed to 2 Dates and 2 Strings)
     * If edit meeting, and make no changes, we can still "send update"
   * Robustness for Template:
     * Check for poorly formated placeholders 
