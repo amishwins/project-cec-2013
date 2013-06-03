@@ -8,6 +8,7 @@ import cec.persistence.RuleDao;
 public class RuleImpl implements Rule {
 	
 	private RuleDao ruleDao;
+	private UUID id;
 	private int rank;
 	private String emailAddresses;
 	private String words;
@@ -15,7 +16,8 @@ public class RuleImpl implements Rule {
 	private Boolean isActive;
 	private Search searcher;
 	
-	public RuleImpl(int rank, String emailAddresses, String words, Folder targetFolder, boolean active) {
+	public RuleImpl(UUID id, int rank, String emailAddresses, String words, Folder targetFolder, boolean active) {
+		this.id = id;
 		this.rank = rank;
 		this.emailAddresses = emailAddresses;
 		this.words = words;
@@ -125,13 +127,13 @@ public class RuleImpl implements Rule {
 
 	@Override
 	public void save() {
-		ruleDao.save(UUID.randomUUID(), "1", getEmailAddresses(), getWords(), targetFolder.getPath(), isActive.toString(), 
+		ruleDao.save(UUID.randomUUID(), new Integer(rank).toString(), getEmailAddresses(), getWords(), targetFolder.getPath(), isActive.toString(), 
 				CECConfigurator.getReference().get("RuleFolder"));
 	}
 
 	@Override
 	public void delete() {
-		// TODO Auto-generated method stub
+		ruleDao.delete(CECConfigurator.getReference().get("RuleFolder"), id);
 		
 	}
 

@@ -20,7 +20,7 @@ public class RuleTests {
 
 	@Before
 	public void setUp() throws Exception {
-		ruleCUT = new RuleImpl(1, "amish.gala@gmail.com; pankajkapania@yahoo.com", 
+		ruleCUT = new RuleImpl(UUID.randomUUID(), 1, "amish.gala@gmail.com; pankajkapania@yahoo.com", 
 				"jokes, soen", new FolderStub("Test"), true);
 	}
 
