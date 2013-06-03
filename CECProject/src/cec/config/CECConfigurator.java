@@ -30,6 +30,7 @@ public class CECConfigurator {
 		mapDefaultSystemFolders();
 		mapDefaultDateFormat();
 		mapDefaultClientEmailAddress();
+		mapDefaultTechnicalFolders();
 	}
 
 	/**
@@ -84,6 +85,11 @@ public class CECConfigurator {
 		systemSettings.put("Outbox", "emails/Outbox");
 		systemSettings.put("Sent", "emails/Sent");
 		systemSettings.put("Meetings", "Meetings");
+	}
+
+	private void mapDefaultTechnicalFolders() {
+		systemSettings.put("Templates", "templates/");  // TODO: find out where this is used!
+		systemSettings.put("RuleFolder", "rules/");
 	}
 	
 	private void mapDefaultDateFormat() {

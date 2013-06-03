@@ -7,7 +7,7 @@ import cec.persistence.RuleDao;
 
 public class RuleImpl implements Rule {
 	
-	private RuleDao ruleDao;
+	protected RuleDao ruleDao;
 	private UUID id;
 	private int rank;
 	private String emailAddresses;
