@@ -1,5 +1,8 @@
 package cec.model;
 
+import java.util.UUID;
+
+import cec.config.CECConfigurator;
 import cec.persistence.RuleDao;
 
 public class RuleImpl implements Rule {
@@ -10,6 +13,7 @@ public class RuleImpl implements Rule {
 	private String words;
 	private Folder targetFolder;
 	private Boolean isActive;
+	private Search searcher;
 	
 	public RuleImpl(int rank, String emailAddresses, String words, Folder targetFolder, boolean active) {
 		this.rank = rank;
@@ -60,54 +64,69 @@ public class RuleImpl implements Rule {
 
 	@Override
 	public void apply(Email email) {
+		if (!isActive) return;
 		// logic which tells the email to move to another folder
 		String[] splitEmailAddresses = emailAddresses.split(";");
 		boolean match = false;
 		
 		for(String s: splitEmailAddresses) {
-			if (email.getFrom().toString().toUpperCase().equals(s.toUpperCase())) {
+			searcher = new SearchImpl(email.getFrom(), s.trim());
+			if (searcher.isMatch()) {
 				match = true;
+				break;
 			}
 		}
 		
 		String [] splitWords = words.split(" ");
+		
 		for(String s: splitWords) {
-			if (email.getSubject().toString().toUpperCase().contains(s.toUpperCase())) {
-				match = true;
+			if (email.getSubject() == null || email.getSubject() == "") { 
+			} else {
+				searcher = new SearchImpl(email.getSubject(), s.trim());
+				if (searcher.isMatch()) {
+					match = true;
+					break;
+				}
 			}
-			if (email.getBody().toString().toUpperCase().contains(s.toUpperCase())) {
-				match = true;
+			if (email.getBody() == null || email.getBody() == "") {
+			} else {
+				searcher = new SearchImpl(email.getBody(), s.trim());
+				if (searcher.isMatch()) {
+					match = true;
+					break;
+				}	
 			}
 		}
 		
 		if (match) {
-			email.move(targetFolder);
+			moveEmail(email);
 		}
 		
 	}
 
+	protected void moveEmail(Email email) {
+		email.move(targetFolder);
+	}
+
 	@Override
 	public boolean isActive() {
-		// TODO Auto-generated method stub
-		return false;
+		return isActive;
 	}
 
 	@Override
 	public void activate() {
-		// TODO Auto-generated method stub
-		
+		isActive = true;
 	}
 
 	@Override
 	public void deactivate() {
-		// TODO Auto-generated method stub
-		
+		isActive = false;
 	}
 
 	@Override
 	public void save() {
-		// TODO Auto-generated method stub
-		
+		ruleDao.save(UUID.randomUUID(), "1", getEmailAddresses(), getWords(), targetFolder.getPath(), isActive.toString(), 
+				CECConfigurator.getReference().get("RuleFolder"));
 	}
 
 	@Override
