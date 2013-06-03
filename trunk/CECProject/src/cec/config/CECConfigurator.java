@@ -87,7 +87,8 @@ public class CECConfigurator {
 	}
 	
 	private void mapDefaultDateFormat() {
-		systemSettings.put("DateFormat", "yyyy.MM.dd_'At'_HH.mm.ss.SSS");		
+		systemSettings.put("DateFormat", "yyyy.MM.dd_'At'_HH.mm.ss.SSS");
+		systemSettings.put("DateFormatForMeetingFields", "yyyy-MM-dd");
 	}
 	
 	private void mapDefaultClientEmailAddress() {

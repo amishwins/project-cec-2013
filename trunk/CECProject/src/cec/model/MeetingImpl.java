@@ -178,6 +178,24 @@ public class MeetingImpl implements Meeting {
 		return targetFormat.format(lastModified);
 	}
 
+	private String getStartOREndDateNicelyFormatted(String startOrEndDate) {
+		if (startOrEndDate == null || startOrEndDate.equals(""))
+			return "";
+		Date sOrEDate = new Date();
+
+		SimpleDateFormat sourceFormat = new SimpleDateFormat(CECConfigurator
+				.getReference().get("DateFormatForMeetingFields"));
+
+		try {
+			sOrEDate = sourceFormat.parse(startOrEndDate);
+		} catch (ParseException e) {
+			// if the date is poorly formatted, throw a runtime exception
+			throw new RuntimeException();
+		}
+		SimpleDateFormat targetFormat = new SimpleDateFormat("EEE, MMM d, yyyy");
+		return targetFormat.format(sOrEDate);
+	}
+
 	public String getSentTime() {
 		return sentTime;
 	}
@@ -195,11 +213,44 @@ public class MeetingImpl implements Meeting {
 	 * 
 	 */
 	public void send() {
-
 		// Assumption that meeting email has been sent successfully..
 		meetingDao.save(id, from, attendees, startDate, endDate, startTime,
 				endTime, place, subject, body, lastModifiedTime, sentTime,
 				CECConfigurator.getReference().get("Meetings"));
+		sendEmailToAttendeesForMeeting();
+	}
+
+	private void sendEmailToAttendeesForMeeting() {
+		Email email = buildEmailFromMeeting();
+		email.send();
+	}
+
+	private Email buildEmailFromMeeting() {
+		EmailBuilder emailBuilder = new EmailBuilder();
+		Email emailToSendForMeeting = emailBuilder.computeID().withFrom(from)
+				.withTo(attendees).withSubject("Meeting Request: " + subject)
+				.withBody(buildBodyPartOfEmailToBeSentForMeeting())
+				.computelastModifiedTime().computeSentTime()
+				.withOutboxParentFolder().build();
+		return emailToSendForMeeting;
+	}
+
+	private String buildBodyPartOfEmailToBeSentForMeeting() {
+		StringBuilder buildBody = new StringBuilder();
+		String nextLine = "\n";
+		buildBody.append("Meeting Request" + nextLine);
+		buildBody.append("---------------" + nextLine);
+		buildBody.append("Subject:    " + subject + nextLine);
+		buildBody.append("Location:   " + place + nextLine);
+		buildBody.append("Start Date: "
+				+ getStartOREndDateNicelyFormatted(startDate));
+		buildBody.append(" at: " + startTime + nextLine);
+		buildBody.append("End Date:   "
+				+ getStartOREndDateNicelyFormatted(endDate));
+		buildBody.append(" at: " + endTime + nextLine);
+		buildBody.append("--------------------------------------------" + nextLine);
+		buildBody.append(body);
+		return buildBody.toString();
 	}
 
 	/**
