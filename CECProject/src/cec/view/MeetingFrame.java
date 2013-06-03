@@ -329,8 +329,6 @@ public class MeetingFrame extends JFrame {
 		bodyTextField.setEditable(true);
 		startDateTextField.setEditable(true);
 		endDateTextField.setEditable(true);
-		startTimeComboBox.setEditable(true);
-		endTimeComboBox.setEditable(true);
 	}
 
 	private void setPropertiesForNewMeetingFrameFields() {
