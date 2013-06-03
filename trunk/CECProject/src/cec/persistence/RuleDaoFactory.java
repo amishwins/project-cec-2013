@@ -3,7 +3,7 @@ package cec.persistence;
 /**
  * A factory for creating EmailDao objects.
  */
-public class RulelDaoFactory {
+public class RuleDaoFactory {
     
     /**
      * It returns the instance of the class implementing the 
