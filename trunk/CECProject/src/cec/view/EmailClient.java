@@ -335,6 +335,12 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		
 		editMenuBarEntry.addSeparator();
 		
+		JMenuItem editSelectedMeeting = new JMenuItem("Edit Meeting", KeyEvent.VK_T);
+		editSelectedMeeting.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_DOWN_MASK));
+		editMenuBarEntry.add(editSelectedMeeting);
+
+		editMenuBarEntry.addSeparator();
+		
 		JMenuItem deleteSelectedMeeting = new JMenuItem("Delete Meeting", KeyEvent.VK_B);
 		deleteSelectedMeeting.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_B, InputEvent.CTRL_DOWN_MASK));
 		editMenuBarEntry.add(deleteSelectedMeeting);
@@ -358,6 +364,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		// Add all the action listeners for the Edit menu
 		moveSelectedEmail.addActionListener(new MenuEditMoveEmail());
 		deleteSelectedEmail.addActionListener(new MenuEditDeleteEmail());
+		editSelectedMeeting.addActionListener(new MenuEditEditMeeting());
 		deleteSelectedMeeting.addActionListener(new MenuEditDeleteMeeting());
 		deleteSelectedFolder.addActionListener(new MenuEditDeleteFolder());
 		editTemplate.addActionListener(new MenuEditEditTemplate());
@@ -399,6 +406,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		selectEmailsOrMeetings();
 		
 		setSelectedEmailEntity(null);
+		setSelectedMeetingEntity(null);
 	}
 	
 	public void selectEmailsOrMeetings(){
@@ -422,7 +430,6 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 			} else{
 				setSelectedEmailEntity(((EmailListViewData) (emailOrMeetingTable.getModel())).getViewEntityAtIndex(emailOrMeetingTable.getSelectedRow()));
 				emailOrMeetingBody.setText(getSelectedEmailEntity().getBody());
-				
 			}
 			
 			
@@ -462,6 +469,26 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 			}
 		}
 	}
+	
+	
+	// EDIT > DELETE FOLDER >
+		private class MenuEditDeleteFolder implements ActionListener {
+			public void actionPerformed(ActionEvent e) {
+
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) folders
+						.getLastSelectedPathComponent();
+
+				if (node == null)
+					JOptionPane.showMessageDialog(null, "Select a folder to delete");
+				
+				try {
+					folderService.delete(lastSelectedFolder);
+					updateFolderTree();
+				} catch (CannotDeleteSystemFolderException ex) { 
+					JOptionPane.showMessageDialog(null, "Cannot delete system folders");
+				}
+			}
+		}
 
 	// FILE > OPEN SELECTED EMAIL
 	private class MenuFileOpenSelectedEmail implements ActionListener {
@@ -549,6 +576,21 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 				}
 			}
 	}
+
+		
+	// EDIT > EDIT Meeting >
+		private class MenuEditEditMeeting implements ActionListener {
+			public void actionPerformed(ActionEvent e) {
+					if (getSelectedMeetingEntity() == null)
+						JOptionPane.showMessageDialog(null, "Select Meeting First");
+
+					if (getSelectedMeetingEntity() != null) {
+						new MeetingFrame(selectedMeetingEntity);
+					}
+				}
+		}
+	
+	
 	// EDIT > DELETE Meeting >
 	private class MenuEditDeleteMeeting implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
@@ -564,24 +606,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	}
 	
 
-	// EDIT > DELETE FOLDER >
-	private class MenuEditDeleteFolder implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-
-			DefaultMutableTreeNode node = (DefaultMutableTreeNode) folders
-					.getLastSelectedPathComponent();
-
-			if (node == null)
-				JOptionPane.showMessageDialog(null, "Select a folder to delete");
-			
-			try {
-				folderService.delete(lastSelectedFolder);
-				updateFolderTree();
-			} catch (CannotDeleteSystemFolderException ex) { 
-				JOptionPane.showMessageDialog(null, "Cannot delete system folders");
-			}
-		}
-	}
+	
 
 
 	// FOLDER TREE CONTEXT MENU (Right-Click)
