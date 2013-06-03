@@ -44,5 +44,7 @@ public interface RuleDao {
 	 * @param FileName the file name
 	 * @return the map
 	 */
-	public Map<String, String> loadRule(String folder, String FileName);
+	public Map<String, String> loadRule(String folder, String ruleXmlFileName);
+	
+	public Iterable<Map<String, String>> loadAllRules(String pathToRuleFolder);
 }

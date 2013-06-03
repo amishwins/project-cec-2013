@@ -1,6 +1,8 @@
 package cec.persistence;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
@@ -17,6 +19,7 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.io.FileDeleteStrategy;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -59,119 +62,60 @@ public class RuleXMLDao implements RuleDao {
 	 * @param location the location
 	 * @return the document
 	 */
-	private Document buildXmlFile(UUID id, String from, String to, String cc,
-			String subject, String body, String lastModifiedTime,
-			String sentTime, String location) {
+	private Document buildXmlFile(UUID id, String rank, String sender, String keywords,
+			String tartgetFolder, String status) {
+		
 		DocumentBuilderFactory documentFactory = null;
 		DocumentBuilder documentBuilder = null;
-		Document emailInXMLFormat = null;
+		Document ruleInXMLFormat = null;
 		
 		try {
 			documentFactory = DocumentBuilderFactory.newInstance();
 			documentBuilder = documentFactory.newDocumentBuilder();			
 			
 			// root element Email
-			emailInXMLFormat = documentBuilder.newDocument();
-			Element emailRootElement = emailInXMLFormat.createElement("E-Mail");
-			emailInXMLFormat.appendChild(emailRootElement);
+			ruleInXMLFormat = documentBuilder.newDocument();
+			Element ruleRootElement = ruleInXMLFormat.createElement("Rule");
+			ruleInXMLFormat.appendChild(ruleRootElement);
 
 			// id
-			Element idLabel = emailInXMLFormat.createElement("Id");
-			idLabel.appendChild(emailInXMLFormat.createTextNode(id.toString()));
-			emailRootElement.appendChild(idLabel);
+			Element idLabel = ruleInXMLFormat.createElement("Id");
+			idLabel.appendChild(ruleInXMLFormat.createTextNode(id.toString()));
+			ruleRootElement.appendChild(idLabel);
 
-			// from
-			Element fromLabel = emailInXMLFormat.createElement("From");
-			fromLabel.appendChild(emailInXMLFormat.createTextNode(from));
-			emailRootElement.appendChild(fromLabel);
+			// rank
+			Element rankLabel = ruleInXMLFormat.createElement("Rank");
+			rankLabel.appendChild(ruleInXMLFormat.createTextNode(rank));
+			ruleRootElement.appendChild(rankLabel);
 
-			// to
-			Element toLabel = emailInXMLFormat.createElement("To");
-			toLabel.appendChild(emailInXMLFormat.createTextNode(to));
-			emailRootElement.appendChild(toLabel);
+			// senders
+			Element sendersLabel = ruleInXMLFormat.createElement("Senders");
+			sendersLabel.appendChild(ruleInXMLFormat.createTextNode(sender));
+			ruleRootElement.appendChild(sendersLabel);
 
-			// cc
-			Element ccLabel = emailInXMLFormat.createElement("CC");
-			ccLabel.appendChild(emailInXMLFormat.createTextNode(cc));
-			emailRootElement.appendChild(ccLabel);
+			// keywords
+			Element keywordsLabel = ruleInXMLFormat.createElement("Keywords");
+			keywordsLabel.appendChild(ruleInXMLFormat.createTextNode(keywords));
+			ruleRootElement.appendChild(keywordsLabel);
 
-			// subject
-			Element subjectLabel = emailInXMLFormat.createElement("Subject");
-			subjectLabel.appendChild(emailInXMLFormat.createTextNode(subject));
-			emailRootElement.appendChild(subjectLabel);
+			// tartgetFolder
+			Element tartgetFolderLabel = ruleInXMLFormat.createElement("TartgetFolder");
+			tartgetFolderLabel.appendChild(ruleInXMLFormat.createTextNode(tartgetFolder));
+			ruleRootElement.appendChild(tartgetFolderLabel);
 
-			// body
-			Element bodyLabel = emailInXMLFormat.createElement("Body");
-			bodyLabel.appendChild(emailInXMLFormat.createTextNode(body));
-			emailRootElement.appendChild(bodyLabel);
-
-			// lastModifiedTime
-			Element lastModifiedTimeLabel = emailInXMLFormat
-					.createElement("LastModifiedTime");
-			lastModifiedTimeLabel.appendChild(emailInXMLFormat
-					.createTextNode(lastModifiedTime));
-			emailRootElement.appendChild(lastModifiedTimeLabel);
-
-			// sentTime
-			Element sentTimeLabel = emailInXMLFormat.createElement("SentTime");
-			sentTimeLabel
-			.appendChild(emailInXMLFormat.createTextNode(sentTime));
-			emailRootElement.appendChild(sentTimeLabel);
-
-			// parent folder
-			Element parentFolder = emailInXMLFormat
-					.createElement("ParentFolder");
-			parentFolder.appendChild(emailInXMLFormat.createTextNode(location));
-			emailRootElement.appendChild(parentFolder);
+			// status
+			Element statusLabel = ruleInXMLFormat.createElement("Status");
+			statusLabel.appendChild(ruleInXMLFormat.createTextNode(status));
+			ruleRootElement.appendChild(statusLabel);
 
 		} catch (ParserConfigurationException pce) {
 			pce.printStackTrace();
 		}
-		return emailInXMLFormat;
+		return ruleInXMLFormat;
 
 	}
 
-	/** This method is responsible for building an XML file from the specified fields.
-	 * It is also responsible for saving that file on the file system.
-	 * Name of each file and Location where the file to be saved
-	 * is given by the argument id and location.
-	 * @param id the id
-	 * @param from the from
-	 * @param to the to
-	 * @param cc the CC
-	 * @param subject the subject
-	 * @param body the body
-	 * @param lastModifiedTime the last modified time
-	 * @param sentTime the sent time
-	 * @param location the location
-	 */
-	public void save(UUID id, String from, String to, String cc,
-			String subject, String body, String lastModifiedTime,
-			String sentTime, String location) {
-        String path = location;
-		String fileName = id.toString();
-       	String pathToSaveFile = path + "/" + fileName
-				+ FILE_EXTENSION;
-
-		try {
-			Document emailInXMLFormat = buildXmlFile(id, from, to, cc, subject,
-					body, lastModifiedTime, sentTime, location);
-			
-			TransformerFactory transformerFactory = TransformerFactory
-					.newInstance();
-			StreamSource stylesource = new StreamSource(getClass()
-					.getResourceAsStream("proper-indenting.xsl"));
-			Transformer transformer = transformerFactory
-					.newTransformer(stylesource);
-			DOMSource source = new DOMSource(emailInXMLFormat);
-			StreamResult result = new StreamResult(new File(pathToSaveFile));
-
-			transformer.transform(source, result);
-
-		} catch (TransformerException e) {
-			logger.severe(StackTrace.asString(e));
-		}
-	}
+	
 	
 	/**
 	 * It deletes each file from the system.
@@ -192,24 +136,7 @@ public class RuleXMLDao implements RuleDao {
     	   logger.severe(StackTrace.asString(fileDeleteException));;
        }     		
 	}
-	/**
-	 * Moves an email from source folder to some different folder.
-	 * Other folder or destination folder is specified by an argument desDir.
-	 *
-	 * @param fileName the file name
-	 * @param srcDir the source  directory
-	 * @param destDir the destination  directory
-	 */
-	public void move(UUID fileName, String srcDir, String destDir){
-		try {
-			File file = new File(srcDir+"/"+fileName.toString()+FILE_EXTENSION);
-			File destinationDir = new File(destDir);
-			updateXMLField(file.getPath(),destDir);
-			FileUtils.moveFileToDirectory(file, destinationDir, false);
-		} catch (Exception fileMoveException) {
-			logger.severe(StackTrace.asString(fileMoveException));
-		}
-	}
+	
 	
 	/**
 	 * Updates the parentFolder tag value inside the xml file.
@@ -249,66 +176,88 @@ public class RuleXMLDao implements RuleDao {
 		}
 		
 	}
-	/**
-	 * Loads an equivalent lower level representation of an email from a specific folder.
-	 * It basically loads the email field values and returns a Map of 
-	 * those values. 
-	 *
-	 * @param folder the folder
-	 * @param FileName the file name
-	 * @return the map
-	 */
-	public Map<String, String> loadEmail(String folder, String xmlFileName) {
-		Map<String, String> emailData = new TreeMap<String, String>();
+
+
+	@Override
+	public void save(UUID id, String rank, String sender, String keywords,
+			String tartgetFolder, String status, String pathToSaveRuleFile) {
+
+    String path = pathToSaveRuleFile;
+	String fileName = id.toString();
+   	String pathToSaveFile = path + "/" + fileName
+			+ FILE_EXTENSION;
+
+	try {
+		Document emailInXMLFormat = buildXmlFile(id, rank, sender, keywords, tartgetFolder,
+				status);
+		
+		TransformerFactory transformerFactory = TransformerFactory
+				.newInstance();
+		StreamSource stylesource = new StreamSource(getClass()
+				.getResourceAsStream("proper-indenting.xsl"));
+		Transformer transformer = transformerFactory
+				.newTransformer(stylesource);
+		DOMSource source = new DOMSource(emailInXMLFormat);
+		StreamResult result = new StreamResult(new File(pathToSaveFile));
+
+		transformer.transform(source, result);
+
+	} catch (TransformerException e) {
+		logger.severe(StackTrace.asString(e));
+	}
+		
+	}
+
+	
+	@Override
+	public Map<String, String> loadRule(String folder, String ruleXmlFileName) {
+		Map<String, String> ruleData = new TreeMap<String, String>();
 		try {
-			File xmlFile = new File(folder + "/" + xmlFileName);
+			File xmlFile = new File(folder + "/" + ruleXmlFileName);
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-			Document email = documentBuilder.parse(xmlFile);
-			logger.info("loading Email(s) from folder: "+folder+ " and from file: "+xmlFileName+" " );
-			email.getDocumentElement().normalize();
-			NodeList listOfEmailFields = email.getElementsByTagName("E-Mail");
-			for (int index = 0; index < listOfEmailFields.getLength(); index++) {
-				Node emailField = listOfEmailFields.item(index);
-				if (emailField.getNodeType() == Node.ELEMENT_NODE) {
-					Element eElement = (Element) emailField;
-					emailData.put("Id", eElement.getElementsByTagName("Id").item(0).getTextContent());
-					emailData.put("From", eElement.getElementsByTagName("From").item(0).getTextContent());
-					emailData.put("To", eElement.getElementsByTagName("To").item(0).getTextContent());
-					emailData.put("CC", eElement.getElementsByTagName("CC").item(0).getTextContent());
-					emailData.put("Subject", eElement.getElementsByTagName("Subject").item(0).getTextContent());
-					emailData.put("Body", eElement.getElementsByTagName("Body").item(0).getTextContent());
-					emailData.put("LastModifiedTime", eElement.getElementsByTagName("LastModifiedTime").item(0).getTextContent());
-					emailData.put("SentTime", eElement.getElementsByTagName("SentTime").item(0).getTextContent());
-					emailData.put("ParentFolder", eElement.getElementsByTagName("ParentFolder").item(0).getTextContent());
-					logger.info("Id: " + eElement.getElementsByTagName("Id").item(0).getTextContent());
-					logger.info("From: " + eElement.getElementsByTagName("From").item(0).getTextContent());
-					logger.info("To: " + eElement.getElementsByTagName("To").item(0).getTextContent());
-					logger.info("CC: " + eElement.getElementsByTagName("CC").item(0).getTextContent());
-					logger.info("Subject: " + eElement.getElementsByTagName("Subject").item(0).getTextContent());
-					logger.info("Body: " + eElement.getElementsByTagName("Body").item(0).getTextContent());
-					logger.info("LastModifiedTime: " + eElement.getElementsByTagName("LastModifiedTime").item(0).getTextContent());
-					logger.info("SentTime: " + eElement.getElementsByTagName("SentTime").item(0).getTextContent());
-					logger.info("ParentFolder: " + eElement.getElementsByTagName("ParentFolder").item(0).getTextContent());
+			Document rule = documentBuilder.parse(xmlFile);
+			logger.info("loading Rules(s) from folder: "+folder+ " and from file: "+ruleXmlFileName+" " );
+			rule.getDocumentElement().normalize();
+			NodeList listOfRuleFields = rule.getElementsByTagName("Rule");
+			for (int index = 0; index < listOfRuleFields.getLength(); index++) {
+				Node ruleField = listOfRuleFields.item(index);
+				if (ruleField.getNodeType() == Node.ELEMENT_NODE) {
+					Element eElement = (Element) ruleField;
+					ruleData.put("Id", eElement.getElementsByTagName("Id").item(0).getTextContent());
+					ruleData.put("Rank", eElement.getElementsByTagName("Rank").item(0).getTextContent());
+					ruleData.put("Senders", eElement.getElementsByTagName("Senders").item(0).getTextContent());
+					ruleData.put("Keywords", eElement.getElementsByTagName("Keywords").item(0).getTextContent());
+					ruleData.put("TartgetFolder", eElement.getElementsByTagName("TartgetFolder").item(0).getTextContent());
+					ruleData.put("Status", eElement.getElementsByTagName("Status").item(0).getTextContent());
 					
+					logger.info("Id: " + eElement.getElementsByTagName("Id").item(0).getTextContent());
+					logger.info("Rank: " + eElement.getElementsByTagName("Rank").item(0).getTextContent());
+					logger.info("Senders: " + eElement.getElementsByTagName("Senders").item(0).getTextContent());
+					logger.info("Keywords: " + eElement.getElementsByTagName("Keywords").item(0).getTextContent());
+					logger.info("TartgetFolder: " + eElement.getElementsByTagName("TartgetFolder").item(0).getTextContent());
+					logger.info("Status: " + eElement.getElementsByTagName("Status").item(0).getTextContent());
 				}
 			}
 		} catch (Exception e) {
 			logger.severe(StackTrace.asString(e));
 		}
-		return emailData;
+		return ruleData;
 	}
 
+	
 	@Override
-	public void save(UUID id, String rank, String sender, String keyword,
-			String tartgetFolder, String status, String pathToSaveRuleFile) {
-		// TODO Auto-generated method stub
+	public Iterable<Map<String, String>> loadAllRules(String pathToRuleFolder) {
+		Collection<Map<String, String>> listOfRules = new ArrayList<>();
+		Map<String, String> template;
 		
+		String[] xmlFileNames = FolderDaoImpl.getFileNames(pathToRuleFolder);
+		for (String xmlFileName : xmlFileNames) {
+			xmlFileName = FilenameUtils.removeExtension(xmlFileName);
+			template = loadRule(pathToRuleFolder, xmlFileName);
+				listOfRules.add(template);
+		}
+		return listOfRules;
 	}
-
-	@Override
-	public Map<String, String> loadRule(String folder, String FileName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 }
