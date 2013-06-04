@@ -176,4 +176,13 @@ public class RuleImpl implements Rule {
 		
 	}
 
+	@Override
+	public int compareTo(Rule anotherRule) {
+		if (this.rank < anotherRule.getRank())
+			return -1;
+		else if ( this.rank > anotherRule.getRank())
+			return 1;
+		else
+			return 0;
+	}
 }

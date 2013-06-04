@@ -3,6 +3,7 @@ package tests.integration;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -92,6 +93,30 @@ public class RuleSetModelAndDaoIntegrationTests {
 			}
 		}
 		assertEquals(count, 1);
+		rule1.delete();
+		rule2.delete();
+	}
+
+	@Test
+	public void createLoadAndSortRules() {
+		List<Rule> rulesToBeSorted = new ArrayList<>();
+		int count = 0;
+		rule1.save();
+		rule2.save();
+		Iterable<Rule> rules = ruleSet.loadRules();
+		for (Rule rule : rules) {
+			if ((rule.getId().compareTo(rule1.getId()) == 0)
+					|| (rule.getId().compareTo(rule2.getId()) == 0)) {
+				count++;
+				rulesToBeSorted.add(rule);
+			}
+		}
+		
+		Collections.sort(rulesToBeSorted);
+		boolean expression = rulesToBeSorted.get(0).getRank() < rulesToBeSorted
+				.get(1).getRank();
+		assertTrue(expression);
+		assertEquals(count, ruleList.size());
 		rule1.delete();
 		rule2.delete();
 	}

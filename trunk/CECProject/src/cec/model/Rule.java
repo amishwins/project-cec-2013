@@ -2,7 +2,7 @@ package cec.model;
 
 import java.util.UUID;
 
-public interface Rule {
+public interface Rule extends Comparable<Rule> {
 	public UUID getId();
 	public int getRank();
 	public String getEmailAddresses();
