@@ -185,4 +185,16 @@ public class RuleImpl implements Rule {
 		else
 			return 0;
 	}
+
+	@Override
+	public void setRank(int rank) {
+		this.rank = rank;
+		
+	}
+
+	@Override
+	public void update() {
+		//ruleDao.update(id, rank, getEmailAddresses(), getWords(), targetFolder.getPath(), isActive.toString(), 
+		//		CECConfigurator.getReference().get("RuleFolder"));
+	}
 }

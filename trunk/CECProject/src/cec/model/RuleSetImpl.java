@@ -70,8 +70,11 @@ public class RuleSetImpl implements RuleSet {
 
 	@Override
 	public void swapRank(Rule first, Rule second) {
-		// TODO Auto-generated method stub
-
+		int temp = first.getRank();
+		first.setRank(second.getRank());
+		second.setRank(temp);
+		//first.update();
+		//second.update();
 	}
 
 }
