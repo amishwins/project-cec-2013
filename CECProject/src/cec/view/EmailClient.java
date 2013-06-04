@@ -14,6 +14,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -33,6 +34,7 @@ import javax.swing.JTree;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneLayout;
+import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -145,9 +147,41 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	}
 	
 	
+	//Timer implementation to test Rules (every 5s)
+	private void startSwingTimerForTestingRules(){
+		 Timer timer = new Timer(5000, new newEmailForTestingRules());
+		 timer.setInitialDelay(1000);
+		 timer.start(); 
+	}
+	
+	private class newEmailForTestingRules implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			
+			UUID emailId;
+			EmailViewEntity emailViewEntity;
+			
+			emailId = UUID.randomUUID();
+			emailViewEntity = new EmailViewEntity();
+			emailViewEntity.setId(emailId);
+			emailViewEntity.setFrom("user@cec.com");
+			emailViewEntity.setTo("Pankaj@yahoo.com");
+			emailViewEntity.setCC("Pankaj@yahoo.com");
+			emailViewEntity.setSubject("Subject@IntegrationTests"+emailId);
+			emailViewEntity.setBody("Body");
+			emailViewEntity.setSentTime("2013.05.19_At_05.08.28.457");
+			emailViewEntity.setLastModifiedTime("2013.05.19_At_05.08.28.457");
+			
+			emailService.draftEmail(emailViewEntity);
+			emailService.move(emailViewEntity, "emails/Inbox");
+			updateEmailsTable();			
+		}
+	}
+	
+	
 	private EmailClient(String title) {
 		super(title);
 		initialize();
+		startSwingTimerForTestingRules(); //Time
 	}
 
 	private void initialize() {
