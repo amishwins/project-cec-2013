@@ -5,6 +5,7 @@ import java.util.UUID;
 public interface Rule extends Comparable<Rule> {
 	public UUID getId();
 	public int getRank();
+	public void setRank(int rank);
 	public String getEmailAddresses();
 	public String getWords();
 	public Folder getTargetFolder();
@@ -17,6 +18,7 @@ public interface Rule extends Comparable<Rule> {
 	public void deactivate();
 	
 	public void save();
+	public void update();
 	public void delete();
 	
 	public void apply(Email email);
