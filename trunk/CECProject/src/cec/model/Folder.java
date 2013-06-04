@@ -4,6 +4,9 @@
  */
 package cec.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cec.persistence.FolderDao;
 import cec.persistence.FolderDaoFactory;
 
@@ -30,6 +33,16 @@ public abstract class Folder {
 	
     protected void setFolderDao(FolderDao folderDao){
     	this.folderDao = folderDao;    	
+    }
+    
+    public Iterable<Folder> loadAllSubFolderUnderSomeSystemFolder(){
+ 	   List<Folder> foldersToSearchIn = new ArrayList<>();
+ 	   Iterable<String> foldersPath = folderDao.loadSubFolders(getPath());
+ 	   for(String folderPath: foldersPath){
+ 		   Folder newFolder = FolderFactory.getFolder(folderPath);
+ 		   foldersToSearchIn.add(newFolder);
+ 	   }
+ 	   return foldersToSearchIn;
     }
     
     /**
