@@ -135,6 +135,46 @@ public class InputValidationTests {
 	*/
 	
 	@Test
+	public void validateBothDatesAreInOrder() {
+		assertTrue(v.isStartTimeAndEndTimeInOrder("2013-06-02", "10:30 PM", "2013-06-02", "11:30 PM"));
+	}
+	
+	@Test
+	public void validateSameDatesDoesNotWork() {
+		assertFalse(v.isStartTimeAndEndTimeInOrder("2013-06-02", "10:30 PM", "2013-06-02", "10:30 PM"));
+	}
+	
+	@Test
+	public void validateUnOrderedDatesDoesNotWorks() {
+		assertFalse(v.isStartTimeAndEndTimeInOrder("2013-06-02", "11:30 PM", "2013-06-02", "10:30 PM"));
+	}
+	
+	@Test
+	public void validateUnOrderedDifferentDatesDoesNotWork() {
+		assertFalse(v.isStartTimeAndEndTimeInOrder("2013-06-03", "11:30 PM", "2013-06-02", "10:30 PM"));
+	}
+	
+	@Test
+	public void validateOrderedDifferentDatesWork() {
+		assertTrue(v.isStartTimeAndEndTimeInOrder("2013-06-03", "11:30 PM", "2013-06-04", "10:30 PM"));
+	}
+	
+	@Test
+	public void validateBothDateTimeArePassedDates() {
+		assertFalse(v.hasNotPassedDates("2013-06-03", "11:30 PM", "2013-06-02", "10:30 PM"));
+	}
+	
+	@Test
+	public void validateBothDateTimeAreFutureDates() {
+		assertTrue(v.hasNotPassedDates("2014-06-03", "11:30 PM", "2014-06-02", "10:30 PM"));
+	}
+	/*
+	@Test
+	public void validateBothCurrentDateTimeAreFutureDates() {
+		assertFalse(v.hasNotPassedDates("2013-06-04", "03:30 PM", "2013-06-04", "03:30 PM"));
+	}*/
+	
+	@Test
 	public void onlyAtSymbolFails() {
 		String emailString = "@";
 		assertFalse(v.isValidSendees(emailString, ""));

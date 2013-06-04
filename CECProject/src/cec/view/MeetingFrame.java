@@ -113,17 +113,17 @@ public class MeetingFrame extends JFrame {
 		Vector<String> timeArray = new Vector<>();
 		String am = " AM";
 		String pm = " PM";
-		timeArray.add(df.format(new Double(12.00)) + am);
-		timeArray.add(df.format(new Double(12.30)) + am);
+		timeArray.add(df.format(new Double(12.00)).replace('.',':') + am);
+		timeArray.add(df.format(new Double(12.30)).replace('.',':') + am);
 		for (double i = 01.00; i < 12.00; i = i + 1.00) {
-			timeArray.add(df.format(new Double(i)) + am);
-			timeArray.add(df.format(new Double(i + 0.30)) + am);
+			timeArray.add(df.format(new Double(i)).replace('.',':') + am);
+			timeArray.add(df.format(new Double(i + 0.30)).replace('.',':') + am);
 		}
-		timeArray.add(df.format(new Double(12.00)) + pm);
-		timeArray.add(df.format(new Double(12.30)) + pm);
+		timeArray.add(df.format(new Double(12.00)).replace('.',':') + pm);
+		timeArray.add(df.format(new Double(12.30)).replace('.',':') + pm);
 		for (double i = 01.00; i < 12.00; i = i + 1.00) {
-			timeArray.add(df.format(new Double(i)) + pm);
-			timeArray.add(df.format(new Double(i + 0.30)) + pm);
+			timeArray.add(df.format(new Double(i)).replace('.',':') + pm);
+			timeArray.add(df.format(new Double(i + 0.30)).replace('.',':') + pm);
 		}
 		return timeArray;
 	}
@@ -299,17 +299,28 @@ public class MeetingFrame extends JFrame {
 
 		if (!emailValidator.isValidDates(meetingView.getStartDate(),
 				meetingView.getEndDate())) {
-			JOptionPane.showMessageDialog(null,
-					"One of the Date is not properly formatted. Please recheck");
+			JOptionPane
+					.showMessageDialog(null,
+							"One of the Date is not properly formatted. Please recheck");
 			return false;
 		}
-		
-		if (!emailValidator.hasNotPassedDates(meetingView.getStartDate(),
-				meetingView.getEndDate())) {
+
+		if (!emailValidator.hasNotPassedDates(meetingView.getStartDate(), meetingView.getStartTime(),
+				meetingView.getEndDate(), meetingView.getEndTime())) {
 			JOptionPane.showMessageDialog(null,
 					"One of the Date is past date. Please recheck");
 			return false;
 		}
+
+		if (!emailValidator.isStartTimeAndEndTimeInOrder(
+				meetingView.getStartDate(), meetingView.getStartTime(),
+				meetingView.getEndDate(), meetingView.getEndTime())) {
+			JOptionPane
+					.showMessageDialog(null,
+							"Start Time should not be less than or equal to End Time. Please recheck");
+			return false;
+		}
+
 		return true;
 	}
 
