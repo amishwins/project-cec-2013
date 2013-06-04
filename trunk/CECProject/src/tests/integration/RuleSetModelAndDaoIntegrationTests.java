@@ -4,7 +4,9 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.junit.After;
@@ -139,12 +141,48 @@ public class RuleSetModelAndDaoIntegrationTests {
 		int rule1BeforeSwapping = rulesToBeSwapped.get(0).getRank();
 		int rule2BeforeSwapping = rulesToBeSwapped.get(1).getRank();
 		ruleSet.swapRank(rulesToBeSwapped.get(0), rulesToBeSwapped.get(1));
-        int rule1AfterSwapping = rulesToBeSwapped.get(0).getRank();
-        int rule2AfterSwapping = rulesToBeSwapped.get(1).getRank();
-        assertEquals(rule1BeforeSwapping,rule2AfterSwapping);
-        assertEquals(rule2BeforeSwapping,rule1AfterSwapping);
+		int rule1AfterSwapping = rulesToBeSwapped.get(0).getRank();
+		int rule2AfterSwapping = rulesToBeSwapped.get(1).getRank();
+		assertEquals(rule1BeforeSwapping, rule2AfterSwapping);
+		assertEquals(rule2BeforeSwapping, rule1AfterSwapping);
 
-        rule1.delete();
+		rule1.delete();
+		rule2.delete();
+	}
+
+	@Test
+	public void createLoadAndSwapAndUpdateRules() {
+		List<Rule> rulesToBeSwapped = new ArrayList<>();
+		rule1.save();
+		rule2.save();
+		Map<UUID, Integer> idToRankBefore = new HashMap<>();
+		Map<UUID, Integer> idToRankAfter = new HashMap<>();
+		Iterable<Rule> rulesBeforeSwapping = ruleSet.loadRules();
+		for (Rule rule : rulesBeforeSwapping) {
+			if ((rule.getId().compareTo(rule1.getId()) == 0)
+					|| (rule.getId().compareTo(rule2.getId()) == 0)) {
+				rulesToBeSwapped.add(rule);
+				idToRankBefore.put(rule.getId(), rule.getRank());
+			}
+		}
+
+		Collections.sort(rulesToBeSwapped);
+
+		ruleSet.swapRank(rulesToBeSwapped.get(0), rulesToBeSwapped.get(1));
+		Iterable<Rule> rulesAfterSwapping = ruleSet.loadRules();
+		for (Rule rule : rulesAfterSwapping) {
+			if ((rule.getId().compareTo(rule1.getId()) == 0)
+					|| (rule.getId().compareTo(rule2.getId()) == 0)) {
+
+				idToRankAfter.put(rule.getId(), rule.getRank());
+			}
+		}
+
+		assertEquals(idToRankBefore.get(rule1.getId()),
+				idToRankAfter.get(rule2.getId()));
+		assertEquals(idToRankBefore.get(rule2.getId()),
+				idToRankAfter.get(rule1.getId()));
+		rule1.delete();
 		rule2.delete();
 	}
 

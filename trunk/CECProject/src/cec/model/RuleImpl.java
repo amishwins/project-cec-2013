@@ -194,7 +194,7 @@ public class RuleImpl implements Rule {
 
 	@Override
 	public void update() {
-		//ruleDao.update(id, rank, getEmailAddresses(), getWords(), targetFolder.getPath(), isActive.toString(), 
-		//		CECConfigurator.getReference().get("RuleFolder"));
+		ruleDao.update(id, String.valueOf(rank), getEmailAddresses(), getWords(), targetFolder.getPath(), isActive.toString(), 
+				CECConfigurator.getReference().get("RuleFolder"));
 	}
 }

@@ -69,12 +69,12 @@ public class RuleSetImpl implements RuleSet {
 	
 
 	@Override
-	public void swapRank(Rule first, Rule second) {
+	public synchronized void  swapRank(Rule first, Rule second) {
 		int temp = first.getRank();
 		first.setRank(second.getRank());
 		second.setRank(temp);
-		//first.update();
-		//second.update();
+		first.update();
+		second.update();
 	}
 
 }

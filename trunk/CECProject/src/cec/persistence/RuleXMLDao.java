@@ -12,14 +12,11 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.io.FileDeleteStrategy;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -357,6 +354,33 @@ public class RuleXMLDao implements RuleDao {
 			logger.severe(StackTrace.asString(exception));
 		}
 
+	}
+
+	@Override
+	public synchronized void update(UUID id, String rank, String sender, String keywords,
+			String tartgetFolder, String status, String pathToSaveRuleFile) {
+		String path = pathToSaveRuleFile;
+		String fileName = id.toString();
+		String pathToSaveFile = path + "/" + fileName + FILE_EXTENSION;
+        try {
+			Document emailInXMLFormat = buildXmlFile(id, rank, sender,
+					keywords, tartgetFolder, status);
+
+			TransformerFactory transformerFactory = TransformerFactory
+					.newInstance();
+			StreamSource stylesource = new StreamSource(getClass()
+					.getResourceAsStream("proper-indenting.xsl"));
+			Transformer transformer = transformerFactory
+					.newTransformer(stylesource);
+			DOMSource source = new DOMSource(emailInXMLFormat);
+			StreamResult result = new StreamResult(new File(pathToSaveFile));
+
+			transformer.transform(source, result);
+	
+		} catch (Exception e) {
+			logger.severe(StackTrace.asString(e));
+		}
+		
 	}
 
 }
