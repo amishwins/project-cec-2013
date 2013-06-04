@@ -17,6 +17,10 @@ public class RuleImpl implements Rule {
 	private Search searcher;
 	
 	public RuleImpl(UUID id, int rank, String emailAddresses, String words, Folder targetFolder, boolean active) {
+		if ((emailAddresses == null || emailAddresses == "") && (words == null || words == "")) {
+			throw new IllegalArgumentException("Must supply at least email addresses or search words");
+		}
+		
 		this.id = id;
 		this.rank = rank;
 		this.emailAddresses = emailAddresses;
@@ -67,20 +71,40 @@ public class RuleImpl implements Rule {
 	@Override
 	public void apply(Email email) {
 		if (!isActive) return;
-		// logic which tells the email to move to another folder
-		String[] splitEmailAddresses = emailAddresses.split(";");
-		boolean match = false;
 		
-		for(String s: splitEmailAddresses) {
-			searcher = new SearchImpl(email.getFrom(), s.trim());
-			if (searcher.isMatch()) {
-				match = true;
-				break;
-			}
+		// if rule has both email address and words, both must apply
+		// if rule has only email address, only from applies
+		// if rule has only words, only subject and body applies
+		boolean emailsSupplied = true;
+		boolean wordsSupplied = true;
+		if (emailAddresses.trim() == "" || emailAddresses == null) emailsSupplied = false;
+		if (words.trim() == "" || words == null) wordsSupplied = false;
+		
+		String[] splitEmailAddresses = emailAddresses.trim().split(";");
+		String[] splitWords = words.trim().split(" ");
+
+		boolean match = false;
+		if (emailsSupplied && wordsSupplied) {
+			match = doesRuleApplyToSender(email, splitEmailAddresses, match) && 
+					 doesRuleApplyToSubjectAndBody(email, splitWords, match);
+		}
+		else if (emailsSupplied) {
+			match = doesRuleApplyToSender(email, splitEmailAddresses, match);
+		} 
+		else if (wordsSupplied) {
+			match = doesRuleApplyToSubjectAndBody(email, splitWords, match);
+		}
+		else {
+			throw new RuntimeException("A rule must have at least 1 email or 1 word");
 		}
 		
-		String [] splitWords = words.split(" ");
+		if (match) {
+			moveEmail(email);
+		}
 		
+	}
+
+	protected boolean doesRuleApplyToSubjectAndBody(Email email, String[] splitWords, boolean match) {
 		for(String s: splitWords) {
 			if (email.getSubject() == null || email.getSubject() == "") { 
 			} else {
@@ -99,11 +123,18 @@ public class RuleImpl implements Rule {
 				}	
 			}
 		}
-		
-		if (match) {
-			moveEmail(email);
+		return match;
+	}
+
+	protected boolean doesRuleApplyToSender(Email email, String[] splitEmailAddresses, boolean match) {
+		for(String s: splitEmailAddresses) {
+			searcher = new SearchImpl(email.getFrom(), s.trim());
+			if (searcher.isMatch()) {
+				match = true;
+				break;
+			}
 		}
-		
+		return match;
 	}
 
 	protected void moveEmail(Email email) {

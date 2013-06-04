@@ -17,15 +17,26 @@ import cec.model.RuleImpl;
 import cec.persistence.RuleDao;
 
 public class RuleTests {
-	RuleImplCUT ruleCUT;
+	RuleImplCUT ruleOnlyEmailAddressesCUT;
+	RuleImplCUT ruleOnlyWordsCUT;
+	RuleImplCUT ruleBothEmailAddressesAndWordsCUT;
 	EmailStub email;
 	RuleDaoStub ruleDaoStub = new RuleDaoStub();
 
 	@Before
 	public void setUp() throws Exception {
-		ruleCUT = new RuleImplCUT(UUID.randomUUID(), 1, "amish.gala@gmail.com; pankajkapania@yahoo.com", 
+		ruleOnlyEmailAddressesCUT = new RuleImplCUT(UUID.randomUUID(), 1, "amish.gala@gmail.com; pankajkapania@yahoo.com", "", 
+				new FolderStub("test"), true);
+		ruleOnlyEmailAddressesCUT.setRuleDao(ruleDaoStub);
+		
+		ruleOnlyWordsCUT = new RuleImplCUT(UUID.randomUUID(), 1, "", "jokes, soen", 
+				new FolderStub("test"), true);
+		ruleOnlyWordsCUT.setRuleDao(ruleDaoStub);
+		
+		ruleBothEmailAddressesAndWordsCUT = new RuleImplCUT(UUID.randomUUID(), 1, "amish.gala@gmail.com; pankajkapania@yahoo.com", 
 				"jokes, soen", new FolderStub("Test"), true);
-		ruleCUT.setRuleDao(ruleDaoStub);
+		ruleBothEmailAddressesAndWordsCUT.setRuleDao(ruleDaoStub);
+		
 		email = new EmailStub();
 	}
 
@@ -34,65 +45,77 @@ public class RuleTests {
 	}
 
 	@Test
-	public void ruleAppliesToEmailAddressEmailMoved() {
+	public void ruleForEmailAddressesAppliesEmailMoved() {
 		email.from = "pankajkapania@yahoo.com";
-		ruleCUT.apply(email);
+		ruleOnlyEmailAddressesCUT.apply(email);
 		assertTrue(email.moveWasCalled);
 	}
 
 	@Test
-	public void ruleAppliesToWordsInSubjectEmailMoved() {
-		email.from = "billybob@gmail.com"; //not found
-		email.subject = "These are some jokes for you"; // the word jokes should be found
-		ruleCUT.apply(email);
-		assertTrue(email.moveWasCalled);
-	}
-
-	@Test
-	public void ruleAppliesToWordsInBodyEmailMoved() {
-		email.from = "billybob@gmail.com"; //not found
-		email.subject = "bad man";
-		email.body = "These are some jokes for you"; // the word jokes should be found
-		ruleCUT.apply(email);
-		assertTrue(email.moveWasCalled);
-	}
-	
-	@Test
-	public void ruleDoesNotApply() {
-		email.from = "billy@gmail.com";
-		email.subject = "no joke";
-		email.body = "i like coen 491";
-		ruleCUT.apply(email);
+	public void ruleForEmailAddressesDoesNotApplyEmailNotMoved() {
+		email.from = "bobby@yahoo.com";
+		ruleOnlyEmailAddressesCUT.apply(email);
 		assertFalse(email.moveWasCalled);
 	}
 	
 	@Test
+	public void ruleForWordsAppliesEmailMoved() {
+		email.from = "bobby@yahoo.com";
+		email.subject = "Today I love soen and maybe coen";
+		ruleOnlyWordsCUT.apply(email);
+		assertTrue(email.moveWasCalled);
+	}
+	
+	@Test
+	public void ruleForWordsDoesNotApplyEmailNotMoved() {
+		email.from = "bobby@yahoo.com";
+		email.subject = "Today I love cows and maybe goats";
+		ruleOnlyWordsCUT.apply(email);
+		assertFalse(email.moveWasCalled);		
+	}
+	
+	@Test
+	public void ruleForBothDoesNotApplyIfOnlyAddressMatch() {
+		email.from = "pankajkapania@yahoo.com";
+		email.body = "dogs and goats";
+		ruleBothEmailAddressesAndWordsCUT.apply(email);
+		assertFalse(email.moveWasCalled);
+	}	
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void noEmailSuppliedAndNoTermsSuppliedThrowsException() {
+		@SuppressWarnings("unused")
+		RuleImplCUT emptyRule = new RuleImplCUT(UUID.randomUUID(), 1, "", "", new FolderStub("Test"), true);
+	}
+	
+	@Test
 	public void saveCallsDaoSave() {
-		ruleCUT.save();
+		ruleBothEmailAddressesAndWordsCUT.save();
 		assertTrue(ruleDaoStub.saveWasCalled);
 	}
 
 	@Test
 	public void deleteCallsDaoSave() {
-		ruleCUT.delete();
+		ruleBothEmailAddressesAndWordsCUT.delete();
 		assertTrue(ruleDaoStub.deleteWasCalled);
 	}
 	
 	@Test
 	public void deactivateIsDeactivatedDoesntApply() {
-		ruleCUT.deactivate();
-		assertFalse(ruleCUT.isActive());
-		ruleCUT.apply(email);
+		ruleBothEmailAddressesAndWordsCUT.deactivate();
+		assertFalse(ruleBothEmailAddressesAndWordsCUT.isActive());
+		ruleBothEmailAddressesAndWordsCUT.apply(email);
 		assertFalse(email.moveWasCalled);		
 	}
 	
 	@Test
 	public void activateAfterDeactivate() {
-		ruleCUT.deactivate();
-		ruleCUT.activate();
+		ruleBothEmailAddressesAndWordsCUT.deactivate();
+		ruleBothEmailAddressesAndWordsCUT.activate();
 		email.from = "pankajkapania@yahoo.com";
-		ruleCUT.apply(email);
-		assertTrue(ruleCUT.isActive());
+		email.subject = "hi soen jokes";
+		ruleBothEmailAddressesAndWordsCUT.apply(email);
+		assertTrue(ruleBothEmailAddressesAndWordsCUT.isActive());
 		assertTrue(email.moveWasCalled);		
 	}	
 }

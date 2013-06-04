@@ -16,10 +16,12 @@ import org.junit.runners.Suite.SuiteClasses;
 	InputValidationTests.class,
 	MeetingBuilderTests.class,
 	PlaceholderHelperTests.class,
+	RuleTests.class,
+	RuleXMLDaoTests.class,
 	SearchTests.class,
 	TemplateServiceTests.class,
 	TemplateXMLDaoTests.class,
-	RuleXMLDaoTests.class
+		
 })
 
 public class UnitTests {
