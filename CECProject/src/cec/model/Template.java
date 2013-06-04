@@ -1,9 +1,7 @@
 package cec.model;
 
-import java.util.UUID;
-
 /**
- * The Interface Email exposes the life cycle methods 
+ * The Interface Template exposes the lifecycle methods 
  * of an email template that service layer should call.
  * 
  * Service layer classes are coupled to Model layer 
@@ -14,12 +12,12 @@ import java.util.UUID;
 public interface Template extends Comparable<Template> {
     
     /**
-     * Sends the email object to its destination address.
+     * Saves the template
      */
     public void save();
      
     /**
-     * Deletes the email from the System.
+     * Deletes the template from the System.
      */
     public void delete();
     
@@ -31,28 +29,28 @@ public interface Template extends Comparable<Template> {
     public String getName();
     
     /**
-     * Gets the To addresses(recipients) of an email .
+     * Gets the To addresses(recipients) of the template .
      *
      * @return the to
      */
     public String getTo();
     
     /**
-     * Gets the cc field of an email .
+     * Gets the cc field of the template .
      *
      * @return the cc 
      */
     public String getCC();
     
     /**
-     * Gets the subject of an email.
+     * Gets the subject of the template .
      *
      * @return the subject
      */
     public String getSubject();
     
     /**
-     * Gets the body part of an email.
+     * Gets the body part of the template.
      *
      * @return the body
      */
