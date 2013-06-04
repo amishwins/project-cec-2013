@@ -151,7 +151,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	private void startSwingTimerForTestingRules(){
 		 Timer timer = new Timer(5000, new newEmailForTestingRules());
 		 timer.setInitialDelay(1000);
-		 timer.start(); 
+		 //timer.start(); 
 	}
 	
 	private class newEmailForTestingRules implements ActionListener {
@@ -181,7 +181,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	private EmailClient(String title) {
 		super(title);
 		initialize();
-		//startSwingTimerForTestingRules(); //Time
+		startSwingTimerForTestingRules(); //Time
 	}
 
 	private void initialize() {
@@ -411,12 +411,17 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		rulesMenuBarEntry.setMnemonic('R');
 		menuBar.add(rulesMenuBarEntry);
 
-		JMenuItem newRule = new JMenuItem("New Rule", KeyEvent.VK_U);
+		JMenuItem newRule = new JMenuItem("New Rule...", KeyEvent.VK_U);
 		newRule.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, InputEvent.CTRL_DOWN_MASK));
 		rulesMenuBarEntry.add(newRule);
+
+		JMenuItem ruleSett = new JMenuItem("Rule Settings...", KeyEvent.VK_T);
+		ruleSett.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_DOWN_MASK));
+		rulesMenuBarEntry.add(ruleSett);
 		
 		// Add all the action listeners for the Rules menu
 		newRule.addActionListener(new MenuRulesNewRule());
+		ruleSett.addActionListener(new MenuRulesRuleSett());
 	}
 	
 	private void defineEmailsOrMeetingsTableLayout() {
@@ -837,6 +842,13 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	private class MenuRulesNewRule implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			new RuleFrame();
+		}
+	}
+
+	//RULES -> RULE SETTINGS
+	private class MenuRulesRuleSett implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			new RuleSettings();
 		}
 	}
 	
