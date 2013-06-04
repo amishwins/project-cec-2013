@@ -1,7 +1,9 @@
 package cec.model;
 
+import java.util.UUID;
+
 public interface Rule {
-	
+	public UUID getId();
 	public int getRank();
 	public String getEmailAddresses();
 	public String getWords();

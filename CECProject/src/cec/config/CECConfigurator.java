@@ -31,6 +31,7 @@ public class CECConfigurator {
 		mapDefaultDateFormat();
 		mapDefaultClientEmailAddress();
 		mapDefaultTechnicalFolders();
+		mapDefaultTechnicalFiles();
 	}
 
 	/**
@@ -90,6 +91,10 @@ public class CECConfigurator {
 	private void mapDefaultTechnicalFolders() {
 		systemSettings.put("Templates", "templates/");  // TODO: find out where this is used!
 		systemSettings.put("RuleFolder", "rules/");
+	}
+	
+	private void mapDefaultTechnicalFiles() {
+		systemSettings.put("LastRank", "rules/lastRank/lastRank.xml");  // TODO: find out where this is used!
 	}
 	
 	private void mapDefaultDateFormat() {
