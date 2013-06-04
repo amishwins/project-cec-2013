@@ -3,7 +3,9 @@ package cec.model;
 import java.util.UUID;
 
 import cec.config.CECConfigurator;
+import cec.persistence.EmailDaoFactory;
 import cec.persistence.RuleDao;
+import cec.persistence.RuleDaoFactory;
 
 public class RuleImpl implements Rule {
 	
@@ -27,12 +29,18 @@ public class RuleImpl implements Rule {
 		this.words = words;
 		this.targetFolder = targetFolder;
 		this.isActive = active;
+		setRuleDao(RuleDaoFactory.getRuleDaoInstance());
 	}
 	
 	protected void setRuleDao(RuleDao ruleDao) {
 		this.ruleDao = ruleDao;
 	}
-
+	
+	@Override
+	public UUID getId(){
+		return id;
+	}
+	
 	@Override
 	public int getRank() {
 		return rank;
@@ -158,7 +166,7 @@ public class RuleImpl implements Rule {
 
 	@Override
 	public void save() {
-		ruleDao.save(UUID.randomUUID(), new Integer(rank).toString(), getEmailAddresses(), getWords(), targetFolder.getPath(), isActive.toString(), 
+		ruleDao.save(id, getEmailAddresses(), getWords(), targetFolder.getPath(), isActive.toString(), 
 				CECConfigurator.getReference().get("RuleFolder"));
 	}
 

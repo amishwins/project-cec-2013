@@ -10,11 +10,11 @@ import cec.persistence.RuleDao;
 import cec.persistence.RuleDaoFactory;
 
 public class RuleSetImpl implements RuleSet {
-	RuleDao ruleDao = RuleDaoFactory.getRuleDaoInstance();
+	RuleDao ruleDao;
 
-	public RuleSetImpl(RuleDao ruleDao) {
+	public RuleSetImpl() {
 		super();
-		this.ruleDao = ruleDao;
+		setRuleDao(RuleDaoFactory.getRuleDaoInstance());
 	}
 
 	public RuleDao getRuleDao() {
@@ -26,28 +26,15 @@ public class RuleSetImpl implements RuleSet {
 	}
 
 	@Override
-	public void swapRank(Rule first, Rule second) {
-		// TODO Auto-generated method stub
-
+	public Iterable<Rule> loadActiveRules() {
+		Iterable<Rule> listOfAllRules = loadRules();
+		Iterable<Rule> listOfActiveRules = filterActiveRules(listOfAllRules); 
+		return listOfActiveRules;
 	}
-
 	@Override
 	public Iterable<Rule> loadRules() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Iterable<Rule> loadActiveRules() {
-		List<Rule> listOfActiveRules = new ArrayList<>();
-		Iterable<Rule> listOfAllRules = buildAllRules();
-     //   filterActiverules(); 
-		return null;
-	}
-
-	private Iterable<Rule> buildAllRules() {
 		Iterable<Map<String, String>> rulesData = ruleDao
-				.loadAllRules(CECConfigurator.getReference().get("Rules"));
+				.loadAllRules(CECConfigurator.getReference().get("RuleFolder"));
 		List<Rule> rules = new ArrayList<>();
 		for (Map<String, String> ruleData : rulesData) {
 			UUID id = UUID.fromString(ruleData.get("Id"));
@@ -63,9 +50,26 @@ public class RuleSetImpl implements RuleSet {
 		}
 		return rules;
 	}
+	
+	private Iterable<Rule> filterActiveRules(Iterable<Rule> allRules){
+		List<Rule> activeRules = new ArrayList<Rule>();
+		for (Rule rule : allRules){
+			if(rule.isActive()){
+				activeRules.add(rule);
+			}
+		}
+		return activeRules;
+	}
 
 	@Override
 	public void apply(Iterable<Email> targets) {
+		// TODO Auto-generated method stub
+
+	}
+	
+
+	@Override
+	public void swapRank(Rule first, Rule second) {
 		// TODO Auto-generated method stub
 
 	}

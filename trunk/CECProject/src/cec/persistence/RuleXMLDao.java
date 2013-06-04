@@ -25,54 +25,65 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import exceptions.StackTrace;
+import cec.config.CECConfigurator;
 
+import exceptions.StackTrace;
 
 /**
  * 
- * EmailXMLDao is a class in the persistence layer responsible for handling 
- * email life cycle events at a lower level. It saves each email in a XML file format.
- * it is also responsible for deleting an XML file  and moving an XML file from one folder to 
- * another folder.
+ * EmailXMLDao is a class in the persistence layer responsible for handling
+ * email life cycle events at a lower level. It saves each email in a XML file
+ * format. it is also responsible for deleting an XML file and moving an XML
+ * file from one folder to another folder.
  * 
  */
 public class RuleXMLDao implements RuleDao {
-	
-	/** Specifies the extension of file. */
-	private final String FILE_EXTENSION=".xml";
-	
-	static Logger logger = Logger.getLogger(RuleXMLDao.class.getName()); 
 
-    static { 
-        logger.setParent( Logger.getLogger( RuleXMLDao.class.getPackage().getName() ) );
-    }
-	
+	/** Specifies the extension of file. */
+	private final String FILE_EXTENSION = ".xml";
+
+	static Logger logger = Logger.getLogger(RuleXMLDao.class.getName());
+
+	static {
+		logger.setParent(Logger.getLogger(RuleXMLDao.class.getPackage()
+				.getName()));
+	}
+
 	/**
-	 * Builds the XML file using the specified arguments.
-	 * Name of each file is its id field.
+	 * Builds the XML file using the specified arguments. Name of each file is
+	 * its id field.
 	 * 
-	 * @param id the id
-	 * @param from the F
-	 * @param to the to
-	 * @param cc the cc
-	 * @param subject the subject
-	 * @param body the body
-	 * @param lastModifiedTime the last modified time
-	 * @param sentTime the sent time
-	 * @param location the location
+	 * @param id
+	 *            the id
+	 * @param from
+	 *            the F
+	 * @param to
+	 *            the to
+	 * @param cc
+	 *            the cc
+	 * @param subject
+	 *            the subject
+	 * @param body
+	 *            the body
+	 * @param lastModifiedTime
+	 *            the last modified time
+	 * @param sentTime
+	 *            the sent time
+	 * @param location
+	 *            the location
 	 * @return the document
 	 */
-	private Document buildXmlFile(UUID id, String rank, String sender, String keywords,
-			String tartgetFolder, String status) {
-		
+	private Document buildXmlFile(UUID id, String rank, String sender,
+			String keywords, String tartgetFolder, String status) {
+
 		DocumentBuilderFactory documentFactory = null;
 		DocumentBuilder documentBuilder = null;
 		Document ruleInXMLFormat = null;
-		
+
 		try {
 			documentFactory = DocumentBuilderFactory.newInstance();
-			documentBuilder = documentFactory.newDocumentBuilder();			
-			
+			documentBuilder = documentFactory.newDocumentBuilder();
+
 			// root element Email
 			ruleInXMLFormat = documentBuilder.newDocument();
 			Element ruleRootElement = ruleInXMLFormat.createElement("Rule");
@@ -99,8 +110,10 @@ public class RuleXMLDao implements RuleDao {
 			ruleRootElement.appendChild(keywordsLabel);
 
 			// tartgetFolder
-			Element tartgetFolderLabel = ruleInXMLFormat.createElement("TartgetFolder");
-			tartgetFolderLabel.appendChild(ruleInXMLFormat.createTextNode(tartgetFolder));
+			Element tartgetFolderLabel = ruleInXMLFormat
+					.createElement("TartgetFolder");
+			tartgetFolderLabel.appendChild(ruleInXMLFormat
+					.createTextNode(tartgetFolder));
 			ruleRootElement.appendChild(tartgetFolderLabel);
 
 			// status
@@ -115,128 +128,153 @@ public class RuleXMLDao implements RuleDao {
 
 	}
 
-	
-	
 	/**
-	 * It deletes each file from the system.
-	 * specification of an email to be deleted is given by
-	 * argument path and filename respectively to identify each email before deleting it.
-	 *  
-	 * It deletes each file forcefully from the System just to avoid exceptions that generates if file
-	 * is being used by another programs.
+	 * It deletes each file from the system. specification of an email to be
+	 * deleted is given by argument path and filename respectively to identify
+	 * each email before deleting it.
 	 * 
-	 * @param path the path
-	 * @param fileName the file name
+	 * It deletes each file forcefully from the System just to avoid exceptions
+	 * that generates if file is being used by another programs.
+	 * 
+	 * @param path
+	 *            the path
+	 * @param fileName
+	 *            the file name
 	 */
-	public void delete(String path, UUID fileName){
-       FileDeleteStrategy file = FileDeleteStrategy.FORCE;
-       try{
-    	   file.delete(new File(path+"/"+fileName.toString()+FILE_EXTENSION));
-       }catch(Exception fileDeleteException){
-    	   logger.severe(StackTrace.asString(fileDeleteException));;
-       }     		
+	public void delete(String path, UUID fileName) {
+		FileDeleteStrategy file = FileDeleteStrategy.FORCE;
+		try {
+			file.delete(new File(path + "/" + fileName.toString()
+					+ FILE_EXTENSION));
+		} catch (Exception fileDeleteException) {
+			logger.severe(StackTrace.asString(fileDeleteException));
+			;
+		}
 	}
-	
-	
+
 	/**
-	 * Updates the parentFolder tag value inside the xml file.
-	 * this method is called by move method so that before it moves the file to another folder, it 
-	 * should have the correct parentFolder tag value.
-	 *
-	 * @param xmlFile the xml file
-	 * @param destDir the dest dir
+	 * Updates the parentFolder tag value inside the xml file. this method is
+	 * called by move method so that before it moves the file to another folder,
+	 * it should have the correct parentFolder tag value.
+	 * 
+	 * @param xmlFile
+	 *            the xml file
+	 * @param destDir
+	 *            the dest dir
 	 */
-	private void updateXMLField(String xmlFile, String destDir){
+	private void updateXMLField(String xmlFile, String destDir) {
 		DocumentBuilderFactory documentFactory = null;
 		DocumentBuilder documentBuilder = null;
 		Document emailInXMLFormat = null;
-		
+
 		try {
 			documentFactory = DocumentBuilderFactory.newInstance();
 			documentBuilder = documentFactory.newDocumentBuilder();
-			 emailInXMLFormat = documentBuilder.parse(xmlFile);
-			 emailInXMLFormat.getDocumentElement().normalize();
+			emailInXMLFormat = documentBuilder.parse(xmlFile);
+			emailInXMLFormat.getDocumentElement().normalize();
 
 			NodeList email = emailInXMLFormat.getElementsByTagName("E-Mail");
-			Element	field = (Element) email.item(0);
-			Node parentFolder = field.getElementsByTagName("ParentFolder").item(0)
-						.getFirstChild();
-		    parentFolder.setNodeValue(destDir);
+			Element field = (Element) email.item(0);
+			Node parentFolder = field.getElementsByTagName("ParentFolder")
+					.item(0).getFirstChild();
+			parentFolder.setNodeValue(destDir);
 
 			emailInXMLFormat.getDocumentElement().normalize();
 			TransformerFactory transformerFactory = TransformerFactory
 					.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(emailInXMLFormat);
-			StreamResult result = new StreamResult(
-					new File(xmlFile));
+			StreamResult result = new StreamResult(new File(xmlFile));
 			transformer.transform(source, result);
 		} catch (Exception exception) {
 			logger.severe(StackTrace.asString(exception));
 		}
-		
-	}
 
+	}
 
 	@Override
-	public void save(UUID id, String rank, String sender, String keywords,
+	public synchronized void save(UUID id, String sender, String keywords,
 			String tartgetFolder, String status, String pathToSaveRuleFile) {
 
-    String path = pathToSaveRuleFile;
-	String fileName = id.toString();
-   	String pathToSaveFile = path + "/" + fileName
-			+ FILE_EXTENSION;
+		String path = pathToSaveRuleFile;
+		String fileName = id.toString();
+		String pathToSaveFile = path + "/" + fileName + FILE_EXTENSION;
+        String rank = String.valueOf(getLatestRank()+1);
+		try {
+			Document emailInXMLFormat = buildXmlFile(id, rank, sender,
+					keywords, tartgetFolder, status);
 
-	try {
-		Document emailInXMLFormat = buildXmlFile(id, rank, sender, keywords, tartgetFolder,
-				status);
-		
-		TransformerFactory transformerFactory = TransformerFactory
-				.newInstance();
-		StreamSource stylesource = new StreamSource(getClass()
-				.getResourceAsStream("proper-indenting.xsl"));
-		Transformer transformer = transformerFactory
-				.newTransformer(stylesource);
-		DOMSource source = new DOMSource(emailInXMLFormat);
-		StreamResult result = new StreamResult(new File(pathToSaveFile));
+			TransformerFactory transformerFactory = TransformerFactory
+					.newInstance();
+			StreamSource stylesource = new StreamSource(getClass()
+					.getResourceAsStream("proper-indenting.xsl"));
+			Transformer transformer = transformerFactory
+					.newTransformer(stylesource);
+			DOMSource source = new DOMSource(emailInXMLFormat);
+			StreamResult result = new StreamResult(new File(pathToSaveFile));
 
-		transformer.transform(source, result);
+			transformer.transform(source, result);
+			updateRank(rank);
 
-	} catch (TransformerException e) {
-		logger.severe(StackTrace.asString(e));
+		} catch (Exception e) {
+			logger.severe(StackTrace.asString(e));
+		}
+
 	}
-		
-	}
 
-	
 	@Override
 	public Map<String, String> loadRule(String folder, String ruleXmlFileName) {
 		Map<String, String> ruleData = new TreeMap<String, String>();
 		try {
 			File xmlFile = new File(folder + "/" + ruleXmlFileName);
-			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory
+					.newInstance();
+			DocumentBuilder documentBuilder = documentBuilderFactory
+					.newDocumentBuilder();
 			Document rule = documentBuilder.parse(xmlFile);
-			logger.info("loading Rules(s) from folder: "+folder+ " and from file: "+ruleXmlFileName+" " );
+			logger.info("loading Rules(s) from folder: " + folder
+					+ " and from file: " + ruleXmlFileName + " ");
 			rule.getDocumentElement().normalize();
 			NodeList listOfRuleFields = rule.getElementsByTagName("Rule");
 			for (int index = 0; index < listOfRuleFields.getLength(); index++) {
 				Node ruleField = listOfRuleFields.item(index);
 				if (ruleField.getNodeType() == Node.ELEMENT_NODE) {
 					Element eElement = (Element) ruleField;
-					ruleData.put("Id", eElement.getElementsByTagName("Id").item(0).getTextContent());
-					ruleData.put("Rank", eElement.getElementsByTagName("Rank").item(0).getTextContent());
-					ruleData.put("Senders", eElement.getElementsByTagName("Senders").item(0).getTextContent());
-					ruleData.put("Keywords", eElement.getElementsByTagName("Keywords").item(0).getTextContent());
-					ruleData.put("TartgetFolder", eElement.getElementsByTagName("TartgetFolder").item(0).getTextContent());
-					ruleData.put("Status", eElement.getElementsByTagName("Status").item(0).getTextContent());
-					
-					logger.info("Id: " + eElement.getElementsByTagName("Id").item(0).getTextContent());
-					logger.info("Rank: " + eElement.getElementsByTagName("Rank").item(0).getTextContent());
-					logger.info("Senders: " + eElement.getElementsByTagName("Senders").item(0).getTextContent());
-					logger.info("Keywords: " + eElement.getElementsByTagName("Keywords").item(0).getTextContent());
-					logger.info("TartgetFolder: " + eElement.getElementsByTagName("TartgetFolder").item(0).getTextContent());
-					logger.info("Status: " + eElement.getElementsByTagName("Status").item(0).getTextContent());
+					ruleData.put("Id", eElement.getElementsByTagName("Id")
+							.item(0).getTextContent());
+					ruleData.put("Rank", eElement.getElementsByTagName("Rank")
+							.item(0).getTextContent());
+					ruleData.put("Senders",
+							eElement.getElementsByTagName("Senders").item(0)
+									.getTextContent());
+					ruleData.put("Keywords",
+							eElement.getElementsByTagName("Keywords").item(0)
+									.getTextContent());
+					ruleData.put("TartgetFolder", eElement
+							.getElementsByTagName("TartgetFolder").item(0)
+							.getTextContent());
+					ruleData.put("Status",
+							eElement.getElementsByTagName("Status").item(0)
+									.getTextContent());
+
+					logger.info("Id: "
+							+ eElement.getElementsByTagName("Id").item(0)
+									.getTextContent());
+					logger.info("Rank: "
+							+ eElement.getElementsByTagName("Rank").item(0)
+									.getTextContent());
+					logger.info("Senders: "
+							+ eElement.getElementsByTagName("Senders").item(0)
+									.getTextContent());
+					logger.info("Keywords: "
+							+ eElement.getElementsByTagName("Keywords").item(0)
+									.getTextContent());
+					logger.info("TartgetFolder: "
+							+ eElement.getElementsByTagName("TartgetFolder")
+									.item(0).getTextContent());
+					logger.info("Status: "
+							+ eElement.getElementsByTagName("Status").item(0)
+									.getTextContent());
 				}
 			}
 		} catch (Exception e) {
@@ -245,7 +283,6 @@ public class RuleXMLDao implements RuleDao {
 		return ruleData;
 	}
 
-	
 	@Override
 	public Iterable<Map<String, String>> loadAllRules(String pathToRuleFolder) {
 		Collection<Map<String, String>> listOfRules = new ArrayList<>();
@@ -253,9 +290,73 @@ public class RuleXMLDao implements RuleDao {
 		String[] xmlFileNames = FolderDaoImpl.getFileNames(pathToRuleFolder);
 		for (String xmlFileName : xmlFileNames) {
 			rule = loadRule(pathToRuleFolder, xmlFileName);
-				listOfRules.add(rule);
+			listOfRules.add(rule);
 		}
 		return listOfRules;
 	}
-	
+
+	private synchronized int getLatestRank() {
+		int rank = -1;
+		try {
+			File xmlFile = new File(CECConfigurator.getReference().get(
+					"LastRank"));
+			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory
+					.newInstance();
+			DocumentBuilder documentBuilder = documentBuilderFactory
+					.newDocumentBuilder();
+
+			Document lastRank = documentBuilder.parse(xmlFile);
+			logger.info("loading Rank from xmlFile: " + xmlFile);
+
+			lastRank.getDocumentElement().normalize();
+			NodeList listOfRuleFields = lastRank.getElementsByTagName("Rule");
+			for (int index = 0; index < listOfRuleFields.getLength(); index++) {
+				Node ruleField = listOfRuleFields.item(index);
+				if (ruleField.getNodeType() == Node.ELEMENT_NODE) {
+					Element eElement = (Element) ruleField;
+					rank = Integer.parseInt(eElement
+							.getElementsByTagName("Rank").item(0)
+							.getTextContent());
+
+					logger.info("Rank: " + rank);
+				}
+			}
+		} catch (Exception e) {
+			logger.severe(StackTrace.asString(e));
+		}
+		return rank;
+	}
+
+	private synchronized void updateRank(String rank) {
+		DocumentBuilderFactory documentFactory = null;
+		DocumentBuilder documentBuilder = null;
+		Document ruleRankInXMLFormat = null;
+
+		try {
+			File xmlFile = new File(CECConfigurator.getReference().get(
+					"LastRank"));
+			documentFactory = DocumentBuilderFactory.newInstance();
+			documentBuilder = documentFactory.newDocumentBuilder();
+			ruleRankInXMLFormat = documentBuilder.parse(xmlFile);
+			ruleRankInXMLFormat.getDocumentElement().normalize();
+
+			NodeList rule = ruleRankInXMLFormat.getElementsByTagName("Rule");
+			Element field = (Element) rule.item(0);
+			Node newRank = field.getElementsByTagName("Rank")
+					.item(0).getFirstChild();
+			newRank.setNodeValue(rank);
+
+			ruleRankInXMLFormat.getDocumentElement().normalize();
+			TransformerFactory transformerFactory = TransformerFactory
+					.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+			DOMSource source = new DOMSource(ruleRankInXMLFormat);
+			StreamResult result = new StreamResult(xmlFile);
+			transformer.transform(source, result);
+		} catch (Exception exception) {
+			logger.severe(StackTrace.asString(exception));
+		}
+
+	}
+
 }

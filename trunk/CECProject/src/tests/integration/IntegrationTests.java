@@ -10,7 +10,8 @@ import org.junit.runners.Suite.SuiteClasses;
 	EmailServiceModelAndDaoIntegrationTests.class,
 	FolderServiceModelAndDaoIntegrationTests.class,
 	MeetingServiceModelAndDaoIntegrationTests.class,
-	TemplateModelAndDaoIntegrationTests.class })
+	TemplateModelAndDaoIntegrationTests.class,
+	 RuleSetModelAndDaoIntegrationTests.class })
 
 public class IntegrationTests {
 

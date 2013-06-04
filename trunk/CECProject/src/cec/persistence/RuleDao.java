@@ -23,7 +23,7 @@ public interface RuleDao {
 	 * @param sentTime the sent time
 	 * @param location the location
 	 */
-	public void save(UUID id, String rank, String sender, String keyword,
+	public void save(UUID id, String sender, String keyword,
 			String tartgetFolder, String status, String pathToSaveRuleFile);
 	
 	/**
@@ -47,4 +47,5 @@ public interface RuleDao {
 	public Map<String, String> loadRule(String folder, String ruleXmlFileName);
 	
 	public Iterable<Map<String, String>> loadAllRules(String pathToRuleFolder);
+	
 }

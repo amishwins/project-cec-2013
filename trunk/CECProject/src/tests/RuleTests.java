@@ -139,7 +139,7 @@ class RuleDaoStub implements RuleDao {
 	public boolean deleteWasCalled = false;
 
 	@Override
-	public void save(UUID id, String rank, String sender, String keyword,
+	public void save(UUID id, String sender, String keyword,
 			String tartgetFolder, String status, String pathToSaveRuleFile) {
 		saveWasCalled = true;
 	}
@@ -160,7 +160,7 @@ class RuleDaoStub implements RuleDao {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 }
 
 class EmailStub implements Email {
