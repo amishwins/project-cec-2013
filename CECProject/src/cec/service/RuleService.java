@@ -32,7 +32,7 @@ public class RuleService {
 	
 	public void delete(RuleViewEntity ruleViewEntity) {
 		Rule rule = (new RuleBuilder())
-				.withId(UUID.fromString(ruleViewEntity.getID()))
+				.withId(ruleViewEntity.getID())
 				.build();
 		rule.delete();
 	}
