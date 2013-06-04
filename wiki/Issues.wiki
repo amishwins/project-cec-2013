@@ -17,6 +17,7 @@
     * If edit template, and make no changes, we can still "overwrite"
   * Unit test gaps: Service Layer for Template, and Search
   * Clean up warnings in all classes (mostly unused imports)
+  * Console Log messages - find a nice way to turn them all off!
   * Clean up Email Client and Email Frame
 
 === Phase 1 ===
