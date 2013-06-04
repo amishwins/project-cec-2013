@@ -120,6 +120,13 @@ public class FolderService {
 		folder.delete();
 	}
 	
-	
-	
+	public Iterable<String> loadSubFolders(String folderPath){
+		List<String> foldersList = new ArrayList<>();
+		folder = FolderFactory.getFolder(folderPath);
+		Iterable<Folder> listOfSubFolders = folder.loadAllSubFolderUnderSomeSystemFolder();
+		for(Folder folder:listOfSubFolders){
+			foldersList.add(folder.getPath());
+		}
+		return foldersList;
+	}
 }

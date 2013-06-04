@@ -76,7 +76,7 @@ public abstract class EmailsFolder extends Folder {
 		return emailsInFolder;
 	}
    
-   private Iterable<Folder>loadAllSubFolderUnderSearchableFolder(Folder searchableFolder){
+   public Iterable<Folder>loadAllSubFolderUnderSearchableFolder(Folder searchableFolder){
 	   List<Folder> foldersToSearchIn = new ArrayList<>();
 	   foldersToSearchIn.add(searchableFolder);
 	   Iterable<String> foldersPath = folderDao.loadSubFolders(searchableFolder.getPath());
