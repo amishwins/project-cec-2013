@@ -1,0 +1,155 @@
+<html>
+	<head>
+		<title>CECProject Design Phase 1</title>
+	</head>
+
+	<body>
+	
+		<h1>Collaborative Email Client Project Design - Phase 2</h1>
+		<p>Wednesday, June 5, 2013</p>
+		<p><b>Group 5: </b> Amish Gala, Deyvid William, Pankaj Kapania, and Romeo Honvo</p>
+
+		<p><b>Statistics:</b></p>
+		<table border=1>
+			<tr>
+				<th>Type</th>
+				<th>Measurement Phase 1</th>
+				<th>Measurement Phase 2</th>
+			</tr>
+			<tr>
+				<td>Total LOC</td>
+				<td>3222 (43 classes)</td>
+				<td>?</td>
+			</tr>
+			<tr>
+				<td>Total Production LOC</td>
+				<td>2477 (29 classes)</td>
+				<td>?</td>
+			</tr>
+			<tr>
+				<td>Total Unit Test LOC</td>
+				<td>742 (14 classes, 40 unit tests, 7 integration tests)</td>
+				<td>?</td>
+			</tr>
+			<tr>
+				<td>Code Coverage (ALL)</td>
+				<td>55.6%</td>
+				<td>?</td>
+			</tr>
+			<tr>
+				<td>Code Coverage (Unit)</td>
+				<td>32.2%</td>
+				<td>?</td>
+			</tr>
+			<tr>
+				<td>Code Coverage (Integration)</td>
+				<td>35.5%</td>
+				<td>?</td>
+			</tr>
+		</table>
+		
+		<h2>Architecture and Design</h2>
+		
+		<p>Phase 2 presented us with some new requirements to complement our already <b><i>robust</i></b> 
+		email client:</p>
+		
+		<ol>
+			<li>Email Template
+				<ul>
+					<li>Create Template</li>
+					<li>Edit Template</li>
+					<li>Delete Template</li>
+					<li>Apply Template</li>
+				</ul>
+			</li>
+			<li>Search emails in Inbox (and its subfolders)</li>
+			<li>Email Filter - move email into a specified Inbox subfolder based on certain criteria
+			<ul>
+					<li>Create Filter</li>
+					<li>Edit Filter</li>
+					<li>Delete Filter</li>
+					<li>Activate/Deactivate Filter</li>
+					<li>Re-order Filter</li>
+					<li>Simulate Filter Execution</li>
+				</ul>			
+			</li>
+			<li>Meetings
+			<ul>
+					<li>Create Meeting</li>
+					<li>Edit Meeting</li>
+					<li>Delete Meeting</li>
+					<li>Automatic email sending</li>
+				</ul>			
+			</li>
+		</ol>
+		
+	
+		
+		<h3>N-Tiers and Package Structure</h3>		
+
+		<h3>Major Additions and Changes to Classes</h3>
+		
+		
+		<h2>Important Decisions</h2>
+		
+		
+		<h3>Template and Email Sharing Same View Class (EmailFrame)</h3>
+		
+		<h3>Changes to the Folder Model Classes to Support Meetings</h3>
+		
+		<h3>Search and Special Characters</h3>
+		
+		<h3>Applying Template - Getting the UI to Highlight</h3>
+		
+		<h3>Rules - How to Treat Creation, Activation, and Execution</h3>
+		
+		<h2>Reused Libraries / Code Inspiration (in addition to Phase 1)</h2>
+		
+		<ul>
+			<li>javax.swing.InputMap and javax.swing.ActionMap - to handle the behavior when the user
+			applied a template to a new email</li>
+			<li>javax.swing.Timer to handle the periodic simulation of receiving an email, and firing the
+			rules afterwards</li>
+		</ul>
+		
+		
+		<h2>Design Patterns</h2>
+		
+		<ul>
+			<li>Builder: cec.model.EmailBuilder</li>
+			<li>Factory: cec.model.FolderFactory, cec.persistence.EmailDaoFactory, 
+			cec.persistence.FolderDaoFactory</li>
+			<li>Adapter/Wrapper: cec.view.Email, cec.view.EmailClient</li>
+			<li>Facade: cec.persistence.EmailXMLDao, cec.persistence.FolderXMLDao (for the javax.xml.parser,
+			javax.xml.transform, apache.commons.io, and w3c.dom classes)</li>
+			<li>Observer: cec.view.EmailClient (TreeSelectionListener), JTable for emails listens to 
+			model changes when an email is send, saved, or deleted.</li>
+			<li>Singleton: cec.view.EmailClient</li>
+		</ul>
+		
+		<h2>OOD Honorable Mentions</h2>
+		<ul>
+			<li>Value object: cec.view.EmailViewEntity</li>
+			<li>Data Access Object (DAO) interfaces: cec.persistence.EmailDao, cec.persistence.FolderDao</li>
+			<li>Test Patterns: 
+				<ul>
+					<li>Stub objects: isolated model tests by injecting/stubbing dependencies to persistence</li>
+					<li>Integration: a few more-involved integration tests were written, on the back
+					bone one solid unit tests</li>
+				</ul>
+			</li>	
+		
+		</ul>
+		
+		<h2>Known Issues</h2>
+		<h3>Overwrite Template</h3>
+		<p>Currently our save policy does not check if saving a template with the same name will overwrite 
+		an existing template with the same name. This is 
+		
+		<h3>Tree Refresh</h3>
+		<p>After we create or delete a subfolder, there's an problem that we redraw the JTree. This doesn't 
+		provided the best user experience, but it was an algorithmically challenging problem, and we didn't 
+		want to spend more time on it.</p> 
+		
+	</body>
+</html>
