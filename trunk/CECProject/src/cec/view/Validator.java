@@ -124,44 +124,108 @@ public class Validator {
 			int year = Integer.parseInt(matcher.group(1));
 			int month = Integer.parseInt(matcher.group(2));
 			int day = Integer.parseInt(matcher.group(3));
-			if(year<1900 || month>12 || day>31){
+			if (year < 1900 || month > 12 || day > 31) {
 				return false;
-			}else{
+			} else {
 				return true;
 			}
-			
+
 		}
 		return false;
 	}
 
 	public boolean hasNotPassedDates(String startDate, String endDate) {
-		if (!startDate.isEmpty() && !endDate.isEmpty()){
+		if (!startDate.isEmpty() && !endDate.isEmpty()) {
 			return hasNotPassed(startDate) && hasNotPassed(endDate);
 		}
 		return false;
 	}
-	
+
+	public boolean hasNotPassedDates(String startDate, String startTime,
+			String endDate, String endTime) {
+		if (!startDate.isEmpty() && !endDate.isEmpty()) {
+			return hasNotPassed(startDate,startTime) && hasNotPassed(endDate,endTime);
+		}
+		return false;
+	}
+
+	private boolean hasNotPassed(String date, String time) {
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm a");
+		
+		Calendar today = Calendar.getInstance();
+		int year = today.get(Calendar.YEAR);
+		int month = (today.get(Calendar.MONTH) + 1);
+		int day = today.get(Calendar.DAY_OF_MONTH);
+		int hour = today.get(Calendar.HOUR+1);
+		int second = today.get(Calendar.MINUTE);
+		int am_pm = today.get(Calendar.AM_PM);
+		String AM_PM;
+	    if(am_pm==0){
+	    	AM_PM="AM";
+	    }else{
+	    	AM_PM="PM";
+	    }
+		Date currentDate = null;
+		Date dateToBeTested = null;
+		try {
+			dateToBeTested = formatter.parse(date + " " + time);
+			currentDate = formatter.parse(year + "-" + month + "-" + day + " "
+					+ hour + ":" + second + " " + AM_PM);
+			
+		} catch (ParseException e) {
+
+			e.printStackTrace();
+		}
+
+		int i = currentDate.compareTo(dateToBeTested);
+		if (i < 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	private boolean hasNotPassed(String date) {
 		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar today = Calendar.getInstance();
 		int year = today.get(Calendar.YEAR);
-		int month = (today.get(Calendar.MONTH)+1);
+		int month = (today.get(Calendar.MONTH) + 1);
 		int day = today.get(Calendar.DAY_OF_MONTH);
 		Date currentDate = null;
-		Date dateToBeTested=null;
+		Date dateToBeTested = null;
 		try {
-		  dateToBeTested = formatter.parse(date);
-		  currentDate = formatter.parse(year+"-"+month+"-"+day);
+			dateToBeTested = formatter.parse(date);
+			currentDate = formatter.parse(year + "-" + month + "-" + day);
 		} catch (ParseException e) {
-			
+
 			e.printStackTrace();
 		}
-		
+
 		int i = currentDate.compareTo(dateToBeTested);
-		if (i>0){
+		if (i > 0) {
 			return false;
-		}else{
+		} else {
 			return true;
+		}
+	}
+
+	public boolean isStartTimeAndEndTimeInOrder(String startDate,
+			String startTime, String endDate, String endTime) {
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm a");
+		Date startDateTime = null;
+		Date endDateTime = null;
+		try {
+			startDateTime = formatter.parse(startDate + " " + startTime);
+			endDateTime = formatter.parse(endDate + " " + endTime);
+		} catch (ParseException e) {
+			
+			throw new RuntimeException(e);
+		}
+		int i = startDateTime.compareTo(endDateTime);
+		if (i < 0) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 }

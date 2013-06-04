@@ -181,7 +181,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	private EmailClient(String title) {
 		super(title);
 		initialize();
-		startSwingTimerForTestingRules(); //Time
+		//startSwingTimerForTestingRules(); //Time
 	}
 
 	private void initialize() {
