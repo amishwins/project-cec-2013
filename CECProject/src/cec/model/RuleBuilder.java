@@ -2,8 +2,6 @@ package cec.model;
 
 import java.util.UUID;
 
-import cec.persistence.RuleDaoFactory;
-
 /**
  * A builder of email instances.
  * 
