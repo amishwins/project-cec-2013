@@ -13,7 +13,6 @@ public class RuleSetImpl implements RuleSet {
 	RuleDao ruleDao;
 
 	public RuleSetImpl() {
-		super();
 		setRuleDao(RuleDaoFactory.getRuleDaoInstance());
 	}
 
@@ -64,7 +63,6 @@ public class RuleSetImpl implements RuleSet {
 	@Override
 	public void apply(Iterable<Email> targets) {
 		// TODO Auto-generated method stub
-
 	}
 	
 
@@ -75,6 +73,18 @@ public class RuleSetImpl implements RuleSet {
 		second.setRank(temp);
 		first.update();
 		second.update();
+	}
+
+	@Override
+	public int getNextRank() {
+		ArrayList<Rule> rules = (ArrayList<Rule>)loadRules();
+		int highest = 0;
+		for(Rule r: rules) {
+			if (highest > r.getRank())
+				highest = r.getRank();
+		}
+		
+		return highest + 1;
 	}
 
 }

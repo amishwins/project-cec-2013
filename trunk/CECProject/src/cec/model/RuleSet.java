@@ -5,4 +5,6 @@ public interface RuleSet {
 	public Iterable<Rule> loadRules();
 	public Iterable<Rule> loadActiveRules();
 	public void apply(Iterable<Email> targets);
+	public int getNextRank();
+
 }
