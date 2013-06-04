@@ -26,7 +26,8 @@ public interface RuleDao {
 	public void save(UUID id, String sender, String keyword,
 			String tartgetFolder, String status, String pathToSaveRuleFile);
 	
-	
+	public void update(UUID id, String rank, String sender, String keyword,
+			String tartgetFolder, String status, String pathToSaveRuleFile);
 	
 	/**
 	 * Delete each email object from the persistence layer.

@@ -161,6 +161,13 @@ class RuleDaoStub implements RuleDao {
 		return null;
 	}
 
+	@Override
+	public void update(UUID id, String rank, String sender, String keyword,
+			String tartgetFolder, String status, String pathToSaveRuleFile) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
 
 class EmailStub implements Email {
