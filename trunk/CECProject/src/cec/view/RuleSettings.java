@@ -73,6 +73,8 @@ public void setLastSelectedRow(int lastSelectedRow) {
 	}
 
 	private void setupMenuBar() {
+		JMenuItem applyItem = new JMenuItem("Apply ", KeyEvent.VK_A);
+		JMenuItem applyAllItem = new JMenuItem("Apply All Rules", KeyEvent.VK_L);
 		JMenuItem editItem = new JMenuItem("Edit Rule", KeyEvent.VK_D);
 		JMenuItem deleteItem = new JMenuItem("Delete Rule", KeyEvent.VK_E);
 		JMenuItem moveUpItem = new JMenuItem("Move Rule Up", KeyEvent.VK_U);
@@ -91,6 +93,13 @@ public void setLastSelectedRow(int lastSelectedRow) {
 		exitItem.setAccelerator(KeyStroke.getKeyStroke("ESCAPE"));
 		fileMenuBarEntry.add(exitItem);
 
+		
+		applyItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK));
+		editMenuBarEntry.add(applyItem);
+		applyAllItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_DOWN_MASK));
+		editMenuBarEntry.add(applyAllItem);
+		editMenuBarEntry.addSeparator();
+		
 		editItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK));
 		editMenuBarEntry.add(editItem);
 		editMenuBarEntry.addSeparator();
@@ -102,7 +111,18 @@ public void setLastSelectedRow(int lastSelectedRow) {
 		moveDownItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_DOWN_MASK));
 		editMenuBarEntry.add(moveDownItem);				
 
-			
+		
+		
+		applyItem.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				applyRule();
+			}
+		});	
+		applyAllItem.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				applyAllRules();
+			}
+		});	
 		editItem.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				menuEditEditRule();
@@ -197,12 +217,12 @@ public void setLastSelectedRow(int lastSelectedRow) {
 		ImageIcon topIcon = new ImageIcon("images/arr_up.png");		
 		ImageIcon downIcon = new ImageIcon("images/arr_down.png");		
 		
-		JButton moveUp = new JButton(" Up ");
-		//moveUp.setIcon(topIcon);
-		//moveUp.setPreferredSize(new Dimension(50, 50));	
-		JButton moveDown = new JButton("Down ");
-		//moveDown.setIcon(downIcon);
-		//moveDown.setPreferredSize(new Dimension(50,50));
+		JButton moveUp = new JButton("");
+		moveUp.setIcon(topIcon);
+		moveUp.setPreferredSize(new Dimension(35, 60));	
+		JButton moveDown = new JButton("");
+		moveDown.setIcon(downIcon);
+		moveDown.setPreferredSize(new Dimension(35,60));
 		
 		botLeft.setPreferredSize(new Dimension(430, 250));	
 		botRight.setPreferredSize(new Dimension(55, 50));		
@@ -282,9 +302,7 @@ public void setLastSelectedRow(int lastSelectedRow) {
 					}
 				}
 
-				private void Popup(MouseEvent e) {
-					/*EmailTableContextMenu menu = new EmailTableContextMenu();
-					menu.show(e.getComponent(), e.getX() + 7, e.getY());*/
+				private void Popup(MouseEvent e) {					
 				}
 
 			}
