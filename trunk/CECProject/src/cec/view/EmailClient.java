@@ -347,8 +347,8 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		
 		editMenuBarEntry.addSeparator();
 		
-		JMenuItem editSelectedMeeting = new JMenuItem("Edit Meeting", KeyEvent.VK_T);
-		editSelectedMeeting.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_DOWN_MASK));
+		JMenuItem editSelectedMeeting = new JMenuItem("Edit Meeting", KeyEvent.VK_I);
+		editSelectedMeeting.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK));
 		editMenuBarEntry.add(editSelectedMeeting);
 
 		editMenuBarEntry.addSeparator();
@@ -392,8 +392,8 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		newRule.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, InputEvent.CTRL_DOWN_MASK));
 		rulesMenuBarEntry.add(newRule);
 
-		JMenuItem ruleSett = new JMenuItem("Rule Settings...", KeyEvent.VK_T);
-		ruleSett.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_DOWN_MASK));
+		JMenuItem ruleSett = new JMenuItem("Rule Settings...", KeyEvent.VK_S);
+		ruleSett.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 		rulesMenuBarEntry.add(ruleSett);
 		
 		// Add all the action listeners for the Rules menu
