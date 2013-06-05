@@ -175,6 +175,7 @@ public class RuleFrame extends JFrame {
 	//Actions > Save Rule
 	private void saveRule(){
 		
+		// ensure both checkboxes are checked
 		if ((!from.isSelected()) &&(!content.isSelected())){
 			JOptionPane.showMessageDialog(null, "Select at least one of the methods of implementation");
 		}
@@ -215,16 +216,20 @@ public class RuleFrame extends JFrame {
 	
 	
 	private boolean validateEmailAndContainFields() {
-			
-		if (!fromField.getText().isEmpty() &&
-				emailValidator.isValidSendees(fromField.getText(), fromField.getText())
-				
-				||!contentField.getText().isEmpty())
-			return true;
 		
-		JOptionPane.showMessageDialog(null,
-				"Address is not properly formulated Or searching Containing field is missing");
-		return false;
+		// check that both are not empty
+		if (fromField.getText().isEmpty() && contentField.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Both fields cannot be empty");
+			return false;
+		}
+		
+		// if the from is filled, and is invalid
+		if (!fromField.getText().isEmpty() && !emailValidator.isValidSendees(fromField.getText(), fromField.getText())) {
+			JOptionPane.showMessageDialog(null, "Address is not properly formulated");
+			return false;
+		}			
+		
+		return true;
 		
 	}
 	
