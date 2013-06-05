@@ -26,5 +26,18 @@ public class RuleViewEntity {
 	public UUID getID() {
 		return id;
 	}
+	
+	public void setWords(String words) {
+		this.words = words;
+	}
+	public void setEmailAddresses(String emailAddresses) {
+		this.emailAddresses = emailAddresses;
+	}
+	public void setFolderPath(String folderPath) {
+		this.folderPath = folderPath;
+	}
+	public void setId(UUID id) {
+		this.id = id;
+	}
 
 }
