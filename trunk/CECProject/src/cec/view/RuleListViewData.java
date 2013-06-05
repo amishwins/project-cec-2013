@@ -42,20 +42,20 @@ public class RuleListViewData extends AbstractTableModel {
 	}
     
     public Object getValueAt(int row, int column){ 
-    	//RuleViewEntity currentRow = data.get(row);
+    	RuleViewEntity currentRow = data.get(row);
     	String columnValue = "";
     	switch (column) {
 			case 0:
-				columnValue = "a";//currentRow.getEmailAddresses();		
+				columnValue = currentRow.getEmailAddresses();		
 				break;
 			case 1:
-				columnValue = "b";//currentRow.getWords();
+				columnValue = currentRow.getWords();
 				break;
 			case 2:
-				columnValue = "c";//currentRow.getFolderPath();
+				columnValue = currentRow.getFolderPath();
 				break;
 			case 3:
-				columnValue = "d";// currentRow.getFolderPath();
+				columnValue = String.valueOf(currentRow.getRank());
 				break;				
 			default:
 				break;

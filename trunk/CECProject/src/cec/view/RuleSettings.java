@@ -23,6 +23,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import cec.service.FolderService;
+import cec.service.RuleService;
 
 /**
  * RuleSettings Class extends JFRAME to show a graphic windows allowing the user to check 
@@ -55,7 +56,7 @@ public class RuleSettings extends JFrame {
 	};
 Object columnNames[] = { "Column One", "Column Two", "Column Three"};
 JTable ruleTable = new JTable(rowData, columnNames);
-FolderService folderService = new FolderService();
+RuleService ruleService = new RuleService();
 
 EmailViewEntity selectedRuleEntity;
 
@@ -249,8 +250,8 @@ EmailViewEntity selectedRuleEntity;
 	
 	public void loadRuleTable() {
 		String[] ruleTableViewColumns = { "From", "Words", "Folder","Rank" };
-		Iterable<EmailViewEntity> emailsInEachFolder = folderService.loadEmails("emails\\Inbox");
-		ruleTable.setModel(new EmailListViewData(ruleTableViewColumns, emailsInEachFolder));	
+		Iterable<RuleViewEntity> rules = ruleService.loadAllRules();
+		ruleTable.setModel(new RuleListViewData(ruleTableViewColumns, rules));	
 		defineRuleTableLayout();
 	}	
 	
