@@ -48,6 +48,7 @@ import cec.config.CECConfigurator;
 import cec.service.FolderService;
 import cec.service.EmailService;
 import cec.service.MeetingService;
+import cec.service.RuleService;
 import cec.service.TemplateService;
 import cec.service.TreeModelBuilder;
 import exceptions.CannotDeleteSystemFolderException;
@@ -912,30 +913,68 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 				timerAct.setText("Stop Timer");			
 		}
 		
+		private boolean flag = false;
+		
 		private class newEmailForTestingRules implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
 				
-				UUID emailId;
-				EmailViewEntity emailViewEntity;
+				if (flag) {				
+					UUID emailId;
+					EmailViewEntity emailViewEntity;
+					
+					emailId = UUID.randomUUID();
+					emailViewEntity = new EmailViewEntity();
+					emailViewEntity.setId(emailId);
+					emailViewEntity.setFrom("user@cec.com");
+					emailViewEntity.setTo("deyvid.william@gmail.com");
+					emailViewEntity.setCC("");
+					emailViewEntity.setSubject("New Project "+emailId);
+					emailViewEntity.setBody("Dears, we have to work on the new project asap.");
+					emailViewEntity.setSentTime("2013.06.04_At_18.08.28.457");
+					emailViewEntity.setLastModifiedTime("2013.06.04_At_18.08.28.457");				
+					emailService.draftEmail(emailViewEntity);
+					emailService.move(emailViewEntity, "emails/Inbox");			
+					
+	
+					emailViewEntity = null;
+					emailId = UUID.randomUUID();
+					emailViewEntity = new EmailViewEntity();
+					emailViewEntity.setId(emailId);
+					emailViewEntity.setFrom("user@cec.com");
+					emailViewEntity.setTo("pankajkapania@yahoo.com");
+					emailViewEntity.setCC("");
+					emailViewEntity.setSubject("Basketball "+emailId);
+					emailViewEntity.setBody("Dears, let's play basketball tonight!");
+					emailViewEntity.setSentTime("2013.06.03_At_18.08.28.457");
+					emailViewEntity.setLastModifiedTime("2013.06.03_At_18.08.28.457");				
+					emailService.draftEmail(emailViewEntity);
+					emailService.move(emailViewEntity, "emails/Inbox");			
+	
+					emailViewEntity = null;
+					emailId = UUID.randomUUID();
+					emailViewEntity = new EmailViewEntity();
+					emailViewEntity.setId(emailId);
+					emailViewEntity.setFrom("user@cec.com");
+					emailViewEntity.setTo("romeo.honvo@gmail.com");
+					emailViewEntity.setCC("");
+					emailViewEntity.setSubject("Jokes "+emailId);
+					emailViewEntity.setBody("Jokes here.");
+					emailViewEntity.setSentTime("2013.06.02_At_18.08.28.457");
+					emailViewEntity.setLastModifiedTime("2013.06.02_At_18.08.28.457");				
+					emailService.draftEmail(emailViewEntity);
+					emailService.move(emailViewEntity, "emails/Inbox");		
+									
+					updateEmailsTable();
+					flag = !flag;
 				
-				emailId = UUID.randomUUID();
-				emailViewEntity = new EmailViewEntity();
-				emailViewEntity.setId(emailId);
-				emailViewEntity.setFrom("user@cec.com");
-				emailViewEntity.setTo("deyvid.william@gmail.com");
-				emailViewEntity.setCC("");
-				emailViewEntity.setSubject("New Project "+emailId);
-				emailViewEntity.setBody("Dears, we have to work on the new project asap.");
-				emailViewEntity.setSentTime("2013.06.04_At_18.08.28.457");
-				emailViewEntity.setLastModifiedTime("2013.06.04_At_18.08.28.457");
-				
-				emailService.draftEmail(emailViewEntity);
-				emailService.move(emailViewEntity, "emails/Inbox");			
-				
-				
-				
-				
-				updateEmailsTable();			
+				} 				
+				else {
+					RuleService ruleService = new RuleService();
+					ruleService.applyAll();
+					updateEmailsTable();
+					flag = !flag;
+				}
+							
 			}
 		}
 	}
