@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -218,7 +220,9 @@ public void setLastSelectedRow(int lastSelectedRow) {
 		
 		ruleTable.setFillsViewportHeight(true);
 		ruleTable.getSelectionModel().addListSelectionListener(new ruleTableRowListener());
+		ruleTable.addMouseListener(new RuleTableMouseListener());
 		ruleTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
 		
 		moveUp.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -255,7 +259,35 @@ public void setLastSelectedRow(int lastSelectedRow) {
 		return selectedRuleEntity; 
 	}
 	
-	
+	// RULE TABLE MOUSE LISTENER
+			private class RuleTableMouseListener extends MouseAdapter {
+
+				int selRow;
+
+				public void mousePressed(MouseEvent e) {
+
+					selRow = ruleTable.rowAtPoint(e.getPoint());
+
+					if (selRow != -1) {
+						ruleTable.setRowSelectionInterval(selRow, selRow);
+						if (e.isPopupTrigger())
+							Popup(e);
+					}
+				}
+
+				public void mouseReleased(MouseEvent e) {
+					if (selRow != -1) {
+						if (e.isPopupTrigger())
+							Popup(e);
+					}
+				}
+
+				private void Popup(MouseEvent e) {
+					/*EmailTableContextMenu menu = new EmailTableContextMenu();
+					menu.show(e.getComponent(), e.getX() + 7, e.getY());*/
+				}
+
+			}
 		
 	// RULE TABLE MAIN LISTENER
 	private class ruleTableRowListener implements ListSelectionListener {
