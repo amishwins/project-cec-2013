@@ -1,6 +1,7 @@
 package cec.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -22,6 +23,13 @@ public class RuleSetImpl implements RuleSet {
 
 	public void setRuleDao(RuleDao ruleDao) {
 		this.ruleDao = ruleDao;
+	}
+	
+	@Override
+	public Iterable<Rule> loadSortedActiveRules() {
+		Iterable<Rule> sorted = loadActiveRules();
+		Collections.sort((List<Rule>) sorted);
+		return sorted;
 	}
 
 	@Override
@@ -50,7 +58,7 @@ public class RuleSetImpl implements RuleSet {
 		return rules;
 	}
 	
-	private Iterable<Rule> filterActiveRules(Iterable<Rule> allRules){
+	protected Iterable<Rule> filterActiveRules(Iterable<Rule> allRules){
 		List<Rule> activeRules = new ArrayList<Rule>();
 		for (Rule rule : allRules){
 			if(rule.isActive()){
@@ -62,9 +70,13 @@ public class RuleSetImpl implements RuleSet {
 
 	@Override
 	public void apply(Iterable<Email> targets) {
-		// TODO Auto-generated method stub
-	}
-	
+		for(Email e: targets) {
+			for(Rule r: loadSortedActiveRules()) {
+				if (r.apply(e))
+					break;
+			}
+		}
+	}	
 
 	@Override
 	public synchronized void  swapRank(Rule first, Rule second) {
@@ -86,5 +98,6 @@ public class RuleSetImpl implements RuleSet {
 		
 		return highest + 1;
 	}
+
 
 }

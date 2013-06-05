@@ -21,5 +21,5 @@ public interface Rule extends Comparable<Rule> {
 	public void update();
 	public void delete();
 	
-	public void apply(Email email);
+	public boolean apply(Email email);
 }
