@@ -119,7 +119,7 @@ public class EmailFrame extends JFrame implements DocumentListener {
 		case APPLY:
 			// get the selected template, create an email normally
 			templateView = templateService.getTemplateEntity(EmailClient
-					.getReference().getSelectedTemplateFromDialog().toString());
+					.getReference().getSelectedTemplate().toString());
 			emailView = new EmailViewEntity();
 			id = UUID.randomUUID();
 			setVisibilityOfButtonsAndMenuItemsForNewEmail();
@@ -134,7 +134,7 @@ public class EmailFrame extends JFrame implements DocumentListener {
 			break;
 		case EDIT:
 			templateView = templateService.getTemplateEntity(EmailClient
-					.getReference().getSelectedTemplateFromDialog().toString());
+					.getReference().getSelectedTemplate().toString());
 			setVisibilityOfButtonsAndMenuItemsForExistingTemplate();
 			initialize();
 			setTemplateFields();

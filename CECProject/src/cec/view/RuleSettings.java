@@ -328,7 +328,7 @@ public void setLastSelectedRow(int lastSelectedRow) {
 				//setLastSelectedRow(previousIndex);
 			}
 			loadRuleTable();
-			//setSelectedRuleEntity(null);
+			setSelectedRuleEntity(null);
 		}
 	}	
 	// Actions > Move Rule Down
@@ -346,7 +346,7 @@ public void setLastSelectedRow(int lastSelectedRow) {
 				//setLastSelectedRow(nextIndex);
 			}
 			loadRuleTable();
-			//setSelectedRuleEntity(null);
+			setSelectedRuleEntity(null);
 		}
 	}	
 
