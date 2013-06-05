@@ -38,6 +38,7 @@ public class RuleFrame extends JFrame {
 	Choice folderChoosed= new Choice();
 	
 	private UUID id = null;
+	private Validator emailValidator = new Validator();
 	RuleService ruleService = new RuleService();
 	RuleViewEntity ruleView;
 	
@@ -50,10 +51,6 @@ public class RuleFrame extends JFrame {
 	public RuleFrame(RuleViewEntity existingRule){
 		ruleView = existingRule;
 		setRuleFields();
-		/*initialize();*/
-		
-		//ruleView = new RuleViewEntity();
-		//id = UUID.randomUUID();
 		initialize();
 	}	
 	
@@ -87,7 +84,7 @@ public class RuleFrame extends JFrame {
 			
 		saveItem.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				saveRuleButton();
+				saveRule();
 			}
 		});
 		
@@ -113,7 +110,7 @@ public class RuleFrame extends JFrame {
 		
 		save.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				saveRuleButton();
+				saveRule();
 			}
 		});		
 	}
@@ -174,37 +171,29 @@ public class RuleFrame extends JFrame {
 	}
 	
 	//Actions > Save Rule
-	private void saveRuleButton(){
+	private void saveRule(){
 		
 		if ((!from.isSelected()) &&(!content.isSelected())){
 			JOptionPane.showMessageDialog(null, "Select at least one of the methods of implementation");
 		}
 		else
 		{
-			
-			// Building the Rules 
-			saveRule();
-			String choosed =folderChoosed.getSelectedItem();
-			JOptionPane.showMessageDialog(null, "From "+fromField.getText()+"\nContaining "+contentField.getText()
-													+"\n Selected Folder = "+choosed);							
+			saveRuleAndExit();			
 		}		
 	}
 	
 	private void buildRuleViewObject() {
-		if (null == ruleView.getID()) {
-			ruleView.setId(id);
-		}
 
 		ruleView.setWords(contentField.getText());
 		ruleView.setEmailAddresses(fromField.getText());
 		ruleView.setFolderPath(folderChoosed.getSelectedItem());
 	}
-	private void editExistingRule() {
+	/*private void editExistingRule() {
 		//id = ruleView.getID();		
 		contentField.setText(ruleView.getWords());
 		fromField.setText(ruleView.getEmailAddresses());
 		//folderChoosed.setVisible(false);
-	}
+	}*/
 	
 	private void setRuleFields() {
 		//id = ruleView.getID();
@@ -213,14 +202,32 @@ public class RuleFrame extends JFrame {
 	}
 	
 	
-	private void saveRule()
+	private void saveRuleAndExit()
 	{
+		
+		if (!validateEmailAndContainFields())
+			return;
+		
 		buildRuleViewObject();
 		ruleService.save(ruleView);
+		exitRule();
 	}
 	
 	
-	//Actions > Exit
+	
+	private boolean validateEmailAndContainFields() {
+			
+		if (!contentField.getText().isEmpty() &&
+				emailValidator.isValidSendees(fromField.getText(), fromField.getText()))
+			return true;
+		
+		JOptionPane.showMessageDialog(null,
+				"Address is not properly formulated Or searching Containing field is missing");
+		return false;
+		
+	}
+	
+
 	private void exitRule(){
 		this.dispose();		
 	}
