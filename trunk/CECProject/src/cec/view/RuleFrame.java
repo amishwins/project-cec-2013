@@ -40,16 +40,18 @@ public class RuleFrame extends JFrame {
 	private UUID id = null;
 	private Validator emailValidator = new Validator();
 	RuleService ruleService = new RuleService();
-	RuleViewEntity ruleView;
+	RuleViewEntity ruleViewEntity;
+	RuleSettings rs;
 	
 	public RuleFrame(){
-		ruleView = new RuleViewEntity();
+		ruleViewEntity = new RuleViewEntity();
 		id = UUID.randomUUID();
 		initialize();
 	}
 	
-	public RuleFrame(RuleViewEntity existingRule){
-		ruleView = existingRule;
+	public RuleFrame(RuleViewEntity existingRule,RuleSettings rs){
+		ruleViewEntity = existingRule;
+		this.rs =rs;
 		setRuleFields();
 		initialize();
 	}	
@@ -182,28 +184,31 @@ public class RuleFrame extends JFrame {
 		}		
 	}
 	
-	private void buildRuleViewObject() {
-
-		ruleView.setWords(contentField.getText());
-		ruleView.setEmailAddresses(fromField.getText());
-		ruleView.setFolderPath(folderChoosed.getSelectedItem());
+	private void buildRuleViewEntityObject() {
+		ruleViewEntity.setWords(contentField.getText());
+		ruleViewEntity.setEmailAddresses(fromField.getText());
+		ruleViewEntity.setFolderPath(folderChoosed.getSelectedItem());
 	}
 	
 	private void setRuleFields() {
 		//id = ruleView.getID();
-		contentField.setText(ruleView.getWords());
-		fromField.setText(ruleView.getEmailAddresses());
+		contentField.setText(ruleViewEntity.getWords());//(ruleView.getWords());
+		fromField.setText(ruleViewEntity.getEmailAddresses());//(ruleView.getEmailAddresses());
 	}
 	
 	
-	private void saveRuleAndExit()
-	{
-		
+	private void saveRuleAndExit()	{
 		if (!validateEmailAndContainFields())
 			return;
 		
-		buildRuleViewObject();
-		ruleService.save(ruleView);
+		buildRuleViewEntityObject();
+		
+		if (null == ruleViewEntity.getID()) {
+			ruleService.save(ruleViewEntity);
+		}else{
+			ruleService.update(ruleViewEntity);
+			rs.loadRuleTable();
+		}
 		exitRule();
 	}
 	

@@ -38,8 +38,16 @@ RuleService ruleService = new RuleService();
 
 RuleViewEntity selectedRuleEntity;
 
-
+int lastSelectedRow;
 	
+	public int getLastSelectedRow() {
+	return lastSelectedRow;
+}
+
+public void setLastSelectedRow(int lastSelectedRow) {
+	this.lastSelectedRow = lastSelectedRow;
+}
+
 	public RuleSettings(){
 		initialize();
 	}
@@ -235,6 +243,7 @@ RuleViewEntity selectedRuleEntity;
 		Iterable<RuleViewEntity> rules = ruleService.loadAllRules();
 		ruleTable.setModel(new RuleListViewData(ruleTableViewColumns, rules));	
 		defineRuleTableLayout();
+		ruleTable.changeSelection(lastSelectedRow, 1, false, false);
 	}	
 	
 	private void setSelectedRuleEntity(RuleViewEntity emailViewEntity) {
@@ -285,9 +294,9 @@ RuleViewEntity selectedRuleEntity;
 			if (getSelectedRuleEntity() == null) {
 				JOptionPane.showMessageDialog(null, "Select a Rule to update");
 			} else {
-				new RuleFrame();
-				// new RuleFrame(selectedRuleEntity);
-
+				new RuleFrame(getSelectedRuleEntity(),this);
+				loadRuleTable();
+				setSelectedRuleEntity(null);
 			}
 		}
 	
@@ -307,19 +316,35 @@ RuleViewEntity selectedRuleEntity;
 		if (getSelectedRuleEntity() == null) {
 			JOptionPane.showMessageDialog(null, "Select a Rule to move");
 		} else {
-			// update rank to UP
-			// reload table
+			int previousIndex = ruleTable.getSelectedRow()-1;
+			if(!(previousIndex<0)){
+				RuleViewEntity previous = ((RuleListViewData) (ruleTable
+						.getModel())).getViewEntityAtIndex(ruleTable
+						.getSelectedRow()-1);
+				RuleViewEntity current = getSelectedRuleEntity();
+				ruleService.shuffle(previous,current);
+				setLastSelectedRow(previousIndex);
+			}
 			loadRuleTable();
+			//setSelectedRuleEntity(null);
 		}
 	}	
 	// Actions > Move Rule Down
 	public void moveDownSelectedRuleEntity() {
 		if (getSelectedRuleEntity() == null) {
-			JOptionPane.showMessageDialog(null, "Select a rule to move");
+			JOptionPane.showMessageDialog(null, "Select a Rule to move");
 		} else {
-			// update rank to UP
-			// reload table
+			int nextIndex = ruleTable.getSelectedRow()+1;
+			if(!(nextIndex>=ruleTable.getRowCount())){
+				RuleViewEntity next = ((RuleListViewData) (ruleTable
+						.getModel())).getViewEntityAtIndex(ruleTable
+						.getSelectedRow()+1);
+				RuleViewEntity current = getSelectedRuleEntity();
+				ruleService.shuffle(next,current);
+				setLastSelectedRow(nextIndex);
+			}
 			loadRuleTable();
+			//setSelectedRuleEntity(null);
 		}
 	}	
 
