@@ -154,24 +154,29 @@ public class Validator {
 		
 		Calendar today = Calendar.getInstance();
 		int year = today.get(Calendar.YEAR);
-		int month = (today.get(Calendar.MONTH) + 1);
+		int month = (today.get(Calendar.MONTH))+1;
 		int day = today.get(Calendar.DAY_OF_MONTH);
-		int hour = today.get(Calendar.HOUR+1);
-		int second = today.get(Calendar.MINUTE);
+		int hour = today.get(Calendar.HOUR_OF_DAY);
+		int minute = today.get(Calendar.MINUTE);
 		int am_pm = today.get(Calendar.AM_PM);
 		String AM_PM;
-	    if(am_pm==0){
+		
+	    if(hour<12){
 	    	AM_PM="AM";
 	    }else{
 	    	AM_PM="PM";
 	    }
+	    
+	    if(hour>12){
+	    	hour = hour -12;
+	    }
+  
 		Date currentDate = null;
 		Date dateToBeTested = null;
 		try {
 			dateToBeTested = formatter.parse(date + " " + time);
 			currentDate = formatter.parse(year + "-" + month + "-" + day + " "
-					+ hour + ":" + second + " " + AM_PM);
-			
+					+ hour + ":" + minute + " " + AM_PM);
 		} catch (ParseException e) {
 
 			e.printStackTrace();
