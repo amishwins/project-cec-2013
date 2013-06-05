@@ -61,6 +61,17 @@ public class MeetingService {
 
 		Meeting meeting = meetingBuilder
 				.withId(meetingInView.getId())
+				.withFrom()
+				.withAttendees(meetingInView.getAttendees())
+				.withStartDate(meetingInView.getStartDate())
+				.withEndDate(meetingInView.getEndDate())
+				.withStartTime(meetingInView.getStartTime())
+				.withEndTime(meetingInView.getEndTime())
+				.withPlace(meetingInView.getPlace())
+				.withSubject(meetingInView.getSubject())
+				.withBody(meetingInView.getBody())
+				.computelastModifiedTime()
+				.computeSentTime()
 				.withParentFolder(
 						FolderFactory.getFolder(meetingInView
 								.getFolder())).build();

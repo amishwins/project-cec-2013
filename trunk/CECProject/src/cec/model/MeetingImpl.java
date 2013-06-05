@@ -217,28 +217,29 @@ public class MeetingImpl implements Meeting {
 		meetingDao.save(id, from, attendees, startDate, endDate, startTime,
 				endTime, place, subject, body, lastModifiedTime, sentTime,
 				CECConfigurator.getReference().get("Meetings"));
-		sendEmailToAttendeesForMeeting();
+		String subjectPrefix = "Meeting Request: ";
+		sendEmailToAttendeesForMeeting(subjectPrefix);
 	}
 
-	private void sendEmailToAttendeesForMeeting() {
-		Email email = buildEmailFromMeeting();
+	private void sendEmailToAttendeesForMeeting(String subjectPrefix) {
+		Email email = buildEmailFromMeeting(subjectPrefix);
 		email.send();
 	}
 
-	private Email buildEmailFromMeeting() {
+	private Email buildEmailFromMeeting(String subjectPrefix) {
 		EmailBuilder emailBuilder = new EmailBuilder();
 		Email emailToSendForMeeting = emailBuilder.computeID().withFrom(from)
-				.withTo(attendees).withSubject("Meeting Request: " + subject)
-				.withBody(buildBodyPartOfEmailToBeSentForMeeting())
+				.withTo(attendees).withSubject(subjectPrefix + subject)
+				.withBody(buildBodyPartOfEmailToBeSentForMeeting(subjectPrefix))
 				.computelastModifiedTime().computeSentTime()
 				.withOutboxParentFolder().build();
 		return emailToSendForMeeting;
 	}
 
-	private String buildBodyPartOfEmailToBeSentForMeeting() {
+	private String buildBodyPartOfEmailToBeSentForMeeting(String subjectPrefix) {
 		StringBuilder buildBody = new StringBuilder();
 		String nextLine = "\n";
-		buildBody.append("Meeting Request" + nextLine);
+		buildBody.append(subjectPrefix + nextLine);
 		buildBody.append("---------------" + nextLine);
 		buildBody.append("Subject:    " + subject + nextLine);
 		buildBody.append("Location:   " + place + nextLine);
@@ -259,6 +260,8 @@ public class MeetingImpl implements Meeting {
 	 * 
 	 */
 	public void delete() {
+		String subjectPrefix = "Cancellation Meeting Request: ";
+		sendEmailToAttendeesForMeeting(subjectPrefix);
 		meetingDao.delete(parentFolder.getPath(), id);
 	}
 
