@@ -2,12 +2,8 @@ package cec.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -27,6 +23,13 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import cec.service.FolderService;
+
+/**
+ * RuleSettings Class extends JFRAME to show a graphic windows allowing the user to check 
+ * all the Rules configured in the Application and perform actions against them
+ * such as Edit, Delete, Reorder(Up,Down) and Apply them individually/all.  * 
+ */
+
 
 public class RuleSettings extends JFrame {	
 	
@@ -277,7 +280,7 @@ EmailViewEntity selectedRuleEntity;
 	// Actions > Update Rule
 	private void menuEditEditRule() {			
 			if (getSelectedRuleEntity() == null) {
-				JOptionPane.showMessageDialog(null, "Select a rule to update");
+				JOptionPane.showMessageDialog(null, "Select a Rule to update");
 			} else {
 				new RuleFrame();
 				// new RuleFrame(selectedRuleEntity);
@@ -288,7 +291,7 @@ EmailViewEntity selectedRuleEntity;
 	// Actions > Delete Rule
 	private void menuEditDeleteRule() {			
 			if (getSelectedRuleEntity() == null) {
-				JOptionPane.showMessageDialog(null, "Select a rule to delete");
+				JOptionPane.showMessageDialog(null, "Select a Rule to delete");
 			} else {
 				//new RuleFrame();
 				// new RuleFrame(selectedRuleEntity);
@@ -298,7 +301,7 @@ EmailViewEntity selectedRuleEntity;
 	// Actions > Move Rule Up
 	public void moveUpSelectedRuleEntity() {
 		if (getSelectedRuleEntity() == null) {
-			JOptionPane.showMessageDialog(null, "Select a rule to move");
+			JOptionPane.showMessageDialog(null, "Select a Rule to move");
 		} else {
 			// update rank to UP
 			// reload table

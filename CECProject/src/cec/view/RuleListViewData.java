@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
 
-/** CREATE!!
- * Auxiliary Class used by <code>EmailClient</code> class to fill the JTable
- *  <code>emailTable</code> that shows the Emails of the selected folder.
+/** 
+ * Auxiliary Class used by <code>RuleSettings</code> class to fill the JTable
+ *  <code>ruleTable</code> that shows all the Rules configured in the Application.
  * It receives trough its constructor a String containing the columns
- * and list of Email Entities and returns the data in a Model that is
+ * and list of Rule View Entities and returns the data in a Model that is
  * compatible with the JTable component. To do this, this class extends
  * the AbstractTableModel class and it's default implementations.
  * */
