@@ -318,7 +318,6 @@ public void setLastSelectedRow(int lastSelectedRow) {
 		if ( ( (ArrayList<RuleViewEntity>) rules).size() == 0 ) return;
 		
 		ruleService.applyAll();
-		setSelectedRuleEntity(null);
 		EmailClient.getReference().updateEmailsTable();
 	
 	}
