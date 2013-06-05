@@ -379,9 +379,18 @@ public class EmailFrame extends JFrame implements DocumentListener {
 	}
 
 	private void saveTemplate() {
-		buildTemplateViewObject();
-		templateService.saveTemplate(templateView);
-		this.dispose();
+		String name = JOptionPane.showInputDialog(null,
+				"Enter name of template");
+		if (name == null) {
+			return;  // cancel
+		} else if (name.isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Empty name is invalid");
+		}
+		else {
+			buildTemplateViewObject(name);
+			templateService.saveTemplate(templateView);
+			this.dispose();
+		}			
 	}
 
 	private void overwriteTemplate() {
@@ -426,9 +435,8 @@ public class EmailFrame extends JFrame implements DocumentListener {
 		emailView.setBody(bodyField.getText());
 	}
 
-	private void buildTemplateViewObject() {
-		String name = JOptionPane.showInputDialog(null,
-				"Enter name of template");
+	private void buildTemplateViewObject(String name) {
+		
 		templateView.setName(name);
 		setTemplateViewFields();
 	}
