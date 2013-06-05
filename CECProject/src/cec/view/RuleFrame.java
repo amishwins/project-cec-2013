@@ -188,17 +188,11 @@ public class RuleFrame extends JFrame {
 		ruleView.setEmailAddresses(fromField.getText());
 		ruleView.setFolderPath(folderChoosed.getSelectedItem());
 	}
-	/*private void editExistingRule() {
-		//id = ruleView.getID();		
-		contentField.setText(ruleView.getWords());
-		fromField.setText(ruleView.getEmailAddresses());
-		//folderChoosed.setVisible(false);
-	}*/
 	
 	private void setRuleFields() {
 		//id = ruleView.getID();
-		contentField.setText("What is here");//(ruleView.getWords());
-		fromField.setText("From This One");//(ruleView.getEmailAddresses());
+		contentField.setText(ruleView.getWords());
+		fromField.setText(ruleView.getEmailAddresses());
 	}
 	
 	
@@ -217,8 +211,10 @@ public class RuleFrame extends JFrame {
 	
 	private boolean validateEmailAndContainFields() {
 			
-		if (!contentField.getText().isEmpty() &&
-				emailValidator.isValidSendees(fromField.getText(), fromField.getText()))
+		if (!fromField.getText().isEmpty() &&
+				emailValidator.isValidSendees(fromField.getText(), fromField.getText())
+				
+				||!contentField.getText().isEmpty())
 			return true;
 		
 		JOptionPane.showMessageDialog(null,
