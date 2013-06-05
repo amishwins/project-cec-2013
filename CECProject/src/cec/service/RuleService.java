@@ -22,7 +22,6 @@ public class RuleService {
 	public void save(RuleViewEntity ruleViewEntity) {
 		Rule rule = (new RuleBuilder())
 				.withId(UUID.randomUUID())
-				.withRank(ruleSet.getNextRank())
 				.withEmailAddresses(ruleViewEntity.getEmailAddresses())
 				.withWords(ruleViewEntity.getWords())
 				.withTargetFolder(FolderFactory.getFolder(ruleViewEntity.getFolderPath()))

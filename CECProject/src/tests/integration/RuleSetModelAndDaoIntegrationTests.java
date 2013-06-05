@@ -13,20 +13,20 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import cec.model.Email;
 import cec.model.Folder;
 import cec.model.FolderFactory;
 import cec.model.Rule;
 import cec.model.RuleBuilder;
 import cec.model.RuleSet;
 import cec.model.RuleSetFactory;
-import cec.model.RuleSetImpl;
-import cec.persistence.RuleDao;
-import cec.persistence.RuleDaoFactory;
 
 public class RuleSetModelAndDaoIntegrationTests {
 
-	Rule rule1, rule2;
-	RuleBuilder ruleBuilder;
+	Email email1, email2;
+	Rule rule1, rule2, rule3;
+	Rule integrationRule1, integrationRule2, integrationRule3;
+	RuleBuilder ruleBuilder, ruleBuilder2;
 	RuleSet ruleSet;
 
 	UUID id1, id2;
@@ -34,6 +34,7 @@ public class RuleSetModelAndDaoIntegrationTests {
 	String emailAddresses1, emailAddresses2;
 	String words1, words2;
 	Folder targetFolder1, targetFolder2;
+	Folder inbox, createdFolder1, createdFolder2;
 	Boolean isActive1, isActive2;
 	List<Rule> ruleList;
 
@@ -45,18 +46,29 @@ public class RuleSetModelAndDaoIntegrationTests {
 		emailAddresses2 = "a@c.com;d@b.com";
 		words1 = "jokes jokes";
 		words2 = "jokes2 jokes2";
-		targetFolder1 = FolderFactory.getFolder("emails/Inbox/Jokes");
-		targetFolder2 = FolderFactory.getFolder("emails/Inbox/Jokes");
+
+		
+		inbox = FolderFactory.getFolder("emails/Inbox");
+
+		createdFolder1 = FolderFactory.getFolder("emails/Inbox/rule1");
+		createdFolder2 = FolderFactory.getFolder("emails/Inbox/rule2");
+		createdFolder1.delete();
+		createdFolder2.delete();
+		inbox.createSubFolder("rule1");
+		inbox.createSubFolder("rule2");
+		createdFolder1 = FolderFactory.getFolder("emails/Inbox/rule1");
+		createdFolder2 = FolderFactory.getFolder("emails/Inbox/rule2");
+		
 		isActive1 = true;
 		isActive2 = false;
 
-		RuleBuilder ruleBuilder = new RuleBuilder();
-		RuleBuilder ruleBuilder2 = new RuleBuilder();
+		ruleBuilder = new RuleBuilder();
+		ruleBuilder2 = new RuleBuilder();
 		rule1 = ruleBuilder.computeID().withEmailAddresses(emailAddresses1)
-				.withWords(words1).withTargetFolder(targetFolder1)
+				.withWords(words1).withTargetFolder(createdFolder1)
 				.withIsActive(isActive1).build();
 		rule2 = ruleBuilder2.computeID().withEmailAddresses(emailAddresses2)
-				.withWords(words2).withTargetFolder(targetFolder2)
+				.withWords(words2).withTargetFolder(createdFolder2)
 				.withIsActive(isActive2).build();
 		ruleList.add(rule1);
 		ruleList.add(rule2);
@@ -64,6 +76,9 @@ public class RuleSetModelAndDaoIntegrationTests {
 
 	@After
 	public void tearDown() throws Exception {
+		createdFolder1.delete();
+		createdFolder2.delete();
+
 	}
 
 	@Test

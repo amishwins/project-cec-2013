@@ -77,16 +77,19 @@ public class RuleImpl implements Rule {
 	}
 
 	@Override
-	public void apply(Email email) {
-		if (!isActive) return;
+	public boolean apply(Email email) {
+		if (!isActive) return false;
 		
 		// if rule has both email address and words, both must apply
 		// if rule has only email address, only from applies
 		// if rule has only words, only subject and body applies
 		boolean emailsSupplied = true;
 		boolean wordsSupplied = true;
-		if (emailAddresses.trim() == "" || emailAddresses == null) emailsSupplied = false;
-		if (words.trim() == "" || words == null) wordsSupplied = false;
+		if ( (emailAddresses == null) || (emailAddresses.trim().isEmpty()) ) 
+			emailsSupplied = false;
+		
+		if ( (words == null) || (words.trim().isEmpty()) ) 
+			wordsSupplied = false;
 		
 		String[] splitEmailAddresses = emailAddresses.trim().split(";");
 		String[] splitWords = words.trim().split(" ");
@@ -108,7 +111,10 @@ public class RuleImpl implements Rule {
 		
 		if (match) {
 			moveEmail(email);
+			return true;
 		}
+		
+		return false;
 		
 	}
 
@@ -183,7 +189,7 @@ public class RuleImpl implements Rule {
 		else if ( this.rank > anotherRule.getRank())
 			return 1;
 		else
-			return 0;
+			throw new RuntimeException("Two rules have the same rank. Call the dev team.");
 	}
 
 	@Override
