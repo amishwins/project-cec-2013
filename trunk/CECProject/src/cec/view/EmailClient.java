@@ -93,6 +93,10 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	String lastSelectedFolder;
 	JTextField searchField = new JTextField(null, 22);
 	
+	EmailClientTimer tm = new EmailClientTimer(); //Timer
+	JMenuItem timerAct = new JMenuItem("Start Timer");
+	boolean timerStatus = true; 
+	
 	private static EmailClient instance;
 	
 	/***
@@ -147,41 +151,9 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	}
 	
 	
-	//Timer implementation to test Rules (every 5s)
-	private void startSwingTimerForTestingRules(){
-		 Timer timer = new Timer(5000, new newEmailForTestingRules());
-		 timer.setInitialDelay(1000);
-		 //timer.start(); 
-	}
-	
-	private class newEmailForTestingRules implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			
-			UUID emailId;
-			EmailViewEntity emailViewEntity;
-			
-			emailId = UUID.randomUUID();
-			emailViewEntity = new EmailViewEntity();
-			emailViewEntity.setId(emailId);
-			emailViewEntity.setFrom("user@cec.com");
-			emailViewEntity.setTo("Pankaj@yahoo.com");
-			emailViewEntity.setCC("Pankaj@yahoo.com");
-			emailViewEntity.setSubject("Subject@IntegrationTests"+emailId);
-			emailViewEntity.setBody("Body");
-			emailViewEntity.setSentTime("2013.05.19_At_05.08.28.457");
-			emailViewEntity.setLastModifiedTime("2013.05.19_At_05.08.28.457");
-			
-			emailService.draftEmail(emailViewEntity);
-			emailService.move(emailViewEntity, "emails/Inbox");
-			updateEmailsTable();			
-		}
-	}
-	
-	
 	private EmailClient(String title) {
 		super(title);
-		initialize();
-		startSwingTimerForTestingRules(); //Time
+		initialize();		
 	}
 
 	private void initialize() {
@@ -303,9 +275,12 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		setupFileMenu(menuBar);
 		setupEditMenu(menuBar);
 		setupRulesMenu(menuBar);
+		setupTimerMenu(menuBar);
 	}
 	
-	private void setupFileMenu(JMenuBar menuBar) {
+	private void setupFileMenu(JMenuBar menuBar) {	
+		
+		
 		JMenu fileMenuBarEntry = new JMenu("File");
 		fileMenuBarEntry.setMnemonic('F');
 		menuBar.add(fileMenuBarEntry);
@@ -350,8 +325,9 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		newTemplate.addActionListener(new MenuFileNewTemplate());
 		newSubfolder.addActionListener(new MenuFileNewSubFolder());
 		openSelectedEmail.addActionListener(new MenuFileOpenSelectedEmail());
-		exitItem.addActionListener(new MenuFileExit());
+		exitItem.addActionListener(new MenuFileExit());		
 	}
+	
 
 	private void setupEditMenu(JMenuBar menuBar) {
 		JMenu editMenuBarEntry = new JMenu("Edit");
@@ -423,6 +399,23 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		newRule.addActionListener(new MenuRulesNewRule());
 		ruleSett.addActionListener(new MenuRulesRuleSett());
 	}
+	
+	// Timer
+	private void setupTimerMenu(JMenuBar menuBar) {
+		
+		JMenu timerMenuBarEntry = new JMenu("Timer");		
+		timerMenuBarEntry.setMnemonic('I');
+		menuBar.add(timerMenuBarEntry);
+		
+		timerMenuBarEntry.add(timerAct);
+	
+		timerAct.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				tm.enable(timerStatus);
+			}
+		});	
+
+	}		
 	
 	private void defineEmailsOrMeetingsTableLayout() {
 		emailOrMeetingTable.getColumnModel().getColumn(0).setPreferredWidth(100);		
@@ -893,6 +886,61 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	    }
 	    public void keyReleased(KeyEvent e) {}	    
 	    public void keyTyped(KeyEvent e) {}
-	}		
+	}
+	
+	//TIMER TEMPORARY SOLUTION FOR DEMO PRESENTATION
+	private class EmailClientTimer {
+	
+		Timer timer = new Timer(5000, new newEmailForTestingRules());
+		
+		public EmailClientTimer() {			 
+			 timer.setInitialDelay(1000);
+		}
+		
+		public void enable(boolean flag) {
+
+			if (flag)
+				 timer.start();
+			else
+				timer.stop();
+			
+			timerStatus = !timerStatus;
+			
+			if (timerStatus)
+				timerAct.setText("Start Timer");
+			else
+				timerAct.setText("Stop Timer");			
+		}
+		
+		private class newEmailForTestingRules implements ActionListener {
+			public void actionPerformed(ActionEvent e) {
+				
+				UUID emailId;
+				EmailViewEntity emailViewEntity;
+				
+				emailId = UUID.randomUUID();
+				emailViewEntity = new EmailViewEntity();
+				emailViewEntity.setId(emailId);
+				emailViewEntity.setFrom("user@cec.com");
+				emailViewEntity.setTo("deyvid.william@gmail.com");
+				emailViewEntity.setCC("");
+				emailViewEntity.setSubject("New Project "+emailId);
+				emailViewEntity.setBody("Dears, we have to work on the new project asap.");
+				emailViewEntity.setSentTime("2013.06.04_At_18.08.28.457");
+				emailViewEntity.setLastModifiedTime("2013.06.04_At_18.08.28.457");
+				
+				emailService.draftEmail(emailViewEntity);
+				emailService.move(emailViewEntity, "emails/Inbox");			
+				
+				
+				
+				
+				updateEmailsTable();			
+			}
+		}
+	}
+	
+	
+	
 }
 
