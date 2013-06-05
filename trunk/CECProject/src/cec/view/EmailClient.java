@@ -553,7 +553,10 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	// EDIT > EDIT TEMPLATE
 	private class MenuEditEditTemplate implements ActionListener {
 		public void actionPerformed(ActionEvent e) { 
-			new EmailFrame(TemplateContext.EDIT);
+			templateToUse = getSelectedTemplateFromDialog();
+			
+			if (templateToUse != null)
+				new EmailFrame(TemplateContext.EDIT);
 		}
 	}
 	
@@ -808,9 +811,16 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	}
 
 	// FILE -> NEW EMAIL FROM TEMPLATE
+	Object templateToUse;
+	protected Object getSelectedTemplate() {
+		return templateToUse;
+	}
 	private class MenuFileNewEmailFromTemplate implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			new EmailFrame(TemplateContext.APPLY);
+			templateToUse = getSelectedTemplateFromDialog();
+			
+			if (templateToUse != null)
+				new EmailFrame(TemplateContext.APPLY);
 		}
 	}
 	
