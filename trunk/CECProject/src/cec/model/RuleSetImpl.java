@@ -55,6 +55,7 @@ public class RuleSetImpl implements RuleSet {
 					Boolean.parseBoolean(status));
             rules.add(rule);
 		}
+		Collections.sort((List<Rule>) rules);
 		return rules;
 	}
 	
