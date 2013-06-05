@@ -25,7 +25,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import cec.service.FolderService;
 import cec.service.RuleService;
 
 /**
@@ -257,10 +256,10 @@ public void setLastSelectedRow(int lastSelectedRow) {
 	}
 	
 	private void defineRuleTableLayout() {
-		ruleTable.getColumnModel().getColumn(0).setPreferredWidth(70);		
-		ruleTable.getColumnModel().getColumn(1).setPreferredWidth(70);
-		ruleTable.getColumnModel().getColumn(2).setPreferredWidth(70);
-		ruleTable.getColumnModel().getColumn(2).setPreferredWidth(30);	
+		ruleTable.getColumnModel().getColumn(0).setPreferredWidth(80);		
+		ruleTable.getColumnModel().getColumn(1).setPreferredWidth(80);
+		ruleTable.getColumnModel().getColumn(2).setPreferredWidth(90);
+		ruleTable.getColumnModel().getColumn(3).setPreferredWidth(10);	
 	}		
 	
 	public void loadRuleTable() {
