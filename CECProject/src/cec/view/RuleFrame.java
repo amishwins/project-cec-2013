@@ -87,7 +87,7 @@ public class RuleFrame extends JFrame {
 			
 		saveItem.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				saveRule();
+				saveRuleButton();
 			}
 		});
 		
@@ -182,7 +182,8 @@ public class RuleFrame extends JFrame {
 		else
 		{
 			
-			// Building the Rules 			
+			// Building the Rules 
+			saveRule();
 			String choosed =folderChoosed.getSelectedItem();
 			JOptionPane.showMessageDialog(null, "From "+fromField.getText()+"\nContaining "+contentField.getText()
 													+"\n Selected Folder = "+choosed);							
