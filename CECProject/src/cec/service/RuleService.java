@@ -1,5 +1,7 @@
 package cec.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import cec.model.FolderFactory;
@@ -35,5 +37,20 @@ public class RuleService {
 				.withId(ruleViewEntity.getID())
 				.build();
 		rule.delete();
+	}
+
+	public Iterable<RuleViewEntity> loadAllRules() {
+		List<RuleViewEntity> listOfRuleViewEntities = new ArrayList<>();
+		Iterable<Rule> rules = ruleSet.loadRules();
+		for(Rule rule: rules){
+			RuleViewEntity ruleViewEntity = new RuleViewEntity();
+			ruleViewEntity.setId(rule.getId());
+			ruleViewEntity.setRank(rule.getRank());
+			ruleViewEntity.setEmailAddresses(rule.getEmailAddresses());
+			ruleViewEntity.setWords(rule.getWords());
+			ruleViewEntity.setFolderPath(rule.getTargetFolder().getPath());
+			listOfRuleViewEntities.add(ruleViewEntity);
+		}
+		return listOfRuleViewEntities;
 	}
 }
