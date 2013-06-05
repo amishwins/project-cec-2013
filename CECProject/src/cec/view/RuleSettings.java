@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -241,9 +242,9 @@ public void setLastSelectedRow(int lastSelectedRow) {
 	public void loadRuleTable() {
 		String[] ruleTableViewColumns = { "From", "Words", "Folder","Rank" };
 		Iterable<RuleViewEntity> rules = ruleService.loadAllRules();
+		
 		ruleTable.setModel(new RuleListViewData(ruleTableViewColumns, rules));	
 		defineRuleTableLayout();
-		//ruleTable.changeSelection(lastSelectedRow, 1, false, false);
 	}	
 	
 	private void setSelectedRuleEntity(RuleViewEntity emailViewEntity) {
@@ -272,17 +273,18 @@ public void setLastSelectedRow(int lastSelectedRow) {
 	// Actions > Apply Rule
 	private void applyRule() {			
 			if (getSelectedRuleEntity() == null) {
-				JOptionPane.showMessageDialog(null, "Select a Rule to delete");
+				JOptionPane.showMessageDialog(null, "Select a Rule to apply");
 			} else {
 				ruleService.apply(getSelectedRuleEntity());
-				loadRuleTable();
-				setSelectedRuleEntity(null);
 				EmailClient.getReference().updateEmailsTable();
 			}
 		}
 	
 	// Actions > Apply All Rules
 	private void applyAllRules() {			
+		Iterable<RuleViewEntity> rules = ruleService.loadAllRules();
+		if ( ( (ArrayList<RuleViewEntity>) rules).size() == 0 ) return;
+		
 		ruleService.applyAll();
 		setSelectedRuleEntity(null);
 		EmailClient.getReference().updateEmailsTable();
@@ -295,7 +297,7 @@ public void setLastSelectedRow(int lastSelectedRow) {
 				JOptionPane.showMessageDialog(null, "Select a Rule to update");
 			} else {
 				new RuleFrame(getSelectedRuleEntity(),this);
-				loadRuleTable();
+				//loadRuleTable();
 				setSelectedRuleEntity(null);
 			}
 		}
