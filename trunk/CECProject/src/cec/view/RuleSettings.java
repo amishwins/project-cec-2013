@@ -28,9 +28,7 @@ import javax.swing.event.ListSelectionListener;
 
 import cec.service.FolderService;
 
-public class RuleSettings extends JFrame {
-	
-	
+public class RuleSettings extends JFrame {	
 	
 	Object rowData[][] = { { "Row1-Column1", "Row1-Column2", "Row1-Column3"},
             { "Row2-Column1", "Row2-Column2", "Row2-Column3"},
@@ -84,6 +82,8 @@ EmailViewEntity selectedRuleEntity;
 	private void setupMenuBar() {
 		JMenuItem editItem = new JMenuItem("Edit Rule", KeyEvent.VK_D);
 		JMenuItem deleteItem = new JMenuItem("Delete Rule", KeyEvent.VK_E);
+		JMenuItem moveUpItem = new JMenuItem("Move Rule Up", KeyEvent.VK_U);
+		JMenuItem moveDownItem = new JMenuItem("Move Rule Down", KeyEvent.VK_W);
 		JMenuItem exitItem = new JMenuItem("Exit");
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -102,26 +102,40 @@ EmailViewEntity selectedRuleEntity;
 		editMenuBarEntry.add(editItem);
 		editMenuBarEntry.addSeparator();
 		deleteItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK));
-		editMenuBarEntry.add(deleteItem);			
+		editMenuBarEntry.add(deleteItem);	
+		editMenuBarEntry.addSeparator();		
+		moveUpItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, InputEvent.CTRL_DOWN_MASK));
+		editMenuBarEntry.add(moveUpItem);		
+		moveDownItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_DOWN_MASK));
+		editMenuBarEntry.add(moveDownItem);				
 
 			
 		editItem.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				menuEditEditRule();
 			}
-		});
-		
+		});		
 		deleteItem.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				menuEditDeleteRule();
 			}
 		});
-		
+		moveUpItem.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				moveUpSelectedRuleEntity();
+			}
+		});
+		moveDownItem.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				moveDownSelectedRuleEntity();
+			}
+		});		
 		exitItem.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				exitRuleSett();
 			}
-		});		
+		});	
+		
 	}
 
 	
@@ -131,6 +145,7 @@ EmailViewEntity selectedRuleEntity;
 		ImageIcon applyIcon = new ImageIcon("images/rule_save.png");
 		ImageIcon updateIcon = new ImageIcon("images/rule_edit.png");		
 		ImageIcon deleteIcon = new ImageIcon("images/rule_delete.png");
+		
 		JButton apply = new JButton(" Apply");
 		JButton applyAll = new JButton(" Apply All >>");
 		JButton edit = new JButton("Edit");
@@ -168,7 +183,7 @@ EmailViewEntity selectedRuleEntity;
 		});		
 		delete.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				//deleteRule();
+				menuEditDeleteRule();
 			}
 		});	
 	}
@@ -182,9 +197,15 @@ EmailViewEntity selectedRuleEntity;
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);		
 		
+		ImageIcon topIcon = new ImageIcon("images/arr_up.png");		
+		ImageIcon downIcon = new ImageIcon("images/arr_down.png");		
 		
-		JButton moveTop = new JButton("Top ");
-		JButton moveDown = new JButton("Down");
+		JButton moveUp = new JButton(" Up ");
+		//moveUp.setIcon(topIcon);
+		//moveUp.setPreferredSize(new Dimension(50, 50));	
+		JButton moveDown = new JButton("Down ");
+		//moveDown.setIcon(downIcon);
+		//moveDown.setPreferredSize(new Dimension(50,50));
 		
 		botLeft.setPreferredSize(new Dimension(430, 250));	
 		botRight.setPreferredSize(new Dimension(55, 50));		
@@ -193,7 +214,7 @@ EmailViewEntity selectedRuleEntity;
 		midPanel.add(hBar, BorderLayout.NORTH);
 		add(midPanel);
 		
-		botRight.add(moveTop,BorderLayout.NORTH);		
+		botRight.add(moveUp,BorderLayout.NORTH);		
 		botRight.add(moveDown,BorderLayout.SOUTH);		
 		botPanel.add(botLeft, BorderLayout.WEST);
 		botPanel.add(botRight, BorderLayout.CENTER);
@@ -204,6 +225,16 @@ EmailViewEntity selectedRuleEntity;
 		ruleTable.getSelectionModel().addListSelectionListener(new ruleTableRowListener());
 		ruleTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
+		moveUp.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				moveUpSelectedRuleEntity();
+			}
+		});		
+		moveDown.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				moveDownSelectedRuleEntity();
+			}
+		});			
 	}
 	
 	private void defineRuleTableLayout() {
@@ -211,8 +242,7 @@ EmailViewEntity selectedRuleEntity;
 		ruleTable.getColumnModel().getColumn(1).setPreferredWidth(70);
 		ruleTable.getColumnModel().getColumn(2).setPreferredWidth(70);
 		ruleTable.getColumnModel().getColumn(2).setPreferredWidth(30);	
-	}	
-	
+	}		
 	
 	public void loadRuleTable() {
 		String[] ruleTableViewColumns = { "From", "Words", "Folder","Rank" };
@@ -228,6 +258,7 @@ EmailViewEntity selectedRuleEntity;
 	private EmailViewEntity getSelectedRuleEntity() {
 		return selectedRuleEntity; 
 	}
+	
 	
 		
 	// RULE TABLE MAIN LISTENER
@@ -264,7 +295,26 @@ EmailViewEntity selectedRuleEntity;
 			}
 		}	
 	
-	
+	// Actions > Move Rule Up
+	public void moveUpSelectedRuleEntity() {
+		if (getSelectedRuleEntity() == null) {
+			JOptionPane.showMessageDialog(null, "Select a rule to move");
+		} else {
+			// update rank to UP
+			// reload table
+			loadRuleTable();
+		}
+	}	
+	// Actions > Move Rule Down
+	public void moveDownSelectedRuleEntity() {
+		if (getSelectedRuleEntity() == null) {
+			JOptionPane.showMessageDialog(null, "Select a rule to move");
+		} else {
+			// update rank to UP
+			// reload table
+			loadRuleTable();
+		}
+	}	
 
 	// Actions > Exit
 	private void exitRuleSett() {
