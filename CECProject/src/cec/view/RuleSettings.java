@@ -243,7 +243,7 @@ public void setLastSelectedRow(int lastSelectedRow) {
 		Iterable<RuleViewEntity> rules = ruleService.loadAllRules();
 		ruleTable.setModel(new RuleListViewData(ruleTableViewColumns, rules));	
 		defineRuleTableLayout();
-		ruleTable.changeSelection(lastSelectedRow, 1, false, false);
+		//ruleTable.changeSelection(lastSelectedRow, 1, false, false);
 	}	
 	
 	private void setSelectedRuleEntity(RuleViewEntity emailViewEntity) {
@@ -323,7 +323,7 @@ public void setLastSelectedRow(int lastSelectedRow) {
 						.getSelectedRow()-1);
 				RuleViewEntity current = getSelectedRuleEntity();
 				ruleService.shuffle(previous,current);
-				setLastSelectedRow(previousIndex);
+				//setLastSelectedRow(previousIndex);
 			}
 			loadRuleTable();
 			//setSelectedRuleEntity(null);
@@ -341,7 +341,7 @@ public void setLastSelectedRow(int lastSelectedRow) {
 						.getSelectedRow()+1);
 				RuleViewEntity current = getSelectedRuleEntity();
 				ruleService.shuffle(next,current);
-				setLastSelectedRow(nextIndex);
+				//setLastSelectedRow(nextIndex);
 			}
 			loadRuleTable();
 			//setSelectedRuleEntity(null);
