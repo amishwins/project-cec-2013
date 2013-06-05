@@ -564,8 +564,10 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	private class MenuEditDeleteTemplate implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			 templateService.deleteTemplate(getSelectedTemplateFromDialog().toString());
-		 }		
+			Object template = getSelectedTemplateFromDialog();
+			if (template != null)
+				templateService.deleteTemplate(template.toString());
+		}		
 	}
 
 	// EDIT > MOVE EMAIL >
