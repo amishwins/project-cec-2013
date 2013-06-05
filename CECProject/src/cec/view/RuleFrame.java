@@ -1,130 +1,3 @@
-/*package cec.view;
-
-import java.awt.BorderLayout;
-import java.awt.Choice;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.util.ArrayList;
-
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.JTextField;
-import javax.swing.JToolBar;
-
-import cec.service.FolderService;
-
-public class RuleFrame extends JFrame {
-	
-	public RuleFrame(){
-		initialize();
-	}
-	
-	public RuleFrame(String rule){
-		initialize();
-	}
-	
-	
-	private void initialize() {		
-		setSize(460, 360);
-		//setSize(610, 470);
-		setLayout(new BorderLayout());
-		setResizable(false);
-		setVisible(true);
-		setLocationRelativeTo(null);
-
-		// Menu
-		//setupMenuBar();
-		// Button
-		setupToolBar();
-		// Entry Fields
-		setupEntryFields();
-	}
-	
-	private void setupToolBar() {
-		JToolBar bar = new JToolBar();
-		bar.setPreferredSize(new Dimension(460, 60));
-		ImageIcon sendIcon = new ImageIcon("images/email_send.png");
-		JButton send = new JButton(" Save >>   ");
-		JSeparator hBar = new JSeparator();
-		
-		send.setIcon(sendIcon);
-		bar.setFloatable(false);
-		bar.add(send);		
-		add(bar, BorderLayout.NORTH);
-		add(hBar);
-	}
-	
-	private void setupEntryFields() {
-		
-		//JPanel botPanel = new JPanel();
-		JPanel botPanel = new JPanel(new BorderLayout());
-		//botPanel.setLayout(new GridLayout(3,1));
-		botPanel.setPreferredSize(new Dimension(460, 270));
-
-		
-		
-		JPanel botTop = new JPanel();
-		botTop.setPreferredSize(new Dimension(460, 90));
-		
-		JPanel botMid = new JPanel();
-		botMid.setPreferredSize(new Dimension(460, 90));
-		
-		JPanel botBot = new JPanel();
-		botBot.setPreferredSize(new Dimension(460, 90));
-		
-		//JLabel when = new JLabel("When receiving Emails");
-		//botTop.add(when);		
-		
-		JLabel from = new JLabel("From:        ");
-		JTextField fromField = new JTextField("", 45);
-		botTop.add(from,BorderLayout.WEST);
-		botTop.add(fromField,BorderLayout.EAST);
-
-		
-		JLabel content = new JLabel("Containing:");
-		JTextField contentField = new JTextField("", 45);
-			
-		botMid.add(content,BorderLayout.WEST);
-		botMid.add(contentField,BorderLayout.EAST);
-		
-	
-		
-		
-		
-		JLabel move = new JLabel("Move to:    ");
-		//JTextField moveField = new JTextField("", 45);
-		Choice folderChoosed=new Choice();
-		folderChoosed.setPreferredSize(new Dimension(350, 00));
-		
-		FolderService folderService = new FolderService();
-		ArrayList<String> listOfFolders = (ArrayList<String>) folderService.loadHierarchy();
-		
-		for (String folder : listOfFolders)
-			folderChoosed.add(folder);
-		
-		
-		
-		
-		botBot.add(move,BorderLayout.WEST);
-		botBot.add(folderChoosed,BorderLayout.EAST);
-		
-		
-		
-		botPanel.add(botTop, BorderLayout.NORTH);
-		botPanel.add(botMid, BorderLayout.CENTER);
-		botPanel.add(botBot, BorderLayout.SOUTH);
-		add(botPanel, BorderLayout.SOUTH);
-		
-		
-		
-	}	
-	
-}*/
 package cec.view;
 
 import java.awt.BorderLayout;
@@ -135,6 +8,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -152,6 +26,7 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 
 import cec.config.CECConfigurator;
+import cec.service.RuleService;
 import cec.service.FolderService;
 
 public class RuleFrame extends JFrame {
@@ -162,11 +37,23 @@ public class RuleFrame extends JFrame {
 	JTextField contentField = new JTextField("", 40);
 	Choice folderChoosed= new Choice();
 	
+	private UUID id = null;
+	RuleService ruleService = new RuleService();
+	RuleViewEntity ruleView;
+	
 	public RuleFrame(){
+		ruleView = new RuleViewEntity();
+		id = UUID.randomUUID();
 		initialize();
 	}
 	
-	public RuleFrame(String rule){
+	public RuleFrame(RuleViewEntity existingRule){
+		ruleView = existingRule;
+		setRuleFields();
+		/*initialize();*/
+		
+		//ruleView = new RuleViewEntity();
+		//id = UUID.randomUUID();
 		initialize();
 	}	
 	
@@ -226,7 +113,7 @@ public class RuleFrame extends JFrame {
 		
 		save.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				saveRule();
+				saveRuleButton();
 			}
 		});		
 	}
@@ -259,18 +146,15 @@ public class RuleFrame extends JFrame {
 
 		//Choice folderChoosed=new Choice();
 		folderChoosed.setPreferredSize(new Dimension(330, 00));
-		/***/
-		FolderService folderService = new FolderService();
-		ArrayList<String> listOfFolders = (ArrayList<String>) folderService.loadHierarchy();
-		/*ArrayList<String> listOfFolders = (ArrayList<String>) folderService.loadHierarchy(
-				CECConfigurator.getReference().get("Inbox"));*/
+		FolderService folderService = new FolderService();		
+		ArrayList<String> listOfFolders = (ArrayList<String>) folderService.loadSubFolders(
+				CECConfigurator.getReference().get("Inbox"));
 		
 		for (String folder : listOfFolders)
 			folderChoosed.add(folder);
 		
 		
-		/***/
-				
+			
 		botBot.add(move,BorderLayout.WEST);
 		botBot.add(folderChoosed,BorderLayout.EAST);
 		
@@ -290,7 +174,7 @@ public class RuleFrame extends JFrame {
 	}
 	
 	//Actions > Save Rule
-	private void saveRule(){
+	private void saveRuleButton(){
 		
 		if ((!from.isSelected()) &&(!content.isSelected())){
 			JOptionPane.showMessageDialog(null, "Select at least one of the methods of implementation");
@@ -298,12 +182,42 @@ public class RuleFrame extends JFrame {
 		else
 		{
 			
-			// Building the Rules 
+			// Building the Rules 			
 			String choosed =folderChoosed.getSelectedItem();
 			JOptionPane.showMessageDialog(null, "From "+fromField.getText()+"\nContaining "+contentField.getText()
 													+"\n Selected Folder = "+choosed);							
 		}		
 	}
+	
+	private void buildRuleViewObject() {
+		if (null == ruleView.getID()) {
+			ruleView.setId(id);
+		}
+
+		ruleView.setWords(contentField.getText());
+		ruleView.setEmailAddresses(fromField.getText());
+		ruleView.setFolderPath(folderChoosed.getSelectedItem());
+	}
+	private void editExistingRule() {
+		//id = ruleView.getID();		
+		contentField.setText(ruleView.getWords());
+		fromField.setText(ruleView.getEmailAddresses());
+		//folderChoosed.setVisible(false);
+	}
+	
+	private void setRuleFields() {
+		//id = ruleView.getID();
+		contentField.setText("What is here");//(ruleView.getWords());
+		fromField.setText("From This One");//(ruleView.getEmailAddresses());
+	}
+	
+	
+	private void saveRule()
+	{
+		buildRuleViewObject();
+		ruleService.save(ruleView);
+	}
+	
 	
 	//Actions > Exit
 	private void exitRule(){
