@@ -19,6 +19,7 @@ import org.junit.runners.Suite.SuiteClasses;
 	RuleTests.class,
 	RuleXMLDaoTests.class,
 	SearchTests.class,
+	TemplateImplTests.class,
 	TemplateServiceTests.class,
 	TemplateXMLDaoTests.class,
 		
