@@ -1,5 +1,6 @@
 package cec.model;
 
+import java.util.List;
 import java.util.UUID;
 
 import cec.config.CECConfigurator;
@@ -202,5 +203,12 @@ public class RuleImpl implements Rule {
 	public void update() {
 		ruleDao.update(id, String.valueOf(rank), getEmailAddresses(), getWords(), targetFolder.getPath(), isActive.toString(), 
 				CECConfigurator.getReference().get("RuleFolder"));
+	}
+
+	@Override
+	public void apply() {
+		Iterable<Email> emailsInInbox = FolderFactory.getFolder(CECConfigurator.getReference().get("Inbox")).loadEmails();
+		for(Email e: emailsInInbox)
+			apply(e);
 	}
 }

@@ -33,32 +33,10 @@ import cec.service.RuleService;
 
 
 public class RuleSettings extends JFrame {	
-	
-	Object rowData[][] = { { "Row1-Column1", "Row1-Column2", "Row1-Column3"},
-            { "Row2-Column1", "Row2-Column2", "Row2-Column3"},
-            { "Row2-Column1", "Row2-Column2", "Row2-Column3"},
-            { "Row2-Column1", "Row2-Column2", "Row2-Column3"},
-            { "Row2-Column1", "Row2-Column2", "Row2-Column3"},
-            { "Row2-Column1", "Row2-Column2", "Row2-Column3"},
-            { "Row2-Column1", "Row2-Column2", "Row2-Column3"},
-            { "Row2-Column1", "Row2-Column2", "Row2-Column3"},
-            { "Row2-Column1", "Row2-Column2", "Row2-Column3"},
-            { "Row2-Column1", "Row2-Column2", "Row2-Column3"},
-            { "Row2-Column1", "Row2-Column2", "Row2-Column3"},
-            { "Row2-Column1", "Row2-Column2", "Row2-Column3"},
-            { "Row2-Column1", "Row2-Column2", "Row2-Column3"},
-            { "Row2-Column1", "Row2-Column2", "Row2-Column3"},
-            { "Row2-Column1", "Row2-Column2", "Row2-Column3"},
-            
-	
-	
-	
-	};
-Object columnNames[] = { "Column One", "Column Two", "Column Three"};
-JTable ruleTable = new JTable(rowData, columnNames);
+JTable ruleTable = new JTable();
 RuleService ruleService = new RuleService();
 
-EmailViewEntity selectedRuleEntity;
+RuleViewEntity selectedRuleEntity;
 
 
 	
@@ -170,13 +148,13 @@ EmailViewEntity selectedRuleEntity;
 		
 		apply.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				//applyRule();
+				applyRule();
 			}
 		});	
 
 		applyAll.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				//applyAllRules();
+				applyAllRules();
 			}
 		});	
 
@@ -191,6 +169,10 @@ EmailViewEntity selectedRuleEntity;
 			}
 		});	
 	}
+	
+	
+	
+	
 	
 	private void setupRuleTable() {
 
@@ -255,11 +237,11 @@ EmailViewEntity selectedRuleEntity;
 		defineRuleTableLayout();
 	}	
 	
-	private void setSelectedRuleEntity(EmailViewEntity emailViewEntity) {
+	private void setSelectedRuleEntity(RuleViewEntity emailViewEntity) {
 		selectedRuleEntity = emailViewEntity;
 	}
 	
-	private EmailViewEntity getSelectedRuleEntity() {
+	private RuleViewEntity getSelectedRuleEntity() {
 		return selectedRuleEntity; 
 	}
 	
@@ -271,13 +253,33 @@ EmailViewEntity selectedRuleEntity;
 			if (event.getValueIsAdjusting()) {
 				return;
 			} else {
-				setSelectedRuleEntity(((EmailListViewData) (ruleTable
+				setSelectedRuleEntity(((RuleListViewData) (ruleTable
 						.getModel())).getViewEntityAtIndex(ruleTable
 						.getSelectedRow()));
 			}
 		}
 	}
 
+	// Actions > Apply Rule
+	private void applyRule() {			
+			if (getSelectedRuleEntity() == null) {
+				JOptionPane.showMessageDialog(null, "Select a Rule to delete");
+			} else {
+				ruleService.apply(getSelectedRuleEntity());
+				loadRuleTable();
+				setSelectedRuleEntity(null);
+				EmailClient.getReference().updateEmailsTable();
+			}
+		}
+	
+	// Actions > Apply All Rules
+	private void applyAllRules() {			
+		ruleService.applyAll();
+		setSelectedRuleEntity(null);
+		EmailClient.getReference().updateEmailsTable();
+	
+	}
+	
 	// Actions > Update Rule
 	private void menuEditEditRule() {			
 			if (getSelectedRuleEntity() == null) {
@@ -294,8 +296,9 @@ EmailViewEntity selectedRuleEntity;
 			if (getSelectedRuleEntity() == null) {
 				JOptionPane.showMessageDialog(null, "Select a Rule to delete");
 			} else {
-				//new RuleFrame();
-				// new RuleFrame(selectedRuleEntity);
+				ruleService.delete(getSelectedRuleEntity());
+				loadRuleTable();
+				setSelectedRuleEntity(null);
 			}
 		}	
 	

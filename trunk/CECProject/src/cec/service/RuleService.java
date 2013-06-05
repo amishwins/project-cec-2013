@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import cec.config.CECConfigurator;
 import cec.model.FolderFactory;
 import cec.model.Rule;
 import cec.model.RuleBuilder;
@@ -34,6 +35,11 @@ public class RuleService {
 	public void delete(RuleViewEntity ruleViewEntity) {
 		Rule rule = (new RuleBuilder())
 				.withId(ruleViewEntity.getID())
+				.withRank(ruleViewEntity.getRank())
+				.withEmailAddresses(ruleViewEntity.getEmailAddresses())
+				.withWords(ruleViewEntity.getWords())
+				.withTargetFolder(FolderFactory.getFolder(ruleViewEntity.getFolderPath()))
+				.withIsActive(true)
 				.build();
 		rule.delete();
 	}
@@ -51,5 +57,25 @@ public class RuleService {
 			listOfRuleViewEntities.add(ruleViewEntity);
 		}
 		return listOfRuleViewEntities;
+	}
+
+	public void apply(RuleViewEntity ruleViewEntity) {
+		Rule rule = (new RuleBuilder())
+				.withId(ruleViewEntity.getID())
+				.withRank(ruleViewEntity.getRank())
+				.withEmailAddresses(ruleViewEntity.getEmailAddresses())
+				.withWords(ruleViewEntity.getWords())
+				.withTargetFolder(FolderFactory.getFolder(ruleViewEntity.getFolderPath()))
+				.withIsActive(true)
+				.build();
+		
+		rule.apply();  // should this call the ruleset?
+		
+	}
+
+	public void applyAll() {
+		RuleSet ruleSet = RuleSetFactory.getRuleSetInstance();
+		ruleSet.apply(FolderFactory.getFolder(CECConfigurator.getReference().get("Inbox")).loadEmails());
+		
 	}
 }

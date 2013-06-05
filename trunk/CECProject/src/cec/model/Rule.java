@@ -20,6 +20,9 @@ public interface Rule extends Comparable<Rule> {
 	public void save();
 	public void update();
 	public void delete();
-	
+
 	public boolean apply(Email email);
+	
+	// apply to all emails
+	public void apply();
 }
