@@ -78,4 +78,38 @@ public class RuleService {
 		ruleSet.apply(FolderFactory.getFolder(CECConfigurator.getReference().get("Inbox")).loadEmails());
 		
 	}
+
+	public void update(RuleViewEntity ruleViewEntity) {
+		Rule rule = (new RuleBuilder())
+				.withId(ruleViewEntity.getID())
+				.withRank(ruleViewEntity.getRank())
+				.withEmailAddresses(ruleViewEntity.getEmailAddresses())
+				.withWords(ruleViewEntity.getWords())
+				.withTargetFolder(FolderFactory.getFolder(ruleViewEntity.getFolderPath()))
+				.withIsActive(true)
+				.build();
+		
+		rule.update();  // should this call the ruleset?
+		
+	}
+
+	public void shuffle(RuleViewEntity previous, RuleViewEntity current) {
+		Rule previousRule = (new RuleBuilder())
+				.withId(previous.getID())
+				.withRank(previous.getRank())
+				.withEmailAddresses(previous.getEmailAddresses())
+				.withWords(previous.getWords())
+				.withTargetFolder(FolderFactory.getFolder(previous.getFolderPath()))
+				.withIsActive(true)
+				.build();
+		Rule currentRule = (new RuleBuilder())
+				.withId(current.getID())
+				.withRank(current.getRank())
+				.withEmailAddresses(current.getEmailAddresses())
+				.withWords(current.getWords())
+				.withTargetFolder(FolderFactory.getFolder(current.getFolderPath()))
+				.withIsActive(true)
+				.build();
+		ruleSet.swapRank(previousRule, currentRule);
+	}
 }
