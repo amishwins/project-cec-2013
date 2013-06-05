@@ -6,14 +6,14 @@
 
 === Search ===
 
-CEC Application will not perform the search, ignoring user command, in the following cases:
- * Term searched is empty
+CEC Application will not perform the search, ignoring user request, in the following cases:
+ * Search box is empty
  * contains only spaces
- * contains only special characters
+ * contains only Special characters
 
-"@" symbol is not considered as a special character
+The symbols "@", "." and "_" are not considered Special characters but "Email characters".
 
-The Email search engine finds emails that contains the term wanted in at least one of the fields: From, To, CC, Subject and Body. It considers every word separately, it means that the application will return Emails that match with at least one of the words informed by the user. Special characters - except the at symbol "@"  - are not considered, and words concatenated with them are treated separately.
+The Email search engine finds emails that contains the user input in at least one of the fields: From, To, CC, Subject and Body. It considers every word separately, what means that the application will return Emails that match with at least one of the words informed by the user. Special characters are not considered, and words concatenated with them are treated separately.
 
 
 === Column Widths for JTable === 
