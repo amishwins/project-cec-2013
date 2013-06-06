@@ -13,13 +13,24 @@ import cec.model.RuleSetFactory;
 
 import cec.view.RuleViewEntity;
 
+/**
+ * PLEASE COMPLETE
+ * 
+ * 
+ * Represents the actions that can be performed against a Rule from
+ * the Presentation Layer (cec.view) such as creating, updating, deleting, 
+ * shuffling, apply and apply all; also retrieves information 
+ * from model/persistence Layers to be used by the JTable <code>ruleTable</code> 
+ * on <code>RuleSettings</code> class. 
+ */
+
 public class RuleService {
 	private RuleSet ruleSet;	
 	
 	public RuleService() {
 		ruleSet = RuleSetFactory.getRuleSetInstance();
 	}
-	
+
 	public void save(RuleViewEntity ruleViewEntity) {
 		Rule rule = (new RuleBuilder())
 				.withId(UUID.randomUUID())
