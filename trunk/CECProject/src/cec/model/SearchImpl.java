@@ -22,7 +22,12 @@ public class SearchImpl implements Search {
 	String source;
 	String patternToFind;
 	
-	/** Constructor, fill the local variables an convert both strings to uppercase */
+	/** Constructor, fill the local variables an convert both strings to uppercase
+	 *  @param  source 
+	 *  			String containing the text in which we have to match the patternToFind string
+	 *  @param  patternToFind 
+	 *  			String containing the pattern to find
+	 */
 	public SearchImpl(String source, String patternToFind)
 	{		
 		
@@ -44,7 +49,7 @@ public class SearchImpl implements Search {
 		return modifiedString;			
 	}
 		
-	/** Return true if both strings match*/	
+	/** Return true if patternToFind is in source*/	
 	public boolean isMatch()
 	{		
 		if(patternToFind.isEmpty())
