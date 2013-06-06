@@ -67,6 +67,13 @@ public class RuleSetImpl implements RuleSet {
 		return listOfActiveRules;
 	}
 	
+	/**
+	 * Precondition: rules exist in the system.
+	 * Postcondition: Rules have been updated with the new rank values.
+	 * It loads all the rules from the persistence.
+	 * @param allRules the all rules
+	 * @return the iterable
+	 */
 	
 	@Override
 	public Iterable<Rule> loadRules() {
