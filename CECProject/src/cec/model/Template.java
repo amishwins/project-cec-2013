@@ -2,7 +2,7 @@ package cec.model;
 
 /**
  * The Interface Template exposes the lifecycle methods 
- * of an email template that service layer should call.
+ * of a template that service layer should call.
  * 
  * Service layer classes are coupled to Model layer 
  * through this interface. 
