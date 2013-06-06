@@ -2,7 +2,6 @@ package tests.integration;
 
 import static org.junit.Assert.*;
 
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -11,10 +10,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cec.config.CECConfigurator;
-import cec.model.FolderFactory;
 import cec.persistence.MeetingDao;
 import cec.persistence.MeetingDaoFactory;
-import cec.service.FolderService;
 import cec.service.MeetingService;
 import cec.view.MeetingViewEntity;
 

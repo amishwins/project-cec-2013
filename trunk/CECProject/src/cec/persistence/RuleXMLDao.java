@@ -149,46 +149,6 @@ public class RuleXMLDao implements RuleDao {
 		}
 	}
 
-	/**
-	 * Updates the parentFolder tag value inside the xml file. this method is
-	 * called by move method so that before it moves the file to another folder,
-	 * it should have the correct parentFolder tag value.
-	 * 
-	 * @param xmlFile
-	 *            the xml file
-	 * @param destDir
-	 *            the dest dir
-	 */
-	private void updateXMLField(String xmlFile, String destDir) {
-		DocumentBuilderFactory documentFactory = null;
-		DocumentBuilder documentBuilder = null;
-		Document emailInXMLFormat = null;
-
-		try {
-			documentFactory = DocumentBuilderFactory.newInstance();
-			documentBuilder = documentFactory.newDocumentBuilder();
-			emailInXMLFormat = documentBuilder.parse(xmlFile);
-			emailInXMLFormat.getDocumentElement().normalize();
-
-			NodeList email = emailInXMLFormat.getElementsByTagName("E-Mail");
-			Element field = (Element) email.item(0);
-			Node parentFolder = field.getElementsByTagName("ParentFolder")
-					.item(0).getFirstChild();
-			parentFolder.setNodeValue(destDir);
-
-			emailInXMLFormat.getDocumentElement().normalize();
-			TransformerFactory transformerFactory = TransformerFactory
-					.newInstance();
-			Transformer transformer = transformerFactory.newTransformer();
-			DOMSource source = new DOMSource(emailInXMLFormat);
-			StreamResult result = new StreamResult(new File(xmlFile));
-			transformer.transform(source, result);
-		} catch (Exception exception) {
-			logger.severe(StackTrace.asString(exception));
-		}
-
-	}
-
 	@Override
 	public synchronized void save(UUID id, String sender, String keywords,
 			String tartgetFolder, String status, String pathToSaveRuleFile) {

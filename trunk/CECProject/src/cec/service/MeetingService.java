@@ -38,11 +38,6 @@ public class MeetingService {
 		newMeeting.send();
 	}
 
-	private void updateMeetingViewEntity(MeetingViewEntity meetingInView,
-			Meeting meeting) {
-		meetingInView.setFolder(meeting.getParentFolder().getPath());
-	}
-
 	/**
 	 * This method communicates the model layer the emailInView object has to be
 	 * deleted and has to set in the draft folder

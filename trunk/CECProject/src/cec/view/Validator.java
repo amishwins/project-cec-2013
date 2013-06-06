@@ -5,11 +5,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.swing.JOptionPane;
 
 /**
  * Auxiliary Class used in the Presentation Layer that implements methods to
@@ -158,7 +155,7 @@ public class Validator {
 		int day = today.get(Calendar.DAY_OF_MONTH);
 		int hour = today.get(Calendar.HOUR_OF_DAY);
 		int minute = today.get(Calendar.MINUTE);
-		int am_pm = today.get(Calendar.AM_PM);
+		
 		String AM_PM;
 		
 	    if(hour<12){
@@ -232,5 +229,9 @@ public class Validator {
 		} else {
 			return false;
 		}
+	}
+
+	public boolean isValidLocation(String place) {
+		return (!(place.trim().isEmpty()));
 	}
 }

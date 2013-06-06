@@ -56,6 +56,8 @@ public class TreeModelBuilder {
 
 	private int subFolderIndex(final DefaultMutableTreeNode parentFolder,
 			final String subFolderPath) {
+		
+		@SuppressWarnings("unchecked")
 		Enumeration<DefaultMutableTreeNode> subFolders = parentFolder
 				.children();
 		DefaultMutableTreeNode subFolder = null;
