@@ -55,7 +55,7 @@ public class RuleSetImpl implements RuleSet {
 	/**
 	 * Precondition: rules exist in the system.
 	 * Postcondition: Rules have been updated with the new rank values.
-	 * I loads all the active rules from the system after filtering out active rules from the
+	 * It loads all the active rules from the system after filtering out active rules from the
 	 * system.
 	 * @param allRules the all rules
 	 * @return the iterable
