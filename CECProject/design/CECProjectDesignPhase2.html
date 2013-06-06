@@ -100,8 +100,8 @@
 		<h3>Major Additions and Changes to Classes</h3>
 		
 		<p><b>Email Template</b></p>
-		<p>Email template class diagram is shown here. It is interesting to note that we have followed
-		the same n-tier architecture as originally created in the first phase. EmailFrame in the context
+		<p>The Email template class diagram is shown here. It is interesting to note that we have followed
+		the same n-tier architecture as originally created. EmailFrame in the context
 		of a Template (NEW, EDIT, APPLY) will know to call the correct service layer methods when
 		actions are performed. Model layer classes to store templates and the collection of templates are
 		provided, and they communicate with the persistence layer abstraction TemplateDao.</p>		
@@ -111,7 +111,7 @@
 		<p>Email interface was enhanced to implement a new Searchable interface. This allowed our application
 		to treat emails as searchable, and thus call the "isMatch" method on them. The email delegated the 
 		responsibility to a new Search object which used regex to determine if there is a match. This separation
-		of concerns and nice encapsulation allowed us to fully unit test the search feature (38 JUnit tests!) in
+		of concerns and nice encapsulation allowed us to fully unit test the search feature <b>(38 JUnit tests!)</b> in
 		isolation. The JTable object in the EmailClient main application was updated with the results,
 		and users could then double click to open up a found email.</p>		
 		<p><a href="SearchClasses.png"><img src="SearchClasses.png" width=600 border=0></img></a></p>
@@ -120,17 +120,22 @@
 		<p>Rule Filters, just like Templates and Meetings required us to build objects in each layer of our
 		n-tier architecture. The communication between layers was respected, and we used View Entity objects
 		to ensure that there was no direct coupling. RuleFrame is responsible to handle the new and edit 
-		functionality. RuleSettings is responsible to help the user organize all rules by seeing them
-		all in one place, and the re-order them.  </p>
+		functionality. RuleSettings is responsible to help the user organize all rules by having them
+		visible all in one place, and given the ability to re-order them.  </p>
 		<p>In order to realize the function of ordered rules, we decided to use a separate XML file to
 		store the value of the latest rule. This allowed us to easily "query" for the next rule ID. Swap
 		was enabled so that users could change the order of rules, and therefore influence how their
-		emails would be affected. 
+		emails would be affected when rules were executed. 
 		<p><a href="RulesClasses.png"><img src="RulesClasses.png" width=600 border=0></img></a></p>
 		
 				
 		<p><b>Meetings</b></p>		
-		<p>Placeholder</p>
+		<p>Meetings constructed as first-class citizens in our overall design - they are given their
+		own independent UI, service, model and persistence objects, and the existing Folder architecture
+		was adapted to handle displaying and manipulation of meetings. We needed to consider the operations
+		such as create, edit, and cancel/delete. One thing we noticed was that the meeting view entity
+		was quite large, and that perhaps we could encapsulate sub-features into their own objects
+		(for example MeetingDates). <i>This will be left as an exercise to the reader.</i> </p>
 		<p><a href="MeetingsClasses.png"><img src="MeetingsClasses.png" width=600 border=0></img></a></p>
 
 		<br><br>
@@ -163,24 +168,22 @@
 		main view class. Additionally, MeetingFolder and UserFolder shared some mutually exclusive methods, and
 		we were forced to throw exceptions in the event that they were incorrectly called.  
 		
-			
-		
 		<h3>Search and Special Characters</h3>
-		
 		<h3>Applying Template - Getting the UI to Highlight</h3>
 		<p>Problem: how to support a nice flow of guided template usage so the user is delighted</p>
 		<p>This was a challenging endeavour. We first tried to manually parse the fields in a template, and build
 		some sort of map of placeholders. This, coupled with the complexities of handling replacements in the text
 		and responding to keyboard events resulted in quite a big headache. Eventually, after some research into
 		using JTextArea and JTextFields, we decided that using javax.swing.InputMap and javax.swing.ActionMap was
-		the best approach.</p>
+		the best approach, and hid complexities in well encapsulated objects.</p>
 		<p>For the regex part, we designed an implemented a Placeholder Helper class, whose responsibility was to
 		respond with the current start and end positions of the next available placeholder match. </p>
 		<p><img src="phh.png"/></p>
 		<p>Each field on which we wanted to apply the highlighting mechanism was asked to return its Input Map and
 		Action Map.	From there, we registered an input (in our case, either the Enter key, or the Tab key), and
 		corresponding Action (in our case, to run an Abstract Action which we aptly named CommitAction). Commit
-		Action took as input the field for which the input was performed, and then executed a simple method:</p>
+		Action took as input the field for which the input was performed, and then executed a simple method (action
+		performed was called by the swing framework upon detection of the input):</p>
 		
 		<p><img src="commitactioncode.png"/></p>
 		
@@ -224,14 +227,17 @@
 		<h2>Design Patterns (extensions and applications from Phase 1)</h2>
 		
 		<ul>
-			<li>Builder: cec.model.EmailBuilder</li>
+			<li>Builder: cec.model.EmailBuilder, cec.model.MeetingBuilder</li>
 			<li>Factory: cec.model.FolderFactory, cec.persistence.EmailDaoFactory, 
-			cec.persistence.FolderDaoFactory</li>
+			cec.persistence.FolderDaoFactory, cec.model.RuleSetFactory, cec.persistence.RuleDaoFactory,
+			cec.persistence.MeetingDaoFactory, cec.persistence.TemplateDaoFactory  </li>
 			<li>Adapter/Wrapper: cec.view.Email, cec.view.EmailClient</li>
 			<li>Facade: cec.persistence.EmailXMLDao, cec.persistence.FolderXMLDao (for the javax.xml.parser,
 			javax.xml.transform, apache.commons.io, and w3c.dom classes)</li>
 			<li>Observer: cec.view.EmailClient (TreeSelectionListener), JTable for emails listens to 
-			model changes when an email is send, saved, or deleted.</li>
+			model changes when an email is send, saved, or deleted., all JTextComponents on which InputMaps
+			and ActionMaps were defined.  
+			</li>
 			<li>Singleton: cec.view.EmailClient</li>
 		</ul>
 		
@@ -264,6 +270,10 @@
 		<p>We wanted to try and use a Test Helper for some of the integration tests to handle some of the
 		heavy lifting, and hide away some complexity from the test class itself. This was not completed in
 		time.</p>
+		
+		<h3>Some TODOs left in the code</h3>
+		<p>We were unable to cleanup every single TODO left in the code. This is something which we should 
+		target before beginning the implementation task for Phase 3.</p>
 		
 	</body>
 </html>
