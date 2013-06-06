@@ -3,7 +3,7 @@ package cec.model;
 import java.util.UUID;
 
 /**
- * A builder of email instances.
+ * A builder of rule instances.
  * 
  */
 public class RuleBuilder {
@@ -21,7 +21,7 @@ public class RuleBuilder {
 	 * 
 	 * @param id
 	 *            the id
-	 * @return the email builder
+	 * @return the rule builder
 	 */
 	public RuleBuilder withId(UUID id) {
 		this.id = id;
@@ -39,7 +39,7 @@ public class RuleBuilder {
 	 * 
 	 * @param from
 	 *            the from
-	 * @return the email builder
+	 * @return the rank builder
 	 */
 	public RuleBuilder withRank(int rank) {
 		this.rank = rank;
@@ -53,7 +53,7 @@ public class RuleBuilder {
 	 * 
 	 * @param to
 	 *            the to
-	 * @return the email builder
+	 * @return the rank builder
 	 */
 	public RuleBuilder withEmailAddresses(String emailAddresses) {
 		this.emailAddresses = emailAddresses;
@@ -66,7 +66,7 @@ public class RuleBuilder {
 	 * 
 	 * @param cc
 	 *            the cc
-	 * @return the email builder
+	 * @return the rule builder
 	 */
 	public RuleBuilder withWords(String words) {
 		this.words = words;
@@ -79,7 +79,7 @@ public class RuleBuilder {
 	 * 
 	 * @param subject
 	 *            the subject
-	 * @return the email builder
+	 * @return the rule builder
 	 */
 	public RuleBuilder withTargetFolder(Folder targetFolder) {
 		this.targetFolder = targetFolder;
@@ -92,7 +92,7 @@ public class RuleBuilder {
 	 * 
 	 * @param body
 	 *            the body
-	 * @return the email builder
+	 * @return the rule builder
 	 */
 	public RuleBuilder withIsActive(Boolean isActive) {
 		this.isActive = isActive;
@@ -100,7 +100,7 @@ public class RuleBuilder {
 	}
 
 	/**
-	 * returns the EmailImpl object.
+	 * returns the RuleImpl object.
 	 * 
 	 * @return the email
 	 */

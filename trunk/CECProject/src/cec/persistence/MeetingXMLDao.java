@@ -25,8 +25,8 @@ import exceptions.StackTrace;
 
 /**
  * 
- * EmailXMLDao is a class in the persistence layer responsible for handling
- * email life cycle events at a lower level. It saves each email in a XML file
+ * MeetingXMLDao is a class in the persistence layer responsible for handling
+ * meeting life cycle events at a lower level. It saves each meeting in a XML file
  * format. it is also responsible for deleting an XML file and moving an XML
  * file from one folder to another folder.
  * 
@@ -47,24 +47,21 @@ public class MeetingXMLDao implements MeetingDao {
 	 * Builds the XML file using the specified arguments. Name of each file is
 	 * its id field.
 	 * 
-	 * @param id
-	 *            the id
-	 * @param from
-	 *            the F
-	 * @param attendees
-	 *            the to
-	 * @param cc
-	 *            the cc
-	 * @param subject
-	 *            the subject
-	 * @param body
-	 *            the body
-	 * @param lastModifiedTime
-	 *            the last modified time
-	 * @param sentTime
-	 *            the sent time
-	 * @param location
-	 *            the location
+	 * Postcondition: It builds the XML file and returns a Document Object.
+	 *
+	 * @param id the id
+	 * @param from the from
+	 * @param attendees the attendees
+	 * @param meetingStartDate the meeting start date
+	 * @param meetingEndDate the meeting end date
+	 * @param meetingStartTime the meeting start time
+	 * @param meetingEndTime the meeting end time
+	 * @param meetingPlace the meeting place
+	 * @param subject the subject
+	 * @param body the body
+	 * @param lastModifiedTime the last modified time
+	 * @param sentTime the sent time
+	 * @param location the location
 	 * @return the document
 	 */
 	private Document buildXmlFile(UUID id, String from, String attendees,
@@ -180,24 +177,21 @@ public class MeetingXMLDao implements MeetingDao {
 	 * Name of each file and Location where the file to be saved is given by the
 	 * argument id and location.
 	 * 
-	 * @param id
-	 *            the id
-	 * @param from
-	 *            the from
-	 * @param to
-	 *            the to
-	 * @param cc
-	 *            the CC
-	 * @param subject
-	 *            the subject
-	 * @param body
-	 *            the body
-	 * @param lastModifiedTime
-	 *            the last modified time
-	 * @param sentTime
-	 *            the sent time
-	 * @param location
-	 *            the location
+	 * Postcondition: Each meeting will have its id and persisted on the file system.
+	 * 
+	 * @param id the id
+	 * @param from the from
+	 * @param attendees the attendees
+	 * @param meetingStartDate the meeting start date
+	 * @param meetingEndDate the meeting end date
+	 * @param meetingStartTime the meeting start time
+	 * @param meetingEndTime the meeting end time
+	 * @param meetingPlace the meeting place
+	 * @param subject the subject
+	 * @param body the body
+	 * @param lastModifiedTime the last modified time
+	 * @param sentTime the sent time
+	 * @param location the location
 	 */
 	public void save(UUID id, String from, String attendees,
 			String meetingStartDate, String meetingEndDate,
@@ -231,17 +225,15 @@ public class MeetingXMLDao implements MeetingDao {
 	}
 
 	/**
-	 * It deletes each file from the system. specification of an email to be
+	 * It deletes each file from the system. specification of an meeting to be
 	 * deleted is given by argument path and filename respectively to identify
-	 * each email before deleting it.
+	 * each meeting before deleting it.
 	 * 
 	 * It deletes each file forcefully from the System just to avoid exceptions
 	 * that generates if file is being used by another programs.
-	 * 
-	 * @param path
-	 *            the path
-	 * @param fileName
-	 *            the file name
+	 *
+	 * @param path the path
+	 * @param fileName the file name
 	 */
 	public void delete(String path, UUID fileName) {
 		FileDeleteStrategy file = FileDeleteStrategy.FORCE;
@@ -254,14 +246,12 @@ public class MeetingXMLDao implements MeetingDao {
 	}
 
 	/**
-	 * Loads an equivalent lower level representation of an email from a
-	 * specific folder. It basically loads the email field values and returns a
+	 * Loads an equivalent lower level representation of an meeting from a
+	 * specific folder. It basically loads the meeting field values and returns a
 	 * Map of those values.
-	 * 
-	 * @param folder
-	 *            the folder
-	 * @param FileName
-	 *            the file name
+	 *
+	 * @param folder the folder
+	 * @param xmlFileName the xml file name
 	 * @return the map
 	 */
 	public Map<String, String> loadMeeting(String folder, String xmlFileName) {

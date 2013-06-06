@@ -26,12 +26,13 @@ import cec.config.CECConfigurator;
 
 import exceptions.StackTrace;
 
+// TODO: Auto-generated Javadoc
 /**
  * 
- * EmailXMLDao is a class in the persistence layer responsible for handling
- * email life cycle events at a lower level. It saves each email in a XML file
- * format. it is also responsible for deleting an XML file and moving an XML
- * file from one folder to another folder.
+ * RuleXMLDao is a class in the persistence layer responsible for handling rule
+ * life cycle events at a lower level. It saves each rule in a XML file format.
+ * it is also responsible for deleting an XML file and swapping the ranks of 2
+ * rules.
  * 
  */
 public class RuleXMLDao implements RuleDao {
@@ -39,6 +40,7 @@ public class RuleXMLDao implements RuleDao {
 	/** Specifies the extension of file. */
 	private final String FILE_EXTENSION = ".xml";
 
+	/** The logger. */
 	static Logger logger = Logger.getLogger(RuleXMLDao.class.getName());
 
 	static {
@@ -52,26 +54,20 @@ public class RuleXMLDao implements RuleDao {
 	 * 
 	 * @param id
 	 *            the id
-	 * @param from
-	 *            the F
-	 * @param to
-	 *            the to
-	 * @param cc
-	 *            the cc
-	 * @param subject
-	 *            the subject
-	 * @param body
-	 *            the body
-	 * @param lastModifiedTime
-	 *            the last modified time
-	 * @param sentTime
-	 *            the sent time
-	 * @param location
-	 *            the location
+	 * @param rank
+	 *            the rank
+	 * @param sender
+	 *            the sender
+	 * @param keywords
+	 *            the keywords
+	 * @param targetFolder
+	 *            the target folder
+	 * @param status
+	 *            the status
 	 * @return the document
 	 */
 	private Document buildXmlFile(UUID id, String rank, String sender,
-			String keywords, String tartgetFolder, String status) {
+			String keywords, String targetFolder, String status) {
 
 		DocumentBuilderFactory documentFactory = null;
 		DocumentBuilder documentBuilder = null;
@@ -81,7 +77,7 @@ public class RuleXMLDao implements RuleDao {
 			documentFactory = DocumentBuilderFactory.newInstance();
 			documentBuilder = documentFactory.newDocumentBuilder();
 
-			// root element Email
+			// root element rule
 			ruleInXMLFormat = documentBuilder.newDocument();
 			Element ruleRootElement = ruleInXMLFormat.createElement("Rule");
 			ruleInXMLFormat.appendChild(ruleRootElement);
@@ -110,7 +106,7 @@ public class RuleXMLDao implements RuleDao {
 			Element tartgetFolderLabel = ruleInXMLFormat
 					.createElement("TartgetFolder");
 			tartgetFolderLabel.appendChild(ruleInXMLFormat
-					.createTextNode(tartgetFolder));
+					.createTextNode(targetFolder));
 			ruleRootElement.appendChild(tartgetFolderLabel);
 
 			// status
@@ -126,9 +122,13 @@ public class RuleXMLDao implements RuleDao {
 	}
 
 	/**
-	 * It deletes each file from the system. specification of an email to be
+	 * It deletes each file from the system. specification of an rule to be
 	 * deleted is given by argument path and filename respectively to identify
-	 * each email before deleting it.
+	 * each rule before deleting it.
+	 * 
+	 * Precondition: Rule file must exists on the System. Postcondition: Rule
+	 * file does not in the System any more. Invariant: System remains in the
+	 * consistent change.
 	 * 
 	 * It deletes each file forcefully from the System just to avoid exceptions
 	 * that generates if file is being used by another programs.
@@ -149,17 +149,38 @@ public class RuleXMLDao implements RuleDao {
 		}
 	}
 
+	/**
+	 * This method is responsible for building an XML file from the specified
+	 * fields. It is also responsible for saving that file on the file system.
+	 * Name of each file and Location where the file to be saved is given by the
+	 * argument id and location. Precondition: each rule must have id and
+	 * related data fields to be persisted on the System. Postcondition: Each
+	 * rule will have its id and rank, and must persists on the file system.
+	 * 
+	 * @param id
+	 *            the id
+	 * @param sender
+	 *            the sender
+	 * @param keywords
+	 *            the keywords
+	 * @param targetFolder
+	 *            the target folder
+	 * @param status
+	 *            the status
+	 * @param pathToSaveRuleFile
+	 *            the path to save rule file
+	 */
 	@Override
 	public synchronized void save(UUID id, String sender, String keywords,
-			String tartgetFolder, String status, String pathToSaveRuleFile) {
+			String targetFolder, String status, String pathToSaveRuleFile) {
 
 		String path = pathToSaveRuleFile;
 		String fileName = id.toString();
 		String pathToSaveFile = path + "/" + fileName + FILE_EXTENSION;
-        String rank = String.valueOf(getLatestRank()+1);
+		String rank = String.valueOf(getLatestRank() + 1);
 		try {
 			Document emailInXMLFormat = buildXmlFile(id, rank, sender,
-					keywords, tartgetFolder, status);
+					keywords, targetFolder, status);
 
 			TransformerFactory transformerFactory = TransformerFactory
 					.newInstance();
@@ -179,6 +200,17 @@ public class RuleXMLDao implements RuleDao {
 
 	}
 
+	/**
+	 * Loads an equivalent lower level representation of a rule from a specific
+	 * folder. It basically loads the meeting field values and returns a Map of
+	 * those values.
+	 * 
+	 * @param folder
+	 *            the folder
+	 * @param ruleXmlFileName
+	 *            the rule xml file name
+	 * @return the map
+	 */
 	@Override
 	public Map<String, String> loadRule(String folder, String ruleXmlFileName) {
 		Map<String, String> ruleData = new TreeMap<String, String>();
@@ -240,6 +272,19 @@ public class RuleXMLDao implements RuleDao {
 		return ruleData;
 	}
 
+	
+	/**
+     * It returns the equivalent low level representation of rule object under given 
+     *  folder specified by the argument folder. It basically returns data pertaining 
+     *  to all the rules under a given folder in the form of a collection of 
+     *  Map<String,String>.
+     *  Precondition: Rules must exists in the rules folder.
+     *  Postcondition: Rules list has been returned to the caller.
+     *  invariant: rules data has not been changed during invocation.
+     * 
+     * @param folder the folder
+     * @return the iterable
+     */
 	@Override
 	public Iterable<Map<String, String>> loadAllRules(String pathToRuleFolder) {
 		Collection<Map<String, String>> listOfRules = new ArrayList<>();
@@ -252,6 +297,11 @@ public class RuleXMLDao implements RuleDao {
 		return listOfRules;
 	}
 
+	/**
+	 * Gets the latest rank. Precondition: Rank file must persist on the System.
+	 * 
+	 * @return the latest rank
+	 */
 	private synchronized int getLatestRank() {
 		int rank = -1;
 		try {
@@ -284,6 +334,13 @@ public class RuleXMLDao implements RuleDao {
 		return rank;
 	}
 
+	/**
+	 * Precondition: Rank file must persists on the system. Postcondition:
+	 * latest rank has been returned for the new rule request.
+	 * 
+	 * @param rank
+	 *            the rank
+	 */
 	private synchronized void updateRank(String rank) {
 		DocumentBuilderFactory documentFactory = null;
 		DocumentBuilder documentBuilder = null;
@@ -299,8 +356,8 @@ public class RuleXMLDao implements RuleDao {
 
 			NodeList rule = ruleRankInXMLFormat.getElementsByTagName("Rule");
 			Element field = (Element) rule.item(0);
-			Node newRank = field.getElementsByTagName("Rank")
-					.item(0).getFirstChild();
+			Node newRank = field.getElementsByTagName("Rank").item(0)
+					.getFirstChild();
 			newRank.setNodeValue(rank);
 
 			ruleRankInXMLFormat.getDocumentElement().normalize();
@@ -316,13 +373,36 @@ public class RuleXMLDao implements RuleDao {
 
 	}
 
+	/**
+	 * Invariant: rule ID will not be changed even after the modification of the
+	 * other fields. Saves each rule object with latest changes to its
+	 * equivalent lower level representation( for example : a File).
+	 * Postconditions: Rule changes will be persisted on the system.
+	 * 
+	 * @param id
+	 *            the id
+	 * @param rank
+	 *            the rank
+	 * @param sender
+	 *            the sender
+	 * @param keywords
+	 *            the keywords
+	 * @param tartgetFolder
+	 *            the tartget folder
+	 * @param status
+	 *            the status
+	 * @param pathToSaveRuleFile
+	 *            the path to save rule file
+	 */
+
 	@Override
-	public synchronized void update(UUID id, String rank, String sender, String keywords,
-			String tartgetFolder, String status, String pathToSaveRuleFile) {
+	public synchronized void update(UUID id, String rank, String sender,
+			String keywords, String tartgetFolder, String status,
+			String pathToSaveRuleFile) {
 		String path = pathToSaveRuleFile;
 		String fileName = id.toString();
 		String pathToSaveFile = path + "/" + fileName + FILE_EXTENSION;
-        try {
+		try {
 			Document emailInXMLFormat = buildXmlFile(id, rank, sender,
 					keywords, tartgetFolder, status);
 
@@ -336,11 +416,11 @@ public class RuleXMLDao implements RuleDao {
 			StreamResult result = new StreamResult(new File(pathToSaveFile));
 
 			transformer.transform(source, result);
-	
+
 		} catch (Exception e) {
 			logger.severe(StackTrace.asString(e));
 		}
-		
+
 	}
 
 }

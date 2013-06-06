@@ -10,7 +10,7 @@ import cec.persistence.MeetingDao;
 import cec.persistence.MeetingDaoFactory;
 
 /**
- * EmailImpl is the concrete implementation of the email interface. it is one of
+ * MeetingImpl is the concrete implementation of the email interface. it is one of
  * the core domain object of our application.
  * 
  */
@@ -25,14 +25,19 @@ public class MeetingImpl implements Meeting {
 	/** The attendees field. */
 	private String attendees;
 
+	/** The start date. */
 	private String startDate;
 
+	/** The end date. */
 	private String endDate;
 
+	/** The start time. */
 	private String startTime;
 
+	/** The end time. */
 	private String endTime;
 
+	/** The place. */
 	private String place;
 
 	/** The subject field. */
@@ -50,28 +55,25 @@ public class MeetingImpl implements Meeting {
 	/** The parentFolder field. */
 	private Folder parentFolder;
 
-	/** The emailDao field. */
+	/** The meetingDao field. */
 	protected MeetingDao meetingDao;
 
 	/**
-	 * Instantiates a new email impl.
-	 * 
-	 * @param id
-	 *            the id
-	 * @param from
-	 *            the from
-	 * @param to
-	 *            the to
-	 * @param subject
-	 *            the subject
-	 * @param body
-	 *            the body
-	 * @param lastModifiedTime
-	 *            the last modified time
-	 * @param sentTime
-	 *            the sent time
-	 * @param parentFolder
-	 *            the parent folder
+	 * Instantiates a new meeting impl.
+	 *
+	 * @param id the id
+	 * @param from the from
+	 * @param attendees the attendees
+	 * @param startDate the start date
+	 * @param endDate the end date
+	 * @param startTime the start time
+	 * @param endTime the end time
+	 * @param place the place
+	 * @param subject the subject
+	 * @param body the body
+	 * @param lastModifiedTime the last modified time
+	 * @param sentTime the sent time
+	 * @param parentFolder the parent folder
 	 */
 	public MeetingImpl(UUID id, String from, String attendees,
 			String startDate, String endDate, String startTime, String endTime,
@@ -94,7 +96,7 @@ public class MeetingImpl implements Meeting {
 	}
 
 	/**
-	 * Sets the email dao.
+	 * Sets the meeting dao.
 	 * 
 	 * @param meetingDao
 	 *            the new email dao
@@ -107,10 +109,12 @@ public class MeetingImpl implements Meeting {
 		return id;
 	}
 
+	
 	public String getAttendees() {
 		return attendees;
 	}
 
+	
 	public String getFrom() {
 		return from;
 	}
@@ -119,30 +123,37 @@ public class MeetingImpl implements Meeting {
 		return startDate;
 	}
 
+	
 	public String getEndDate() {
 		return endDate;
 	}
+
 
 	public String getStartTime() {
 		return startTime;
 	}
 
+	
 	public String getEndTime() {
 		return endTime;
 	}
 
+	
 	public String getPlace() {
 		return place;
 	}
+
 
 	public String getSubject() {
 		return subject;
 	}
 
+	
 	public String getBody() {
 		return body;
 	}
 
+	
 	public String getLastModifiedTime() {
 		return lastModifiedTime;
 	}
@@ -178,6 +189,12 @@ public class MeetingImpl implements Meeting {
 		return targetFormat.format(lastModified);
 	}
 
+	/**
+	 * Gets the start or end date nicely formatted.
+	 *
+	 * @param startOrEndDate the start or end date
+	 * @return the start or end date nicely formatted
+	 */
 	private String getStartOREndDateNicelyFormatted(String startOrEndDate) {
 		if (startOrEndDate == null || startOrEndDate.equals(""))
 			return "";
@@ -196,9 +213,11 @@ public class MeetingImpl implements Meeting {
 		return targetFormat.format(sOrEDate);
 	}
 
+	
 	public String getSentTime() {
 		return sentTime;
 	}
+
 
 	public Folder getParentFolder() {
 		return parentFolder;
@@ -206,10 +225,12 @@ public class MeetingImpl implements Meeting {
 
 	/**
 	 * This method is responsible for communicating the persistence layer that
-	 * save the email object to Outbox folder. Currently it does not have the
+	 * save the meeting object to Meetings folder. Currently it does not have the
 	 * send functionality, it just saves the file assuming that file has reached
 	 * its destination.
-	 * 
+	 * Precondition: meeting does not exist in the system.
+	 * Postcondition: meeting object persists on the system. and email sent to the 
+	 * attendees. 
 	 * 
 	 */
 	public void send() {
@@ -221,11 +242,22 @@ public class MeetingImpl implements Meeting {
 		sendEmailToAttendeesForMeeting(subjectPrefix);
 	}
 
+	/**
+	 * Send email to attendees for inviting into the meeting.
+	 *
+	 * @param subjectPrefix the subject prefix
+	 */
 	private void sendEmailToAttendeesForMeeting(String subjectPrefix) {
 		Email email = buildEmailFromMeeting(subjectPrefix);
 		email.send();
 	}
 
+	/**
+	 * Builds the email from meeting.
+	 *
+	 * @param subjectPrefix the subject prefix
+	 * @return the email
+	 */
 	private Email buildEmailFromMeeting(String subjectPrefix) {
 		EmailBuilder emailBuilder = new EmailBuilder();
 		Email emailToSendForMeeting = emailBuilder.computeID().withFrom(from)
@@ -236,6 +268,12 @@ public class MeetingImpl implements Meeting {
 		return emailToSendForMeeting;
 	}
 
+	/**
+	 * Builds the body part of email to be sent for meeting.
+	 *
+	 * @param subjectPrefix the subject prefix
+	 * @return the string
+	 */
 	private String buildBodyPartOfEmailToBeSentForMeeting(String subjectPrefix) {
 		StringBuilder buildBody = new StringBuilder();
 		String nextLine = "\n";
@@ -256,7 +294,9 @@ public class MeetingImpl implements Meeting {
 
 	/**
 	 * This method is responsible for communicating the persistence layer that
-	 * delete the email object from the System.
+	 * delete the meeting object from the System.
+	 * PostCondition: 1. Meeting Object has been deleted from the system. 
+	 * 2. Cancellation Meeting Request email has been sent to client.
 	 * 
 	 */
 	public void delete() {
@@ -266,9 +306,9 @@ public class MeetingImpl implements Meeting {
 	}
 
 	/**
-	 * Returns a string representation for this email object. move the email
-	 * object to destination folder.
-	 * 
+	 * Returns a string representation for this meeting object.
+	 *
+	 * @return the string
 	 */
 
 	@Override
@@ -293,11 +333,12 @@ public class MeetingImpl implements Meeting {
 	}
 
 	/**
-	 * It compares the this email object to another email object on the basis of
-	 * lastModifiedTime field. it provides the basis for sorting the email
+	 * It compares the this meeting object to another meeting object on the basis of
+	 * lastModifiedTime field. it provides the basis for sorting the meeting
 	 * objects.
-	 * 
-	 * 
+	 *
+	 * @param anotherMeeting the another meeting
+	 * @return the int
 	 */
 	@Override
 	public int compareTo(Meeting anotherMeeting) {
@@ -322,7 +363,7 @@ public class MeetingImpl implements Meeting {
 	 * Handle parse exception.
 	 * 
 	 * @param e
-	 *            the e
+	 *           
 	 */
 	protected void handleParseException(Exception e) {
 		e.printStackTrace();

@@ -3,8 +3,8 @@ package cec.model;
 import java.util.UUID;
 
 /**
- * The Interface Email exposes the life cycle methods 
- * of an email that service layer should call.
+ * The Interface Meeting exposes the life cycle methods 
+ * of an meeting that service layer should call.
  * 
  * Service layer classes are coupled to Model layer 
  * through this interface. 
@@ -13,6 +13,7 @@ import java.util.UUID;
  */
 public interface Meeting extends Comparable<Meeting> {
    
+    
     /**
      * Gets the id.
      *
@@ -28,38 +29,63 @@ public interface Meeting extends Comparable<Meeting> {
     public String getFrom();
     
     /**
-     * Gets the To addresses(recipients) of an email .
+     * Gets the To addresses(recipients) of an meeting .
      *
      * @return the to
      */
     public String getAttendees();
     
+    /**
+     * Gets the start time.
+     *
+     * @return the start time
+     */
     public String getStartTime();
     
+    /**
+     * Gets the end time.
+     *
+     * @return the end time
+     */
     public String getEndTime();
     
+    /**
+     * Gets the start date.
+     *
+     * @return the start date
+     */
     public String getStartDate();
     
+    /**
+     * Gets the end date.
+     *
+     * @return the end date
+     */
     public String getEndDate();
     
+    /**
+     * Gets the place.
+     *
+     * @return the place
+     */
     public String getPlace();
     
     /**
-     * Gets the subject of an email.
+     * Gets the subject of an meeting.
      *
      * @return the subject
      */
     public String getSubject();
     
     /**
-     * Gets the body part of an email.
+     * Gets the body part of an meeting.
      *
      * @return the body
      */
     public String getBody();
     
     /**
-     * Gets the sent time of an email.
+     * Gets the sent time of an meeting.
      *
      * @return the sent time
      */
@@ -89,16 +115,15 @@ public interface Meeting extends Comparable<Meeting> {
 	public String getLastModifiedTimeNicelyFormatted();
 	
 	
-	
 	 
     /**
-     * Sends the email object to its destination address.
+     * Sends the meeting object.
      */
     public void send();
     
        
     /**
-     * Deletes the email from the System.
+     * Deletes the meeting object from the System.
      */
     public void delete();
     
