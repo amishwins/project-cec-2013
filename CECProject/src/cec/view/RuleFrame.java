@@ -29,6 +29,18 @@ import cec.config.CECConfigurator;
 import cec.service.RuleService;
 import cec.service.FolderService;
 
+
+/**
+ * RuleFrame Class extends JFRAME <br>
+ * show a graphic windows allowing user to create a new rule or edit existing rule .<br>
+ * uses JTextField and JCheckBox components to set editable fields<br>
+ * uses Choice component to display all the sub-folders in the inbox folder<br>
+ * uses <code>JButtons</code> and <code>JMenuItem </code>to provides options:<br>
+ * saveRule()<br>
+ * To save a rule, at least one field has to be filled. The email field <br>
+ * should never be filled with invalid email address<br>
+ * <p>
+ */
 public class RuleFrame extends JFrame {
 	
 	/**
@@ -47,13 +59,30 @@ public class RuleFrame extends JFrame {
 	RuleService ruleService = new RuleService();
 	RuleViewEntity ruleViewEntity;
 	RuleSettings rs;
-	
+		
 	public RuleFrame(){
 		ruleViewEntity = new RuleViewEntity();
 		id = UUID.randomUUID();
 		initialize();
 	}
 	
+	
+	/**
+	 * Parameterized constructor of the RuleFrame Class.
+	 * <p>
+	 * Provides non Empty and editable JFrame filled with existing rule<br> 
+	 * <code>JTextField</code> with label "From:"<br>
+	 * <code>JTextField</code> with label "Containing:"<br>
+	 * <code>Choice</code> with label "Move to:"
+	 * <p>
+	 * 
+	 * @param existingRule
+	 *            a <code>RuleViewEntity</code> object that provides the <br>
+	 *            values used to set the JFrame
+	 * @param rs
+	 * 			  a <code>RuleSettings</code> object that has to be updated <br>
+	 * 					 after an existing rule is edited<br>
+	 */
 	public RuleFrame(RuleViewEntity existingRule,RuleSettings rs){
 		ruleViewEntity = existingRule;
 		this.rs =rs;
