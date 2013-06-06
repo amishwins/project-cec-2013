@@ -1,10 +1,8 @@
 package cec.model;
 
-import java.util.List;
 import java.util.UUID;
 
 import cec.config.CECConfigurator;
-import cec.persistence.EmailDaoFactory;
 import cec.persistence.RuleDao;
 import cec.persistence.RuleDaoFactory;
 

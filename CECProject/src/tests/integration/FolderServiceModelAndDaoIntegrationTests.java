@@ -11,9 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cec.config.CECConfigurator;
-import cec.model.Meeting;
-import cec.persistence.MeetingDao;
-import cec.persistence.MeetingDaoFactory;
 import cec.service.FolderService;
 import cec.service.MeetingService;
 import cec.view.MeetingViewEntity;

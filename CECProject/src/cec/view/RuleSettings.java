@@ -35,6 +35,10 @@ import cec.service.RuleService;
 
 
 public class RuleSettings extends JFrame {	
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 JTable ruleTable = new JTable();
 RuleService ruleService = new RuleService();
 

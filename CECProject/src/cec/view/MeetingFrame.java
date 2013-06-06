@@ -60,7 +60,10 @@ public class MeetingFrame extends JFrame {
 	JTextField locationTextField = new JTextField("", 65);
 	JTextField startDateTextField = new JTextField("YYYY-MM-DD", 15);
 	JTextField endDateTextField = new JTextField("YYYY-MM-DD", 15);
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	JComboBox startTimeComboBox = new JComboBox(buildTimeArrayForJComboBoxes());
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	JComboBox endTimeComboBox = new JComboBox(buildTimeArrayForJComboBoxes());
 
 	JTextArea bodyTextField = new JTextArea("", 14, 20);
@@ -245,16 +248,6 @@ public class MeetingFrame extends JFrame {
 		this.dispose();
 	}
 
-	// Actions - Edit
-	/**
-	 * Edits the existing message.
-	 */
-	private void editExistingMessage() {
-		setPropertiesForNewMeetingFrameFields();
-		String auxSubject = subjectTextField.getText();
-		subjectTextField.setText(auxSubject);
-	}
-
 	// Actions - Send
 	/**
 	 * Send email.
@@ -320,6 +313,13 @@ public class MeetingFrame extends JFrame {
 							"Start Time should not be less than or equal to End Time. Please recheck");
 			return false;
 		}
+		
+		/*if(!emailValidator.isValidLocation(meetingView.getPlace())){
+			JOptionPane
+			.showMessageDialog(null,
+					"Please specify Location for the field.");
+			return false;
+		}*/
 
 		return true;
 	}

@@ -12,7 +12,6 @@ import org.junit.Test;
 import cec.model.Email;
 import cec.model.Folder;
 import cec.model.Meeting;
-import cec.model.Rule;
 import cec.model.RuleImpl;
 import cec.persistence.RuleDao;
 

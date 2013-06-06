@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cec.model.Template;
-import cec.model.TemplateImpl;
 import cec.service.TemplateService;
 import cec.view.TemplateViewEntity;
 

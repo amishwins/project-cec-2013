@@ -259,6 +259,24 @@ public class InputValidationTests {
 	public void validateAtSymbol() {
 		String searchFor = "$#%^/*-@";
 		assertTrue(v.isValidSearched(searchFor));
-	}		
+	}
+	
+	@Test
+	public void isNotValidPlace() {
+		String place = "       ";
+		assertFalse(v.isValidSearched(place));
+	}
+	
+	@Test
+	public void isValidPlace() {
+		String place = "H-843";
+		assertTrue(v.isValidSearched(place));
+	}
+	
+	@Test
+	public void isNotAValidPlaceEither() {
+		String place = "";
+		assertFalse(v.isValidSearched(place));
+	}
 
 }

@@ -31,12 +31,17 @@ import cec.service.FolderService;
 
 public class RuleFrame extends JFrame {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	JCheckBox from = new JCheckBox("From:        ");
 	JCheckBox content = new JCheckBox("Containing:");
 	JTextField fromField = new JTextField("", 40);
 	JTextField contentField = new JTextField("", 40);
 	Choice folderChoosed= new Choice();
 	
+	@SuppressWarnings("unused")
 	private UUID id = null;
 	private Validator emailValidator = new Validator();
 	RuleService ruleService = new RuleService();
@@ -103,7 +108,7 @@ public class RuleFrame extends JFrame {
 		bar.setPreferredSize(new Dimension(460, 60));
 		ImageIcon sendIcon = new ImageIcon("images/email_send.png");
 		JButton save = new JButton(" Save >>   ");
-		JSeparator hBar = new JSeparator();
+		new JSeparator();
 		
 		save.setIcon(sendIcon);
 		bar.setFloatable(false);

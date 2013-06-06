@@ -141,14 +141,13 @@ public class RuleSetModelAndDaoIntegrationTests {
 	@Test
 	public void createLoadAndSwapRules() {
 		List<Rule> rulesToBeSwapped = new ArrayList<>();
-		int count = 0;
 		rule1.save();
 		rule2.save();
 		Iterable<Rule> rules = ruleSet.loadRules();
 		for (Rule rule : rules) {
 			if ((rule.getId().compareTo(rule1.getId()) == 0)
 					|| (rule.getId().compareTo(rule2.getId()) == 0)) {
-				count++;
+				
 				rulesToBeSwapped.add(rule);
 			}
 		}

@@ -4,14 +4,14 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * The Interface EmailDao exposes the lower level methods to
+ * The Interface MeetingDao exposes the lower level methods to
  * Model layer. 
  * 
  */
 public interface MeetingDao {
 	
 	/**
-	 * Saves each email object to its equivalent lower level representation( for example : a File).
+	 * Saves each meeting object to its equivalent lower level representation( for example : a File).
 	 *
 	 * @param id the id
 	 * @param from the from

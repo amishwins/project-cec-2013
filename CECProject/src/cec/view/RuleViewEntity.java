@@ -10,7 +10,7 @@ public class RuleViewEntity {
 	private String emailAddresses = "";
 	private String words = "";
 	private String folderPath = "";
-	private Boolean isActive = false;
+	
 	
 	public String getEmailAddresses() {
 		return emailAddresses;

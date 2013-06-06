@@ -11,9 +11,6 @@ import org.junit.Test;
 import cec.model.Template;
 import cec.model.TemplateFolder;
 import cec.model.TemplateImpl;
-import cec.persistence.EmailDaoFactory;
-import cec.persistence.TemplateDao;
-import cec.persistence.TemplateDaoFactory;
 
 public class TemplateModelAndDaoIntegrationTests {
 	Template template;
