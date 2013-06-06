@@ -3,8 +3,9 @@ package cec.view;
 import java.util.UUID;
 
 /**
- * The Class MeetingViewEntity.
- */
+ * Representation of the Meeting object in the View Layer
+ * 
+ * */
 public class MeetingViewEntity {
 
 	/** The id. */
@@ -19,16 +20,16 @@ public class MeetingViewEntity {
 	/** The startDate. */
 	private String startDate = "";
 
-	/** The startDate. */
+	/** The endDate. */
 	private String endDate = "";
-	/** The startDate. */
-
+	
+	/** The startTime. */
 	private String startTime = "";
 
-	/** The startDate. */
+	/** The endTime. */
 	private String endTime = "";
 
-	/** The startDate. */
+	/** The place. */
 	private String place = "";
 
 	/** The subject. */

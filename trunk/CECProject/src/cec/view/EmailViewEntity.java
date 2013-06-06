@@ -3,8 +3,9 @@ package cec.view;
 import java.util.UUID;
 
 /**
- * The Class EmailViewEntity.
- */
+ * Representation of the Email object in the View Layer
+ * 
+ * */
 public class EmailViewEntity {
 	
 	/** The id. */
