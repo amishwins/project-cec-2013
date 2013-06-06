@@ -4,8 +4,11 @@ import cec.persistence.TemplateDao;
 import cec.persistence.TemplateDaoFactory;
 
 /**
- * EmailImpl is the concrete implementation of the email interface.
+ * TemplateImpl is the concrete implementation of the template interface.
  * it is one of the core domain object of our application.
+ * The responsibility is during creation and storage. Once the template is
+ * applied to an email, it no longer is valid in the runtime objects; however,
+ * it remains persisted (and thus reusable) on the file system.
  * 
  */
 public class TemplateImpl implements Template {
@@ -20,7 +23,7 @@ public class TemplateImpl implements Template {
 	protected TemplateDao templateDao;
 
 	/**
-	 * Instantiates a new email impl.
+	 * Instantiates a new template impl.
 	 * @param name the name
 	 * @param to the to
 	 * @param cc the cc
@@ -38,7 +41,8 @@ public class TemplateImpl implements Template {
 	}
 
 	/**
-	 * Sets the email dao.
+	 * Sets the template dao. This is mainly used for testing - to be able to stub out the 
+	 * dependency to the dao
 	 *
 	 * @param templateDao the new email template dao
 	 */
@@ -48,9 +52,8 @@ public class TemplateImpl implements Template {
 
 	/**
 	 * This method is responsible for communicating the persistence layer that 
-	 * save the email object to Outbox folder. Currently it does not have the send functionality, 
+	 * saves the template to the specified system template folder.  
 	 * it just saves the file assuming that file has reached its destination.
-	 *
 	 * 
 	 */
 	@Override
@@ -60,7 +63,7 @@ public class TemplateImpl implements Template {
 
 	/**
 	 * This method is responsible for communicating the persistence layer that 
-	 * delete the email template object from the System.
+	 * delete the  template object from the System.
 	 *
 	 */
 	@Override
@@ -68,6 +71,10 @@ public class TemplateImpl implements Template {
 		templateDao.deleteTemplate(templateName);
 	}
 
+	
+	/* (non-Javadoc)
+	 * All the setters and getters
+	 */
 	@Override
 	public String getName() {
 		return templateName;
@@ -95,7 +102,7 @@ public class TemplateImpl implements Template {
 
 	@Override
 	public int compareTo(Template arg0) {
-		// TODO Auto-generated method stub
-		return 0;
+		// not yet implemented - we shouldn't sort templates
+		throw new IllegalAccessError();
 	}
 }
