@@ -6,16 +6,18 @@ import cec.model.FolderFactory;
 import cec.view.MeetingViewEntity;
 
 /**
- * Expose the action that can be done on an email from the model layer
+ * Expose the action that can be done on an meeting from the model layer
  */
 public class MeetingService {
 
 	/**
-	 * This method communicates the model layer the emailInView in parameter
-	 * received from the view layer has to be sent
+	 * This method communicates the model layer the meetingInView in parameter
+	 * received from the view layer has to be sent.
+	 * PostCondition: Meeting email has been sent to the attendees.
+	 * Meting has been saved into the Meetings folder.
 	 * 
 	 * @param meetingInView
-	 *            the EmailViewEntity object received from view layer
+	 *            the MeetingViewEntity object received from view layer
 	 */
 	public void sendMeeting(MeetingViewEntity meetingInView) {
 		MeetingBuilder meetingBuilder = new MeetingBuilder();
@@ -39,11 +41,13 @@ public class MeetingService {
 	}
 
 	/**
-	 * This method communicates the model layer the emailInView object has to be
-	 * deleted and has to set in the draft folder
+	 * This method communicates the model layer the meetingInView object has to be
+	 * deleted.
+	 * Postcondition: Meeting object has been deleted from the System.
+	 * Invariant: Meeting object file has not been moved during the deletion process.
 	 * 
 	 * @param meetingInView
-	 *            the EmailViewEntity object received from view layer
+	 *            the MeetingViewEntity object received from view layer
 	 */
 	public void delete(MeetingViewEntity meetingInView) {
 		Meeting meeting = convertMeetingInViewToMeetinglModel(meetingInView);
