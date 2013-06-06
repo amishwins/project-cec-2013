@@ -32,18 +32,12 @@ import javax.swing.text.JTextComponent;
 import cec.service.MeetingService;
 
 /**
- * Email Class extends JFRAME <br>
- * show a graphic windows allowing user to read or write an email.<br>
+ * MeetingFrame Class extends JFRAME <br>
+ * show a graphic windows allowing user to create or edit meeting.<br>
  * uses <code>JTextField</code> and <code>JTextArea</code> components to set
  * editable fields<br>
  * uses <code>JButtons</code> and <code>JMenuItem </code>to provides options:<br>
- * <b>sendEmail()</b> <br>
- * <b>draftEmail()</b> <br>
- * Provides <br>
- * empty <code>JFrame</code> filled with existing<br>
- * <code>email</code> for the parameterized constructor<br>
- * and empty <code>JFrame</code> for the default constructor<br>
- * used for new <code>email<code>
+ * sendMeeting()<br>
  * <p>
  */
 
@@ -87,21 +81,18 @@ public class MeetingFrame extends JFrame {
 	}
 
 	/**
-	 * Parameterized constructor of the Email Class.
+	 * Parameterized constructor of the MeetingFrame Class.
 	 * <p>
 	 * Provides non Empty <code>JFrame</code> filled with existing<br>
-	 * email that are editable only if it belongs to <br>
-	 * Draft folder.<br>
-	 * Available fields are Empty<br>
-	 * <code>JTextField</code> with label <b>"To:"</b><br>
-	 * <code>JTextField</code> with label <b>"Cc:"</b><br>
-	 * <code>JTextField</code> with label <b>"Subject:" </b> with a maximum of
-	 * 250 Characters <br>
+	 * meeting that are editable
+	 * <code>JTextField</code> with label "To:"<br>
+	 * <code>JTextField</code> with label "Subject:"<br>
+	 * <code>JTextField</code> with label "Location:"<br>
 	 * <code>JTextArea</code> with label <b>"Body"</b>
 	 * <p>
 	 * 
 	 * @param existingMeeting
-	 *            an <code>email</code> object that provides the <br>
+	 *            an <code>MeetingViewEntity</code> object that provides the <br>
 	 *            values used to set the JFrame
 	 */
 	public MeetingFrame(MeetingViewEntity existingMeeting) {
@@ -130,20 +121,6 @@ public class MeetingFrame extends JFrame {
 		}
 		return timeArray;
 	}
-
-	/**
-	 * Default constructor of the Email Class.
-	 * <p>
-	 * Provides an Empty <code>JFrame</code> from which an email<br>
-	 * can be written.
-	 * <p>
-	 * Available fields are non empty<br>
-	 * <code>JTextField</code> with label <b>"To:"</b><br>
-	 * <code>JTextField</code> with label <b>"Cc:"</b><br>
-	 * <code>JTextField</code> with label <b>"Subject:" </b> with a maximum of
-	 * 250 characters <br>
-	 * <code>JTextArea</code> with label <b>"Body"</b>
-	 */
 
 	private void buildMeetingFrame() {
 		mainClient = EmailClient.getReference();
