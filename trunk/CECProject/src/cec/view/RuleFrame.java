@@ -57,8 +57,8 @@ public class RuleFrame extends JFrame {
 	public RuleFrame(RuleViewEntity existingRule,RuleSettings rs){
 		ruleViewEntity = existingRule;
 		this.rs =rs;
-		setRuleFields();
 		initialize();
+		setRuleFields();
 	}	
 	
 	private void initialize() {		
@@ -198,8 +198,9 @@ public class RuleFrame extends JFrame {
 	
 	private void setRuleFields() {
 		//id = ruleView.getID();
-		contentField.setText(ruleViewEntity.getWords());//(ruleView.getWords());
-		fromField.setText(ruleViewEntity.getEmailAddresses());//(ruleView.getEmailAddresses());
+		contentField.setText(ruleViewEntity.getWords());
+		fromField.setText(ruleViewEntity.getEmailAddresses());
+		folderChoosed.select(ruleViewEntity.getFolderPath());
 	}
 	
 	
