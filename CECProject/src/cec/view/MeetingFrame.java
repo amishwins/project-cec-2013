@@ -227,6 +227,9 @@ public class MeetingFrame extends JFrame {
 
 	// Actions - Send
 	/**
+	 * Postcondition: It sends the meeting to the attendees.
+	 * it first validates the fields, sends the meeting,
+	 * refreshes the table view with latest data. 
 	 * Send email.
 	 */
 	private void sendMeeting() {
