@@ -1,15 +1,15 @@
 package cec.persistence;
 
 /**
- * A factory for creating EmailDao objects.
+ * A factory for creating RuleDao objects.
  */
 public class RuleDaoFactory {
     
     /**
      * It returns the instance of the class implementing the 
-     * EmailDao interface.
+     * RuleDao interface.
      *
-     * @return the email dao instance
+     * @return the rule dao instance
      */
     public static RuleDao getRuleDaoInstance() {
         return new RuleXMLDao();

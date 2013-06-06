@@ -8,8 +8,9 @@ import java.util.UUID;
 import cec.config.CECConfigurator;
 
 
+// TODO: Auto-generated Javadoc
 /**
- * A builder of email instances. 
+ * A builder of meeting instances. 
  * 
  */
 public class MeetingBuilder {
@@ -23,14 +24,19 @@ public class MeetingBuilder {
 	/** The attendees field. */
 	private String attendees = "";
 
+	/** The start date. */
 	private String startDate = "";
 
+	/** The end date. */
 	private String endDate = "";
 
+	/** The start time. */
 	private String startTime = "";
 
+	/** The end time. */
 	private String endTime = "";
 
+	/** The place. */
 	private String place = "";
 
 	/** The subject field. */
@@ -54,7 +60,7 @@ public class MeetingBuilder {
 	 * specified in the argument id.
 	 *
 	 * @param id the id
-	 * @return the email builder
+	 * @return the meeting builder
 	 */
 	public MeetingBuilder withId(UUID id) {
 		this.id = id;
@@ -62,11 +68,11 @@ public class MeetingBuilder {
 	}
 
 	/**
-	 * sets the value of from based on what is 
-	 * specified in the argument named from
+	 * sets the value of from based on what is
+	 * specified in the argument named from.
 	 *
 	 * @param from the from
-	 * @return the email builder
+	 * @return the meeting builder
 	 */
 	public MeetingBuilder withFrom(String from) {
 		this.from = from;
@@ -74,11 +80,11 @@ public class MeetingBuilder {
 	}
 
 	/**
-	 * sets the value of To field based on what is 
+	 * sets the value of To field based on what is
 	 * specified in the argument named to.
 	 *
-	 * @param to the to
-	 * @return the email builder
+	 * @param attendees the attendees
+	 * @return the meeting builder
 	 */
 	public MeetingBuilder withAttendees(String attendees) {
 		this.attendees = attendees;
@@ -86,11 +92,11 @@ public class MeetingBuilder {
 	}
 
 	/**
-	 * sets the value of cc field based on what is 
+	 * sets the value of cc field based on what is
 	 * specified in the argument named cc.
 	 *
-	 * @param cc the cc
-	 * @return the email builder
+	 * @param startDate the start date
+	 * @return the meeting builder
 	 */
 	public MeetingBuilder withStartDate(String startDate) {
 		this.startDate = startDate;
@@ -98,11 +104,11 @@ public class MeetingBuilder {
 	}
 
 	/**
-	 * sets the value of cc field based on what is 
+	 * sets the value of cc field based on what is
 	 * specified in the argument named cc.
 	 *
-	 * @param cc the cc
-	 * @return the email builder
+	 * @param endDate the end date
+	 * @return the meeting builder
 	 */
 	public MeetingBuilder withEndDate(String endDate) {
 		this.endDate = endDate;
@@ -110,11 +116,11 @@ public class MeetingBuilder {
 	}
 	
 	/**
-	 * sets the value of cc field based on what is 
+	 * sets the value of cc field based on what is
 	 * specified in the argument named cc.
 	 *
-	 * @param cc the cc
-	 * @return the email builder
+	 * @param startTime the start time
+	 * @return the meeting builder
 	 */
 	public MeetingBuilder withStartTime(String startTime) {
 		this.startTime = startTime;
@@ -122,11 +128,11 @@ public class MeetingBuilder {
 	}
 	
 	/**
-	 * sets the value of cc field based on what is 
+	 * sets the value of cc field based on what is
 	 * specified in the argument named cc.
 	 *
-	 * @param cc the cc
-	 * @return the email builder
+	 * @param endTime the end time
+	 * @return the meeting builder
 	 */
 	public MeetingBuilder withEndTime(String endTime) {
 		this.endTime = endTime;
@@ -134,26 +140,23 @@ public class MeetingBuilder {
 	}
 	
 	/**
-	 * sets the value of cc field based on what is 
+	 * sets the value of cc field based on what is
 	 * specified in the argument named cc.
 	 *
-	 * @param cc the cc
-	 * @return the email builder
+	 * @param place the place
+	 * @return the meeting builder
 	 */
 	public MeetingBuilder withPlace(String place) {
 		this.place = place;
 		return this;
 	}
 	
-	
-	
-	
 	/**
 	 * sets the value of subject field based on what is 
 	 * specified in the argument named subject.
 	 *
 	 * @param subject the subject
-	 * @return the email builder
+	 * @return the meeting builder
 	 */
 	public MeetingBuilder withSubject(String subject) {
 		this.subject = subject;
@@ -165,7 +168,7 @@ public class MeetingBuilder {
 	 * specified in the argument named body.
 	 * 
 	 * @param body the body
-	 * @return the email builder
+	 * @return the meeting builder
 	 */
 	public MeetingBuilder withBody(String body) {
 		this.body = body;
@@ -173,11 +176,11 @@ public class MeetingBuilder {
 	}
 
 	/**
-	 * sets the value of lastModifiedTime field based on what is 
-	 * specified in the argument named lastModifiedTime
-	 * 
+	 * sets the value of lastModifiedTime field based on what is
+	 * specified in the argument named lastModifiedTime.
+	 *
 	 * @param lastModifiedTime the last modified time
-	 * @return the email builder
+	 * @return the meeting builder
 	 */
 	public MeetingBuilder withLastModifiedTime(String lastModifiedTime) {
 		this.lastModifiedTime = lastModifiedTime;
@@ -189,7 +192,7 @@ public class MeetingBuilder {
 	 * specified in the argument named sentTime.
 	 *
 	 * @param sentTime the sent time
-	 * @return the email builder
+	 * @return the meeting builder
 	 */
 	public MeetingBuilder withSentTime(String sentTime) {
 		this.sentTime = sentTime;
@@ -201,7 +204,7 @@ public class MeetingBuilder {
 	 * specified in the argument named parentFolder.
 	 *
 	 * @param parentFolder the parent folder
-	 * @return the email builder
+	 * @return the meeting builder
 	 */
 	public MeetingBuilder withParentFolder(Folder parentFolder) {
 		this.parentFolder = parentFolder;
@@ -211,7 +214,7 @@ public class MeetingBuilder {
 	/**
 	 * Computes the id of the type UUID type.
 	 *
-	 * @return the email builder
+	 * @return the meeting builder
 	 */
 	public MeetingBuilder computeID() {
 		this.id = UUID.randomUUID();
@@ -221,7 +224,7 @@ public class MeetingBuilder {
 	/**
 	 * Compute last modified time. 
 	 *
-	 * @return the email builder
+	 * @return the meeting builder
 	 */
 	public MeetingBuilder computelastModifiedTime() {
 		this.lastModifiedTime = currentDateTime();
@@ -231,7 +234,7 @@ public class MeetingBuilder {
 	/**
 	 * Compute sent time.
 	 *
-	 * @return the email builder
+	 * @return the meeting builder
 	 */
 	public MeetingBuilder computeSentTime() {
 		this.sentTime = currentDateTime();
@@ -253,12 +256,12 @@ public class MeetingBuilder {
 	
 
 	/**
-	 * returns the email builder object.
-	 * based on the values in the 
+	 * returns the meeting builder object.
+	 * based on the values in the
 	 * argument named fields.
 	 *
-	 * @param Map of the email fields. 
-	 * @return the email builder
+	 * @param fields the fields
+	 * @return the meeting builder
 	 */
 	public MeetingBuilder load(Map<String, String> fields) {
 		if (fields.get("Id") == null) {
@@ -285,7 +288,7 @@ public class MeetingBuilder {
 	/**
 	 * sets the value of FROM field to specified in the configurator object.
 	 *
-	 * @return the email builder
+	 * @return the meeting builder
 	 */
 	public MeetingBuilder withFrom() {
 		this.from = CECConfigurator.getReference().get("ClientEmail");
@@ -293,9 +296,9 @@ public class MeetingBuilder {
 	}
 
 	/**
-	 * returns the EmailImpl object.
+	 * returns the MeetingImpl object.
 	 *
-	 * @return the email
+	 * @return the meeting
 	 */
 	public Meeting build() {
 		return new MeetingImpl(id, from, attendees, startDate, endDate, startTime,

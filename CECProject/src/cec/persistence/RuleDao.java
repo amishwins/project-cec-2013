@@ -4,28 +4,27 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * The Interface EmailDao exposes the lower level methods to
+ * The Interface RuleDao exposes the lower level methods to
  * Model layer. 
  * 
  */
 public interface RuleDao {
 	
 	/**
-	 * Saves each email object to its equivalent lower level representation( for example : a File).
-	 *
-	 * @param id the id
-	 * @param from the from
-	 * @param to the to
-	 * @param cc the cc
-	 * @param subject the subject
-	 * @param body the body
-	 * @param lastModifiedTime the last modified time
-	 * @param sentTime the sent time
-	 * @param location the location
+	 * 
+	 * Saves each rule object to its equivalent lower level representation( for example : a File).
+	 * Postcondition: Each rule will have its rank and persisted on the file system.
+	 * 
 	 */
 	public void save(UUID id, String sender, String keyword,
 			String tartgetFolder, String status, String pathToSaveRuleFile);
 	
+	/**
+	 * Invariant: rule ID will not be changed even after the modification of the other fields.
+	 * Saves each rule object with latest changes to its equivalent lower level representation( for example : a File).
+	 * Postconditions: Rule changes will be persisted on the system.
+	 * 
+	 */
 	public void update(UUID id, String rank, String sender, String keyword,
 			String tartgetFolder, String status, String pathToSaveRuleFile);
 	

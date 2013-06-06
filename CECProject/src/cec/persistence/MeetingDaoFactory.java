@@ -1,15 +1,15 @@
 package cec.persistence;
 
 /**
- * A factory for creating EmailDao objects.
+ * A factory for creating MeetingDao objects.
  */
 public class MeetingDaoFactory {
     
     /**
-     * It returns the instance of the class implementing the 
-     * EmailDao interface.
+     * It returns the instance of the class implementing the
+     * MeetingDao interface.
      *
-     * @return the email dao instance
+     * @return the meeting dao instance
      */
     public static MeetingDao getMeetingDaoInstance() {
         return new MeetingXMLDao();

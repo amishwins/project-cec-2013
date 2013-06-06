@@ -25,7 +25,7 @@ public class MeetingsFolder extends Folder {
     }
 
 	/**
-	 * @return the collection of emails which are currently in this folder
+	 * @return the collection of meetings which are currently in this folder
 	 */
 	@Override
 	public Iterable<Meeting> loadMeetings() {

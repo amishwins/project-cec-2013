@@ -10,20 +10,40 @@ import cec.config.CECConfigurator;
 import cec.persistence.RuleDao;
 import cec.persistence.RuleDaoFactory;
 
+
+/**
+ * The Class RuleSetImpl.
+ */
 public class RuleSetImpl implements RuleSet {
+	
+	/** The rule dao. */
 	RuleDao ruleDao;
 
+	/**
+	 * Instantiates a new rule set impl.
+	 */
 	public RuleSetImpl() {
 		setRuleDao(RuleDaoFactory.getRuleDaoInstance());
 	}
 
+	/**
+	 * Gets the rule dao.
+	 *
+	 * @return the rule dao
+	 */
 	public RuleDao getRuleDao() {
 		return ruleDao;
 	}
 
+	/**
+	 * Sets the rule dao.
+	 *
+	 * @param ruleDao the new rule dao
+	 */
 	public void setRuleDao(RuleDao ruleDao) {
 		this.ruleDao = ruleDao;
 	}
+	
 	
 	@Override
 	public Iterable<Rule> loadSortedActiveRules() {
@@ -32,12 +52,22 @@ public class RuleSetImpl implements RuleSet {
 		return sorted;
 	}
 
+	/**
+	 * Precondition: rules exist in the system.
+	 * Postcondition: Rules have been updated with the new rank values.
+	 * I loads all the active rules from the system after filtering out active rules from the
+	 * system.
+	 * @param allRules the all rules
+	 * @return the iterable
+	 */
 	@Override
 	public Iterable<Rule> loadActiveRules() {
 		Iterable<Rule> listOfAllRules = loadRules();
 		Iterable<Rule> listOfActiveRules = filterActiveRules(listOfAllRules); 
 		return listOfActiveRules;
 	}
+	
+	
 	@Override
 	public Iterable<Rule> loadRules() {
 		Iterable<Map<String, String>> rulesData = ruleDao
@@ -59,6 +89,12 @@ public class RuleSetImpl implements RuleSet {
 		return rules;
 	}
 	
+	/**
+	 * Filter active rules.
+	 *
+	 * @param allRules the all rules
+	 * @return the iterable
+	 */
 	protected Iterable<Rule> filterActiveRules(Iterable<Rule> allRules){
 		List<Rule> activeRules = new ArrayList<Rule>();
 		for (Rule rule : allRules){
@@ -69,6 +105,7 @@ public class RuleSetImpl implements RuleSet {
 		return activeRules;
 	}
 
+	
 	@Override
 	public void apply(Iterable<Email> targets) {
 		for(Email e: targets) {
@@ -79,6 +116,14 @@ public class RuleSetImpl implements RuleSet {
 		}
 	}	
 
+
+	/**
+	 * Precondition: two rules exist in the system.
+	 * Postcondition: Rules have been updated with the new rank values.
+	 *
+	 * @param allRules the all rules
+	 * @return the iterable
+	 */
 	@Override
 	public synchronized void  swapRank(Rule first, Rule second) {
 		int temp = first.getRank();
@@ -88,17 +133,7 @@ public class RuleSetImpl implements RuleSet {
 		second.update();
 	}
 
-	@Override
-	public int getNextRank() {
-		ArrayList<Rule> rules = (ArrayList<Rule>)loadRules();
-		int highest = 0;
-		for(Rule r: rules) {
-			if (highest > r.getRank())
-				highest = r.getRank();
-		}
-		
-		return highest + 1;
-	}
+	
 
 
 }
