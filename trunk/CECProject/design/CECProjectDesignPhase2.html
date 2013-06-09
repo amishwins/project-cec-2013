@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>CECProject Design Phase 1</title>
+		<title>CECProject Design Phase 2</title>
 
 		<style type="text/css">
 		.myTable { background-color:#FFFFE0;border-collapse:collapse; }
@@ -171,6 +171,21 @@
 		we were forced to throw exceptions in the event that they were incorrectly called.  
 		
 		<h3>Search and Special Characters</h3>
+		<p>Problem: How to deal with searching special characters</p>
+		<p>CEC Application will not perform the search, ignoring user request, in the following cases:</p>
+		<ul>
+			<li>Search box is empty</li>
+			<li>contains only spaces</li>
+			<li>contains only Special characters</li>
+		</ul> 
+		<p>The symbols "@", "." and "" are not considered Special characters but "Email characters".</p>
+		<p>The Email search engine finds emails that contains the user input in at least one of the fields: From, 
+		To, CC, Subject and Body. It considers every word separately, what means that the application will return 
+		Emails that match with at least one of the words informed by the user. Special characters are not 
+		considered, and words concatenated with them are treated separately.</p> 
+		
+		
+		
 		<h3>Applying Template - Getting the UI to Highlight</h3>
 		<p>Problem: how to support a nice flow of guided template usage so the user is delighted</p>
 		<p>This was a challenging endeavour. We first tried to manually parse the fields in a template, and build
