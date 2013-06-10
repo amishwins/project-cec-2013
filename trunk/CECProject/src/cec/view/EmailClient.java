@@ -275,6 +275,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		setupEditMenu(menuBar);
 		setupRulesMenu(menuBar);
 		setupTimerMenu(menuBar);
+		setupAuthenticationMenu(menuBar);
 	}
 	
 	private void setupFileMenu(JMenuBar menuBar) {	
@@ -415,6 +416,29 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		});	
 
 	}		
+	
+	private void setupAuthenticationMenu(JMenuBar menuBar)
+	{		
+		
+		JMenu registration = new JMenu("Authentification");		
+		registration.setMnemonic('W');
+		menuBar.add(registration);
+					
+		JMenuItem registerMenuBarEntry = new JMenuItem("Connect");		
+		registerMenuBarEntry.setMnemonic('E');
+		registration.add(registerMenuBarEntry);
+		registerMenuBarEntry.addActionListener(new ConnectToServer());
+		
+		
+		JMenuItem registerMenuBarQuit = new JMenuItem("Disconnect");		
+		registerMenuBarQuit.setMnemonic('Q');
+		registration.add(registerMenuBarQuit);	
+		registerMenuBarQuit.addActionListener(new DisconnectFromServer());
+		
+		
+		
+	}
+	
 	
 	private void defineEmailsOrMeetingsTableLayout() {
 		emailOrMeetingTable.getColumnModel().getColumn(0).setPreferredWidth(100);		
@@ -849,6 +873,23 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		}
 	}
 
+	private class ConnectToServer implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			String cecUser = JOptionPane.showInputDialog(null, "Enter your email address");
+			if (!cecUser.isEmpty())
+			{
+				CECConfigurator.getReference().put("ClientEmail", cecUser);
+	
+			}
+		}
+	}
+	
+	private class DisconnectFromServer implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			System.exit(0);
+		}
+	}
+	
 	//RULES -> RULE SETTINGS
 	private class MenuRulesRuleSett implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
