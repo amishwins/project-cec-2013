@@ -7,15 +7,14 @@ public class CECClientSocket {
 
 	public static void main(String[] args) throws IOException {
 
-		Socket kkSocket = null;
+		Socket socket = null;
 		PrintWriter out = null;
 		BufferedReader in = null;
 
 		try {
-			kkSocket = new Socket("knowles.encs.concordia.ca", 4445);
-			out = new PrintWriter(kkSocket.getOutputStream(), true);
-			in = new BufferedReader(new InputStreamReader(
-					kkSocket.getInputStream()));
+			socket = new Socket("kocher.encs.concordia.ca", 4445);
+			out = new PrintWriter(socket.getOutputStream(), true);
+			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 		} catch (UnknownHostException e) {
 			System.err.println("Don't know about host: taranis.");
@@ -26,8 +25,7 @@ public class CECClientSocket {
 			System.exit(1);
 		}
 
-		BufferedReader stdIn = new BufferedReader(new InputStreamReader(
-				System.in));
+		BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 		String fromServer;
 		String fromUser;
 
@@ -45,7 +43,7 @@ public class CECClientSocket {
 		Cleanup.closeQuietly(out);
 		Cleanup.closeQuietly(in);
 		Cleanup.closeQuietly(stdIn);
-		Cleanup.closeQuietly(kkSocket);
+		Cleanup.closeQuietly(socket);
 
 		/*
 		 * out.close(); in.close(); stdIn.close(); kkSocket.close();
