@@ -4,43 +4,36 @@ import java.net.*;
 import java.io.*;
 
 public class CECMultiServerThread extends Thread {
-    private Socket socket = null;
-   
+	private Socket socket = null;
 
-    public CECMultiServerThread(Socket socket) {
+	public CECMultiServerThread(Socket socket) {
 		super("CECMultiServerThread");
 		this.socket = socket;
+
+	}
+
+	public void run() {
 		
-    }
-
-    public void run() {
-	
+		CECMultiServer server = CECMultiServer.getReference();
+		
 		try {
-			CECMultiServer server = CECMultiServer.getReference();
-		    PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-		    BufferedReader in = new BufferedReader(
-					    new InputStreamReader(
-					    socket.getInputStream()));
-            String inputLine = in.readLine(), outputLine = null;
-            String[] parsedEmailAddress = inputLine.split(" ");
-	       	server.add(parsedEmailAddress[1],socket.getInetAddress().getHostName());
-	    	
-	    	System.out.println(parsedEmailAddress[1]);
-	    	System.out.println(server.getHostNameForEmailAddress(parsedEmailAddress[1]));
-            
-	    	
-		    while ((inputLine = in.readLine()) != null) {
-     	       System.out.println(inputLine); 
-		       
-   	            
+			PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-		    }
-		    out.close();
-		    in.close();
-		    socket.close();
-	
+			String inputLine = in.readLine();
+			String[] parsedEmailAddress = inputLine.split(" ");
+			server.add(socket, parsedEmailAddress[1]);
+
+			while ((inputLine = in.readLine()) != null) {
+				System.out.println(server.getSocketForEmailAddress(inputLine).toString());
+			}
+
+			Cleanup.closeQuietly(out);
+			Cleanup.closeQuietly(in);
+			Cleanup.closeQuietly(socket);
+
 		} catch (IOException e) {
-		    e.printStackTrace();
+			e.printStackTrace();
 		}
-    }
+	}
 }
