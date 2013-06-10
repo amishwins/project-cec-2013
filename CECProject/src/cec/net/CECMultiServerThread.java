@@ -17,9 +17,9 @@ public class CECMultiServerThread extends Thread {
 		CECMultiServer server = CECMultiServer.getReference();
 		
 		try {
+
 			PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
 			String inputLine = in.readLine();
 			String[] parsedEmailAddress = inputLine.split(" ");
 			server.add(socket, parsedEmailAddress[1]);
