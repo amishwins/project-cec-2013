@@ -1,12 +1,18 @@
 package cec.net;
 import java.net.*;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.io.*;
 
 public class CECMultiServer {
 	private static CECMultiServer instance;
-	Map<String, String> clientIPToEmailAddress = new TreeMap<>();
+	ConcurrentMap<Socket, String> clientSocketToEmailAddress;
+	
+	private CECMultiServer() {
+		clientSocketToEmailAddress = new ConcurrentHashMap<>();
+	}
 	
 	public static CECMultiServer getReference() {
 		if (instance == null) {
@@ -15,13 +21,24 @@ public class CECMultiServer {
 		return instance;
 	}
 	
-	public synchronized void add(String email, String ip) {
-		clientIPToEmailAddress.put(email, ip);
-		System.out.println(((TreeMap<String, String>)clientIPToEmailAddress).size());
+	public void add(Socket clientSocket, String emailAddress) {
+		System.out.println("Put in Map: " + clientSocket.toString() + " " + emailAddress);
+		clientSocketToEmailAddress.put(clientSocket, emailAddress);
 	}
 	
-	public synchronized String getHostNameForEmailAddress(String email) {
-		return clientIPToEmailAddress.get(email);
+	public Socket getSocketForEmailAddress(String email) {
+		Socket result = null;
+		for(Map.Entry<Socket, String> entry: clientSocketToEmailAddress.entrySet()) {
+			if (entry.getValue().equals(email))
+				System.out.println("Sockets for email: " + entry.getValue().toString() + " is: " + entry.getKey().toString());
+				result = entry.getKey();
+		}
+		
+		if (result != null)
+			return result;
+		
+		// none were found?
+		throw new IllegalStateException("Did not find the socket you were looking for");
 	}
 	
     public static void main(String[] args) throws IOException {
@@ -33,13 +50,14 @@ public class CECMultiServer {
             serverSocket = new ServerSocket(4445);
            // serverSocket.setReuseAddress(true);
         } catch (IOException e) {
-            System.err.println("Could not listen on port: 4444.");
+            System.err.println("Could not listen on port: 4445.");
         //    System.exit(-1);
         }
 
         while (listening)
         	new CECMultiServerThread(serverSocket.accept()).start();
 
-        serverSocket.close();
+        Cleanup.closeQuietly(serverSocket);
+        instance = null;
     }
 }
