@@ -3,6 +3,13 @@
 = Document Issues we Find (todos, etc.) =
 
 == Priority ==
+
+=== Phase 3 ===
+  * Where should the thread for client go? In which layer? 
+  * Connect the code which Romeo wrote for the EmailClient to register a client with the server
+  * Whats a good strategy to update the Inbox when a client RECEIVES an email? Should we refresh every few seconds (no)? What if the user is currently in the meetings folder? 
+
+
 === Phase 2 ===
   * When changing meeting by adding/removing attendees, how should we handle the removed attendees?
   * Can we cancel a meeting completely?
