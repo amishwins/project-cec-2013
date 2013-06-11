@@ -12,7 +12,8 @@ public class CECClientSocket {
 		BufferedReader in = null;
 
 		try {
-			socket = new Socket("kocher.encs.concordia.ca", 4445);
+//			socket = new Socket("kocher.encs.concordia.ca", 4445);
+			socket = new Socket("localhost", 4445);
 			out = new PrintWriter(socket.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		} catch (UnknownHostException e) {

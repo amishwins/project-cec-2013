@@ -9,8 +9,9 @@ public class CECServerThread extends Thread {
 	public CECServerThread(Socket socket) {
 		super("CECMultiServerThread");
 		this.socket = socket;
-
 	}
+	
+	
 
 	public void run() {
 		
@@ -22,7 +23,7 @@ public class CECServerThread extends Thread {
 			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			String inputLine = in.readLine();
 			String[] parsedEmailAddress = inputLine.split(" ");
-			server.add(socket, parsedEmailAddress[1]);
+			server.add(parsedEmailAddress[1], socket);
 
 			while ((inputLine = in.readLine()) != null) {
 				System.out.println(server.getSocketForEmailAddress(inputLine).toString());
