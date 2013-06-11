@@ -24,11 +24,11 @@ over a network using optismistic locking
 Scenarios for Email
 Scenario A (No User)
 
-1. Launch server
-2. Pankaj connects
-3. Sends email to Deyvid
-4. Server does not have Deyvid registered; server sends email back to Pankaj 
-5. Server deletee from memory
+  # Launch server
+  # Pankaj connects
+  # Sends email to Deyvid
+  # Server does not have Deyvid registered; server sends email back to Pankaj 
+  # Server deletee from memory
 
 
 Scenario B (User Exists)
