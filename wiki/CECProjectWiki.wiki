@@ -4,14 +4,12 @@
 
 === Phase 3 ===
 
-*Tasks*
+==== Tasks ====
   # Create the receiveEmail method and make corresponding changes in persistence
   # Change the Timer implementation to take advantage of this implementation (instead of creating a mail, moving to draft, and then moving to Inbox)
   # Serialize the EmailImpl class (not the interface!), take care to create a custom serialized form, and to ensure that (all) fields are set to transient - according to the guidelines. 
 
----- 
-
-*Phase 3*
+==== Phase 3 ==== 
 
 1. Send email through network between at least 3 clients your filters should apply to received email
   * When server receives the email, it should send an ACK back to the sender
