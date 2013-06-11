@@ -2,6 +2,85 @@
 
 == Design Decisions ==
 
+=== Phase 3 ===
+
+Phase 3
+
+1. Send email through network between at least 3 clients your filters should apply to received email
+-> When server receives the email, it should send an ACK back to the sender
+-> When receiver receives email, it should send ACK back to the SERVER
+-> If user is not connected, we need to store message and try to send later (use a DEQUEUE)
+
+-> If we send an email to a user who has not been registered, we should send an email BACK to the sender
+saying "no user with this email address found"
+-> Only delete the email from the Queue once the recipient has sent back an ACK
+
+2. When you create a new meeting involving another person they should
+recevie email and be able to accept or decline the appointment and edit
+over the network
+3. Allow two instances of your program to concurrently edit an appointment
+over a network using optismistic locking
+
+Scenarios for Email
+Scenario A (No User)
+
+1. Launch server
+2. Pankaj connects
+3. Sends email to Deyvid
+4. Server does not have Deyvid registered; server sends email back to Pankaj 
+5. Server deletee from memory
+
+
+Scenario B (User Exists)
+1. Launch server
+2. Pankaj connects; Deyvid connects
+3. Pankaj sends email to Deyvid
+4. Server sends ACK back to Pankaj
+5. Server sends email to Deyvid
+6. Deyvid sends ACK back to Server
+7. Server deletes from memory
+
+
+Scenario C (User Exists, but disconnected)
+1. Launch server
+2. Pankaj connects; Deyvid connects
+3. Deyvid disconnects
+4. Pankaj sends email to Deyvid
+5. Server sends ACK back to Pankaj
+6. Server blocks on message
+7. Devyid reconnects
+8. Server unblocks and sends to Deyvid
+9. Deyvid sends ACK back to Server
+10. Server deletes from memory
+
+
+Scenario D (Send to multiple recipients - OKAY)
+1. Launch server
+2. Pankaj connects; Deyvid connects; Romeo connects
+3. Pankaj sends email to Deyvid and Romeo
+4. Server sends ACK back to Pankaj
+5. Server sends email to Deyvid and Romeo
+6. Deyvid and Romeo send ACK back to Server
+7. Server deletes from memory
+
+
+Scenario E (Send to multiple recipients - Not okay)
+1. Launch server
+2. Pankaj connects; Deyvid connects; Romeo connects
+3. Deyvid disconnects
+4. Pankaj sends email to Deyvid and Romeo
+5. Server sends ACK back to Pankaj
+5. Server sends email to Romeo
+6. Romeo sends ACK back to Server
+7. Server continues to try to send email to Deyvid
+8. Deyvid reconnects (and then see scenario C step 7 onwards)
+9. Server deletes from memory
+
+
+
+
+
+
 === Phase 2 ===
 
 === Search ===
