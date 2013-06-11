@@ -7,13 +7,13 @@
 Phase 3
 
 1. Send email through network between at least 3 clients your filters should apply to received email
--> When server receives the email, it should send an ACK back to the sender
--> When receiver receives email, it should send ACK back to the SERVER
--> If user is not connected, we need to store message and try to send later (use a DEQUEUE)
+  * When server receives the email, it should send an ACK back to the sender
+  * When receiver receives email, it should send ACK back to the SERVER
+  * If user is not connected, we need to store message and try to send later (use a DEQUEUE)
 
--> If we send an email to a user who has not been registered, we should send an email BACK to the sender
+  * If we send an email to a user who has not been registered, we should send an email BACK to the sender
 saying "no user with this email address found"
--> Only delete the email from the Queue once the recipient has sent back an ACK
+  * Only delete the email from the Queue once the recipient has sent back an ACK
 
 2. When you create a new meeting involving another person they should
 recevie email and be able to accept or decline the appointment and edit
