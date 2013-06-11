@@ -32,53 +32,49 @@ Scenario A (No User)
 
 
 Scenario B (User Exists)
-1. Launch server
-2. Pankaj connects; Deyvid connects
-3. Pankaj sends email to Deyvid
-4. Server sends ACK back to Pankaj
-5. Server sends email to Deyvid
-6. Deyvid sends ACK back to Server
-7. Server deletes from memory
+  # Launch server
+  # Pankaj connects; Deyvid connects
+  # Pankaj sends email to Deyvid
+  # Server sends ACK back to Pankaj
+  # Server sends email to Deyvid
+  # Deyvid sends ACK back to Server
+  # Server deletes from memory
 
 
 Scenario C (User Exists, but disconnected)
-1. Launch server
-2. Pankaj connects; Deyvid connects
-3. Deyvid disconnects
-4. Pankaj sends email to Deyvid
-5. Server sends ACK back to Pankaj
-6. Server blocks on message
-7. Devyid reconnects
-8. Server unblocks and sends to Deyvid
-9. Deyvid sends ACK back to Server
-10. Server deletes from memory
+  # Launch server
+  # Pankaj connects; Deyvid connects
+  # Deyvid disconnects
+  # Pankaj sends email to Deyvid
+  # Server sends ACK back to Pankaj
+  # Server blocks on message
+  # Devyid reconnects
+  # Server unblocks and sends to Deyvid
+  # Deyvid sends ACK back to Server
+  # Server deletes from memory
 
 
 Scenario D (Send to multiple recipients - OKAY)
-1. Launch server
-2. Pankaj connects; Deyvid connects; Romeo connects
-3. Pankaj sends email to Deyvid and Romeo
-4. Server sends ACK back to Pankaj
-5. Server sends email to Deyvid and Romeo
-6. Deyvid and Romeo send ACK back to Server
-7. Server deletes from memory
+  # Launch server
+  # Pankaj connects; Deyvid connects; Romeo connects
+  # Pankaj sends email to Deyvid and Romeo
+  # Server sends ACK back to Pankaj
+  # Server sends email to Deyvid and Romeo
+  # Deyvid and Romeo send ACK back to Server
+  # Server deletes from memory
 
 
 Scenario E (Send to multiple recipients - Not okay)
-1. Launch server
-2. Pankaj connects; Deyvid connects; Romeo connects
-3. Deyvid disconnects
-4. Pankaj sends email to Deyvid and Romeo
-5. Server sends ACK back to Pankaj
-5. Server sends email to Romeo
-6. Romeo sends ACK back to Server
-7. Server continues to try to send email to Deyvid
-8. Deyvid reconnects (and then see scenario C step 7 onwards)
-9. Server deletes from memory
-
-
-
-
+  # Launch server
+  # Pankaj connects; Deyvid connects; Romeo connects
+  # Deyvid disconnects
+  # Pankaj sends email to Deyvid and Romeo
+  # Server sends ACK back to Pankaj
+  # Server sends email to Romeo
+  # Romeo sends ACK back to Server
+  # Server continues to try to send email to Deyvid
+  # Deyvid reconnects (and then see scenario C step 7 onwards)
+  # Server deletes from memory
 
 
 === Phase 2 ===
