@@ -6,17 +6,17 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.io.*;
 
-public class CECMultiServer {
-	private static CECMultiServer instance;
+public class CECServer {
+	private static CECServer instance;
 	ConcurrentMap<Socket, String> clientSocketToEmailAddress;
 	
-	private CECMultiServer() {
+	private CECServer() {
 		clientSocketToEmailAddress = new ConcurrentHashMap<>();
 	}
 	
-	public static CECMultiServer getReference() {
+	public static CECServer getReference() {
 		if (instance == null) {
-			instance = new CECMultiServer();
+			instance = new CECServer();
 		}
 		return instance;
 	}
@@ -55,7 +55,7 @@ public class CECMultiServer {
         }
 
         while (listening)
-        	new CECMultiServerThread(serverSocket.accept()).start();
+        	new CECServerThread(serverSocket.accept()).start();
 
         Cleanup.closeQuietly(serverSocket);
         instance = null;
