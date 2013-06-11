@@ -3,10 +3,10 @@ package cec.net;
 import java.net.*;
 import java.io.*;
 
-public class CECMultiServerThread extends Thread {
+public class CECServerThread extends Thread {
 	private Socket socket = null;
 
-	public CECMultiServerThread(Socket socket) {
+	public CECServerThread(Socket socket) {
 		super("CECMultiServerThread");
 		this.socket = socket;
 
@@ -14,7 +14,7 @@ public class CECMultiServerThread extends Thread {
 
 	public void run() {
 		
-		CECMultiServer server = CECMultiServer.getReference();
+		CECServer server = CECServer.getReference();
 		
 		try {
 
