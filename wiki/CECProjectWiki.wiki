@@ -8,6 +8,7 @@
   # Create the receiveEmail method and make corresponding changes in persistence
   # Change the Timer implementation to take advantage of this implementation (instead of creating a mail, moving to draft, and then moving to Inbox)
   # Serialize the EmailImpl class (not the interface!), take care to create a custom serialized form, and to ensure that (all) fields are set to transient - according to the guidelines. 
+  # Come up with a proof of concept for the "merge" - write code which takes two "meeting" model objects and merges them, creating a new meeting object. Don't put this code in the meeting object itself. We might want to do like SVN does when we have a conflict, it adds ">>>> mine" and "=======" in case we've changed the same lines to show what areas are conflicted.
 
 ==== Phase 3 ==== 
 
