@@ -89,7 +89,7 @@ class EmailImplCUT extends EmailImpl {
 	public EmailImplCUT(UUID id, String from, String to, String cc,
 			String subject, String body, String lastModifiedTime,
 			String sentTime, Folder parentFolder) {
-		super(id, from, to, cc, subject, body, lastModifiedTime, sentTime, parentFolder);
+		super(id, from, to, cc, subject, body, lastModifiedTime, sentTime, parentFolder, false);
 		
 		// inject test double
 		setEmailDao(new EmailDaoStub());
@@ -109,7 +109,7 @@ class EmailDaoStub implements EmailDao {
 	public boolean loadEmailWasCalled = false;
 
 	@Override
-	public void save(UUID id, String from,  String to, String cc, String subject, String body,String lastModifiedTime,String sentTime, String location) {
+	public void save(UUID id, String from,  String to, String cc, String subject, String body,String lastModifiedTime,String sentTime, String location, String isMeetingEmail) {
 		saveWasCalled = true;
 		
 	}

@@ -198,6 +198,12 @@ class EmailStub implements Email {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public void saveToInboxFolder() {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
 	public void delete() {

@@ -941,6 +941,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	}
 	
 	//TIMER TEMPORARY SOLUTION FOR DEMO PRESENTATION
+	
 	private class EmailClientTimer {
 	
 		Timer timer = new Timer(5000, new newEmailForTestingRules());
@@ -983,8 +984,9 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 					emailViewEntity.setBody("Dears, we have to work on the new project asap.");
 					emailViewEntity.setSentTime("2013.06.04_At_18.08.28.457");
 					emailViewEntity.setLastModifiedTime("2013.06.04_At_18.08.28.457");				
-					emailService.draftEmail(emailViewEntity);
-					emailService.move(emailViewEntity, "emails/Inbox");			
+				//	emailService.draftEmail(emailViewEntity);
+				//	emailService.move(emailViewEntity, "emails/Inbox");		
+					emailService.saveToInbox(emailViewEntity);//, "emails/Inbox");	
 					
 	
 					emailViewEntity = null;
@@ -998,10 +1000,11 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 					emailViewEntity.setBody("Dears, let's play basketball tonight!");
 					emailViewEntity.setSentTime("2013.06.03_At_18.08.28.457");
 					emailViewEntity.setLastModifiedTime("2013.06.03_At_18.08.28.457");				
-					emailService.draftEmail(emailViewEntity);
-					emailService.move(emailViewEntity, "emails/Inbox");			
+					//emailService.draftEmail(emailViewEntity);
+					//emailService.move(emailViewEntity, "emails/Inbox");	
+					emailService.saveToInbox(emailViewEntity);
 	
-					emailViewEntity = null;
+/*					emailViewEntity = null;
 					emailId = UUID.randomUUID();
 					emailViewEntity = new EmailViewEntity();
 					emailViewEntity.setId(emailId);
@@ -1012,16 +1015,17 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 					emailViewEntity.setBody("Jokes here.");
 					emailViewEntity.setSentTime("2013.06.02_At_18.08.28.457");
 					emailViewEntity.setLastModifiedTime("2013.06.02_At_18.08.28.457");				
-					emailService.draftEmail(emailViewEntity);
-					emailService.move(emailViewEntity, "emails/Inbox");		
+					//emailService.draftEmail(emailViewEntity);
+					//emailService.move(emailViewEntity, "emails/Inbox");	
+					emailService.saveToInbox(emailViewEntity);*/
 									
 					updateEmailsTable();
 					flag = !flag;
 				
 				} 				
 				else {
-					RuleService ruleService = new RuleService();
-					ruleService.applyAll();
+					//RuleService ruleService = new RuleService();
+					//ruleService.applyAll();
 					updateEmailsTable();
 					flag = !flag;
 				}
@@ -1030,7 +1034,26 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		}
 	}
 	
-	
+	//TIMER TEMPORARY SOLUTION FOR DEMO PRESENTATION
+	/*	private class EmailClientTimer {
+		
+			Timer timer = new Timer(5000, new refreshJTable());
+			
+			public EmailClientTimer() {			 
+				 timer.setInitialDelay(1000);
+				 timer.start();
+			}
+			
+			
+			private class refreshJTable implements ActionListener {
+				public void actionPerformed(ActionEvent e) {	
+					RuleService ruleService = new RuleService();
+					ruleService.applyAll();
+					updateEmailsTable();				
+								
+				}
+			}
+		}*/
 	
 }
 

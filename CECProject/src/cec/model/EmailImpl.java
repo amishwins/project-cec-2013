@@ -2,6 +2,7 @@ package cec.model;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
@@ -238,6 +239,22 @@ public class EmailImpl implements Email {
 			throw new SourceAndDestinationFoldersAreSameException();
 		}
 	}
+	
+	/**
+	 * This method is responsible for communicating the persistence layer that 
+	 * save the email object to Inbox folder. it just saves the file 
+	 * to Inbox folder.
+	 *
+	 * 
+	 */
+	public void saveToInboxFolder() {
+		emailDao.save(id, from, to, cc, subject, body, lastModifiedTime,
+				sentTime, CECConfigurator.getReference().get("Inbox"), isMeetingEmail.toString());
+		ArrayList<Email> target = new ArrayList<Email>();
+		target.add(this);
+		RuleSetFactory.getRuleSetInstance().apply(target);
+	}
+	
 	
 	/**
 	 * Returns a string representation for this email object. 

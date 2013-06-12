@@ -66,7 +66,7 @@ class EmailImplExceptionCUT extends EmailImpl {
 	public EmailImplExceptionCUT(UUID id, String from, String to, String cc,
 			String subject, String body, String lastModifiedTime,
 			String sentTime, Folder parentFolder) {
-		super(id, from, to, cc, subject, body, lastModifiedTime, sentTime, parentFolder);
+		super(id, from, to, cc, subject, body, lastModifiedTime, sentTime, parentFolder, false);
 	}
 	
 	@Override
