@@ -60,6 +60,18 @@ public class EmailService {
 		updateEmailViewEntity(emailInView, email);
 	}
 
+	public void saveToInbox(EmailViewEntity emailInView) {
+		EmailBuilder mailBuilder = new EmailBuilder();
+		Email email = mailBuilder.withId(emailInView.getId()).withFrom()
+				.withTo(emailInView.getTo())
+				.withSubject(emailInView.getSubject())
+				.withBody(emailInView.getBody()).withCC(emailInView.getCC())
+				.computelastModifiedTime().computeSentTime()
+				.withInboxParentFolder().build();
+		email.saveToInboxFolder();
+		//updateEmailViewEntity(emailInView, email);
+	}
+	
 	
 	private void updateEmailViewEntity(EmailViewEntity emailInView, Email email) {
 	   emailInView.setFolder(email.getParentFolder().getPath());

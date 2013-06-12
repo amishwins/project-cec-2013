@@ -24,6 +24,11 @@ public interface Email extends Comparable<Email>, Searchable {
     public void saveToDraftFolder();
     
     /**
+     * Saves the email to inbox folder.
+     */
+    public void saveToInboxFolder();
+    
+    /**
      * Deletes the email from the System.
      */
     public void delete();

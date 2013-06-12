@@ -249,6 +249,17 @@ public class EmailBuilder {
 	}
 
 	/**
+	 * sets the value of PARENTFOLDER to Outbox .
+	 *
+	 * @return the email builder
+	 */
+	public EmailBuilder withInboxParentFolder() {
+		this.parentFolder = FolderFactory.getFolder(CECConfigurator
+				.getReference().get("Inbox"));
+		return this;
+	}
+	
+	/**
 	 * sets the value of FROM field to specified in the configurator object.
 	 *
 	 * @return the email builder
