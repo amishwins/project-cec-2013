@@ -61,7 +61,7 @@ public class EmailXMLDao implements EmailDao {
 	 */
 	private Document buildXmlFile(UUID id, String from, String to, String cc,
 			String subject, String body, String lastModifiedTime,
-			String sentTime, String location) {
+			String sentTime, String location, String meetingInvite) {
 		DocumentBuilderFactory documentFactory = null;
 		DocumentBuilder documentBuilder = null;
 		Document emailInXMLFormat = null;
@@ -124,6 +124,12 @@ public class EmailXMLDao implements EmailDao {
 			parentFolder.appendChild(emailInXMLFormat.createTextNode(location));
 			emailRootElement.appendChild(parentFolder);
 
+			// Is This Email for a Meeting Invite?
+			Element isMeetingInvite = emailInXMLFormat
+					.createElement("IsMeetingEmail");
+			isMeetingInvite.appendChild(emailInXMLFormat.createTextNode(meetingInvite));
+			emailRootElement.appendChild(isMeetingInvite);
+			
 		} catch (ParserConfigurationException pce) {
 			pce.printStackTrace();
 		}
@@ -147,7 +153,7 @@ public class EmailXMLDao implements EmailDao {
 	 */
 	public void save(UUID id, String from, String to, String cc,
 			String subject, String body, String lastModifiedTime,
-			String sentTime, String location) {
+			String sentTime, String location, String meetingInvite) {
         String path = location;
 		String fileName = id.toString();
        	String pathToSaveFile = path + "/" + fileName
@@ -155,7 +161,7 @@ public class EmailXMLDao implements EmailDao {
 
 		try {
 			Document emailInXMLFormat = buildXmlFile(id, from, to, cc, subject,
-					body, lastModifiedTime, sentTime, location);
+					body, lastModifiedTime, sentTime, location, meetingInvite);
 			
 			TransformerFactory transformerFactory = TransformerFactory
 					.newInstance();
@@ -281,6 +287,7 @@ public class EmailXMLDao implements EmailDao {
 					emailData.put("LastModifiedTime", eElement.getElementsByTagName("LastModifiedTime").item(0).getTextContent());
 					emailData.put("SentTime", eElement.getElementsByTagName("SentTime").item(0).getTextContent());
 					emailData.put("ParentFolder", eElement.getElementsByTagName("ParentFolder").item(0).getTextContent());
+					emailData.put("IsMeetingEmail", eElement.getElementsByTagName("IsMeetingEmail").item(0).getTextContent());
 					logger.info("Id: " + eElement.getElementsByTagName("Id").item(0).getTextContent());
 					logger.info("From: " + eElement.getElementsByTagName("From").item(0).getTextContent());
 					logger.info("To: " + eElement.getElementsByTagName("To").item(0).getTextContent());
@@ -290,6 +297,7 @@ public class EmailXMLDao implements EmailDao {
 					logger.info("LastModifiedTime: " + eElement.getElementsByTagName("LastModifiedTime").item(0).getTextContent());
 					logger.info("SentTime: " + eElement.getElementsByTagName("SentTime").item(0).getTextContent());
 					logger.info("ParentFolder: " + eElement.getElementsByTagName("ParentFolder").item(0).getTextContent());
+					logger.info("IsMeetingEmail: " + eElement.getElementsByTagName("IsMeetingEmail").item(0).getTextContent());
 					
 				}
 			}
