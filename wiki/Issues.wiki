@@ -9,6 +9,7 @@
   * Connect the code which Romeo wrote for the EmailClient to register a client with the server
   * Whats a good strategy to update the Inbox when a client RECEIVES an email? Should we refresh every few seconds (no)? What if the user is currently in the meetings folder? 
   * User 1 invites User 2 and User 3. User 2 declines before User 3 accepts. What happens? User 2's decline should go to both User 1 and User 3. And now when User 3 accepts, it should only go to User 1. How to model / implement this?
+  * Test the new field isMeetingEmail flag in EmailImpl and EmailXMLDao. 
 
 
 === Phase 2 ===
