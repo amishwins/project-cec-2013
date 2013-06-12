@@ -69,6 +69,7 @@ public abstract class EmailsFolder extends Folder {
 				.withLastModifiedTime(emailData.get("LastModifiedTime"))
 				.withSentTime(emailData.get("SentTime"))
 				.withParentFolder(FolderFactory.getFolder(emailData.get("ParentFolder")))
+				.withIsMeetingEmail(Boolean.parseBoolean(emailData.get("IsMeetingEmail")))
 				.build();
 			emailsInFolder.add(email);
 		}	

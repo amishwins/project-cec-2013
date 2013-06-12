@@ -40,6 +40,8 @@ public class EmailBuilder {
 	
 	/** The parentFolder field. */
 	Folder parentFolder;
+	
+	Boolean isMeetingEmail = false;
 
 	/**
 	 * sets the value of id based on what is 
@@ -149,6 +151,12 @@ public class EmailBuilder {
 		return this;
 	}
 
+	public EmailBuilder withIsMeetingEmail(Boolean isMeetingEmail) {
+		this.isMeetingEmail = isMeetingEmail;
+		return this;
+	}
+
+	
 	/**
 	 * Computes the id of the type UUID type.
 	 *
@@ -257,6 +265,6 @@ public class EmailBuilder {
 	 */
 	public Email build() {
 		return new EmailImpl(id, from, to, cc, subject, body, lastModifiedTime,
-				sentTime, parentFolder);
+				sentTime, parentFolder, isMeetingEmail);
 	}
 }

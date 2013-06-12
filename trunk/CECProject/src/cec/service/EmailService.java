@@ -11,6 +11,17 @@ import cec.view.EmailViewEntity;
  */
 public class EmailService {
 
+	public void acceptMeeting(EmailViewEntity emailInView) {
+		// create meeting object
+		// send accept email
+		// delete email object
+	}
+	
+	public void declineMeeting(EmailViewEntity emailInView) {
+		// send decline email
+		// delete email object
+		
+	}
 	
 	/**
 	 * This method communicates the model layer the emailInView in parameter

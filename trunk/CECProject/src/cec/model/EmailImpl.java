@@ -46,6 +46,8 @@ public class EmailImpl implements Email {
 
 	/** The emailDao field. */
 	protected EmailDao emailDao;
+	
+	private Boolean isMeetingEmail;
 
 	/**
 	 * Instantiates a new email impl.
@@ -62,7 +64,7 @@ public class EmailImpl implements Email {
 	 */
 	public EmailImpl(UUID id, String from, String to, String cc,
 			String subject, String body, String lastModifiedTime,
-			String sentTime, Folder parentFolder) {
+			String sentTime, Folder parentFolder, Boolean isMeetingEmail) {
 		this.id = id;
 		this.from = from;
 		this.to = to;
@@ -72,6 +74,7 @@ public class EmailImpl implements Email {
 		this.lastModifiedTime = lastModifiedTime;
 		this.sentTime = sentTime;
 		this.parentFolder = parentFolder;
+		this.isMeetingEmail = isMeetingEmail;
 		setEmailDao(EmailDaoFactory.getEmailDaoInstance());
 	}
 
@@ -114,9 +117,12 @@ public class EmailImpl implements Email {
 		return body;
 	}
 
-
 	public String getLastModifiedTime() {
 		return lastModifiedTime;
+	}
+	
+	public Boolean isMeetingEmail() {
+		return isMeetingEmail;
 	}
 	
 	/**
@@ -171,7 +177,7 @@ public class EmailImpl implements Email {
 
 		// Assumption that email has been sent successfully..
 		emailDao.save(id, from, to, cc, subject, body, lastModifiedTime,
-				sentTime, CECConfigurator.getReference().get("Outbox"));
+				sentTime, CECConfigurator.getReference().get("Outbox"), isMeetingEmail.toString());
 		ifItWasInDraftFolderDeleteThatCopy();
 	}
 
@@ -199,7 +205,7 @@ public class EmailImpl implements Email {
 	 */
 	public void saveToDraftFolder() {
 		emailDao.save(id, from, to, cc, subject, body, lastModifiedTime,
-				sentTime, CECConfigurator.getReference().get("Drafts"));
+				sentTime, CECConfigurator.getReference().get("Drafts"), isMeetingEmail.toString());
 	}
 
 	/**

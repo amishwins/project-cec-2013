@@ -260,10 +260,11 @@ public class MeetingImpl implements Meeting {
 	 */
 	private Email buildEmailFromMeeting(String subjectPrefix) {
 		EmailBuilder emailBuilder = new EmailBuilder();
-		Email emailToSendForMeeting = emailBuilder.computeID().withFrom(from)
+		Email emailToSendForMeeting = emailBuilder.withId(id).withFrom(from)
 				.withTo(attendees).withSubject(subjectPrefix + subject)
 				.withBody(buildBodyPartOfEmailToBeSentForMeeting(subjectPrefix))
 				.computelastModifiedTime().computeSentTime()
+				.withIsMeetingEmail(true)
 				.withOutboxParentFolder().build();
 		return emailToSendForMeeting;
 	}
@@ -278,7 +279,7 @@ public class MeetingImpl implements Meeting {
 		StringBuilder buildBody = new StringBuilder();
 		String nextLine = "\n";
 		buildBody.append(subjectPrefix + nextLine);
-		buildBody.append("---------------" + nextLine);
+		buildBody.append("---------------" + nextLine);		
 		buildBody.append("Subject:    " + subject + nextLine);
 		buildBody.append("Location:   " + place + nextLine);
 		buildBody.append("Start Date: "

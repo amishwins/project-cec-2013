@@ -25,7 +25,7 @@ public interface EmailDao {
 	 */
 	public void save(UUID id, String from, String to, String cc,
 			String subject, String body, String lastModifiedTime,
-			String sentTime, String location);
+			String sentTime, String location, String meetingInvite);
 	
 	/**
 	 * Delete each email object from the persistence layer.
