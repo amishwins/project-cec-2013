@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.UUID;
 
 import cec.model.Email;
 import cec.model.EmailBuilder;
@@ -12,11 +13,26 @@ import cec.model.EmailBuilder;
 public class Deserialization {
 
 	ObjectInputStream emailStream;
+	FileInputStream fileIn;
 	public Deserialization()
 	{
-		 FileInputStream fileIn;
+		
 		try {
 			fileIn = new FileInputStream("email.obj");
+			emailStream = new ObjectInputStream(fileIn);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		 
+		
+	}
+	public Deserialization(UUID id)
+	{
+		
+		try {
+			fileIn = new FileInputStream(id+".obj");
 			emailStream = new ObjectInputStream(fileIn);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -31,6 +47,7 @@ public class Deserialization {
 		public void saveToInbox() {
 
 		try {
+			
 			Email email = (Email)emailStream.readObject();
 			EmailBuilder mailBuilder = new EmailBuilder();
 			
