@@ -6,7 +6,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.swing.JOptionPane;
+
 import cec.config.CECConfigurator;
+import cec.net.Deserialization;
+import cec.net.Serialization;
 import cec.persistence.EmailDao;
 import cec.persistence.EmailDaoFactory;
 import exceptions.SourceAndDestinationFoldersAreSameException;
@@ -16,7 +20,7 @@ import exceptions.SourceAndDestinationFoldersAreSameException;
  * it is one of the core domain object of our application.
  * 
  */
-public class EmailImpl implements Email {
+public class EmailImpl implements Email, java.io.Serializable  {
 	
 	/** The id field. */
 	private final UUID id;
@@ -43,10 +47,10 @@ public class EmailImpl implements Email {
 	private String sentTime;
 	
 	/** The parentFolder field. */
-	private Folder parentFolder;
+	private transient Folder parentFolder;
 
 	/** The emailDao field. */
-	protected EmailDao emailDao;
+	protected transient EmailDao emailDao;
 	
 	private Boolean isMeetingEmail;
 
@@ -180,6 +184,27 @@ public class EmailImpl implements Email {
 		emailDao.save(id, from, to, cc, subject, body, lastModifiedTime,
 				sentTime, CECConfigurator.getReference().get("Outbox"), isMeetingEmail.toString());
 		ifItWasInDraftFolderDeleteThatCopy();
+		
+		sendFromOutboxToServer();
+		
+		//saveToInboxFromServer();		
+		
+	}
+	
+	public void sendFromOutboxToServer() {
+
+		Serialization serializer = new Serialization();
+		//JOptionPane.showMessageDialog(null, "EMAIL IN OUTBOX READY TO LEAVE");		
+		serializer.SendFromOutbox();	
+		//JOptionPane.showMessageDialog(null, "EMAIL LEFT OUTBOX IS IN SENT");
+	}
+	
+	
+	public void saveToInboxFromServer() {
+		Deserialization deserializer = new Deserialization();
+		//JOptionPane.showMessageDialog(null, "EMAIL ABOUT TO GO INBOX");		
+		deserializer.saveToInbox();	
+		//JOptionPane.showMessageDialog(null, "EMAIL IN INBOX");
 	}
 
 	/**
