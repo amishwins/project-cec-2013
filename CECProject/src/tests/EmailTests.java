@@ -63,6 +63,13 @@ public class EmailTests {
 	}
 
 	@Test
+	public void saveWasCalledForSavingToInbox() {
+		myEmail.saveToInboxFolder();
+		assertTrue(((EmailDaoStub)myEmail.getEmailDao()).saveWasCalled);
+	}
+	
+
+	@Test
 	public void getNicelyFormattedDate() {
 		myEmail = new EmailImplCUT(id, "", "", "", "", "", "2013.05.17_At_13.52.03.824",
 				"", null);
