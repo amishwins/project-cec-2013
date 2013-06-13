@@ -19,6 +19,10 @@ class Email implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public UUID id;
 	public String to;
+	
+	public String toString(){
+		return to.toString();
+	}
 }
 
 
@@ -35,29 +39,29 @@ class HandShake implements Serializable {
 
 class ServerThreadPerClient implements Runnable {
 	ObjectInputStream in = null; 
-	
 
 	private Socket s = null;
-	public ServerThreadPerClient(Socket s) {
+	public ServerThreadPerClient(Socket s, ObjectInputStream in) {
 		this.s = s;
+		this.in = in;
 	}
 	public void run() {
+		System.out.println("Accepting Emails from socket : "+ s);
 		while(true) {
 			try {
-				in = new ObjectInputStream(s.getInputStream());
 				Email e = (Email) in.readObject();
-				SuperCECServer.getArrivingEmailQueue().add(e);
-				
+				System.out.println("is Email Added to Queue: "+SuperCECServer.getArrivingEmailQueue().add(e));
+				System.out.println("Accepted Email for  "+ e +" From Socket : "+s);
+				//System.out.println("Size of Deque: "+SuperCECServer.getArrivingEmailQueue().size());
 			} catch (IOException e) {
 				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
+			} catch (ClassNotFoundException e1) {
+				e1.printStackTrace();
+			} 
 			
 		}
 	}
 }
-
 
 class ClientsConnecting implements Runnable {
 	ServerSocket server = null;
@@ -69,9 +73,11 @@ class ClientsConnecting implements Runnable {
 		this.map = map;
 	}
 	public void run() {
+		System.out.println("Starting Connection Thread :.....");
 		while(true) {
 			
 			try {
+				System.out.println("Accepting Connection !!!");
 				Socket s = server.accept();
 				in = new ObjectInputStream(s.getInputStream());
 				HandShake h = (HandShake) in.readObject();
@@ -80,15 +86,13 @@ class ClientsConnecting implements Runnable {
 				System.out.println("Before: ");
 				Set<String> emails = map.keySet();
 				for(String email: emails){
-					System.out.println("Email: "+email+"has been assigned Socket :"+ map.get(email));
+					System.out.println("Email: "+email+" has been assigned Socket :"+ map.get(email));
 				}
 				System.out.println("After: ");
-				SuperCECServer.getExecutor().submit(new ServerThreadPerClient(s));
 				
-				
-			
+				SuperCECServer.getExecutor().submit(new ServerThreadPerClient(s,in));
+         		System.out.println("Connection Accepted !!!");
 			} catch (IOException | ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -105,17 +109,20 @@ class ListenerForThingsInQueue implements Runnable {
 	public void run() {
 		while(true) {
 			try {
+				System.out.println("Listening for email Arrivals ....." );
+				//System.out.println("Size of Deque: "+arrivals.size() );
 				Email newEmail = arrivals.take();
 				// only handling 1 email for now
 				// TODO: make it handle more
 				Socket s = SuperCECServer.getClientMap().get(newEmail.to);
 				out = new ObjectOutputStream(s.getOutputStream()); 
 				out.writeObject(newEmail);
+				System.out.println("Email "+ newEmail + " has been sent to Socket " +s );
 				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (IOException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -155,15 +162,10 @@ public class SuperCECServer {
 		
 		executor.submit(new ClientsConnecting(server, clientMap));
 		
-//		executor.submit(new ListenerForThingsInQueue(arrivingEmails));
+		executor.submit(new ListenerForThingsInQueue(arrivingEmails));
 
-		executor.shutdown();
-		System.out.println("Before: ");
-		Set<String> emails = clientMap.keySet();
-		for(String email: emails){
-			System.out.println("Email: "+email+"has been assigned Socket :"+ clientMap.get(email));;
-		}
-		System.out.println("After: ");
+//		executor.shutdown();
+
 		try {
 			executor.awaitTermination(1, TimeUnit.DAYS);
 			

@@ -1,15 +1,9 @@
 package cec.net;
 import java.net.*;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.BlockingDeque;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.io.*;
-
-import cec.model.Email;
 
 public class CECServer {
 	private static CECServer instance;
