@@ -19,7 +19,15 @@ public class Serialization {
 		Iterable<Email> emailListInOutbox = folder.loadEmails();
 		for(Email email:emailListInOutbox)
 		{
+			
 			ObjectOutputStream emailStream=StreamEmail(email);
+			
+			//GO TO SERVER
+			Deserialization deserializer = new Deserialization(email.getId());
+			deserializer.saveToInbox();
+			//SERVER RETURN ACK
+			
+			
 			email.move(destfolder);			
 		}
 		
@@ -58,7 +66,8 @@ public class Serialization {
 	public ObjectOutputStream StreamEmail(Email emailInOutboxFolder) {
 		
 		try {
-			FileOutputStream fileOut = new FileOutputStream("email.obj");					
+			
+			FileOutputStream fileOut = new FileOutputStream(emailInOutboxFolder.getId()+".obj");//""email.obj");					
 			 ObjectOutputStream out = new ObjectOutputStream(fileOut);
 	         out.writeObject(emailInOutboxFolder);
 	         out.close();
