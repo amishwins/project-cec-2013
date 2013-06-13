@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -24,6 +25,11 @@ class Email implements Serializable {
 class HandShake implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public String email;
+	
+	
+	public String toString(){
+		return email.toString();
+	}
 }
 
 
@@ -70,7 +76,15 @@ class ClientsConnecting implements Runnable {
 				in = new ObjectInputStream(s.getInputStream());
 				HandShake h = (HandShake) in.readObject();
 				map.put(h.email, s);
+				
+				System.out.println("Before: ");
+				Set<String> emails = map.keySet();
+				for(String email: emails){
+					System.out.println("Email: "+email+"has been assigned Socket :"+ map.get(email));
+				}
+				System.out.println("After: ");
 				SuperCECServer.getExecutor().submit(new ServerThreadPerClient(s));
+				
 				
 			
 			} catch (IOException | ClassNotFoundException e) {
@@ -140,13 +154,20 @@ public class SuperCECServer {
 		
 		
 		executor.submit(new ClientsConnecting(server, clientMap));
-		executor.submit(new ListenerForThingsInQueue(arrivingEmails));
+		
+//		executor.submit(new ListenerForThingsInQueue(arrivingEmails));
 
 		executor.shutdown();
-		
+		System.out.println("Before: ");
+		Set<String> emails = clientMap.keySet();
+		for(String email: emails){
+			System.out.println("Email: "+email+"has been assigned Socket :"+ clientMap.get(email));;
+		}
+		System.out.println("After: ");
 		try {
 			executor.awaitTermination(1, TimeUnit.DAYS);
-		} catch (InterruptedException e) {
+			
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
