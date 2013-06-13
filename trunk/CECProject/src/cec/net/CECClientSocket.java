@@ -13,7 +13,7 @@ public class CECClientSocket {
 
 		try {
 //			socket = new Socket("kocher.encs.concordia.ca", 4445);
-			socket = new Socket("localhost", 4445);
+			socket = new Socket("localhost", 4444);
 			out = new PrintWriter(socket.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		} catch (UnknownHostException e) {
@@ -31,12 +31,13 @@ public class CECClientSocket {
 
 		// - Introduce ourselves to the server
 		// out.println("register: deyvid.william@gmail.com");
-
+        HandShake hs = new HandShake();
+        hs.email="Pankaj@yahoo.com";
 		while ((fromUser = stdIn.readLine()) != null) {
 			
 			if (fromUser != null) {
 				// System.out.println("Client: " + fromUser);
-				out.println(fromUser);
+				out.println(hs);
 			}
 		}
 
