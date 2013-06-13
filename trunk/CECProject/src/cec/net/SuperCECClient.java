@@ -1,8 +1,10 @@
 package cec.net;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.UUID;
 
 import exceptions.StackTrace;
 
@@ -11,6 +13,7 @@ class SuperCECClient {
     ObjectStream os;
     Socket writer;
     ObjectOutputStream outputStream;
+    ObjectInputStream inputStream;
     volatile boolean stop = false;
 
     SuperCECClient(String host, int port, PrintStream out){
@@ -19,10 +22,10 @@ class SuperCECClient {
         try {
             writer = new Socket(host, port);
             outputStream = new ObjectOutputStream( writer.getOutputStream() );
-            Thread writerThread = new Thread( new WriteToSocket());
-            writerThread.start();
-        } catch (IOException e) {
-            cleanUpAll();
+          //  inputStream = new ObjectInputStream( writer.getInputStream() ); 
+           // outputStream2 = new ObjectOutputStream( writer.getOutputStream() );
+         } catch (Exception e) {
+            //cleanUpAll();
             out.println(StackTrace.asString(e));
         }
     }
@@ -38,23 +41,36 @@ class SuperCECClient {
     
     public static void main (String args[]){
     	SuperCECClient client = new SuperCECClient("localhost",4444,System.out);
-    }
+    	
+     	HandShake hs = new HandShake();
+        hs.email="pankajkapania@yahoo.com";
+        try {
+        	client.outputStream.writeObject(hs);
+        	
+        	Email email = new Email();
+        	email.id = UUID.randomUUID();
+        	email.to = "amish.gala@gmail.com"; 
 
-    class WriteToSocket implements Runnable {
-        public void run() {
-            while(!stop){
-               	HandShake hs = new HandShake();
-                hs.email="Pankaj@yahoo.com";
-                try {
-                    outputStream.writeObject(hs);
-                   // out.println("sent: " + hs);
-                    outputStream.flush();
-                    Wait.seconds(1);
-                } catch (IOException e) {
-                    out.println(StackTrace.asString(e));
-                }
-            }
-            cleanUpAll();
+        	//client.outputStream.writeObject(email);
+        	
+        	ObjectInputStream inputStream = new ObjectInputStream( client.writer.getInputStream() ); 
+        	while(true){
+        		Email e;
+				try {
+					e = (Email) inputStream.readObject();
+					System.out.println(e.to);
+				} catch (ClassNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+        		
+        		
+        		
+        	}
+   
+        } catch (IOException e) {
+        	client.out.println(StackTrace.asString(e));
         }
+        client.cleanUpAll();
     }
 }
