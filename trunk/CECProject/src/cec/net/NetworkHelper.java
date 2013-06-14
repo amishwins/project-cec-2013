@@ -1,12 +1,12 @@
 package cec.net;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import cec.config.CECConfigurator;
 import cec.model.Email;
@@ -33,8 +33,12 @@ public class NetworkHelper {
 					}
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
+				} catch (EOFException e) {
+					System.out.println("Disconnected from the server!");
+					break;
+				}catch(Exception e){
+					System.out.println("Disconnected from the server!");
+					break;
 				}
 				
 			}
