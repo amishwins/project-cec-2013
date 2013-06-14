@@ -1,5 +1,6 @@
 package cec.net;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -51,10 +52,14 @@ class ServerThreadPerClient implements Runnable {
 				Email e = (Email) SuperCECServer.getEmailToObjectInputStream().get(emailAddress).readObject();
 				System.out.println("is Email Added to Queue: "+ SuperCECServer.getArrivingEmailQueue().add(e));
 				//System.out.println("Accepted Email for: " + e);
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (EOFException e) {
+				System.out.println(emailAddress +" Disconnected from the server!");
+				//e.printStackTrace();
+				break;				
 			} catch (Exception e1) {
-				e1.printStackTrace();
+				System.out.println(emailAddress +" Disconnected from the server!");
+				//e.printStackTrace();
+				break;
 			} 
 		}
 	}
