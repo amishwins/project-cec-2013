@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import cec.config.CECConfigurator;
 import cec.net.Deserialization;
+import cec.net.NetworkHelper;
 import cec.net.Serialization;
 import cec.persistence.EmailDao;
 import cec.persistence.EmailDaoFactory;
@@ -178,15 +179,25 @@ public class EmailImpl implements Email, Serializable  {
 	 * 
 	 */
 	public void send() {
-
+		NetworkHelper nh = new NetworkHelper();
+		String target;
+		
+		if (NetworkHelper.isConnectedToServer()) {
+			nh.sendEmail(this);
+			target = CECConfigurator.getReference().get("Sent");
+		}
+		else {
+			target = CECConfigurator.getReference().get("Outbox");
+		}
+		
 		// Assumption that email has been sent successfully..
 		emailDao.save(id, from, to, cc, subject, body, lastModifiedTime,
-				sentTime, CECConfigurator.getReference().get("Outbox"), isMeetingEmail.toString());
+				sentTime, target, isMeetingEmail.toString());
 		ifItWasInDraftFolderDeleteThatCopy();
 		
-		sendFromOutboxToServer();
-		
+	//	sendFromOutboxToServer();
 		//saveToInboxFromServer();		
+
 		
 	}
 	
