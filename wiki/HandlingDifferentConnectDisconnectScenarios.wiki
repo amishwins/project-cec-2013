@@ -2,7 +2,20 @@
 
 = Introduction =
 
-Add your content here.
+1. Server is running and client A and Client B are connected. 
+  a) Client A Disconnects and servers starts throwing exceptions in console. 
+  Fixed:  This case has been taken care of.... Now server logs a message whenever cleint disconnects. 
+  b) Client A Disconnects and cleint starts throwing exception logs too.
+Fixed:  This case has been taken care of.... Now cleint logs a message whenever cleint disconnects.
+
+
+
+
+
+
+
+
+
 
 
 = Details =
