@@ -15,6 +15,12 @@ import cec.model.EmailBuilder;
 
 public class NetworkHelper {
 	
+	class SendEmailToServer implements Runnable {
+		public void run() {
+			
+		}
+	}
+	
 	class ListenerForMessagesFromServer implements Runnable {
 		public void run() {
 			ObjectInputStream ois = null;

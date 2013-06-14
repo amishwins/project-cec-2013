@@ -37,22 +37,20 @@ class HandShake implements Serializable {
 
 
 class ServerThreadPerClient implements Runnable {
-	ObjectInputStream in = null; 
 
-	private Socket socket = null;
+	private String emailAddress;
 	
-	public ServerThreadPerClient(Socket s, ObjectInputStream in) {
-		this.socket = s;
-		this.in = in;
+	public ServerThreadPerClient(String emailAddress) {
+		this.emailAddress = emailAddress;
 	}
 	
 	public void run() {
-		System.out.println("Accepting Emails from socket : "+ socket);
+		System.out.println("Accepting Emails from this guy: " + emailAddress);
 		while(true) {
 			try {
-				Email e = (Email) in.readObject();
+				Email e = (Email) SuperCECServer.getEmailToObjectInputStream().get(emailAddress).readObject();
 				System.out.println("is Email Added to Queue: "+ SuperCECServer.getArrivingEmailQueue().add(e));
-				System.out.println("Accepted Email for: " + e + " From Socket: " +socket);
+				System.out.println("Accepted Email for: " + e);
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (ClassNotFoundException e1) {
@@ -65,6 +63,7 @@ class ServerThreadPerClient implements Runnable {
 class ClientAcceptor implements Runnable {
 	ServerSocket server = null;
 	ObjectInputStream in = null; 
+	ObjectOutputStream out = null; 
 	
 	public ClientAcceptor(ServerSocket server) {
 		this.server = server;
@@ -77,8 +76,12 @@ class ClientAcceptor implements Runnable {
 				System.out.println("Ready to accept connections...");
 				Socket socket = server.accept();
 				in = new ObjectInputStream(socket.getInputStream());
+				out = new ObjectOutputStream(socket.getOutputStream());
+				
 				HandShake handShake = (HandShake) in.readObject();
 				SuperCECServer.getEmailToSocketMap().put(handShake.emailAddress, socket);
+				SuperCECServer.getEmailToObjectInputStream().put(handShake.emailAddress, in);
+				SuperCECServer.getEmailToObjectOutputStream().put(handShake.emailAddress, out);
 				
 				Set<String> emails = SuperCECServer.getEmailToSocketMap().keySet();
 				for(String email: emails){
@@ -86,7 +89,7 @@ class ClientAcceptor implements Runnable {
 				}
 				
 				// Spawn new task for the client which has just connected
-				SuperCECServer.getExecutor().submit(new ServerThreadPerClient(socket, in));
+				SuperCECServer.getExecutor().submit(new ServerThreadPerClient(handShake.emailAddress));
 
 				System.out.println("Connection Accepted !!!");
 			} catch (IOException | ClassNotFoundException e) {
@@ -104,18 +107,20 @@ class ListenerForThingsInQueue implements Runnable {
 	}
 	
 	public void run() {
+		Email newEmail;
 		while(true) {
 			try {
+				newEmail = SuperCECServer.getArrivingEmailQueue().take();
+				out = SuperCECServer.getEmailToObjectOutputStream().get(newEmail.getTo());
+
 				System.out.println("Listening for email Arrivals ....." );
 				//System.out.println("Size of Deque: "+arrivals.size() );
-				Email newEmail = SuperCECServer.getArrivingEmailQueue().take();
+
 				// only handling 1 email for now
 				// TODO: make it handle more
-				Socket socket = SuperCECServer.getEmailToSocketMap().get(newEmail.getTo());
-				out = new ObjectOutputStream(socket.getOutputStream());
+
 				out.writeObject(newEmail);
-				//out.writeObject(newEmail);
-				System.out.println("Email " + newEmail.getTo() + " has been sent to Socket " + socket );
+				System.out.println("Email " + newEmail.getTo() + " has been sent." );
 				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -134,7 +139,18 @@ public class SuperCECServer {
 	static LinkedBlockingDeque<Email> arrivingEmails = new LinkedBlockingDeque<>();
 	static ConcurrentHashMap<String, Socket> emailToSocketMap = new ConcurrentHashMap<>();
 	static ExecutorService executor = Executors.newCachedThreadPool();
+	static ConcurrentHashMap<String, ObjectInputStream> emailToObjectInputStream  = new ConcurrentHashMap<>();
+	static ConcurrentHashMap<String, ObjectOutputStream> emailToObjectOutputStream  = new ConcurrentHashMap<>();
+	
+	public static ConcurrentHashMap<String, ObjectInputStream> getEmailToObjectInputStream() {
+		return emailToObjectInputStream;
+	}
 
+	public static ConcurrentHashMap<String, ObjectOutputStream> getEmailToObjectOutputStream() {
+		return emailToObjectOutputStream;
+	}
+
+	
 	public static ConcurrentHashMap<String, Socket> getEmailToSocketMap() {
 		return emailToSocketMap;
 	}
