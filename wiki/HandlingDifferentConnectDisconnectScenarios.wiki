@@ -20,7 +20,7 @@
 
 1. Server is running and Client A is connecting to it.
   a) Client A tries to send email to Cleint B which is not conncted.
-Peding:
+   Pending:
 
 2. 
 
