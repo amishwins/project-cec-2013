@@ -32,6 +32,12 @@ public class CECConfigurator {
 		mapDefaultClientEmailAddress();
 		mapDefaultTechnicalFolders();
 		mapDefaultTechnicalFiles();
+		mapDefaultServerSettings();
+	}
+
+	private void mapDefaultServerSettings() {
+		systemSettings.put("ServerName", "localhost");
+		systemSettings.put("ServerPort", "7777");		
 	}
 
 	/**

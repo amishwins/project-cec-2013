@@ -1,12 +1,11 @@
 package cec.model;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
-
-import javax.swing.JOptionPane;
 
 import cec.config.CECConfigurator;
 import cec.net.Deserialization;
@@ -20,7 +19,7 @@ import exceptions.SourceAndDestinationFoldersAreSameException;
  * it is one of the core domain object of our application.
  * 
  */
-public class EmailImpl implements Email, java.io.Serializable  {
+public class EmailImpl implements Email, Serializable  {
 	
 	/** The id field. */
 	private final UUID id;
