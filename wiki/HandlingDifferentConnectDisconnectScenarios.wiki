@@ -7,7 +7,7 @@
 
   Fixed:  This case has been taken care of.... Now server logs a message whenever cleint disconnects.
  
-  b) Client A Disconnects and cleint starts throwing exception logs too.
+  b) Client A Disconnects and client A starts throwing exception logs too.
 
   Fixed:  This case has been taken care of.... Now client logs a message whenever cleint disconnects.
 
