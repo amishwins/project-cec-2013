@@ -43,6 +43,7 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 import cec.config.CECConfigurator;
+import cec.net.NetworkHelper;
 import cec.service.FolderService;
 import cec.service.EmailService;
 import cec.service.MeetingService;
@@ -880,6 +881,8 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 			{
 				// TODO: check if this email is valid
 				CECConfigurator.getReference().put("ClientEmail", clientEmailAddress);
+				NetworkHelper nw = new NetworkHelper();
+				nw.connectToServer();
 				
 	
 			}
