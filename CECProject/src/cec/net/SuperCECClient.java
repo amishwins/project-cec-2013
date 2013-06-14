@@ -57,7 +57,7 @@ class SuperCECClient {
         	EmailBuilder emailBuilder = new EmailBuilder();
     		Email email = emailBuilder.computeID()
     				.withFrom("pankajkapania@gmail.com")
-    				.withTo("deyvid@cec.com")//.withTo("romeo@cec.com")
+    				.withTo("cec.user@cec.com")//.withTo("romeo@cec.com")
     				.withCC("PankajKapania@gmail.com")
     				.withSubject("Romeo Email")
     				.withBody("Body1")
@@ -67,7 +67,7 @@ class SuperCECClient {
     				.build();
     		Email email2 = emailBuilder.computeID()
     				.withFrom("pankajkapania@gmail.com")
-    				.withTo("deyvid@cec.com")
+    				.withTo("cec.user@cec.com")
     				.withCC("PankajKapania@gmail.com")
     				.withSubject("Deyvid  Email")
     				.withBody("Body1")
@@ -78,7 +78,7 @@ class SuperCECClient {
     		
     		Email email3 = emailBuilder.computeID()
     				.withFrom("pankajkapania@gmail.com")
-    				.withTo("romeo@cec.com")//.withTo("romeo@cec.com")
+    				.withTo("cec.user@cec.com")//.withTo("romeo@cec.com")
     				.withCC("PankajKapania@gmail.com")
     				.withSubject("Testing Concurrency Email")
     				.withBody("Body1")

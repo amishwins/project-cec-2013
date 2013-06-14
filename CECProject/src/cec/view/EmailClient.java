@@ -891,6 +891,8 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	
 	private class DisconnectFromServer implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			NetworkHelper nw = new NetworkHelper();
+			nw.disconnectFromServer();
 			System.exit(0);
 		}
 	}

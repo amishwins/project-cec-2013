@@ -53,9 +53,16 @@ public class NetworkHelper {
 		}
 	}
 	
+	private void handShake() throws IOException {
+		HandShake hs = new HandShake();
+        hs.emailAddress = config.getClientEmailAddress();
+       // ObjectOutputStream outputStream = new ObjectOutputStream(clientSocket.getOutputStream() );
+        oos.writeObject(hs);	    
+	}
+	
 	static Socket clientSocket;
 	ObjectInputStream ois = null;
-	ObjectOutputStream oos = null;
+    ObjectOutputStream oos = null;
 	CECConfigurator config = CECConfigurator.getReference();
 	volatile boolean stop = false;
 	ExecutorService exec = null;
@@ -67,17 +74,14 @@ public class NetworkHelper {
 	public void connectToServer() {
 		
 	    try {
-			clientSocket = new Socket(config.get("ServerName"), 
+	    	clientSocket = new Socket(config.get("ServerName"), 
 					Integer.parseInt(config.get("ServerPort")));
-			ois = new ObjectInputStream(clientSocket.getInputStream());
 			oos = new ObjectOutputStream(clientSocket.getOutputStream());
-			
+			ois = new ObjectInputStream(clientSocket.getInputStream());
 			handShake();
-			
 			exec = Executors.newCachedThreadPool();
 			exec.submit(new ListenerForMessagesFromServer());
-			
-			
+					
 		} catch (NumberFormatException | IOException e) {
 			e.printStackTrace();
 		}
@@ -108,12 +112,7 @@ public class NetworkHelper {
 		Cleanup.closeQuietly(clientSocket);
 	}
 	
-	private void handShake() throws IOException {
-		HandShake hs = new HandShake();
-        hs.emailAddress = config.getClientEmailAddress();
-        ObjectOutputStream outputStream = new ObjectOutputStream(clientSocket.getOutputStream() );
-        outputStream.writeObject(hs);	    
-	}
+	
 	
 	private void stopClient() {
 		stop = true;
