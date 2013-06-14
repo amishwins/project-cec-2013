@@ -50,10 +50,10 @@ class ServerThreadPerClient implements Runnable {
 			try {
 				Email e = (Email) SuperCECServer.getEmailToObjectInputStream().get(emailAddress).readObject();
 				System.out.println("is Email Added to Queue: "+ SuperCECServer.getArrivingEmailQueue().add(e));
-				System.out.println("Accepted Email for: " + e);
+				//System.out.println("Accepted Email for: " + e);
 			} catch (IOException e) {
 				e.printStackTrace();
-			} catch (ClassNotFoundException e1) {
+			} catch (Exception e1) {
 				e1.printStackTrace();
 			} 
 		}
