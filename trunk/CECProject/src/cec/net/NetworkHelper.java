@@ -15,20 +15,12 @@ import cec.model.EmailBuilder;
 
 public class NetworkHelper {
 	
-	class SendEmailToServer implements Runnable {
-		public void run() {
-			
-		}
+	public static boolean isConnectedToServer() {
+		return (clientSocket != null);
 	}
 	
 	class ListenerForMessagesFromServer implements Runnable {
 		public void run() {
-			ObjectInputStream ois = null;
-			try {
-				ois = new ObjectInputStream(NetworkHelper.getSocket().getInputStream());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 			
 			while(!stop) {
 				try {
@@ -62,8 +54,11 @@ public class NetworkHelper {
 	}
 	
 	static Socket clientSocket;
+	ObjectInputStream ois = null;
+	ObjectOutputStream oos = null;
 	CECConfigurator config = CECConfigurator.getReference();
 	volatile boolean stop = false;
+	ExecutorService exec = null;
 		
 	public static Socket getSocket() {
 		return clientSocket;
@@ -74,10 +69,12 @@ public class NetworkHelper {
 	    try {
 			clientSocket = new Socket(config.get("ServerName"), 
 					Integer.parseInt(config.get("ServerPort")));
+			ois = new ObjectInputStream(clientSocket.getInputStream());
+			oos = new ObjectOutputStream(clientSocket.getOutputStream());
 			
 			handShake();
 			
-			ExecutorService exec = Executors.newFixedThreadPool(2);
+			exec = Executors.newFixedThreadPool(2);
 			exec.submit(new ListenerForMessagesFromServer());
 			
 			
@@ -87,8 +84,27 @@ public class NetworkHelper {
 		
 	}
 	
+	public void sendEmail(Email email) {
+		final Email myEmail = email;
+		exec.submit(new Runnable() {
+			public void run() {
+				try {
+					oos.writeObject(myEmail);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
 	public void disconnectFromServer() {
+		clientSocket = null;
+		ois = null;
+		oos = null;
 		stopClient();
+		exec.shutdown();
+		// TODO do we have to awaitTermination? 
 		Cleanup.closeQuietly(clientSocket);
 	}
 	
