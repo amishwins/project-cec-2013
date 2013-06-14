@@ -1,8 +1,7 @@
 #summary One-sentence summary of this page.
 
-= Introduction =
 ============================================================
-     Connect-Disconnect and Error/Exception Log Issues
+=Connect-Disconnect and Error/Exception Log Issues=
 ============================================================
 
 1. Server is running and client A and Client B are connected. 
@@ -15,7 +14,7 @@
 2. Server is not running and client tries to connect to server....
   Pending:
 ===============================================================
-               Sending/Receving Email ToDos
+=Sending/Receving Email ToDos=
 ===============================================================
 
 1. Server is running and Client A is connecting to it.
