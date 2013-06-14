@@ -8,8 +8,10 @@ import java.io.Serializable;
 import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -18,16 +20,6 @@ import java.util.concurrent.TimeUnit;
 
 import cec.model.Email;
 import cec.model.EmailBuilder;
-
-class EmailTest implements Serializable {
-	private static final long serialVersionUID = 1L;
-	public UUID id;
-	public String to;
-
-	public String toString() {
-		return to.toString();
-	}
-}
 
 class HandShake implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -130,24 +122,39 @@ class ListenerForThingsInQueue implements Runnable {
 			try {
 				System.out.println("Listening for email Arrivals .....");
 				newEmail = SuperCECServer.getArrivingEmailQueue().take();
-				out = SuperCECServer.getEmailToObjectOutputStream().get(
-						newEmail.getTo());
-				if (null == out) {
-					out = SuperCECServer.getEmailToObjectOutputStream().get(
-							newEmail.getFrom());
-					Email deliveryFailureNoticeEmail = buildNoticeEmail(
-							newEmail, newEmail.getTo());
-					out.writeObject(deliveryFailureNoticeEmail);
-					System.out.println("Delivery Failure Email " + newEmail.getFrom()
-							+ " has been sent.");
-				} else {
-					// only handling 1 email for now
-					// TODO: make it handle more
+								
+				String[] toArray = newEmail.getTo().split(";");
+				String[] ccArray = newEmail.getCC().split(";");
 
-					out.writeObject(newEmail);
-					System.out.println("Email " + newEmail.getTo()
-							+ " has been sent.");
+				ArrayList<String> emailAddresses = new ArrayList<String>(Arrays.asList(toArray));
+				emailAddresses.addAll(Arrays.asList(ccArray));
+				
+				
+				for(String emailAddress: emailAddresses) {
+					String addr = emailAddress.trim();
+
+					out = SuperCECServer.getEmailToObjectOutputStream().get(addr);
+					if (null == out) {
+						out = SuperCECServer.getEmailToObjectOutputStream().get(newEmail.getFrom());
+						Email deliveryFailureNoticeEmail = buildNoticeEmail(newEmail, newEmail.getTo());
+						out.writeObject(deliveryFailureNoticeEmail);
+						System.out.println("Delivery Failure Email " + newEmail.getFrom()
+								+ " has been sent.");
+					} else {
+						// only handling 1 email for now
+						// TODO: make it handle more
+						
+						try {
+							out.writeObject(newEmail);
+							System.out.println("Email " + newEmail.getTo()
+									+ " has been sent.");
+						} catch (SocketException e) {
+							System.out.println("Email sending failed for: " + addr);
+							// handle this!!!!
+						}
+					}					
 				}
+				
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			} catch (Exception e) {
