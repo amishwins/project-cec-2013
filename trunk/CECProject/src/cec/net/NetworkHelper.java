@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import cec.config.CECConfigurator;
 import cec.model.Email;
@@ -61,11 +62,11 @@ public class NetworkHelper {
 	}
 	
 	static Socket clientSocket;
-	ObjectInputStream ois = null;
-    ObjectOutputStream oos = null;
+	static ObjectInputStream ois;
+	static ObjectOutputStream oos;
 	CECConfigurator config = CECConfigurator.getReference();
 	volatile boolean stop = false;
-	ExecutorService exec = null;
+	static ExecutorService exec;
 		
 	public static Socket getSocket() {
 		return clientSocket;
@@ -81,6 +82,13 @@ public class NetworkHelper {
 			handShake();
 			exec = Executors.newCachedThreadPool();
 			exec.submit(new ListenerForMessagesFromServer());
+			
+			/*try {
+				exec.awaitTermination(1, TimeUnit.DAYS);
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}*/
 					
 		} catch (NumberFormatException | IOException e) {
 			e.printStackTrace();
@@ -103,12 +111,14 @@ public class NetworkHelper {
 	}
 	
 	public void disconnectFromServer() {
-		clientSocket = null;
-		ois = null;
-		oos = null;
+		//clientSocket = null;
+		//ois = null;
+		//oos = null;
 		stopClient();
 		exec.shutdown();
 		// TODO do we have to awaitTermination? 
+		Cleanup.closeQuietly(ois);
+		Cleanup.closeQuietly(oos);
 		Cleanup.closeQuietly(clientSocket);
 	}
 	
