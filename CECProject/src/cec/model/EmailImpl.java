@@ -8,9 +8,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import cec.config.CECConfigurator;
-import cec.net.Deserialization;
 import cec.net.NetworkHelper;
-import cec.net.Serialization;
 import cec.persistence.EmailDao;
 import cec.persistence.EmailDaoFactory;
 import exceptions.SourceAndDestinationFoldersAreSameException;
@@ -21,7 +19,13 @@ import exceptions.SourceAndDestinationFoldersAreSameException;
  * 
  */
 public class EmailImpl implements Email, Serializable  {
-	
+
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8780010934346160239L;
+
 	/** The id field. */
 	private final UUID id;
 	
@@ -194,29 +198,8 @@ public class EmailImpl implements Email, Serializable  {
 		emailDao.save(id, from, to, cc, subject, body, lastModifiedTime,
 				sentTime, target, isMeetingEmail.toString());
 		ifItWasInDraftFolderDeleteThatCopy();
-		
-	//	sendFromOutboxToServer();
-		//saveToInboxFromServer();		
-
-		
 	}
 	
-	public void sendFromOutboxToServer() {
-
-		Serialization serializer = new Serialization();
-		//JOptionPane.showMessageDialog(null, "EMAIL IN OUTBOX READY TO LEAVE");		
-		serializer.SendFromOutbox();	
-		//JOptionPane.showMessageDialog(null, "EMAIL LEFT OUTBOX IS IN SENT");
-	}
-	
-	
-	public void saveToInboxFromServer() {
-		Deserialization deserializer = new Deserialization();
-		//JOptionPane.showMessageDialog(null, "EMAIL ABOUT TO GO INBOX");		
-		deserializer.saveToInbox();	
-		//JOptionPane.showMessageDialog(null, "EMAIL IN INBOX");
-	}
-
 	/**
 	 * This method is responsible for deleting the existing copy of an email from the Drafts folder
 	 * after the email has been sent to its destination address and saved to Outbox folder. 
