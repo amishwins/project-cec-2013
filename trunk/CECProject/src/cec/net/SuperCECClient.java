@@ -57,9 +57,9 @@ class SuperCECClient {
         	EmailBuilder emailBuilder = new EmailBuilder();
     		Email email = emailBuilder.computeID()
     				.withFrom("pankajkapania@gmail.com")
-    				.withTo("romeo@cec.com")
+    				.withTo("deyvid@cec.com")//.withTo("romeo@cec.com")
     				.withCC("PankajKapania@gmail.com")
-    				.withSubject("TestSubject1")
+    				.withSubject("Romeo Email")
     				.withBody("Body1")
     				.withLastModifiedTime("2013.05.12_At_14.07.56.874")
     				.withSentTime("2013.05.13_At_14.07.56.874")
@@ -69,15 +69,18 @@ class SuperCECClient {
     				.withFrom("pankajkapania@gmail.com")
     				.withTo("deyvid@cec.com")
     				.withCC("PankajKapania@gmail.com")
-    				.withSubject("TestSubject1")
+    				.withSubject("Deyvid  Email")
     				.withBody("Body1")
     				.withLastModifiedTime("2013.05.12_At_14.07.56.874")
     				.withSentTime("2013.05.13_At_14.07.56.874")
     				.withParentFolder(FolderFactory.getFolder(CECConfigurator.getReference().get("Inbox")))
     				.build();
 
-        	client.outputStream.writeObject(email);
-        	client.outputStream.writeObject(email2);
+    		client.outputStream.writeObject(email);
+    		//Thread.sleep(10);
+    		client.outputStream.writeObject(email2);
+        	
+        	//client.outputStream.writeObject(email);
         	
         	ObjectInputStream inputStream = new ObjectInputStream( client.writer.getInputStream() ); 
         	while(true){
