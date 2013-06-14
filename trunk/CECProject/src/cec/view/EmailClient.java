@@ -875,10 +875,12 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 
 	private class ConnectToServer implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			String cecUser = JOptionPane.showInputDialog(null, "Enter your email address");
-			if (!cecUser.isEmpty())
+			String clientEmailAddress = JOptionPane.showInputDialog(null, "Enter your email address");
+			if (!clientEmailAddress.isEmpty())
 			{
-				CECConfigurator.getReference().put("ClientEmail", cecUser);
+				// TODO: check if this email is valid
+				CECConfigurator.getReference().put("ClientEmail", clientEmailAddress);
+				
 	
 			}
 		}

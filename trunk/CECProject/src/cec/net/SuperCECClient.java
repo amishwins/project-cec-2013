@@ -29,6 +29,13 @@ class SuperCECClient {
             out.println(StackTrace.asString(e));
         }
     }
+    
+    public void handShake() throws IOException {
+
+     	HandShake hs = new HandShake();
+        hs.emailAddress = "pankajkapania@yahoo.com";
+        outputStream.writeObject(hs);
+    }
 
     void stop(){
         stop = true;
@@ -42,12 +49,10 @@ class SuperCECClient {
     public static void main (String args[]){
     	SuperCECClient client = new SuperCECClient("localhost",4444,System.out);
     	
-     	HandShake hs = new HandShake();
-        hs.email="pankajkapania@yahoo.com";
         try {
-        	client.outputStream.writeObject(hs);
+        	client.handShake();
         	
-        	Email email = new Email();
+        	EmailTest email = new EmailTest();
         	email.id = UUID.randomUUID();
         	email.to = "amish.gala@gmail.com"; 
 
@@ -55,9 +60,9 @@ class SuperCECClient {
         	
         	ObjectInputStream inputStream = new ObjectInputStream( client.writer.getInputStream() ); 
         	while(true){
-        		Email e;
+        		EmailTest e;
 				try {
-					e = (Email) inputStream.readObject();
+					e = (EmailTest) inputStream.readObject();
 					System.out.println(e.to);
 				} catch (ClassNotFoundException e1) {
 					// TODO Auto-generated catch block

@@ -13,6 +13,7 @@ public class SocketExample {
                 = new SocketReader(host, 7777, out);
         SocketWriter writer
                 = new SocketWriter(host, 7777, out);
+       
         Wait.seconds(7);
         writer.stop();
         reader.stop();
