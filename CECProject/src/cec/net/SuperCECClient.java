@@ -4,8 +4,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.util.UUID;
 
+import cec.config.CECConfigurator;
+import cec.model.Email;
+import cec.model.EmailBuilder;
+import cec.model.FolderFactory;
 import exceptions.StackTrace;
 
 class SuperCECClient {
@@ -47,20 +50,38 @@ class SuperCECClient {
     }
     
     public static void main (String args[]){
-    	SuperCECClient client = new SuperCECClient("localhost",4444,System.out);
+    	SuperCECClient client = new SuperCECClient("localhost",7777,System.out);
     	
         try {
         	client.handShake();
-        	
-        	EmailTest email = new EmailTest();
-        	email.id = UUID.randomUUID();
-        	email.to = "amish.gala@gmail.com"; 
+        	EmailBuilder emailBuilder = new EmailBuilder();
+    		Email email = emailBuilder.computeID()
+    				.withFrom("pankajkapania@gmail.com")
+    				.withTo("romeo@cec.com")
+    				.withCC("PankajKapania@gmail.com")
+    				.withSubject("TestSubject1")
+    				.withBody("Body1")
+    				.withLastModifiedTime("2013.05.12_At_14.07.56.874")
+    				.withSentTime("2013.05.13_At_14.07.56.874")
+    				.withParentFolder(FolderFactory.getFolder(CECConfigurator.getReference().get("Inbox")))
+    				.build();
+    		Email email2 = emailBuilder.computeID()
+    				.withFrom("pankajkapania@gmail.com")
+    				.withTo("deyvid@cec.com")
+    				.withCC("PankajKapania@gmail.com")
+    				.withSubject("TestSubject1")
+    				.withBody("Body1")
+    				.withLastModifiedTime("2013.05.12_At_14.07.56.874")
+    				.withSentTime("2013.05.13_At_14.07.56.874")
+    				.withParentFolder(FolderFactory.getFolder(CECConfigurator.getReference().get("Inbox")))
+    				.build();
 
-        	//client.outputStream.writeObject(email);
+        	client.outputStream.writeObject(email);
+        	client.outputStream.writeObject(email2);
         	
         	ObjectInputStream inputStream = new ObjectInputStream( client.writer.getInputStream() ); 
         	while(true){
-        		EmailTest e;
+        		/*EmailTest e;
 				try {
 					e = (EmailTest) inputStream.readObject();
 					System.out.println(e.to);
@@ -70,7 +91,7 @@ class SuperCECClient {
 				}
         		
         		
-        		
+        		*/
         	}
    
         } catch (IOException e) {

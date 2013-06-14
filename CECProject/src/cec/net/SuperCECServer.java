@@ -14,6 +14,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 
+import cec.model.Email;
+
 class EmailTest implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public UUID id;
@@ -48,7 +50,7 @@ class ServerThreadPerClient implements Runnable {
 		System.out.println("Accepting Emails from socket : "+ socket);
 		while(true) {
 			try {
-				EmailTest e = (EmailTest) in.readObject();
+				Email e = (Email) in.readObject();
 				System.out.println("is Email Added to Queue: "+ SuperCECServer.getArrivingEmailQueue().add(e));
 				System.out.println("Accepted Email for: " + e + " From Socket: " +socket);
 			} catch (IOException e) {
@@ -106,13 +108,13 @@ class ListenerForThingsInQueue implements Runnable {
 			try {
 				System.out.println("Listening for email Arrivals ....." );
 				//System.out.println("Size of Deque: "+arrivals.size() );
-				EmailTest newEmail = SuperCECServer.getArrivingEmailQueue().take();
+				Email newEmail = SuperCECServer.getArrivingEmailQueue().take();
 				// only handling 1 email for now
 				// TODO: make it handle more
-				Socket socket = SuperCECServer.getEmailToSocketMap().get(newEmail.to);
+				Socket socket = SuperCECServer.getEmailToSocketMap().get(newEmail.getTo());
 				out = new ObjectOutputStream(socket.getOutputStream()); 
 				out.writeObject(newEmail);
-				System.out.println("Email " + newEmail + " has been sent to Socket " + socket );
+				System.out.println("Email " + newEmail.getTo() + " has been sent to Socket " + socket );
 				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -128,7 +130,7 @@ class ListenerForThingsInQueue implements Runnable {
 
 public class SuperCECServer {
 	
-	static LinkedBlockingDeque<EmailTest> arrivingEmails = new LinkedBlockingDeque<>();
+	static LinkedBlockingDeque<Email> arrivingEmails = new LinkedBlockingDeque<>();
 	static ConcurrentHashMap<String, Socket> emailToSocketMap = new ConcurrentHashMap<>();
 	static ExecutorService executor = Executors.newCachedThreadPool();
 
@@ -140,7 +142,7 @@ public class SuperCECServer {
 		return executor;
 	}
 	
-	public static LinkedBlockingDeque<EmailTest> getArrivingEmailQueue() {
+	public static LinkedBlockingDeque<Email> getArrivingEmailQueue() {
 		return arrivingEmails;
 	}
 	
