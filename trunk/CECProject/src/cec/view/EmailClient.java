@@ -47,7 +47,6 @@ import cec.net.NetworkHelper;
 import cec.service.FolderService;
 import cec.service.EmailService;
 import cec.service.MeetingService;
-import cec.service.RuleService;
 import cec.service.TemplateService;
 import cec.service.TreeModelBuilder;
 import exceptions.CannotDeleteSystemFolderException;
