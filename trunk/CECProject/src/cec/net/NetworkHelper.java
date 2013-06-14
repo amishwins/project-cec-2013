@@ -74,7 +74,7 @@ public class NetworkHelper {
 			
 			handShake();
 			
-			exec = Executors.newFixedThreadPool(2);
+			exec = Executors.newCachedThreadPool();
 			exec.submit(new ListenerForMessagesFromServer());
 			
 			
