@@ -112,8 +112,9 @@ class ListenerForThingsInQueue implements Runnable {
 				// only handling 1 email for now
 				// TODO: make it handle more
 				Socket socket = SuperCECServer.getEmailToSocketMap().get(newEmail.getTo());
-				out = new ObjectOutputStream(socket.getOutputStream()); 
+				out = new ObjectOutputStream(socket.getOutputStream());
 				out.writeObject(newEmail);
+				//out.writeObject(newEmail);
 				System.out.println("Email " + newEmail.getTo() + " has been sent to Socket " + socket );
 				
 			} catch (InterruptedException e) {
