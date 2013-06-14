@@ -75,11 +75,23 @@ class SuperCECClient {
     				.withSentTime("2013.05.13_At_14.07.56.874")
     				.withParentFolder(FolderFactory.getFolder(CECConfigurator.getReference().get("Inbox")))
     				.build();
+    		
+    		Email email3 = emailBuilder.computeID()
+    				.withFrom("pankajkapania@gmail.com")
+    				.withTo("romeo@cec.com")//.withTo("romeo@cec.com")
+    				.withCC("PankajKapania@gmail.com")
+    				.withSubject("Testing Concurrency Email")
+    				.withBody("Body1")
+    				.withLastModifiedTime("2013.05.12_At_14.07.56.874")
+    				.withSentTime("2013.05.13_At_14.07.56.874")
+    				.withParentFolder(FolderFactory.getFolder(CECConfigurator.getReference().get("Inbox")))
+    				.build();
 
     		client.outputStream.writeObject(email);
     		//Thread.sleep(10);
     		client.outputStream.writeObject(email2);
-        	
+    		
+    		client.outputStream.writeObject(email3);
         	//client.outputStream.writeObject(email);
         	
         	ObjectInputStream inputStream = new ObjectInputStream( client.writer.getInputStream() ); 
