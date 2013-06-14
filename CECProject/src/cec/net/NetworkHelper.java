@@ -4,6 +4,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -94,6 +95,8 @@ public class NetworkHelper {
 				e.printStackTrace();
 			}*/
 					
+		}catch (ConnectException e){
+			System.out.println("Unable to connect to server. Seems like server is down!");
 		} catch (NumberFormatException | IOException e) {
 			e.printStackTrace();
 		}
