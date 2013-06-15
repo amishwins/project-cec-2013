@@ -75,6 +75,8 @@ public class EmailFrame extends JFrame implements DocumentListener {
 	JButton send = new JButton(" Send >>   ");
 	JButton saveTemplate = new JButton(" Save Template ");
 	JButton overwriteTemplate = new JButton(" Overwrite Template ");
+	JButton acceptMeeting = new JButton("Accept Meeting");
+	JButton declineMeeting = new JButton("Decline Meeting");	
 
 	JMenuItem replyItem = new JMenuItem("Reply", KeyEvent.VK_R);
 	JMenuItem forwardItem = new JMenuItem("Fwd", KeyEvent.VK_F);
@@ -107,7 +109,7 @@ public class EmailFrame extends JFrame implements DocumentListener {
 	 *            values used to set the JFrame
 	 */
 	public EmailFrame(EmailViewEntity email) {
-		emailView = email;
+		emailView = email;				
 		setVisibilityOfButtonsAndMenuItemsForExistingEmail();
 		setMessageFields();
 		initialize();
@@ -275,13 +277,17 @@ public class EmailFrame extends JFrame implements DocumentListener {
 		ImageIcon draftIcon = new ImageIcon("images/email_draft.png");
 		ImageIcon replyIcon = new ImageIcon("images/email_reply.png");
 		ImageIcon forwardIcon = new ImageIcon("images/email_forward.png");
+		ImageIcon acceptMeetingIcon = new ImageIcon("images/met_accept.png");
+		ImageIcon declineMeetingIcon = new ImageIcon("images/met_decline.png");		
 
 		send.setIcon(sendIcon);
 		draft.setIcon(draftIcon);
 		reply.setIcon(replyIcon);
 		forward.setIcon(forwardIcon);
 		saveTemplate.setIcon(draftIcon);
-		overwriteTemplate.setIcon(draftIcon);
+		overwriteTemplate.setIcon(draftIcon);	
+		acceptMeeting.setIcon(acceptMeetingIcon);
+		declineMeeting.setIcon(declineMeetingIcon);		
 
 		bar.setFloatable(false);
 		bar.add(send);
@@ -290,6 +296,8 @@ public class EmailFrame extends JFrame implements DocumentListener {
 		bar.add(forward);
 		bar.add(saveTemplate);
 		bar.add(overwriteTemplate);
+		bar.add(acceptMeeting);
+		bar.add(declineMeeting);
 
 		send.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -487,6 +495,9 @@ public class EmailFrame extends JFrame implements DocumentListener {
 		forward.setEnabled(true);
 		replyItem.setEnabled(false);
 		forwardItem.setEnabled(false);
+		
+		acceptMeeting.setVisible(false);
+		declineMeeting.setVisible(false);
 	}
 
 	private void setVisibilityOfButtonsAndMenuItemsForExistingEmail() {
@@ -504,9 +515,9 @@ public class EmailFrame extends JFrame implements DocumentListener {
 			toField.setEditable(true);
 			ccField.setEditable(true);
 			subjectField.setEditable(true);
-			bodyField.setEditable(true);
-
-		} else {
+			bodyField.setEditable(true);			
+		}		
+		else {
 			reply.setVisible(true);
 			forward.setVisible(true);
 			replyItem.setVisible(true);
@@ -516,6 +527,12 @@ public class EmailFrame extends JFrame implements DocumentListener {
 			subjectField.setEditable(false);
 			bodyField.setEditable(false);
 		}
+		
+		//Meeting Invitation 	
+		if(emailView.isMeetingEmail()) {
+		    acceptMeeting.setVisible(true);
+			declineMeeting.setVisible(true);			
+		}		
 	}
 
 	private void setVisibilityOfButtonsAndMenuItemsForNewEmail() {

@@ -5,13 +5,14 @@ import java.util.List;
 
 import cec.config.CECConfigurator;
 import cec.model.Email;
+import cec.model.EmailImpl;
 import cec.model.Folder;
 import cec.model.FolderFactory;
 import cec.model.Hierarchy;
+import cec.model.HierarchyImpl;
 import cec.model.Meeting;
 import cec.view.EmailViewEntity;
 import cec.view.MeetingViewEntity;
-import cec.model.HierarchyImpl;
 
 /**
  * Class that represents all the actions/methods that can be performed against a Folder from
@@ -51,7 +52,7 @@ public class FolderService {
 			emailInView.setLastModifiedTime(emailInModel.getLastModifiedTimeNicelyFormatted());
 			emailInView.setSentTime(emailInModel.getSentTime());
 			emailInView.setFolder(emailInModel.getParentFolder().getPath());
-		
+			emailInView.setIsMeetingEmail(isMeetingInvitationEmail(emailInModel));
 			emailListInView.add(emailInView);
 		}
 		return emailListInView;
@@ -72,7 +73,7 @@ public class FolderService {
 			emailInView.setLastModifiedTime(emailInModel.getLastModifiedTimeNicelyFormatted());
 			emailInView.setSentTime(emailInModel.getSentTime());
 			emailInView.setFolder(emailInModel.getParentFolder().getPath());
-		
+			emailInView.setIsMeetingEmail(isMeetingInvitationEmail(emailInModel));			
 			emailListInView.add(emailInView);
 		}		
 			
@@ -98,13 +99,17 @@ public class FolderService {
 			meetingInView.setBody(meetingInModel.getBody());
 			meetingInView.setLastModifiedTime(meetingInModel.getLastModifiedTimeNicelyFormatted());
 			meetingInView.setSentTime(meetingInModel.getSentTime());
-			meetingInView.setFolder(meetingInModel.getParentFolder().getPath());
-		
+			meetingInView.setFolder(meetingInModel.getParentFolder().getPath());		
 			meetingListInView.add(meetingInView);
 		}
 		return meetingListInView;
 	}
 	
+	/** Check if the Email object from the model is a meeting invitation */
+	private boolean isMeetingInvitationEmail(Email email){
+		EmailImpl e = (EmailImpl) email;
+	    return e.isMeetingEmail();
+	}
 	
 	/** Creates a subfolder once receiving the path of the parent folder and its own name */
 	public void createSubFolder(String folderPath, String newSubFolderName) {
