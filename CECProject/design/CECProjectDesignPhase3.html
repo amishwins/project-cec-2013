@@ -1,0 +1,167 @@
+<html>
+	<head>
+		<title>CECProject Design Phase 3</title>
+
+		<style type="text/css">
+		.myTable { background-color:#FFFFE0;border-collapse:collapse; }
+		.myTable th { background-color:#BDB76B;color:white; }
+		.myTable td, .myTable th { padding:5px;border:1px solid #BDB76B; }
+		</style>
+
+	</head>
+
+	<body>
+	
+		<h1>Collaborative Email Client Project Design - Phase 3</h1>
+		<p>Wednesday, June 17, 2013</p>
+		<p><b>Group 5: </b> Amish Gala, Deyvid William, Pankaj Kapania, and Romeo Honvo</p>
+
+		<p><b>Statistics:</b></p>
+		<table border=1 class="myTable">
+			<tr>
+				<th>Type</th>
+				<th>Measurement Phase 1</th>
+				<th>Measurement Phase 2</th>
+				<th>Measurement Phase 3</th>
+			</tr>
+			<tr>
+				<td>Total LOC</td>
+				<td>3222 (43 classes)</td>
+				<td>9633 (94 classes)</td>
+				<td>?? (?? classes)</td>
+			</tr>
+			<tr>
+				<td>Total Production LOC</td>
+				<td>2477 (29 classes)</td>
+				<td>7292 (69 classes)</td>
+				<td>?? (?? classes)</td>
+			</tr>
+			<tr>
+				<td>Total Unit Test LOC</td>
+				<td>742 (14 classes, 40 unit tests, 7 integration tests)</td>
+				<td>2341 (25 classes, 137 unit tests, 18 integration tests )</td>
+				<td>Unit Test Code</td>
+			</tr>
+			<tr>
+				<td>Code Coverage (ALL)</td>
+				<td>55.6%</td>
+				<td>57.3%</td>
+				<td>???%</td>
+			</tr>
+			<tr>
+				<td>Code Coverage (Unit)</td>
+				<td>32.2%</td>
+				<td>32.5%</td>
+				<td>???%</td>
+			</tr>
+			<tr>
+				<td>Code Coverage (Integration)</td>
+				<td>35.5%</td>
+				<td>36.8%</td>
+				<td>???%</td>
+			</tr>
+		</table>
+		
+		<h2>Architecture and Design</h2>
+		
+		<p>Phase 3 presented us with some new requirements to complement our already <b><i>robust</i></b> 
+		email and meeting client:</p>
+		
+		<ol>
+			<li>Send email through network
+				<ul>
+					<li>Test with at least 3 clients</li>
+					<li>Verify that filters are applied on each client</li>
+					<li>Robustness (if user is logged off when email is sent)</li>
+				</ul>
+			</li>
+			<li>Invite another person to a meeting
+				<ul>
+					<li>Target person receives email invitation</li>
+					<li>Target person can accept or decline</li>
+					<li>"Edit over the network" (See next requirement)</li>
+				</ul>			
+			</li>
+			<li>Concurrently edit an appointment
+				<ul>
+					<li>Allow two instances of your program to edit over the network</li>
+					<li>Optimistic locking</li>
+					<li>Basic merge / conflict resolution</li>
+				</ul>			
+			</li>
+		</ol>
+		
+	
+		
+		<h3>N-Tiers and Package Structure</h3>		
+		<p>We enhanced the package structure to include a new Network package, whose responsibility
+		was to handle all communication between client/server.</p>
+		<p><a href="PackageLayout.jpg"><img src="PackageLayout.jpg" width=600 border=0></img></a><p>
+		
+
+		<h3>Major Additions and Changes to Classes</h3>
+		
+		<p><b>Placeholder</b></p>
+		<p>Placeholder</p>		
+		<p>Image Placeholder</p>
+		
+		<br><br>
+		
+		<h2>Important Decisions</h2>
+		
+		
+		<h3>Decision Name</h3>
+		<p>Problem: ?</p>
+		<p>Solution: ?</p>  
+		
+	
+		
+				
+		<h2>Reused Libraries / Code Inspiration (in addition to Phase 1)</h2>
+		
+		<ul>
+			<li>StringTokenizer: Tokenizer to help with removing spaces and email address parsing
+			(java.util.StringTokenizer)</li>
+			<li>SrtringUtils: Apache Commons Language StringUtils to help with counting the number 
+			of occurrences of a certain character within a string (org.apache.commons.lang3.StringUtils)</li>
+		</ul>
+		
+		
+		<h2>Design Patterns (extensions and applications from Phase 1)</h2>
+		
+		<ul>
+			<li>Builder: cec.model.EmailBuilder, cec.model.MeetingBuilder</li>
+			<li>Factory: cec.model.FolderFactory, cec.persistence.EmailDaoFactory, 
+			cec.persistence.FolderDaoFactory, cec.model.RuleSetFactory, cec.persistence.RuleDaoFactory,
+			cec.persistence.MeetingDaoFactory, cec.persistence.TemplateDaoFactory  </li>
+			<li>Adapter/Wrapper: cec.view.Email, cec.view.EmailClient</li>
+			<li>Facade: cec.persistence.EmailXMLDao, cec.persistence.FolderXMLDao (for the javax.xml.parser,
+			javax.xml.transform, apache.commons.io, and w3c.dom classes)</li>
+			<li>Observer: cec.view.EmailClient (TreeSelectionListener), JTable for emails listens to 
+			model changes when an email is send, saved, or deleted., all JTextComponents on which InputMaps
+			and ActionMaps were defined.  
+			</li>
+			<li>Singleton: cec.view.EmailClient</li>
+		</ul>
+		
+		<h2>OOD Honorable Mentions</h2>
+		<ul>
+			<li>Value object: cec.view.EmailViewEntity</li>
+			<li>Data Access Object (DAO) interfaces: cec.persistence.EmailDao, cec.persistence.FolderDao</li>
+			<li>Test Patterns: 
+				<ul>
+					<li>Stub objects: isolated model tests by injecting/stubbing dependencies to persistence</li>
+					<li>Integration: a few more-involved integration tests were written, on the back
+					bone one solid unit tests</li>
+				</ul>
+			</li>	
+		
+		</ul>
+		
+		<h2>Known Issues</h2>
+		<h3>Placeholder </h3>
+		<p>Placeholder</p> 
+		
+		
+	</body>
+</html>
