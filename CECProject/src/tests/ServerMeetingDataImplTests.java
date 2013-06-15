@@ -82,7 +82,17 @@ public class ServerMeetingDataImplTests {
 		fakeMeeting.setAttendees("bob@hope.com");
 		sm.setup(fakeMeeting);
 		sm.setAccepted("fake@guy.com");
+	}
+	
+	@Test(expected=RuntimeException.class)
+	public void attendeeWhoDoesntExistTriesToDecline() {
+		fakeMeeting.setFrom("a@b.com");
+		fakeMeeting.setAttendees("bob@hope.com");
+		sm.setup(fakeMeeting);
+		sm.setDeclined("fake@guy.com");
 	}	
+	
+	
 	
 	@Test(expected=RuntimeException.class)
 	public void poorlyFormattedAttendees() {
