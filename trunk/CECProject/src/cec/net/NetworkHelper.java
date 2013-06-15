@@ -12,6 +12,7 @@ import java.util.concurrent.Executors;
 import cec.config.CECConfigurator;
 import cec.model.Email;
 import cec.model.EmailBuilder;
+import cec.model.Folder;
 import cec.model.FolderFactory;
 
 public class NetworkHelper {
@@ -102,7 +103,7 @@ public class NetworkHelper {
 			handShake();
 			exec = Executors.newCachedThreadPool();
 			exec.submit(new ListenerForMessagesFromServer());
-
+            sendPendingEmails();
 			/*
 			 * try { exec.awaitTermination(1, TimeUnit.DAYS);
 			 * 
@@ -116,6 +117,15 @@ public class NetworkHelper {
 			e.printStackTrace();
 		}
 
+	}
+
+	private void sendPendingEmails() {
+		Folder outboxFolder = FolderFactory.getFolder(CECConfigurator
+				.getReference().get("Outbox"));
+		Iterable<Email> emails = outboxFolder.loadEmails();
+		for(Email email : emails){
+			email.send();
+		}
 	}
 
 	public void sendEmail(Email email) {
