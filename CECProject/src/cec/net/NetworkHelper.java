@@ -57,6 +57,16 @@ public class NetworkHelper {
 					.withInboxParentFolder().build();
 
 			newEmail.saveToInboxFolder();
+			
+			// send an ack back
+			Ack recieved = new Ack(newEmail.getId(), MessageType.EMAIL);
+			try {
+				System.out.println("Sending Ack back to server");
+				oos.writeObject(recieved);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -82,6 +92,7 @@ public class NetworkHelper {
 		}
 	}
 
+	// TODO: Do we need to make the ExecutorServer static?
 	static Socket clientSocket;
 	static ObjectInputStream ois;
 	static ObjectOutputStream oos;
