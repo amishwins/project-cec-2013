@@ -43,16 +43,16 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 import cec.config.CECConfigurator;
+import cec.exceptions.CannotDeleteSystemFolderException;
+import cec.exceptions.FolderAlreadyExistsException;
+import cec.exceptions.RootFolderSubfolderCreationException;
+import cec.exceptions.SourceAndDestinationFoldersAreSameException;
 import cec.net.NetworkHelper;
 import cec.service.FolderService;
 import cec.service.EmailService;
 import cec.service.MeetingService;
 import cec.service.TemplateService;
 import cec.service.TreeModelBuilder;
-import exceptions.CannotDeleteSystemFolderException;
-import exceptions.FolderAlreadyExistsException;
-import exceptions.RootFolderSubfolderCreationException;
-import exceptions.SourceAndDestinationFoldersAreSameException;
 
 /**
 * Implements SWING packages to create the main window of C.E.C application's
@@ -876,7 +876,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	private class ConnectToServer implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			String clientEmailAddress = JOptionPane.showInputDialog(null, "Enter your email address");
-			if (!clientEmailAddress.isEmpty())
+			if ((null!=clientEmailAddress) && (!clientEmailAddress.isEmpty()))
 			{
 				// TODO: check if this email is valid
 				CECConfigurator.getReference().put("ClientEmail", clientEmailAddress);

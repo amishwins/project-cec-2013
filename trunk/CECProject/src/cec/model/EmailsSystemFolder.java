@@ -1,6 +1,6 @@
 package cec.model;
 
-import exceptions.CannotDeleteSystemFolderException;
+import cec.exceptions.CannotDeleteSystemFolderException;
 
 /**
  * Class which represents a folder which can not be deleted. A runtime 

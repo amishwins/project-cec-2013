@@ -4,11 +4,12 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.io.File;
 import java.io.FileFilter;
-import exceptions.FolderAlreadyExistsException;
-import exceptions.StackTrace;
 
 import org.apache.commons.io.FileDeleteStrategy;
 import org.apache.commons.io.filefilter.FileFileFilter;
+
+import cec.exceptions.FolderAlreadyExistsException;
+import cec.exceptions.StackTrace;
 
 
 /**

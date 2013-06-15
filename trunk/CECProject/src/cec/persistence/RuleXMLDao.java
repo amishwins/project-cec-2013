@@ -23,8 +23,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import cec.config.CECConfigurator;
+import cec.exceptions.StackTrace;
 
-import exceptions.StackTrace;
 
 // TODO: Auto-generated Javadoc
 /**

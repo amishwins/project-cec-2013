@@ -7,7 +7,8 @@ import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.io.Serializable;
 
-import exceptions.StackTrace;
+import cec.exceptions.StackTrace;
+
 
 public class ObjectStream {
     PrintStream out;

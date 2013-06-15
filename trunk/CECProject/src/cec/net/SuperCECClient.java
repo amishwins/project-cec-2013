@@ -6,10 +6,10 @@ import java.io.PrintStream;
 import java.net.Socket;
 
 import cec.config.CECConfigurator;
+import cec.exceptions.StackTrace;
 import cec.model.Email;
 import cec.model.EmailBuilder;
 import cec.model.FolderFactory;
-import exceptions.StackTrace;
 
 class SuperCECClient {
     PrintStream out;
