@@ -289,7 +289,7 @@ public class MeetingImpl implements Meeting {
 				+ getStartOREndDateNicelyFormatted(endDate));
 		buildBody.append(" at: " + endTime + nextLine);
 		buildBody.append("--------------------------------------------" + nextLine);
-		buildBody.append(body);
+		buildBody.append(body + nextLine);
 		return buildBody.toString();
 	}
 

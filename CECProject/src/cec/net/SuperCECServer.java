@@ -110,8 +110,11 @@ class ServerThreadPerClient implements Runnable {
 						Ack ack = new Ack(e.getId(),MessageType.EMAIL);
 		                SuperCECServer.getEmailToObjectOutputStream().get(emailAddress).writeObject(ack);
 					}else{
-						logger.info("Going to build a Meeting object from the email meeting invitation");
-						buildMeeting(e);
+						logger.info("Going to build a Meeting object from the email meeting invitation" + e.getSubject());
+						Meeting meeting = buildMeeting(e);
+						//put meeting in a map
+						//put email on a queue.
+						
 					}
 					 	
 
@@ -142,12 +145,12 @@ class ServerThreadPerClient implements Runnable {
 			}
 		}
 	}
-	private void buildMeeting(EmailImpl e) {
+	private Meeting buildMeeting(EmailImpl e) {
 		MeetingBuilder mb = new MeetingBuilder();
 		logger.fine(e.getSubject());
 		logger.fine(e.getBody());
 				
-		String[] bodyLines = e.getBody().split("\n");
+		String[] bodyLines = e.getBody().split("\n",8);
 		for(String bodyLine: bodyLines){
 			logger.fine(bodyLine);
 		}
@@ -188,9 +191,12 @@ class ServerThreadPerClient implements Runnable {
 							.withParentFolder(FolderFactory.getFolder("Unknown")).build();
 		logger.info("Here is the Meeting Object for email that above received:");
 		logger.info(meeting.toString());
+		
+		return meeting;
       }
 
 	private String formatDateForMeeting(String date) {
+		@SuppressWarnings("deprecation")
 		Date dateToBeFormatted = new Date(date);
 		logger.fine(dateToBeFormatted.toString());
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
