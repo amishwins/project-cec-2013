@@ -9,6 +9,8 @@ import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,6 +22,10 @@ import java.util.logging.Logger;
 
 import cec.exceptions.StackTrace;
 import cec.model.Email;
+import cec.model.EmailImpl;
+import cec.model.FolderFactory;
+import cec.model.Meeting;
+import cec.model.MeetingBuilder;
 import cec.model.MeetingChangeSet;
 
 class HandShake implements Serializable {
@@ -97,11 +103,17 @@ class ServerThreadPerClient implements Runnable {
 				if (obj instanceof Email) {
 					// handle emails
 
-					Email e = (Email) obj;
-					logger.info("is Email " + e.getSubject()+ " Added to Queue: " + SuperCECServer.getArrivingEmailQueue().add(e));
-					logger.info("CECServer Sending Ack to : "+ emailAddress+" for email subject: "+e.getSubject());
-					Ack ack = new Ack(e.getId(),MessageType.EMAIL);
-	                SuperCECServer.getEmailToObjectOutputStream().get(emailAddress).writeObject(ack); 	
+					EmailImpl e = (EmailImpl) obj;
+					if(!e.isMeetingEmail()){
+						logger.info("is Email " + e.getSubject()+ " Added to Queue: " + SuperCECServer.getArrivingEmailQueue().add(e));
+						logger.info("CECServer Sending Ack to : "+ emailAddress+" for email subject: "+e.getSubject());
+						Ack ack = new Ack(e.getId(),MessageType.EMAIL);
+		                SuperCECServer.getEmailToObjectOutputStream().get(emailAddress).writeObject(ack);
+					}else{
+						logger.info("Going to build a Meeting object from the email meeting invitation");
+						buildMeeting(e);
+					}
+					 	
 
 				} else if ((obj instanceof Ack)) {
 					// handle acks
@@ -129,6 +141,62 @@ class ServerThreadPerClient implements Runnable {
 				break;
 			}
 		}
+	}
+	private void buildMeeting(EmailImpl e) {
+		MeetingBuilder mb = new MeetingBuilder();
+		logger.fine(e.getSubject());
+		logger.fine(e.getBody());
+				
+		String[] bodyLines = e.getBody().split("\n");
+		for(String bodyLine: bodyLines){
+			logger.fine(bodyLine);
+		}
+		String subject = bodyLines[2].split(":",2)[1].trim();
+		String location = bodyLines[3].split(":",2)[1].trim();
+		String startDateTime = bodyLines[4].split(":",2)[1].trim();
+		String endDateTime = bodyLines[5].split(":",2)[1].trim();
+		String body = bodyLines[7];
+          
+		logger.fine(subject);
+		logger.fine(location);
+		logger.fine(startDateTime);
+		logger.fine(endDateTime);
+		
+		String startDate = startDateTime.split("at:",2)[0].trim();
+		String startTime = startDateTime.split("at:",2)[1].trim();
+		String endDate = endDateTime.split("at:",2)[0].trim();
+		String endTime = endDateTime.split("at:",2)[1].trim();
+		
+		logger.fine(startDate);
+		logger.fine(startTime);
+		logger.fine(endDate);
+		logger.fine(endTime);
+		logger.fine(body);
+       
+		Meeting meeting = mb.withId(e.getId())
+							.withFrom(e.getFrom())
+							.withAttendees(e.getTo())
+							.withSubject(subject)
+							.withPlace(location)
+							.withStartDate(formatDateForMeeting(startDate))
+							.withEndDate(formatDateForMeeting(endDate))
+							.withStartTime(startTime)
+							.withEndTime(endTime)
+							.withBody(body)
+							.withLastModifiedTime(e.getLastModifiedTime())
+							.withSentTime(e.getSentTime())
+							.withParentFolder(FolderFactory.getFolder("Unknown")).build();
+		logger.info("Here is the Meeting Object for email that above received:");
+		logger.info(meeting.toString());
+      }
+
+	private String formatDateForMeeting(String date) {
+		Date dateToBeFormatted = new Date(date);
+		logger.fine(dateToBeFormatted.toString());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String formattedDate =  sdf.format(dateToBeFormatted);
+    	logger.fine(formattedDate);
+		return formattedDate;
 	}
 
 	private void handleAck(Ack ack) {
