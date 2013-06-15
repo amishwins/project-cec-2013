@@ -483,8 +483,8 @@ public class EmailFrame extends JFrame implements DocumentListener {
 		subjectField.setEditable(true);
 		bodyField.setEditable(true);
 		
-		reply.setEnabled(false);
-		forward.setEnabled(false);
+		reply.setEnabled(true);
+		forward.setEnabled(true);
 		replyItem.setEnabled(false);
 		forwardItem.setEnabled(false);
 	}
