@@ -1,8 +1,13 @@
 package cec.net;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public class Ack {
+public class Ack implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private UUID id;
 	private MessageType msgType;
 	
