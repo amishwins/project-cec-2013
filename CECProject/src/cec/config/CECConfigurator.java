@@ -36,7 +36,7 @@ public class CECConfigurator {
 	}
 
 	private void mapDefaultServerSettings() {
-		systemSettings.put("ServerName", "laxness.encs.concordia.ca");
+		systemSettings.put("ServerName", "laveran.encs.concordia.ca");
 		systemSettings.put("ServerPort", "7777");		
 	}
 
