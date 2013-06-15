@@ -1,6 +1,7 @@
 package cec.net;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Recipients {
 	String to;
@@ -13,7 +14,7 @@ public class Recipients {
 		this.cc = cc;
 	}
 	
-	public ArrayList<String> getListOfAllTargetRecipients() {
+	public HashSet<String> getListOfAllTargetRecipients() {
 		String tocc;
 		
 		if (to.isEmpty() && cc.isEmpty())
@@ -28,7 +29,7 @@ public class Recipients {
 		
 		System.out.println(tocc);
 
-		ArrayList<String> recipients = new ArrayList<String>();
+		HashSet<String> recipients = new HashSet<String>();
 		if(tocc.contains(";")) {
 			String[] arrayTo = tocc.split(";");
 			for(int i = 0; i < arrayTo.length; i++) {
