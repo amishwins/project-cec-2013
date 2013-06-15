@@ -27,6 +27,8 @@ import cec.model.FolderFactory;
 import cec.model.Meeting;
 import cec.model.MeetingBuilder;
 import cec.model.MeetingChangeSet;
+import cec.model.ServerMeetingData;
+import cec.model.ServerMeetingDataImpl;
 
 class HandShake implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -102,21 +104,30 @@ class ServerThreadPerClient implements Runnable {
 				
 				if (obj instanceof Email) {
 					// handle emails
+					boolean emailAdded = false;
 
 					EmailImpl e = (EmailImpl) obj;
 					if(!e.isMeetingEmail()){
-						logger.info("is Email " + e.getSubject()+ " Added to Queue: " + SuperCECServer.getArrivingEmailQueue().add(e));
-						logger.info("CECServer Sending Ack to : "+ emailAddress+" for email subject: "+e.getSubject());
-						Ack ack = new Ack(e.getId(),MessageType.EMAIL);
-		                SuperCECServer.getEmailToObjectOutputStream().get(emailAddress).writeObject(ack);
+						emailAdded = SuperCECServer.getArrivingEmailQueue().add(e);
+						logger.info("Is Email " + e.getSubject()+ " added to Queue: " + emailAdded);
+
 					}else{
 						logger.info("Going to build a Meeting object from the email meeting invitation" + e.getSubject());
 						Meeting meeting = buildMeeting(e);
-						//put meeting in a map
-						//put email on a queue.
+						ServerMeetingData serverMeetingData = new ServerMeetingDataImpl();
+						serverMeetingData.setup(meeting);
+						ConcurrentHashMap<Meeting, ServerMeetingData> innerMeetingMap = new ConcurrentHashMap<>();
+						innerMeetingMap.put(meeting, serverMeetingData);
+						SuperCECServer.getMeetingMap().put(meeting.getId(), innerMeetingMap);
 						
+						emailAdded = SuperCECServer.getArrivingEmailQueue().add(e);
+						logger.info("Is Email " + e.getSubject()+ " added to Queue: " + emailAdded);
 					}
-					 	
+					
+					// Send the acknowledgement regarless if we recieved an email or an email invitation to a meeting
+					logger.info("CECServer Sending Ack to : "+ emailAddress+" for email subject: "+e.getSubject());
+					Ack ack = new Ack(e.getId(),MessageType.EMAIL);
+	                SuperCECServer.getEmailToObjectOutputStream().get(emailAddress).writeObject(ack);
 
 				} else if ((obj instanceof Ack)) {
 					// handle acks
@@ -290,7 +301,13 @@ public class SuperCECServer {
 	static ExecutorService executor = Executors.newCachedThreadPool();
 	static ConcurrentHashMap<String, ObjectInputStream> emailToObjectInputStream = new ConcurrentHashMap<>();
 	static ConcurrentHashMap<String, ObjectOutputStream> emailToObjectOutputStream = new ConcurrentHashMap<>();
+	
+	static ConcurrentHashMap<UUID, ConcurrentHashMap<Meeting, ServerMeetingData>> meetingMap = new ConcurrentHashMap<>();
 
+	public static ConcurrentHashMap<UUID, ConcurrentHashMap<Meeting, ServerMeetingData>> getMeetingMap() {
+		return meetingMap;
+	}
+	
 	public static ConcurrentHashMap<String, ObjectInputStream> getEmailToObjectInputStream() {
 		return emailToObjectInputStream;
 	}
