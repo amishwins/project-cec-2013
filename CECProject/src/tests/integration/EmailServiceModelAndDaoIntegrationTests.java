@@ -9,10 +9,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import cec.exceptions.SourceAndDestinationFoldersAreSameException;
 import cec.service.EmailService;
 import cec.service.FolderService;
 import cec.view.EmailViewEntity;
-import exceptions.SourceAndDestinationFoldersAreSameException;
 
 public class EmailServiceModelAndDaoIntegrationTests {
 	String systemFolderName = "emails/Sent";

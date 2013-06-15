@@ -10,8 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import exceptions.CannotDeleteSystemFolderException;
-import exceptions.RootFolderSubfolderCreationException;
+import cec.exceptions.CannotDeleteSystemFolderException;
+import cec.exceptions.RootFolderSubfolderCreationException;
+
 
 /**
  * Folder model object. A runtime folder object represents a physical folder

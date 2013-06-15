@@ -11,12 +11,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cec.config.CECConfigurator;
+import cec.exceptions.CannotDeleteSystemFolderException;
+import cec.exceptions.FolderAlreadyExistsException;
+import cec.exceptions.RootFolderSubfolderCreationException;
 import cec.service.FolderService;
 import cec.service.MeetingService;
 import cec.view.MeetingViewEntity;
-import exceptions.CannotDeleteSystemFolderException;
-import exceptions.FolderAlreadyExistsException;
-import exceptions.RootFolderSubfolderCreationException;
 
 public class FolderServiceModelAndDaoIntegrationTests {
 	String rootFolder = "emails";

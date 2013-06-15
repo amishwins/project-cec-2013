@@ -1,4 +1,4 @@
-package exceptions;
+package cec.exceptions;
 
 public class FolderAlreadyExistsException extends RuntimeException {
 

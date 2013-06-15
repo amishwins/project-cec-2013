@@ -8,15 +8,17 @@ import java.io.Serializable;
 import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
+import cec.exceptions.StackTrace;
 import cec.model.Email;
 import cec.model.MeetingChangeSet;
 
@@ -31,20 +33,29 @@ class HandShake implements Serializable {
 
 
 class SentEmailWriteToSysout implements Runnable {
+	static Logger logger = Logger.getLogger(SentEmailWriteToSysout.class.getName()); 
+
+    static { 
+        logger.setParent( Logger.getLogger( SentEmailWriteToSysout.class.getPackage().getName() ) );
+    }
 	public void run() {
 		while(true) {
-			System.out.println(SuperCECServer.getSentEmailMap().size());
+			logger.info(String.valueOf(SuperCECServer.getSentEmailMap().size()));
 			try {
 				Thread.sleep(5000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.severe(StackTrace.asString(e));
 			}
 		}
 	}
 }
 
 class SentEmailCleanupThread implements Runnable {
+	static Logger logger = Logger.getLogger(SentEmailCleanupThread.class.getName()); 
+
+    static { 
+        logger.setParent( Logger.getLogger( SentEmailCleanupThread.class.getPackage().getName() ) );
+    }
 	public void run() {
 		while(true) {
 			try {
@@ -52,10 +63,8 @@ class SentEmailCleanupThread implements Runnable {
 				
 				SuperCECServer.getSentEmailMap().remove(ack.getId());
 				
-			} catch (InterruptedException e) {
-				e.printStackTrace();
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.severe(StackTrace.asString(e));
 			}
 		}
 		
@@ -64,6 +73,12 @@ class SentEmailCleanupThread implements Runnable {
 
 class ServerThreadPerClient implements Runnable {
 
+	static Logger logger = Logger.getLogger(ServerThreadPerClient.class.getName()); 
+
+    static { 
+        logger.setParent( Logger.getLogger( ServerThreadPerClient.class.getPackage().getName() ) );
+    }
+	
 	private String emailAddress;
 
 	public ServerThreadPerClient(String emailAddress) {
@@ -71,7 +86,7 @@ class ServerThreadPerClient implements Runnable {
 	}
 
 	public void run() {
-		System.out.println("Accepting Emails from this guy: " + emailAddress);
+		logger.info("Accepting Emails from this guy: " + emailAddress);
 		while (true) {
 			try {
 				// Receiving objects
@@ -83,8 +98,8 @@ class ServerThreadPerClient implements Runnable {
 					// handle emails
 
 					Email e = (Email) obj;
-					System.out.println("is Email Added to Queue: " + SuperCECServer.getArrivingEmailQueue().add(e));
-					System.out.println("Sending Ack to : "+ emailAddress);
+					logger.info("is Email Added to Queue: " + SuperCECServer.getArrivingEmailQueue().add(e));
+					logger.info("Sending Ack to : "+ emailAddress);
 					Ack ack = new Ack(e.getId(),MessageType.EMAIL);
 	                SuperCECServer.getEmailToObjectOutputStream().get(emailAddress).writeObject(ack); 	
 
@@ -99,18 +114,18 @@ class ServerThreadPerClient implements Runnable {
 					// handle ChangeSets
 
 				}
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-				break;
-			} catch (EOFException e) {
-				System.out.println(emailAddress
+			} catch (SocketException e) {
+				logger.info(emailAddress
 						+ " Disconnected from the server!");
-				// e.printStackTrace();
 				break;
-			} catch (Exception e1) {
-				System.out.println(emailAddress
+			}  catch (EOFException e) {
+				logger.info(emailAddress
 						+ " Disconnected from the server!");
-				e1.printStackTrace();
+				break;
+			} catch (Exception e) {
+				logger.info(emailAddress
+						+ " Disconnected from the server!");
+				logger.severe(StackTrace.asString(e));
 				break;
 			}
 		}
@@ -119,10 +134,10 @@ class ServerThreadPerClient implements Runnable {
 	private void handleAck(Ack ack) {
 		if (ack.getMsgType() == MessageType.EMAIL || ack.getMsgType() == MessageType.MEETING ) {
 			try {
-				System.out.println("Putting ack on EmailAckQueue");
+				logger.info("Putting ack on EmailAckQueue");
 				SuperCECServer.getArrivingEmailAcks().put(ack);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			} catch (Exception e) {
+				logger.severe(StackTrace.asString(e));
 			}
 		
 		} else if (ack.getMsgType() == MessageType.CHANGESET) {
@@ -133,6 +148,12 @@ class ServerThreadPerClient implements Runnable {
 }
 
 class ClientAcceptor implements Runnable {
+	static Logger logger = Logger.getLogger(ClientAcceptor.class.getName()); 
+
+    static { 
+        logger.setParent( Logger.getLogger( ClientAcceptor.class.getPackage().getName() ) );
+    }
+	
 	ServerSocket server = null;
 	ObjectInputStream in = null;
 	ObjectOutputStream out = null;
@@ -142,11 +163,11 @@ class ClientAcceptor implements Runnable {
 	}
 
 	public void run() {
-		System.out.println("Starting Connection Thread :.....");
+		logger.info("Starting Connection Thread :.....");
 		while (true) {
 
 			try {
-				System.out.println("Ready to accept connections...");
+				logger.info("Ready to accept connections...");
 				Socket socket = server.accept();
 				in = new ObjectInputStream(socket.getInputStream());
 				out = new ObjectOutputStream(socket.getOutputStream());
@@ -162,7 +183,7 @@ class ClientAcceptor implements Runnable {
 				Set<String> emails = SuperCECServer.getEmailToSocketMap()
 						.keySet();
 				for (String email : emails) {
-					System.out.println("Client connected. Email: " + email
+					logger.info("Client connected. Email: " + email
 							+ ". Socket: "
 							+ SuperCECServer.getEmailToSocketMap().get(email));
 				}
@@ -171,15 +192,22 @@ class ClientAcceptor implements Runnable {
 				SuperCECServer.getExecutor().submit(
 						new ServerThreadPerClient(handShake.emailAddress));
 
-				System.out.println("Connection Accepted !!!");
-			} catch (IOException | ClassNotFoundException e) {
-				e.printStackTrace();
+				logger.info("Connection Accepted !!!");
+			}  catch (Exception e){
+				logger.severe(StackTrace.asString(e));
+				break;
 			}
 		}
 	}
 }
 
 public class SuperCECServer {
+	
+	static Logger logger = Logger.getLogger(SuperCECServer.class.getName()); 
+
+    static { 
+        logger.setParent( Logger.getLogger( SuperCECServer.class.getPackage().getName() ) );
+    }
 
 	static LinkedBlockingDeque<Email> arrivingEmails = new LinkedBlockingDeque<>();
 	static LinkedBlockingDeque<Ack> arrivingEmailAcks = new LinkedBlockingDeque<>();
@@ -224,21 +252,22 @@ public class SuperCECServer {
 		try {
 			server = new ServerSocket(7777);
 		} catch (BindException e) {
-			System.out.println("Server is already running on this port!");
-		} catch (IOException e1) {
-			e1.printStackTrace();
+			logger.info("Server is already running on this port!");
+			logger.severe(StackTrace.asString(e));
+		} catch (Exception e){
+			logger.severe(StackTrace.asString(e));
 		}
 
 		executor.submit(new ClientAcceptor(server));
 		executor.submit(new EmailListenerCECServer());
 		executor.submit(new SentEmailCleanupThread());
-		executor.submit(new SentEmailWriteToSysout());
+		//executor.submit(new SentEmailWriteToSysout());
 
 		try {
 			executor.awaitTermination(1, TimeUnit.DAYS);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.severe(StackTrace.asString(e));
 		}
 	}
 }

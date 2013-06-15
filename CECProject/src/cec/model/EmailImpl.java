@@ -8,10 +8,10 @@ import java.util.Date;
 import java.util.UUID;
 
 import cec.config.CECConfigurator;
+import cec.exceptions.SourceAndDestinationFoldersAreSameException;
 import cec.net.NetworkHelper;
 import cec.persistence.EmailDao;
 import cec.persistence.EmailDaoFactory;
-import exceptions.SourceAndDestinationFoldersAreSameException;
 
 /**
  * EmailImpl is the concrete implementation of the email interface.

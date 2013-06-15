@@ -8,14 +8,22 @@ import java.net.ConnectException;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Logger;
 
 import cec.config.CECConfigurator;
+import cec.exceptions.StackTrace;
 import cec.model.Email;
 import cec.model.EmailBuilder;
 import cec.model.Folder;
 import cec.model.FolderFactory;
 
 public class NetworkHelper {
+	
+	static Logger logger = Logger.getLogger(NetworkHelper.class.getName()); 
+
+    static { 
+        logger.setParent( Logger.getLogger( NetworkHelper.class.getPackage().getName() ) );
+    }
 
 	public static boolean isConnectedToServer() {
 		return (clientSocket != null);
@@ -34,13 +42,12 @@ public class NetworkHelper {
 						Ack ack = (Ack) obj;
 						handleAck(ack);
 					}
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
 				} catch (EOFException e) {
-					System.out.println("Disconnected from the server!");
+					logger.info("Disconnected from the server!");
 					break;
 				} catch (Exception e) {
-					System.out.println("Disconnected from the server!");
+					logger.info("Disconnected from the server!");
+					logger.severe(StackTrace.asString(e));
 					break;
 				}
 
@@ -61,11 +68,10 @@ public class NetworkHelper {
 			// send an ack back
 			Ack recieved = new Ack(newEmail.getId(), MessageType.EMAIL);
 			try {
-				System.out.println("Sending Ack back to server");
+				logger.info("Sending Ack back to server");
 				oos.writeObject(recieved);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (Exception e) {
+				logger.severe(StackTrace.asString(e));				
 			}
 		}
 	}
@@ -73,8 +79,6 @@ public class NetworkHelper {
 	private void handShake() throws IOException {
 		HandShake hs = new HandShake();
 		hs.emailAddress = config.getClientEmailAddress();
-		// ObjectOutputStream outputStream = new
-		// ObjectOutputStream(clientSocket.getOutputStream() );
 		oos.writeObject(hs);
 	}
 
@@ -122,10 +126,9 @@ public class NetworkHelper {
 			 */
 
 		} catch (ConnectException e) {
-			System.out
-					.println("Unable to connect to server. Seems like server is down!");
-		} catch (NumberFormatException | IOException e) {
-			e.printStackTrace();
+			logger.info("Unable to connect to server. Seems like server is down!");
+		} catch (Exception e) {
+			logger.severe(StackTrace.asString(e));				
 		}
 
 	}
@@ -145,18 +148,14 @@ public class NetworkHelper {
 			public void run() {
 				try {
 					oos.writeObject(myEmail);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				} catch (Exception e) {
+					logger.severe(StackTrace.asString(e));				
 				}
 			}
 		});
 	}
 
 	public void disconnectFromServer() {
-		// clientSocket = null;
-		// ois = null;
-		// oos = null;
 		stopClient();
 		exec.shutdown();
 		// TODO do we have to awaitTermination?

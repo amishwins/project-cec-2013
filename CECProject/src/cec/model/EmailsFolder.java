@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import cec.config.CECConfigurator;
-import exceptions.RootFolderSubfolderCreationException;
+import cec.exceptions.RootFolderSubfolderCreationException;
 
 /**
  * Folder model object. A runtime folder object represents a physical folder from the file system

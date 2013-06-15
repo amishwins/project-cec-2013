@@ -10,12 +10,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import cec.exceptions.CannotDeleteSystemFolderException;
+import cec.exceptions.RootFolderSubfolderCreationException;
 import cec.model.EmailsSystemFolder;
 import cec.model.EmailsUserFolder;
 import cec.model.MeetingsFolder;
 import cec.persistence.FolderDao;
-import exceptions.CannotDeleteSystemFolderException;
-import exceptions.RootFolderSubfolderCreationException;
 
 public class FolderTests {
 	

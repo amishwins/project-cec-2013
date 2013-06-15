@@ -1,4 +1,4 @@
-package exceptions;
+package cec.exceptions;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

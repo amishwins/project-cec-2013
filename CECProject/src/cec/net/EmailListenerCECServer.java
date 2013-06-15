@@ -4,11 +4,19 @@ import java.io.ObjectOutputStream;
 import java.net.SocketException;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.logging.Logger;
 
+import cec.exceptions.StackTrace;
 import cec.model.Email;
 import cec.model.EmailBuilder;
 
 public class EmailListenerCECServer implements Runnable {
+	
+	static Logger logger = Logger.getLogger(EmailListenerCECServer.class.getName()); 
+
+    static { 
+        logger.setParent( Logger.getLogger( EmailListenerCECServer.class.getPackage().getName() ) );
+    }
 	private ObjectOutputStream out = null;
 
 	public EmailListenerCECServer() {
@@ -26,7 +34,7 @@ public class EmailListenerCECServer implements Runnable {
 		Email newEmail;
 		while (true) {
 			try {
-				System.out.println("Listening for email Arrivals .....");
+				logger.info("Listening for email Arrivals .....");
 				newEmail = SuperCECServer.getArrivingEmailQueue().take();
 				
 				String toAddress = removeSpaces(newEmail.getTo());
@@ -34,7 +42,7 @@ public class EmailListenerCECServer implements Runnable {
 				Recipients recip = new Recipients(toAddress, ccAddress);
 
 				Set<String> emailAddresses = recip.getListOfAllTargetRecipients();
-				System.out.println(emailAddresses);
+				logger.info(emailAddresses.toString());
 				
 				for(String emailAddress: emailAddresses) {
 					String addr = emailAddress.trim();
@@ -44,7 +52,7 @@ public class EmailListenerCECServer implements Runnable {
 						out = SuperCECServer.getEmailToObjectOutputStream().get(newEmail.getFrom());
 						Email deliveryFailureNoticeEmail = buildNoticeEmail(newEmail, addr);
 						out.writeObject(deliveryFailureNoticeEmail);
-						System.out.println("Delivery Failure Email " + newEmail.getFrom()
+						logger.info("Delivery Failure Email " + newEmail.getFrom()
 								+ " has been sent.");
 					} else {
 						// only handling 1 email for now
@@ -53,18 +61,16 @@ public class EmailListenerCECServer implements Runnable {
 						try {
 							out.writeObject(newEmail);
 							SuperCECServer.getSentEmailMap().put(newEmail.getId(), newEmail);
-							System.out.println("Email " + addr + " has been sent.");
+							logger.info("Email " + addr + " has been sent.");
 						} catch (SocketException e) {
-							System.out.println("Email sending failed for: " + addr);
+							logger.info("Email sending failed for: " + addr);
 							// handle this!!!!
 						}
 					}					
 				}
 				
-			} catch (InterruptedException e) {
-				e.printStackTrace();
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.severe(StackTrace.asString(e));
 			}
 		}
 	}

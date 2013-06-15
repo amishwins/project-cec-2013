@@ -27,7 +27,7 @@ public class Recipients {
 		else
 			tocc = to.concat(";".concat(cc));
 		
-		System.out.println(tocc);
+		
 
 		HashSet<String> recipients = new HashSet<String>();
 		if(tocc.contains(";")) {
