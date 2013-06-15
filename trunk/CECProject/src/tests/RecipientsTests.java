@@ -46,6 +46,14 @@ public class RecipientsTests {
 		assertEquals(cut.getListOfAllTargetRecipients().size(), 5);
 	}
 	
+	@Test
+	public void addSameOneTwiceNotAddedTwice() {
+		to = "a@b.com";
+		cc = "a@b.com; c@d.com";
+		cut = new Recipients(to, cc);
+		assertEquals(cut.getListOfAllTargetRecipients().size(), 2);
+	}
+	
 	
 	@Test(expected=RuntimeException.class)
 	public void noneFilledThrowsException() {
