@@ -25,7 +25,7 @@ public class Cleanup {
 			Object[] args = new Object[0];
             closeMethod.invoke(closeable,args);
 		} catch( Exception e){
-			// explicitly silence exception
+			
 		}
 	}
 	
