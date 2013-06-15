@@ -12,6 +12,7 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -115,6 +116,13 @@ class ListenerForThingsInQueue implements Runnable {
 	public ListenerForThingsInQueue() {
 
 	}
+	
+	public String removeSpaces(String s) {
+		  StringTokenizer st = new StringTokenizer(s," ",false);
+		  String t="";
+		  while (st.hasMoreElements()) t += st.nextElement();
+		  return t;
+		}
 
 	public void run() {
 		Email newEmail;
@@ -122,13 +130,14 @@ class ListenerForThingsInQueue implements Runnable {
 			try {
 				System.out.println("Listening for email Arrivals .....");
 				newEmail = SuperCECServer.getArrivingEmailQueue().take();
-								
-				String[] toArray = newEmail.getTo().split(";");
-				String[] ccArray = newEmail.getCC().split(";");
-
-				ArrayList<String> emailAddresses = new ArrayList<String>(Arrays.asList(toArray));
-				emailAddresses.addAll(Arrays.asList(ccArray));
 				
+				String toAddress = removeSpaces(newEmail.getTo());
+//				String ccAddress = removeSpaces(newEmail.getCC());
+
+				ArrayList<String> emailAddresses = new ArrayList<String>();
+				emailAddresses.add(toAddress);
+				
+				System.out.println(emailAddresses);
 				
 				for(String emailAddress: emailAddresses) {
 					String addr = emailAddress.trim();
