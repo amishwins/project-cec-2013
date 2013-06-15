@@ -15,6 +15,7 @@ import cec.config.CECConfigurator;
 import cec.exceptions.StackTrace;
 import cec.model.Email;
 import cec.model.EmailBuilder;
+import cec.model.EmailImpl;
 import cec.model.Folder;
 import cec.model.FolderFactory;
 
@@ -39,7 +40,9 @@ public class NetworkHelper {
 					if (obj instanceof Email) {
 						Email email = (Email) obj;
 						handleEmail(email);
-					} else if ((obj instanceof Ack)) {
+					}
+					
+					else if ((obj instanceof Ack)) {
 						Ack ack = (Ack) obj;
 						handleAck(ack);
 					}
@@ -60,12 +63,15 @@ public class NetworkHelper {
 
 		private void handleEmail(Email email) {
 			EmailBuilder mailBuilder = new EmailBuilder();
+			boolean isMeetingEmail = ((EmailImpl) email).isMeetingEmail();
 
 			Email newEmail = mailBuilder.computeID().withFrom(email.getFrom())
 					.withTo(email.getTo()).withSubject(email.getSubject())
 					.withBody(email.getBody()).withCC(email.getCC())
 					.computelastModifiedTime().computeSentTime()
-					.withInboxParentFolder().build();
+					.withInboxParentFolder()
+					.withIsMeetingEmail(isMeetingEmail)
+					.build();
 
 			newEmail.saveToInboxFolder();
 			
