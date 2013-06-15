@@ -21,7 +21,7 @@
   a) Client A tries to send email to Cleint B which is not conncted.
    Pending:
 
-2. 
+2. when we run Junit Test cases : AllTests.java, it generates few emails which are not good for our server as it starts throwing exception.
 
 
 == Edge Cases == 
