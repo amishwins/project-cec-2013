@@ -47,7 +47,6 @@ import cec.exceptions.CannotDeleteSystemFolderException;
 import cec.exceptions.FolderAlreadyExistsException;
 import cec.exceptions.RootFolderSubfolderCreationException;
 import cec.exceptions.SourceAndDestinationFoldersAreSameException;
-import cec.exceptions.StackTrace;
 import cec.net.NetworkHelper;
 import cec.service.FolderService;
 import cec.service.EmailService;
@@ -279,8 +278,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		setupAuthenticationMenu(menuBar);
 	}
 	
-	private void setupFileMenu(JMenuBar menuBar) {	
-		
+	private void setupFileMenu(JMenuBar menuBar) {			
 		
 		JMenu fileMenuBarEntry = new JMenu("File");
 		fileMenuBarEntry.setMnemonic('F');
@@ -418,10 +416,9 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 
 	}		
 	
-	private void setupAuthenticationMenu(JMenuBar menuBar)
-	{		
+	private void setupAuthenticationMenu(JMenuBar menuBar) {		
 		
-		JMenu registration = new JMenu("Authentification");		
+		JMenu registration = new JMenu("Authentication");		
 		registration.setMnemonic('W');
 		menuBar.add(registration);
 					
@@ -434,10 +431,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		JMenuItem registerMenuBarQuit = new JMenuItem("Disconnect");		
 		registerMenuBarQuit.setMnemonic('Q');
 		registration.add(registerMenuBarQuit);	
-		registerMenuBarQuit.addActionListener(new DisconnectFromServer());
-		
-		
-		
+		registerMenuBarQuit.addActionListener(new DisconnectFromServer());		
 	}
 	
 	
@@ -446,7 +440,6 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		emailOrMeetingTable.getColumnModel().getColumn(1).setPreferredWidth(300);
 		emailOrMeetingTable.getColumnModel().getColumn(2).setPreferredWidth(100);		
 	}	
-
 	
 	/*** 
 	 * Tree Selection Listener for JTree <code>folders</code>.
@@ -681,10 +674,6 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 			}
 	}
 	
-
-	
-
-
 	// FOLDER TREE CONTEXT MENU (Right-Click)
 	private class FolderTreeContextMenu extends JPopupMenu {
 		private static final long serialVersionUID = -5926440670627487856L;

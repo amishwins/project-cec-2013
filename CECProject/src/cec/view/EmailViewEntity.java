@@ -34,7 +34,10 @@ public class EmailViewEntity {
 	
 	/** The folder. */
 	private String folder = "";
-    
+
+	/** The is Meeting Email flag */
+	private boolean isMeetingEmail = false;
+	
 	/**
 	 * Gets the from.
 	 *
@@ -196,6 +199,25 @@ public class EmailViewEntity {
 	public void setId(UUID id) {
 		this.id= id;
 	}
+	
+	/**
+	 * Gets the isMeetingEmail.
+	 *
+	 * @return the isMeetingEmail
+	 */
+	public boolean isMeetingEmail() {
+		return isMeetingEmail;
+	}
+
+	/**
+	 * Sets the isMeetingEmail.
+	 *
+	 * @param isMeetingEmail
+	 */
+	public void setIsMeetingEmail(boolean isMeetingEmail) {
+		this.isMeetingEmail = isMeetingEmail;
+	}	
+	
 	
 
 }
