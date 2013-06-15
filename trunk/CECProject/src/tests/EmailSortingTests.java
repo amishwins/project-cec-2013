@@ -63,6 +63,8 @@ public class EmailSortingTests {
 
 class EmailImplExceptionCUT extends EmailImpl {
 
+	private static final long serialVersionUID = 1L;
+
 	public EmailImplExceptionCUT(UUID id, String from, String to, String cc,
 			String subject, String body, String lastModifiedTime,
 			String sentTime, Folder parentFolder) {
