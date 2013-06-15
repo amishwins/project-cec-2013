@@ -885,7 +885,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 								
 				if (clientEmailAddress != null) {
 
-					if (clientEmailAddress.trim().length() > 0 && validator.isValidSendees(clientEmailAddress,"")) {
+					if (clientEmailAddress.trim().length() > 0 && validator.isValidFrom(clientEmailAddress)) {
 						CECConfigurator.getReference().put("ClientEmail", clientEmailAddress);
 						nw.connectToServer();							
 					} else {

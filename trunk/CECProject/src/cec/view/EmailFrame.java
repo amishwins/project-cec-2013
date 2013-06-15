@@ -324,11 +324,17 @@ public class EmailFrame extends JFrame implements DocumentListener {
 				saveTemplate();
 			}
 		});
-		overwriteTemplate.addActionListener(new java.awt.event.ActionListener() {
+		acceptMeeting.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				overwriteTemplate();
+				acceptMeeting();
 			}
 		});
+		declineMeeting.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				declineMeeting();
+			}
+		});		
+		
 
 		add(bar, BorderLayout.NORTH);
 	}
@@ -385,7 +391,11 @@ public class EmailFrame extends JFrame implements DocumentListener {
 		mainClient.updateEmailsTable();
 		this.dispose();
 	}
-
+	
+	// Actions - Save Template
+	/**
+	 * Save Template.
+	 */	
 	private void saveTemplate() {
 		String name = JOptionPane.showInputDialog(null,
 				"Enter name of template");
@@ -400,12 +410,34 @@ public class EmailFrame extends JFrame implements DocumentListener {
 			this.dispose();
 		}			
 	}
-
+	
+	// Actions - Overwrite Template
+	/**
+	 * Overwrite Template.
+	 */		
 	private void overwriteTemplate() {
 		setTemplateViewFields();
 		templateService.saveTemplate(templateView);
 		this.dispose();
 	}
+	
+	// Actions - Accept Meeting
+	/**
+	 * Accept Meeting
+	 */		
+	private void acceptMeeting() {
+	
+		this.dispose();
+	}
+	
+	// Actions - Decline Meeting
+	/**
+	 * Decline Meeting
+	 */		
+	private void declineMeeting() {
+		emailService.delete(emailView);
+		this.dispose();
+	}	
 
 	// Actions - Draft
 	/**
@@ -529,7 +561,7 @@ public class EmailFrame extends JFrame implements DocumentListener {
 		}
 		
 		//Meeting Invitation 	
-		if(emailView.isMeetingEmail()) {
+		if(emailView.isMeetingEmail() && emailView.getFolder().equals(CECConfigurator.getReference().get("Inbox"))) {
 		    acceptMeeting.setVisible(true);
 			declineMeeting.setVisible(true);			
 		}		
