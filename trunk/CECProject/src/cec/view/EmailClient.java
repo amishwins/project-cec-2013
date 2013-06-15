@@ -47,6 +47,7 @@ import cec.exceptions.CannotDeleteSystemFolderException;
 import cec.exceptions.FolderAlreadyExistsException;
 import cec.exceptions.RootFolderSubfolderCreationException;
 import cec.exceptions.SourceAndDestinationFoldersAreSameException;
+import cec.exceptions.StackTrace;
 import cec.net.NetworkHelper;
 import cec.service.FolderService;
 import cec.service.EmailService;
@@ -519,6 +520,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 				String folderName = JOptionPane.showInputDialog(null, "Folder Name");
 				Validator validator = new Validator();
 				
+				
 				if (folderName != null) {
 
 					if (folderName.trim().length() > 0 && validator.isValidFolderName(folderName)) {
@@ -873,30 +875,6 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		}
 	}
 
-	private class ConnectToServer implements ActionListener {
-		public void actionPerformed(ActionEvent e) {			
-			NetworkHelper nw = new NetworkHelper();
-			if (!NetworkHelper.isConnectedToServer()) {
-				String clientEmailAddress = JOptionPane.showInputDialog(null, "Enter your email address");
-				if ((null!=clientEmailAddress) && (!clientEmailAddress.isEmpty()))
-				{
-					// TODO: check if this email is valid
-					CECConfigurator.getReference().put("ClientEmail", clientEmailAddress);
-					nw.connectToServer();		
-				}				
-			}
-			else
-				JOptionPane.showMessageDialog(null,  "You are already connected to the server!");
-		}
-	}
-	
-	private class DisconnectFromServer implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			NetworkHelper nw = new NetworkHelper();
-			nw.disconnectFromServer();
-			//System.exit(0);
-		}
-	}
 	
 	//RULES -> RULE SETTINGS
 	private class MenuRulesRuleSett implements ActionListener {
@@ -905,8 +883,40 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		}
 	}
 	
+	//AUTHENTICATION -> CONNECT
+	private class ConnectToServer implements ActionListener {
+		public void actionPerformed(ActionEvent e) {			
+			NetworkHelper nw = new NetworkHelper();
+			if (NetworkHelper.isConnectedToServer()) {
+				JOptionPane.showMessageDialog(null,  "You are already connected to the server!");
+			}
+			else{
+				String clientEmailAddress = JOptionPane.showInputDialog(null, "Enter your email address");
+				Validator validator = new Validator();								
+								
+				if (clientEmailAddress != null) {
+
+					if (clientEmailAddress.trim().length() > 0 && validator.isValidSendees(clientEmailAddress,"")) {
+						CECConfigurator.getReference().put("ClientEmail", clientEmailAddress);
+						nw.connectToServer();							
+					} else {
+						JOptionPane.showMessageDialog(null,	"Invalid email address");
+					}				
+				}	
+			}
+		}
+	}	
+
+	//AUTHENTICATION -> DISCONNECT
+	private class DisconnectFromServer implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			NetworkHelper nw = new NetworkHelper();
+			nw.disconnectFromServer();			
+		}
+	}	
+	
 	private void updateEmailTableFound(String toFind) {
-		selectInboxByDefault(); //? Keep? (Deyvid) it moves the cursor to Inbox folder, but loads its emails
+		selectInboxByDefault(); 
 		String[] emailTableViewColumns = { "From", "Subject", "Date" };			
 		Iterable<EmailViewEntity> emailsFoundInFolder=folderService.searchEmails(toFind);		
 		emailOrMeetingTable.setModel(new EmailListViewData(emailTableViewColumns, emailsFoundInFolder));			
@@ -928,7 +938,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	{
 		String toFind = searchField.getText();	
 		Validator v =new Validator();
-		if(v.isValidSearched(toFind))//if(toFind.trim().length()>0)					
+		if(v.isValidSearched(toFind))				
 			updateEmailTableFound(toFind);					
 	}
 	private class BarSearchEmails implements ActionListener {
