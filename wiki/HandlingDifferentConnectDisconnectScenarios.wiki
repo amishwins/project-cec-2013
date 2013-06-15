@@ -24,14 +24,6 @@
 2. 
 
 
+== Edge Cases == 
 
-
-
-
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+  * Email is sent with "To: a@b.com; c@d.com". Both recipients are registered, but offline. Do we store TWO copies of this email address in the sentEmails list (on the server)?
