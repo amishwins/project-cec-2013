@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ConnectException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
@@ -45,6 +46,9 @@ public class NetworkHelper {
 				} catch (EOFException e) {
 					logger.info("Disconnected from the server!");
 					break;
+				} catch (SocketException e) {
+					logger.info("Disconnected from the server!");
+					break;					
 				} catch (Exception e) {
 					logger.info("Disconnected from the server!");
 					logger.severe(StackTrace.asString(e));
@@ -110,27 +114,29 @@ public class NetworkHelper {
 
 	public void connectToServer() {
 
-		try {
-			clientSocket = new Socket(config.get("ServerName"),
-					Integer.parseInt(config.get("ServerPort")));
-			oos = new ObjectOutputStream(clientSocket.getOutputStream());
-			ois = new ObjectInputStream(clientSocket.getInputStream());
-			handShake();
-			exec = Executors.newCachedThreadPool();
-			exec.submit(new ListenerForMessagesFromServer());
-            sendPendingEmails();
-			/*
-			 * try { exec.awaitTermination(1, TimeUnit.DAYS);
-			 * 
-			 * } catch (Exception e) { e.printStackTrace(); }
-			 */
-
-		} catch (ConnectException e) {
-			logger.info("Unable to connect to server. Seems like server is down!");
-		} catch (Exception e) {
-			logger.severe(StackTrace.asString(e));				
+		if (!isConnectedToServer()){		
+			try {
+				clientSocket = new Socket(config.get("ServerName"),
+						Integer.parseInt(config.get("ServerPort")));
+				oos = new ObjectOutputStream(clientSocket.getOutputStream());
+				ois = new ObjectInputStream(clientSocket.getInputStream());
+				handShake();			
+				logger.info("Connected to the server!");			
+				exec = Executors.newCachedThreadPool();
+				exec.submit(new ListenerForMessagesFromServer());
+	            sendPendingEmails();
+				/*
+				 * try { exec.awaitTermination(1, TimeUnit.DAYS);
+				 * 
+				 * } catch (Exception e) { e.printStackTrace(); }
+				 */
+	
+			} catch (ConnectException e) {
+				logger.info("Unable to connect to server. Seems like server is down!");
+			} catch (Exception e) {
+				logger.severe(StackTrace.asString(e));				
+			}
 		}
-
 	}
 
 	private void sendPendingEmails() {
