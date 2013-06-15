@@ -874,17 +874,19 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	}
 
 	private class ConnectToServer implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			String clientEmailAddress = JOptionPane.showInputDialog(null, "Enter your email address");
-			if ((null!=clientEmailAddress) && (!clientEmailAddress.isEmpty()))
-			{
-				// TODO: check if this email is valid
-				CECConfigurator.getReference().put("ClientEmail", clientEmailAddress);
-				NetworkHelper nw = new NetworkHelper();
-				nw.connectToServer();
-				
-	
+		public void actionPerformed(ActionEvent e) {			
+			NetworkHelper nw = new NetworkHelper();
+			if (!NetworkHelper.isConnectedToServer()) {
+				String clientEmailAddress = JOptionPane.showInputDialog(null, "Enter your email address");
+				if ((null!=clientEmailAddress) && (!clientEmailAddress.isEmpty()))
+				{
+					// TODO: check if this email is valid
+					CECConfigurator.getReference().put("ClientEmail", clientEmailAddress);
+					nw.connectToServer();		
+				}				
 			}
+			else
+				JOptionPane.showMessageDialog(null,  "You are already connected to the server!");
 		}
 	}
 	
