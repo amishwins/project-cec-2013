@@ -25,8 +25,8 @@ public class NetworkHelper {
         logger.setParent( Logger.getLogger( NetworkHelper.class.getPackage().getName() ) );
     }
 
-	public static boolean isConnectedToServer() {
-		return (clientSocket != null);
+	public static boolean isConnectedToServer() {	
+			return (clientSocket != null);	
 	}
 
 	class ListenerForMessagesFromServer implements Runnable {
@@ -162,6 +162,7 @@ public class NetworkHelper {
 		Cleanup.closeQuietly(ois);
 		Cleanup.closeQuietly(oos);
 		Cleanup.closeQuietly(clientSocket);
+		clientSocket = null;
 	}
 
 	private void stopClient() {
