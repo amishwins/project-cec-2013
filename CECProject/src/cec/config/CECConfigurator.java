@@ -36,7 +36,7 @@ public class CECConfigurator {
 	}
 
 	private void mapDefaultServerSettings() {
-		systemSettings.put("ServerName", "localhost");
+		systemSettings.put("ServerName", "laxness.encs.concordia.ca");
 		systemSettings.put("ServerPort", "7777");		
 	}
 
@@ -76,6 +76,10 @@ public class CECConfigurator {
 		
 		return false;
 		
+	}
+	
+	public boolean isPatchForAnyEmailFolder(String path) {
+		return !isPathForAMeetingSystemFolder(path);
 	}
 	
 	public boolean isPathForAMeetingSystemFolder(String path){

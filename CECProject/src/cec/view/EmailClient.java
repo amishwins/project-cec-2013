@@ -127,7 +127,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	}
 
 	public void updateMeetingsTable() {
-		if (CECConfigurator.getReference().isPathForAEmailSystemFolder(lastSelectedFolder)) return;
+		if (CECConfigurator.getReference().isPatchForAnyEmailFolder(lastSelectedFolder)) return;
 		String[] meetingsTableViewColumns = { "From", "Subject", "Date" };
 		Iterable<MeetingViewEntity> meetingsInEachFolder = folderService.loadMeetings(lastSelectedFolder);
 		emailOrMeetingTable.setModel(new MeetingListViewData(meetingsTableViewColumns, meetingsInEachFolder));	
