@@ -184,7 +184,6 @@ public class EmailImpl implements Email, Serializable  {
 	 */
 	public void send() {
 		NetworkHelper nh = new NetworkHelper();
-		// Assumption that email has been sent successfully..
 		emailDao.save(id, from, to, cc, subject, body, lastModifiedTime,
 				sentTime, CECConfigurator.getReference().get("Outbox"), isMeetingEmail.toString());
 		ifItWasInDraftFolderDeleteThatCopy();
