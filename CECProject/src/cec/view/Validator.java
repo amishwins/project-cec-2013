@@ -17,6 +17,10 @@ public class Validator {
 
 	Pattern pattern;
 	Matcher matcher;
+	
+	public boolean isValidFrom(String from) {
+		return isValidSendees(from, "");
+	}
 
 	/**
 	 * Method to verify if the email addresses supplied by the user are valid.
@@ -45,7 +49,7 @@ public class Validator {
 		return true;
 	}
 
-	private boolean isValidTo(String emailString) {
+	public boolean isValidTo(String emailString) {
 		String[] emails = emailString.split(";");
 
 		pattern = Pattern.compile("(.+)@(.+)(\\.)(.+)");
