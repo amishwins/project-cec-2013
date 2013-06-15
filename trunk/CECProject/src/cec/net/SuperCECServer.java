@@ -141,8 +141,7 @@ class ListenerForThingsInQueue implements Runnable {
 				String ccAddress = removeSpaces(newEmail.getCC());
 				Recipients recip = new Recipients(toAddress, ccAddress);
 
-				HashSet<String> emailAddresses = recip.getListOfAllTargetRecipients();
-				
+				Set<String> emailAddresses = recip.getListOfAllTargetRecipients();
 				System.out.println(emailAddresses);
 				
 				for(String emailAddress: emailAddresses) {
@@ -151,7 +150,7 @@ class ListenerForThingsInQueue implements Runnable {
 					out = SuperCECServer.getEmailToObjectOutputStream().get(addr);
 					if (null == out) {
 						out = SuperCECServer.getEmailToObjectOutputStream().get(newEmail.getFrom());
-						Email deliveryFailureNoticeEmail = buildNoticeEmail(newEmail, newEmail.getTo());
+						Email deliveryFailureNoticeEmail = buildNoticeEmail(newEmail, addr);
 						out.writeObject(deliveryFailureNoticeEmail);
 						System.out.println("Delivery Failure Email " + newEmail.getFrom()
 								+ " has been sent.");
