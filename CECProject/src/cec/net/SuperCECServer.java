@@ -9,8 +9,7 @@ import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
@@ -139,10 +138,10 @@ class ListenerForThingsInQueue implements Runnable {
 				newEmail = SuperCECServer.getArrivingEmailQueue().take();
 				
 				String toAddress = removeSpaces(newEmail.getTo());
-//				String ccAddress = removeSpaces(newEmail.getCC());
+				String ccAddress = removeSpaces(newEmail.getCC());
+				Recipients recip = new Recipients(toAddress, ccAddress);
 
-				ArrayList<String> emailAddresses = new ArrayList<String>();
-				emailAddresses.add(toAddress);
+				HashSet<String> emailAddresses = recip.getListOfAllTargetRecipients();
 				
 				System.out.println(emailAddresses);
 				
@@ -162,8 +161,7 @@ class ListenerForThingsInQueue implements Runnable {
 						
 						try {
 							out.writeObject(newEmail);
-							System.out.println("Email " + newEmail.getTo()
-									+ " has been sent.");
+							System.out.println("Email " + addr + " has been sent.");
 						} catch (SocketException e) {
 							System.out.println("Email sending failed for: " + addr);
 							// handle this!!!!
