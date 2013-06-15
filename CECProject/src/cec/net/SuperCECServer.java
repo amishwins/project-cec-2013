@@ -86,7 +86,7 @@ class ServerThreadPerClient implements Runnable {
 	}
 
 	public void run() {
-		logger.info("Accepting Emails from this guy: " + emailAddress);
+		logger.info("Accepting Emails from this cleint: " + emailAddress);
 		while (true) {
 			try {
 				// Receiving objects
@@ -98,8 +98,8 @@ class ServerThreadPerClient implements Runnable {
 					// handle emails
 
 					Email e = (Email) obj;
-					logger.info("is Email Added to Queue: " + SuperCECServer.getArrivingEmailQueue().add(e));
-					logger.info("Sending Ack to : "+ emailAddress);
+					logger.info("is Email " + e.getSubject()+ " Added to Queue: " + SuperCECServer.getArrivingEmailQueue().add(e));
+					logger.info("CECServer Sending Ack to : "+ emailAddress+" for email subject: "+e.getSubject());
 					Ack ack = new Ack(e.getId(),MessageType.EMAIL);
 	                SuperCECServer.getEmailToObjectOutputStream().get(emailAddress).writeObject(ack); 	
 
@@ -116,7 +116,7 @@ class ServerThreadPerClient implements Runnable {
 				}
 			} catch (SocketException e) {
 				logger.info(emailAddress
-						+ " Disconnected from the server!");
+						+ " is Disconnected from the server!");
 				break;
 			}  catch (EOFException e) {
 				logger.info(emailAddress
@@ -163,11 +163,11 @@ class ClientAcceptor implements Runnable {
 	}
 
 	public void run() {
-		logger.info("Starting Connection Thread :.....");
+		logger.info("Thread to Accept Connections is started .....");
 		while (true) {
 
 			try {
-				logger.info("Ready to accept connections...");
+				logger.info("Ready to accept new connections...");
 				Socket socket = server.accept();
 				in = new ObjectInputStream(socket.getInputStream());
 				out = new ObjectOutputStream(socket.getOutputStream());
@@ -179,7 +179,7 @@ class ClientAcceptor implements Runnable {
 						handShake.emailAddress, in);
 				SuperCECServer.getEmailToObjectOutputStream().put(
 						handShake.emailAddress, out);
-
+				logger.info(handShake.emailAddress+" is connected!!!");
 				Set<String> emails = SuperCECServer.getEmailToSocketMap()
 						.keySet();
 				for (String email : emails) {
@@ -192,7 +192,6 @@ class ClientAcceptor implements Runnable {
 				SuperCECServer.getExecutor().submit(
 						new ServerThreadPerClient(handShake.emailAddress));
 
-				logger.info("Connection Accepted !!!");
 			}  catch (Exception e){
 				logger.severe(StackTrace.asString(e));
 				break;
@@ -252,7 +251,7 @@ public class SuperCECServer {
 		try {
 			server = new ServerSocket(7777);
 		} catch (BindException e) {
-			logger.info("Server is already running on this port!");
+			logger.info("CECServer is already running on this port!");
 			logger.severe(StackTrace.asString(e));
 		} catch (Exception e){
 			logger.severe(StackTrace.asString(e));

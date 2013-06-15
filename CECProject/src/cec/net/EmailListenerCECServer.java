@@ -31,10 +31,11 @@ public class EmailListenerCECServer implements Runnable {
 		}
 
 	public void run() {
+		logger.info("Thread: Listening for email Arrivals is started .....");
 		Email newEmail;
-		while (true) {
+			while (true) {
 			try {
-				logger.info("Listening for email Arrivals .....");
+				
 				newEmail = SuperCECServer.getArrivingEmailQueue().take();
 				
 				String toAddress = removeSpaces(newEmail.getTo());
@@ -46,18 +47,15 @@ public class EmailListenerCECServer implements Runnable {
 				
 				for(String emailAddress: emailAddresses) {
 					String addr = emailAddress.trim();
-
 					out = SuperCECServer.getEmailToObjectOutputStream().get(addr);
 					if (null == out) {
+						logger.info(addr+" does not exist.");
 						out = SuperCECServer.getEmailToObjectOutputStream().get(newEmail.getFrom());
 						Email deliveryFailureNoticeEmail = buildNoticeEmail(newEmail, addr);
 						out.writeObject(deliveryFailureNoticeEmail);
-						logger.info("Delivery Failure Email " + newEmail.getFrom()
+						logger.info("Delivery Failure Email to " + newEmail.getFrom()
 								+ " has been sent.");
 					} else {
-						// only handling 1 email for now
-						// TODO: make it handle more
-						
 						try {
 							out.writeObject(newEmail);
 							SuperCECServer.getSentEmailMap().put(newEmail.getId(), newEmail);
