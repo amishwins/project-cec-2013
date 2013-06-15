@@ -93,6 +93,8 @@ public class EmailTests {
 class EmailImplCUT extends EmailImpl {
 	
 	
+	private static final long serialVersionUID = 1L;
+
 	public EmailImplCUT(UUID id, String from, String to, String cc,
 			String subject, String body, String lastModifiedTime,
 			String sentTime, Folder parentFolder) {

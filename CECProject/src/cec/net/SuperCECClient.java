@@ -94,7 +94,7 @@ class SuperCECClient {
     		client.outputStream.writeObject(email3);
         	//client.outputStream.writeObject(email);
         	
-        	ObjectInputStream inputStream = new ObjectInputStream( client.writer.getInputStream() ); 
+        	//ObjectInputStream inputStream = new ObjectInputStream( client.writer.getInputStream() ); 
         	while(true){
         		/*EmailTest e;
 				try {

@@ -3,8 +3,6 @@ package cec.net;
 
 import java.io.Closeable;
 import java.lang.reflect.Method;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class Cleanup {
 	private Cleanup(){
