@@ -184,21 +184,14 @@ public class EmailImpl implements Email, Serializable  {
 	 */
 	public void send() {
 		NetworkHelper nh = new NetworkHelper();
-		String target;
-		
-		if (NetworkHelper.isConnectedToServer()) {
-			nh.sendEmail(this);
-			target = CECConfigurator.getReference().get("Sent");
-		}
-		else {
-			target = CECConfigurator.getReference().get("Outbox");
-		}
-		
 		// Assumption that email has been sent successfully..
 		emailDao.save(id, from, to, cc, subject, body, lastModifiedTime,
-				sentTime, target, isMeetingEmail.toString());
+				sentTime, CECConfigurator.getReference().get("Outbox"), isMeetingEmail.toString());
 		ifItWasInDraftFolderDeleteThatCopy();
-	}
+		if (NetworkHelper.isConnectedToServer()) {
+			nh.sendEmail(this);
+		}
+     }
 	
 	/**
 	 * This method is responsible for deleting the existing copy of an email from the Drafts folder

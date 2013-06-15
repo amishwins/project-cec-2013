@@ -43,11 +43,18 @@ class ServerThreadPerClient implements Runnable {
 		System.out.println("Accepting Emails from this guy: " + emailAddress);
 		while (true) {
 			try {
+				// Receiving email from some client... 
 				Email e = (Email) SuperCECServer.getEmailToObjectInputStream()
 						.get(emailAddress).readObject();
 				System.out.println("is Email Added to Queue: "
 						+ SuperCECServer.getArrivingEmailQueue().add(e));
-				// System.out.println("Accepted Email for: " + e);
+				// Sending back Ack to client....
+				System.out.println("Sending Ack to : "+emailAddress);
+				Ack ack = new Ack(e.getId(),MessageType.EMAIL);
+                SuperCECServer.getEmailToObjectOutputStream()
+					.get(emailAddress).writeObject(ack); 				
+
+                // System.out.println("Accepted Email for: " + e);
 			} catch (EOFException e) {
 				System.out.println(emailAddress
 						+ " Disconnected from the server!");
