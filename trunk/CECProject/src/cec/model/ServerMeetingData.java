@@ -11,5 +11,7 @@ public interface ServerMeetingData {
 	public List<String> getUnAnsweredRecipients();
 	
 	public void setAccepted(String name);
-	public void setDeclined(String name);	
+	public void setDeclined(String name);
+
+	public InvitationStatus invitationStatus(String emailAddress);	
 }

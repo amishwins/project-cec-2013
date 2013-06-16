@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import cec.config.CECConfigurator;
 import cec.exceptions.SourceAndDestinationFoldersAreSameException;
@@ -19,7 +20,12 @@ import cec.persistence.EmailDaoFactory;
  * 
  */
 public class EmailImpl implements Email, Serializable  {
+	
+	static Logger logger = Logger.getLogger(EmailImpl.class.getName()); 
 
+    static { 
+        logger.setParent( Logger.getLogger( EmailImpl.class.getPackage().getName() ) );
+    }
 
 	/**
 	 * 
@@ -183,12 +189,15 @@ public class EmailImpl implements Email, Serializable  {
 	 * 
 	 */
 	public void send() {
-		NetworkHelper nh = new NetworkHelper();
+		NetworkHelper nh = NetworkHelper.getReference();
 		emailDao.save(id, from, to, cc, subject, body, lastModifiedTime,
 				sentTime, CECConfigurator.getReference().get("Outbox"), isMeetingEmail.toString());
 		ifItWasInDraftFolderDeleteThatCopy();
 		if (NetworkHelper.isConnectedToServer()) {
 			nh.sendEmail(this);
+		}
+		else {
+			logger.info("You are currently not connected to the network");
 		}
      }
 	

@@ -1,11 +1,18 @@
 package cec.service;
 
+import java.io.IOException;
+
+import cec.exceptions.StackTrace;
+import cec.exceptions.UserIsNotConnectedException;
 import cec.model.Email;
 import cec.model.EmailBuilder;
 import cec.model.Folder;
 import cec.model.FolderFactory;
 import cec.model.Meeting;
 import cec.model.MeetingBuilder;
+import cec.net.ChangeSetState;
+import cec.net.CommunicationChangeSet;
+import cec.net.NetworkHelper;
 import cec.view.EmailViewEntity;
 
 /**
@@ -15,21 +22,38 @@ public class EmailService {
 
 	public void acceptMeeting(EmailViewEntity emailInView) {
 		// create meeting object
-		MeetingBuilder mb = new MeetingBuilder();
-		Email email = buildEmailModelObjectFromViewEntity(emailInView);
-		Meeting newMeeting = mb.buildFromAcceptInvite(email);
-		newMeeting.saveAfterAccept();
-		
-		// send accept email (ACK)
-		
-		// delete email object
-		email.delete();
+		if(NetworkHelper.isConnectedToServer()) {
+			
+			MeetingBuilder mb = new MeetingBuilder();
+			Email email = buildEmailModelObjectFromViewEntity(emailInView);
+			Meeting newMeeting = mb.buildFromAcceptInvite(email);
+			newMeeting.saveAfterAccept();
+			
+			// send accept email (ChangeSet)
+			CommunicationChangeSet ccs = new CommunicationChangeSet(ChangeSetState.ACCEPT, emailInView.getId());
+			ccs.send();
+			
+			// delete email object
+			email.delete();
+		}
+		else {
+			throw new UserIsNotConnectedException();			
+		}
 	}
 	
 	public void declineMeeting(EmailViewEntity emailInView) {
-		// send decline email
-		// delete email object
+		if(NetworkHelper.isConnectedToServer()) {
+		// send accept email (ChangeSet)
+		CommunicationChangeSet ccs = new CommunicationChangeSet(ChangeSetState.DECLINE, emailInView.getId());
+		ccs.send();
 		
+		// delete email object
+		Email email = buildEmailModelObjectFromViewEntity(emailInView);
+		email.delete();
+		}
+		else {
+			throw new UserIsNotConnectedException();			
+		}
 	}
 	
 	/**

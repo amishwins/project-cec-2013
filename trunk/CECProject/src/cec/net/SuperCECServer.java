@@ -39,6 +39,11 @@ class HandShake implements Serializable {
 	}
 }
 
+class MeetingDataWrapper {
+	public UUID id;
+	public Meeting meetingObj;
+	public ServerMeetingData meetingData;
+}
 
 class SentEmailWriteToSysout implements Runnable {
 	static Logger logger = Logger.getLogger(SentEmailWriteToSysout.class.getName()); 
@@ -79,6 +84,42 @@ class SentEmailCleanupThread implements Runnable {
 	}
 }
 
+class ChangeSetThreadForMeetings implements Runnable {
+	static Logger logger = Logger.getLogger(ChangeSetThreadForMeetings.class.getName()); 
+
+    static { 
+        logger.setParent( Logger.getLogger( ChangeSetThreadForMeetings.class.getPackage().getName() ) );
+    }
+	
+	private String emailAddress;
+	private CommunicationChangeSet ccs;
+	
+	public ChangeSetThreadForMeetings (String emailAddress, CommunicationChangeSet ccs) {
+		this.emailAddress = emailAddress;
+		this.ccs = ccs;
+	}
+	
+	public void run() {
+		ConcurrentHashMap<UUID, MeetingDataWrapper> meetingMap = SuperCECServer.getMeetingMap();
+		MeetingDataWrapper md = meetingMap.get(ccs.getId());
+		
+		if (ccs.isAccept()) {
+			md.meetingData.setAccepted(emailAddress);
+			logger.info("The meeting invite for " + emailAddress + " is " + md.meetingData.invitationStatus(emailAddress));
+		}
+		
+		else if (ccs.isDecline()) {
+			md.meetingData.setDeclined(emailAddress);
+			logger.info("The meeting invite for " + emailAddress + " is " + md.meetingData.invitationStatus(emailAddress));
+		}
+		
+		else if (ccs.isChange()) {
+			// todo
+		}
+	}
+}
+
+
 class ServerThreadPerClient implements Runnable {
 
 	static Logger logger = Logger.getLogger(ServerThreadPerClient.class.getName()); 
@@ -114,11 +155,15 @@ class ServerThreadPerClient implements Runnable {
 					}else{
 						logger.info("Going to build a Meeting object from the email meeting invitation" + e.getSubject());
 						Meeting meeting = buildMeeting(e);
+						MeetingDataWrapper md = new MeetingDataWrapper();
+						md.id = meeting.getId(); //
+						md.meetingObj = meeting; // 
+
 						ServerMeetingData serverMeetingData = new ServerMeetingDataImpl();
 						serverMeetingData.setup(meeting);
-						ConcurrentHashMap<Meeting, ServerMeetingData> innerMeetingMap = new ConcurrentHashMap<>();
-						innerMeetingMap.put(meeting, serverMeetingData);
-						SuperCECServer.getMeetingMap().put(meeting.getId(), innerMeetingMap);
+						md.meetingData = serverMeetingData; //
+
+						SuperCECServer.getMeetingMap().put(meeting.getId(), md);
 						
 						emailAdded = SuperCECServer.getArrivingEmailQueue().add(e);
 						logger.info("Is Email " + e.getSubject()+ " added to Queue: " + emailAdded);
@@ -136,8 +181,9 @@ class ServerThreadPerClient implements Runnable {
 					// delete the thing that we were saving for this ack (regular email, email for meeting, 
 					// or changeset)
 					
-				} else if ((obj instanceof MeetingChangeSet)) {
-					// handle ChangeSets
+				} else if ((obj instanceof CommunicationChangeSet)) {
+					CommunicationChangeSet ccs = (CommunicationChangeSet) obj;
+					applyChangeSetToMeetingMap(emailAddress, ccs);
 
 				}
 			} catch (SocketException e) {
@@ -156,6 +202,10 @@ class ServerThreadPerClient implements Runnable {
 			}
 		}
 	}
+	private void applyChangeSetToMeetingMap(String emailAddress, CommunicationChangeSet ccs) {
+		SuperCECServer.getExecutor().submit(new ChangeSetThreadForMeetings(emailAddress, ccs));
+	}
+
 	private Meeting buildMeeting(EmailImpl e) {
 		MeetingBuilder mb = new MeetingBuilder();
 		return mb.buildFromAcceptInvite(e);
@@ -230,6 +280,8 @@ class ClientAcceptor implements Runnable {
 	}
 }
 
+
+
 public class SuperCECServer {
 	
 	static Logger logger = Logger.getLogger(SuperCECServer.class.getName()); 
@@ -247,9 +299,9 @@ public class SuperCECServer {
 	static ConcurrentHashMap<String, ObjectInputStream> emailToObjectInputStream = new ConcurrentHashMap<>();
 	static ConcurrentHashMap<String, ObjectOutputStream> emailToObjectOutputStream = new ConcurrentHashMap<>();
 	
-	static ConcurrentHashMap<UUID, ConcurrentHashMap<Meeting, ServerMeetingData>> meetingMap = new ConcurrentHashMap<>();
+	static ConcurrentHashMap<UUID, MeetingDataWrapper> meetingMap = new ConcurrentHashMap<>();
 
-	public static ConcurrentHashMap<UUID, ConcurrentHashMap<Meeting, ServerMeetingData>> getMeetingMap() {
+	public static ConcurrentHashMap<UUID, MeetingDataWrapper> getMeetingMap() {
 		return meetingMap;
 	}
 	

@@ -32,6 +32,10 @@ public class ServerMeetingDataImpl implements ServerMeetingData {
 	}
 	
 	@Override
+	public InvitationStatus invitationStatus(String emailAddress) {
+		return attendees.get(emailAddress);
+	}	
+	@Override
 	public List<String> getAcceptedRecipients() {
 		return getRecipientsWithInvitationStatus(InvitationStatus.ACCEPTED);
 	}
@@ -85,4 +89,6 @@ public class ServerMeetingDataImpl implements ServerMeetingData {
 		}
 		return recipients;		
 	}
+
+
 }
