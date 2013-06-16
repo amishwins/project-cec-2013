@@ -900,8 +900,9 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	private class DisconnectFromServer implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			NetworkHelper nw = NetworkHelper.getReference();
-			nw.disconnectFromServer();			
-		}
+			if (!NetworkHelper.isConnectedToServer()) {
+				nw.disconnectFromServer();			
+		}}
 	}	
 	
 	private void updateEmailTableFound(String toFind) {
