@@ -118,8 +118,7 @@ public class EmailFrame extends JFrame implements DocumentListener {
 	public EmailFrame(TemplateContext context) {
 		templateService = new TemplateService();
 		switch (context) {
-		case APPLY:
-			// get the selected template, create an email normally
+		case APPLY:			
 			templateView = templateService.getTemplateEntity(EmailClient
 					.getReference().getSelectedTemplate().toString());
 			emailView = new EmailViewEntity();
@@ -309,16 +308,7 @@ public class EmailFrame extends JFrame implements DocumentListener {
 				draftEmail();
 			}
 		});
-		reply.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				editExistingMessage();
-			}
-		});
-		forward.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				editExistingMessage();
-			}
-		});
+
 		saveTemplate.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				saveTemplate();
@@ -367,16 +357,6 @@ public class EmailFrame extends JFrame implements DocumentListener {
 	private void ExitMessage() {
 
 		this.dispose();
-	}
-
-	// Actions - Edit
-	/**
-	 * Edits the existing message.
-	 */
-	private void editExistingMessage() {
-		setVisibilityOfButtonsAndMenuItemsForNewEmail();
-		String auxSubject = subjectField.getText();
-		subjectField.setText(auxSubject);
 	}
 
 	// Actions - Send
@@ -524,8 +504,8 @@ public class EmailFrame extends JFrame implements DocumentListener {
 		subjectField.setEditable(true);
 		bodyField.setEditable(true);
 		
-		reply.setEnabled(true);
-		forward.setEnabled(true);
+		reply.setEnabled(false);
+		forward.setEnabled(false);
 		replyItem.setEnabled(false);
 		forwardItem.setEnabled(false);
 		
