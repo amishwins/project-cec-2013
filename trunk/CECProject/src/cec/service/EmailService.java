@@ -45,7 +45,7 @@ public class EmailService {
 	
 	private Email buildEmailModelObjectFromViewEntity(EmailViewEntity emailInView) {
 		EmailBuilder mailBuilder = new EmailBuilder();
-		Email newEmail = mailBuilder.withId(emailInView.getId()).withFrom()
+		Email newEmail = mailBuilder.withId(emailInView.getId()).withFrom(emailInView.getFrom())
 				.withTo(emailInView.getTo())
 				.withSubject(emailInView.getSubject())
 				.withBody(emailInView.getBody()).withCC(emailInView.getCC())
