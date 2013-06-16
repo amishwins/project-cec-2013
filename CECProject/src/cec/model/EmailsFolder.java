@@ -82,7 +82,7 @@ public abstract class EmailsFolder extends Folder {
 	   emailsInFolder = (LinkedList<Email>)loadEmails();
 	   Iterable<Email> ruleApplicableEmails = new LinkedList<Email>();
 	   for(Email e: emailsInFolder) {
-		   if (!((EmailImpl)e).isMeetingEmail()) {
+		   if ( !(((EmailImpl)e).isMeetingEmail()) ) {
 			   ((LinkedList<Email>)ruleApplicableEmails).add(e);
 		   }
 	   }	   
