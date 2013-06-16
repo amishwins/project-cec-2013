@@ -92,4 +92,9 @@ public class MeetingService {
 		return meeting;
 	}
 
+	public void sendUpdate(MeetingViewEntity before, MeetingViewEntity after) {
+		CommunicationChangeSet ccs = new CommunicationChangeSet(ChangeSetState.CHANGE, before.getId());
+		
+	}
+
 }
