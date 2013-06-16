@@ -198,7 +198,8 @@ public class NetworkHelper {
 
 	public void disconnectFromServer() {
 		stopClient();
-		exec.shutdown();
+		if (null != exec)
+			exec.shutdown();
 		// TODO do we have to awaitTermination?
 		Cleanup.closeQuietly(ois);
 		Cleanup.closeQuietly(oos);
