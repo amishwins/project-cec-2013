@@ -77,6 +77,19 @@ public abstract class EmailsFolder extends Folder {
 		return emailsInFolder;
 	}
    
+   @Override
+   public Iterable<Email> loadRuleApplicableEmails() {
+	   emailsInFolder = (LinkedList<Email>)loadEmails();
+	   Iterable<Email> ruleApplicableEmails = new LinkedList<Email>();
+	   for(Email e: emailsInFolder) {
+		   if (!((EmailImpl)e).isMeetingEmail()) {
+			   ((LinkedList<Email>)ruleApplicableEmails).add(e);
+		   }
+	   }	   
+	   return ruleApplicableEmails;
+	   
+   }
+   
    public Iterable<Folder>loadAllSubFolderUnderSearchableFolder(Folder searchableFolder){
 	   List<Folder> foldersToSearchIn = new ArrayList<>();
 	   foldersToSearchIn.add(searchableFolder);

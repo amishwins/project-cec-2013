@@ -79,6 +79,11 @@ public class MeetingsFolder extends Folder {
 	protected void handleSystemDelete() {
 		throw new CannotDeleteSystemFolderException();
 	}
+
+	@Override
+	public Iterable<Email> loadRuleApplicableEmails() {
+		throw new RuntimeException("Cannot call this method from the meeting folder");
+	}
 	
 	
 }

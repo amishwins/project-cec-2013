@@ -425,6 +425,8 @@ public class EmailFrame extends JFrame implements DocumentListener {
 	private void declineMeeting() {
 		try {
 			emailService.declineMeeting(emailView);
+			this.dispose();
+			EmailClient.getReference().updateEmailsTable();
 		this.dispose();
 		} catch (UserIsNotConnectedException e) {
 			JOptionPane.showMessageDialog(null,

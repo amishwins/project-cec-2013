@@ -124,7 +124,7 @@ public class RuleService {
 	 */
 	public void applyAll() {
 		RuleSet ruleSet = RuleSetFactory.getRuleSetInstance();
-		ruleSet.apply(FolderFactory.getFolder(CECConfigurator.getReference().get("Inbox")).loadEmails());
+		ruleSet.apply(FolderFactory.getFolder(CECConfigurator.getReference().get("Inbox")).loadRuleApplicableEmails());
 		
 	}
 

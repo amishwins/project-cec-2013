@@ -62,6 +62,8 @@ public abstract class Folder {
 	 */
 	public abstract Iterable<Email> loadEmails();
 	
+	public abstract Iterable<Email> loadRuleApplicableEmails();
+	
 	public abstract Iterable<Email> searchEmails(String searchString, Folder folderToSearchIn);
 	
 	public abstract Iterable<Meeting> loadMeetings();	
