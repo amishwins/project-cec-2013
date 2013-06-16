@@ -60,7 +60,7 @@ public class MeetingService {
 
 		Meeting meeting = meetingBuilder
 				.withId(meetingInView.getId())
-				.withFrom()
+				.withFrom(meetingInView.getFrom())
 				.withAttendees(meetingInView.getAttendees())
 				.withStartDate(meetingInView.getStartDate())
 				.withEndDate(meetingInView.getEndDate())
