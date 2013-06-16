@@ -537,12 +537,20 @@ public class EmailFrame extends JFrame implements DocumentListener {
 			draft.setVisible(true);
 			sendItem.setVisible(true);
 			draftItem.setVisible(true);
-
 			toField.setEditable(true);
 			ccField.setEditable(true);
 			subjectField.setEditable(true);
 			bodyField.setEditable(true);			
-		}		
+		}
+		//Meeting Invitation 	
+		else if(emailView.isMeetingEmail()) {
+			reply.setVisible(false);
+			forward.setVisible(false);
+			replyItem.setVisible(false);
+			forwardItem.setVisible(false);				
+			acceptMeeting.setVisible(true);
+			declineMeeting.setVisible(true);			
+		}	
 		else {
 			reply.setVisible(true);
 			forward.setVisible(true);
@@ -554,11 +562,7 @@ public class EmailFrame extends JFrame implements DocumentListener {
 			bodyField.setEditable(false);
 		}
 		
-		//Meeting Invitation 	
-		if(emailView.isMeetingEmail() && emailView.getFolder().equals(CECConfigurator.getReference().get("Inbox"))) {
-		    acceptMeeting.setVisible(true);
-			declineMeeting.setVisible(true);			
-		}		
+				
 	}
 
 	private void setVisibilityOfButtonsAndMenuItemsForNewEmail() {
