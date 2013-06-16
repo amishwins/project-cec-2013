@@ -6,7 +6,8 @@ import java.io.ObjectOutputStream;
 import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -110,14 +111,15 @@ public class SuperCECServer {
 
     // All data structures which hold our CEC Email and Meeting Data which needs to be 
     // thread safe and concurrently accessable
-	static LinkedBlockingDeque<Email> arrivingEmails = new LinkedBlockingDeque<>();
+   	static LinkedBlockingDeque<Email> arrivingEmails = new LinkedBlockingDeque<>();
 	static LinkedBlockingDeque<Ack> arrivingEmailAcks = new LinkedBlockingDeque<>();
 	static ConcurrentHashMap<UUID, Email> sentEmails = new ConcurrentHashMap<>();
+	static ConcurrentHashMap<String, List<Email>> unSendableEmailsMap = new ConcurrentHashMap<>();
 	static ConcurrentHashMap<String, Socket> emailToSocketMap = new ConcurrentHashMap<>();
 	static ConcurrentHashMap<String, ObjectInputStream> emailToObjectInputStream = new ConcurrentHashMap<>();
 	static ConcurrentHashMap<String, ObjectOutputStream> emailToObjectOutputStream = new ConcurrentHashMap<>();
 	static ConcurrentHashMap<UUID, MeetingDataWrapper> meetingMap = new ConcurrentHashMap<>();
-
+	
 	// The Thread Pool we will use is the Executor Service, a really awesome implementation
 	static ExecutorService executor = Executors.newCachedThreadPool();
 	
@@ -153,6 +155,9 @@ public class SuperCECServer {
 		return sentEmails;
 	}
 
+	public static ConcurrentHashMap<String, List<Email>> getUnSendableEmailsMap() {
+		return unSendableEmailsMap;
+	}
 	public static void main(String[] args) throws IOException {
 
 		ServerSocket server = null;
