@@ -426,7 +426,8 @@ public class EmailFrame extends JFrame implements DocumentListener {
 	 * Accept Meeting
 	 */		
 	private void acceptMeeting() {
-	
+
+		emailService.acceptMeeting(emailView);
 		this.dispose();
 	}
 	

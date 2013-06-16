@@ -4,6 +4,8 @@ import cec.model.Email;
 import cec.model.EmailBuilder;
 import cec.model.Folder;
 import cec.model.FolderFactory;
+import cec.model.Meeting;
+import cec.model.MeetingBuilder;
 import cec.view.EmailViewEntity;
 
 /**
@@ -13,8 +15,15 @@ public class EmailService {
 
 	public void acceptMeeting(EmailViewEntity emailInView) {
 		// create meeting object
-		// send accept email
+		MeetingBuilder mb = new MeetingBuilder();
+		Email email = buildEmailModelObjectFromViewEntity(emailInView);
+		Meeting newMeeting = mb.buildFromAcceptInvite(email);
+		newMeeting.saveAfterAccept();
+		
+		// send accept email (ACK)
+		
 		// delete email object
+		email.delete();
 	}
 	
 	public void declineMeeting(EmailViewEntity emailInView) {
@@ -29,6 +38,12 @@ public class EmailService {
 	 * @param emailInView the EmailViewEntity object received from view layer
 	 */
 	public void sendEmail(EmailViewEntity emailInView) {
+		
+		Email newEmail = buildEmailModelObjectFromViewEntity(emailInView);
+		newEmail.send();
+	}
+	
+	private Email buildEmailModelObjectFromViewEntity(EmailViewEntity emailInView) {
 		EmailBuilder mailBuilder = new EmailBuilder();
 		Email newEmail = mailBuilder.withId(emailInView.getId()).withFrom()
 				.withTo(emailInView.getTo())
@@ -36,9 +51,12 @@ public class EmailService {
 				.withBody(emailInView.getBody()).withCC(emailInView.getCC())
 				.computelastModifiedTime().computeSentTime()
 				.withParentFolder(FolderFactory.getFolder(emailInView.getFolder()))
+				.withIsMeetingEmail(emailInView.isMeetingEmail())
 				.build();
-		newEmail.send();
+		
+		return newEmail;
 	}
+	
 
 	/**
 	 * This method communicates the model layer the emailInView received as parameter

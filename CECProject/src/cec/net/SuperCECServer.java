@@ -158,63 +158,8 @@ class ServerThreadPerClient implements Runnable {
 	}
 	private Meeting buildMeeting(EmailImpl e) {
 		MeetingBuilder mb = new MeetingBuilder();
-		logger.fine(e.getSubject());
-		logger.fine(e.getBody());
-				
-		String[] bodyLines = e.getBody().split("\n",8);
-		for(String bodyLine: bodyLines){
-			logger.fine(bodyLine);
-		}
-		String subject = bodyLines[2].split(":",2)[1].trim();
-		String location = bodyLines[3].split(":",2)[1].trim();
-		String startDateTime = bodyLines[4].split(":",2)[1].trim();
-		String endDateTime = bodyLines[5].split(":",2)[1].trim();
-		String body = bodyLines[7];
-          
-		logger.fine(subject);
-		logger.fine(location);
-		logger.fine(startDateTime);
-		logger.fine(endDateTime);
-		
-		String startDate = startDateTime.split("at:",2)[0].trim();
-		String startTime = startDateTime.split("at:",2)[1].trim();
-		String endDate = endDateTime.split("at:",2)[0].trim();
-		String endTime = endDateTime.split("at:",2)[1].trim();
-		
-		logger.fine(startDate);
-		logger.fine(startTime);
-		logger.fine(endDate);
-		logger.fine(endTime);
-		logger.fine(body);
-       
-		Meeting meeting = mb.withId(e.getId())
-							.withFrom(e.getFrom())
-							.withAttendees(e.getTo())
-							.withSubject(subject)
-							.withPlace(location)
-							.withStartDate(formatDateForMeeting(startDate))
-							.withEndDate(formatDateForMeeting(endDate))
-							.withStartTime(startTime)
-							.withEndTime(endTime)
-							.withBody(body)
-							.withLastModifiedTime(e.getLastModifiedTime())
-							.withSentTime(e.getSentTime())
-							.withParentFolder(FolderFactory.getFolder("Unknown")).build();
-		logger.info("Here is the Meeting Object for email that above received:");
-		logger.info(meeting.toString());
-		
-		return meeting;
+		return mb.buildFromAcceptInvite(e);
       }
-
-	private String formatDateForMeeting(String date) {
-		@SuppressWarnings("deprecation")
-		Date dateToBeFormatted = new Date(date);
-		logger.fine(dateToBeFormatted.toString());
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		String formattedDate =  sdf.format(dateToBeFormatted);
-    	logger.fine(formattedDate);
-		return formattedDate;
-	}
 
 	private void handleAck(Ack ack) {
 		if (ack.getMsgType() == MessageType.EMAIL || ack.getMsgType() == MessageType.MEETING ) {

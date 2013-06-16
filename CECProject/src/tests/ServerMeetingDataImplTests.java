@@ -211,5 +211,11 @@ class MeetingStub implements Meeting {
 	@Override
 	public void delete() {
 		// TODO Auto-generated method stub		
+	}
+
+	@Override
+	public void saveAfterAccept() {
+		// TODO Auto-generated method stub
+		
 	}	
 }

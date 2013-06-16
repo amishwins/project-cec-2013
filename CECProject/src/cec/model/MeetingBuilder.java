@@ -4,9 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import cec.config.CECConfigurator;
-
 
 // TODO: Auto-generated Javadoc
 /**
@@ -14,6 +14,13 @@ import cec.config.CECConfigurator;
  * 
  */
 public class MeetingBuilder {
+	
+	static Logger logger = Logger.getLogger(MeetingBuilder.class.getName()); 
+
+    static { 
+        logger.setParent(Logger.getLogger(MeetingBuilder.class.getPackage().getName()) );
+    }
+	
 
 	/** The id field. */
 	private UUID id;
@@ -304,4 +311,66 @@ public class MeetingBuilder {
 		return new MeetingImpl(id, from, attendees, startDate, endDate, startTime,
 				endTime, place, subject, body, lastModifiedTime, sentTime, parentFolder);
 	}
+	
+	public Meeting buildFromAcceptInvite(Email e) {
+		MeetingBuilder mb = new MeetingBuilder();
+		logger.fine(e.getSubject());
+		logger.fine(e.getBody());
+				
+		String[] bodyLines = e.getBody().split("\n",8);
+		for(String bodyLine: bodyLines){
+			logger.fine(bodyLine);
+		}
+		String subject = bodyLines[2].split(":",2)[1].trim();
+		String location = bodyLines[3].split(":",2)[1].trim();
+		String startDateTime = bodyLines[4].split(":",2)[1].trim();
+		String endDateTime = bodyLines[5].split(":",2)[1].trim();
+		String body = bodyLines[7];
+          
+		logger.fine(subject);
+		logger.fine(location);
+		logger.fine(startDateTime);
+		logger.fine(endDateTime);
+		
+		String startDate = startDateTime.split("at:",2)[0].trim();
+		String startTime = startDateTime.split("at:",2)[1].trim();
+		String endDate = endDateTime.split("at:",2)[0].trim();
+		String endTime = endDateTime.split("at:",2)[1].trim();
+		
+		logger.fine(startDate);
+		logger.fine(startTime);
+		logger.fine(endDate);
+		logger.fine(endTime);
+		logger.fine(body);
+       
+		Meeting meeting = mb.withId(e.getId())
+							.withFrom(e.getFrom())
+							.withAttendees(e.getTo())
+							.withSubject(subject)
+							.withPlace(location)
+							.withStartDate(formatDateForMeeting(startDate))
+							.withEndDate(formatDateForMeeting(endDate))
+							.withStartTime(startTime)
+							.withEndTime(endTime)
+							.withBody(body)
+							.withLastModifiedTime(e.getLastModifiedTime())
+							.withSentTime(e.getSentTime())
+							.withParentFolder(FolderFactory.getFolder(CECConfigurator.getReference().get("Meetings")))
+							.build();
+		logger.info("Here is the Meeting Object for email that above received:");
+		logger.info(meeting.toString());
+		
+		return meeting;
+	}
+	
+	private String formatDateForMeeting(String date) {
+		@SuppressWarnings("deprecation")
+		Date dateToBeFormatted = new Date(date);
+		logger.fine(dateToBeFormatted.toString());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String formattedDate =  sdf.format(dateToBeFormatted);
+    	logger.fine(formattedDate);
+		return formattedDate;
+	}
+	
 }
