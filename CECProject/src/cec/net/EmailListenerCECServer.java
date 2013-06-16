@@ -90,8 +90,8 @@ public class EmailListenerCECServer implements Runnable {
 
 	private String buildEmailBody(Email email, String unknownRecipent) {
 		StringBuilder emailBody = new StringBuilder();
-		emailBody.append("\n Below Email Could not be delivered as "
-				+ unknownRecipent + " account does not exist!");
+		emailBody.append("\n The email which appears below could not be sent. Email address: "
+				+ unknownRecipent + " does not exist on the server.");
 		emailBody.append("\n\n To : " + unknownRecipent);
 		emailBody.append("\n From: " + email.getFrom());
 		emailBody.append("\n Subject: " + email.getSubject());
