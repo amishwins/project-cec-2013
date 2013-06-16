@@ -428,10 +428,10 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		registerMenuBarEntry.addActionListener(new ConnectToServer());
 		
 		
-		JMenuItem registerMenuBarQuit = new JMenuItem("Disconnect");		
+		/*JMenuItem registerMenuBarQuit = new JMenuItem("Disconnect");		
 		registerMenuBarQuit.setMnemonic('Q');
 		registration.add(registerMenuBarQuit);	
-		registerMenuBarQuit.addActionListener(new DisconnectFromServer());		
+		registerMenuBarQuit.addActionListener(new DisconnectFromServer());	*/	
 	}
 	
 	
@@ -897,13 +897,13 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	}	
 
 	//AUTHENTICATION -> DISCONNECT
-	private class DisconnectFromServer implements ActionListener {
+	/*private class DisconnectFromServer implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			NetworkHelper nw = NetworkHelper.getReference();
 			if (NetworkHelper.isConnectedToServer()) {
 				nw.disconnectFromServer();			
 		}}
-	}	
+	}	*/
 	
 	private void updateEmailTableFound(String toFind) {
 		selectInboxByDefault(); 
