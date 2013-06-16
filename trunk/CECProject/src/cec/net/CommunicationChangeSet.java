@@ -1,9 +1,11 @@
 package cec.net;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public class CommunicationChangeSet {
+public class CommunicationChangeSet implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
 	private final ChangeSetState state; 
 	private final UUID meetingID;
 	
