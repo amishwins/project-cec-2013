@@ -14,6 +14,8 @@ import cec.config.CECConfigurator;
 import cec.exceptions.CannotDeleteSystemFolderException;
 import cec.exceptions.FolderAlreadyExistsException;
 import cec.exceptions.RootFolderSubfolderCreationException;
+import cec.persistence.MeetingDao;
+import cec.persistence.MeetingDaoFactory;
 import cec.service.FolderService;
 import cec.service.MeetingService;
 import cec.view.MeetingViewEntity;
@@ -86,7 +88,7 @@ class HelperFolderServiceModelAndDaoIntegrationTest{
 	  MeetingService meetingService;
 	  FolderService folderService;
 	  MeetingViewEntity meetingViewEntity,meetingViewEntity2;
-		
+	  MeetingDao meetingDao;	
 	  
 	  UUID meetingId, meetingId2;
 	  String from, from2;
@@ -108,7 +110,8 @@ class HelperFolderServiceModelAndDaoIntegrationTest{
     	    
     	    meetingService = new MeetingService();
     		folderService = new FolderService();
-    		    		
+    		meetingDao = MeetingDaoFactory.getMeetingDaoInstance();
+    		
     		meetingId = UUID.randomUUID();
     		from = CECConfigurator.getReference()
     				.getClientEmailAddress();
@@ -217,5 +220,9 @@ class HelperFolderServiceModelAndDaoIntegrationTest{
       public void deleteMeetings() {
     	  meetingService.delete(meetingViewEntity);
     	  meetingService.delete(meetingViewEntity2);
+    	  meetingDao.delete(CECConfigurator.getReference().get("Sent"),meetingId);
+    	  meetingDao.delete(CECConfigurator.getReference().get("Sent"),meetingId2);
+    	  meetingDao.delete(CECConfigurator.getReference().get("Outbox"), meetingId);
+  		  meetingDao.delete(CECConfigurator.getReference().get("Outbox"), meetingId2);
       } 
 }
