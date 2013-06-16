@@ -97,7 +97,7 @@ public class MeetingService {
 	public void sendUpdate(MeetingViewEntity before, MeetingViewEntity after) {
 		
 		ClientMeetingMerger cm = new ClientMeetingMerger();
-		CommunicationChangeSet ccs = cm.getChanges(before, after);
+		CommunicationChangeSet ccs = cm.getChangeSet(before, after);
 		if (ccs.getChanges().size() == 0) {
 			// TODO: THIS IS THE WRONG PLACE TO DO THIS
 			JOptionPane.showMessageDialog(null, "No changes were made");
