@@ -113,13 +113,17 @@ public interface Meeting extends Comparable<Meeting> {
 	 * @return the last modified time nicely formatted
 	 */
 	public String getLastModifiedTimeNicelyFormatted();
-	
-	
 	 
     /**
      * Sends the meeting object.
      */
     public void send();
+
+    /**
+     * Save a meeting after accepting the invitation
+     */
+    public void saveAfterAccept();
+    
     
        
     /**

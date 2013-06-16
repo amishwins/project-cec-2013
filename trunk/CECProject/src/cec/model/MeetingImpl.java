@@ -234,14 +234,22 @@ public class MeetingImpl implements Meeting {
 	 * 
 	 */
 	public void send() {
-		// Assumption that meeting email has been sent successfully..
+		saveToPersistence();
+		String subjectPrefix = "Meeting Request: ";
+		sendEmailToAttendeesForMeeting(subjectPrefix);
+	}	
+	
+	@Override
+	public void saveAfterAccept() {
+		saveToPersistence();
+	}
+
+	private void saveToPersistence() {
 		meetingDao.save(id, from, attendees, startDate, endDate, startTime,
 				endTime, place, subject, body, lastModifiedTime, sentTime,
 				CECConfigurator.getReference().get("Meetings"));
-		String subjectPrefix = "Meeting Request: ";
-		sendEmailToAttendeesForMeeting(subjectPrefix);
 	}
-
+	
 	/**
 	 * Send email to attendees for inviting into the meeting.
 	 *
@@ -369,4 +377,6 @@ public class MeetingImpl implements Meeting {
 	protected void handleParseException(Exception e) {
 		e.printStackTrace();
 	}
+
+	
 }
