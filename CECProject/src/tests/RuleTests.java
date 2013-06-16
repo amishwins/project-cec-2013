@@ -311,5 +311,11 @@ class FolderStub extends Folder {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Iterable<Email> loadRuleApplicableEmails() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }
