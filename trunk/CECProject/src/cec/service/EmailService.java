@@ -1,8 +1,5 @@
 package cec.service;
 
-import java.io.IOException;
-
-import cec.exceptions.StackTrace;
 import cec.exceptions.UserIsNotConnectedException;
 import cec.model.Email;
 import cec.model.EmailBuilder;
