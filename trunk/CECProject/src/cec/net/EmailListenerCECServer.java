@@ -48,22 +48,33 @@ public class EmailListenerCECServer implements Runnable {
 				for(String emailAddress: emailAddresses) {
 					String addr = emailAddress.trim();
 					out = SuperCECServer.getEmailToObjectOutputStream().get(addr);
+					Email deliveryFailureNoticeEmail=null;
 					if (null == out) {
-						logger.info(addr+" does not exist.");
-						out = SuperCECServer.getEmailToObjectOutputStream().get(newEmail.getFrom());
-						Email deliveryFailureNoticeEmail = buildNoticeEmail(newEmail, addr);
-						out.writeObject(deliveryFailureNoticeEmail);
-						logger.info("Delivery Failure Email to " + newEmail.getFrom()
+						try {
+						      logger.info(addr + " does not exist.");
+						      out = SuperCECServer.getEmailToObjectOutputStream().get(newEmail.getFrom());
+						      out.flush();
+						      deliveryFailureNoticeEmail = buildNoticeEmail(newEmail, addr);
+						      out.writeObject(deliveryFailureNoticeEmail);
+						      logger.info("Delivery Failure Email to " + newEmail.getFrom()
 								+ " has been sent.");
+						} catch (SocketException e) {
+							logger.severe("Delivery Failure Email sending failed for: " + newEmail.getFrom());
+							(SuperCECServer.getUnSendableEmailsMap().get(newEmail.getFrom())).add(deliveryFailureNoticeEmail);
+							logger.severe("Delivery Failure Email has been added to UnSendableQueue for: "+  newEmail.getFrom());							
+     					}
 					} else {
 						try {
 							out.writeObject(newEmail);
+							out.flush();
 							SuperCECServer.getSentEmailMap().put(newEmail.getId(), newEmail);
-							logger.info("Email " + addr + " has been sent.");
+							logger.info("Email with subject: "+newEmail.getSubject() + " has been sent to " + addr);
 						} catch (SocketException e) {
-							logger.info("Email sending failed for: " + addr);
-							// handle this!!!!
-						}
+							logger.info("Sending of email with subject: "+ newEmail.getSubject()+" failed for receiver: " + addr);
+							(SuperCECServer.getUnSendableEmailsMap().get(addr)).add(newEmail);
+							printUnSendableEmailsMapEmails(addr);
+							logger.info("Email with subject: "+newEmail.getSubject()+"  has been added to UnSendableQueue for: " + addr);
+     					}
 					}					
 				}
 				
@@ -71,6 +82,15 @@ public class EmailListenerCECServer implements Runnable {
 				logger.severe(StackTrace.asString(e));
 			}
 		}
+	}
+
+	private void printUnSendableEmailsMapEmails(String addr) {
+		
+		logger.info("Printing UnSendable Email List Size: "+SuperCECServer.getUnSendableEmailsMap().get(addr).size());
+		for(Email email: (SuperCECServer.getUnSendableEmailsMap().get(addr))){
+			logger.info(addr + " has email with subject : "+ email.getSubject());
+		}
+		
 	}
 
 	private Email buildNoticeEmail(Email email, String unknownRecipent) {

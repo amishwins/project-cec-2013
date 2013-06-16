@@ -4,10 +4,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.logging.Logger;
 
 import cec.exceptions.StackTrace;
+import cec.model.Email;
 
 public class ServerClientAcceptor implements Runnable {
 	static Logger logger = Logger.getLogger(ServerClientAcceptor.class.getName());
@@ -34,12 +36,27 @@ public class ServerClientAcceptor implements Runnable {
 				in = new ObjectInputStream(socket.getInputStream());
 				out = new ObjectOutputStream(socket.getOutputStream());
 
+				
+				
+				
 				HandShake handShake = (HandShake) in.readObject();
 				setupServerMaps(socket, handShake);
+				
 				logCurrentlyRegisteredUsers();
-
+				
+				for(Email email:SuperCECServer.getUnSendableEmailsMap().get(handShake.emailAddress)){
+					logger.info(handShake.emailAddress+ " has email with subject: " + email.getSubject());					
+				}
+				
+				
+				
+				// Spawn a new task if there are pending messages for this newly joined person.
+                if((SuperCECServer.getUnSendableEmailsMap().get(handShake.emailAddress)).size()>0){
+				   SuperCECServer.getExecutor().submit(new SendPendingMessages(handShake.emailAddress));
+                }
 				// Spawn new task for the client which has just connected
 				SuperCECServer.getExecutor().submit(new ServerThreadPerClient(handShake.emailAddress));
+				
 
 			} catch (Exception e) {
 				logger.severe(StackTrace.asString(e));
@@ -53,7 +70,10 @@ public class ServerClientAcceptor implements Runnable {
 		for (String email : emails) {
 			logger.info("Client connected. Email: " + email
 					+ ". Socket: "
-					+ SuperCECServer.getEmailToSocketMap().get(email));
+					+ SuperCECServer.getEmailToSocketMap().get(email)
+					+ " in stream: " + SuperCECServer.getEmailToObjectInputStream().get(email) + ". Out stream: " +  SuperCECServer.getEmailToObjectOutputStream().get(email)
+					); 
+					
 		}
 	}
 
@@ -61,6 +81,9 @@ public class ServerClientAcceptor implements Runnable {
 		SuperCECServer.getEmailToSocketMap().put(handShake.emailAddress, socket);
 		SuperCECServer.getEmailToObjectInputStream().put(handShake.emailAddress, in);
 		SuperCECServer.getEmailToObjectOutputStream().put(handShake.emailAddress, out);
+		if((SuperCECServer.getUnSendableEmailsMap().get(handShake.emailAddress))==null){
+    		SuperCECServer.getUnSendableEmailsMap().put(handShake.emailAddress, new ArrayList<Email>());
+		}
 		logger.info(handShake.emailAddress + " is connected!!!");
 	}
 }
