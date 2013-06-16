@@ -39,8 +39,17 @@ public class EmailService {
 	 */
 	public void sendEmail(EmailViewEntity emailInView) {
 		
-		Email newEmail = buildEmailModelObjectFromViewEntity(emailInView);
-		newEmail.send();
+		EmailBuilder mailBuilder = new EmailBuilder();
+		Email newEmail = mailBuilder.withId(emailInView.getId()).withFrom()
+				.withTo(emailInView.getTo())
+				.withSubject(emailInView.getSubject())
+				.withBody(emailInView.getBody()).withCC(emailInView.getCC())
+				.computelastModifiedTime().computeSentTime()
+				.withParentFolder(FolderFactory.getFolder(emailInView.getFolder()))
+				.build();
+		
+		newEmail.send();		
+		
 	}
 	
 	private Email buildEmailModelObjectFromViewEntity(EmailViewEntity emailInView) {

@@ -325,6 +325,7 @@ public class EmailFrame extends JFrame implements DocumentListener {
 			}
 		});		
 		
+
 		add(bar, BorderLayout.NORTH);
 	}
 
