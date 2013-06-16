@@ -65,7 +65,7 @@ public class NetworkHelper {
 			EmailBuilder mailBuilder = new EmailBuilder();
 			boolean isMeetingEmail = ((EmailImpl) email).isMeetingEmail();
 
-			Email newEmail = mailBuilder.computeID().withFrom(email.getFrom())
+			Email newEmail = mailBuilder.withId(email.getId()).withFrom(email.getFrom())
 					.withTo(email.getTo()).withSubject(email.getSubject())
 					.withBody(email.getBody()).withCC(email.getCC())
 					.computelastModifiedTime().computeSentTime()
