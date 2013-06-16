@@ -14,6 +14,7 @@ import cec.config.CECConfigurator;
 import cec.exceptions.CannotDeleteSystemFolderException;
 import cec.exceptions.FolderAlreadyExistsException;
 import cec.exceptions.RootFolderSubfolderCreationException;
+import cec.net.NetworkHelper;
 import cec.persistence.MeetingDao;
 import cec.persistence.MeetingDaoFactory;
 import cec.service.FolderService;
@@ -73,6 +74,10 @@ public class FolderServiceModelAndDaoIntegrationTests {
 	
 	@Test
 	public void sendAndLoadMeetingsFromMeetingsFolder() {
+		if (!NetworkHelper.isConnectedToServer()) {
+			// find a way to log that we're not connected
+	    	return;
+		}
 		HelperFolderServiceModelAndDaoIntegrationTest th = new HelperFolderServiceModelAndDaoIntegrationTest();
 		th.setUpTestData();
 		th.sendMeetings();
