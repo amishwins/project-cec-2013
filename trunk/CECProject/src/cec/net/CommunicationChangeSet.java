@@ -37,26 +37,18 @@ public class CommunicationChangeSet implements Serializable {
 		return meetingID;
 	}
 	
-	public void addChanges() {
-		if (state != ChangeSetState.CHANGE) {
-			throw new IllegalStateException("Cannot add changes to this change set of type: " + state);
-		}
-	}
 
 	public void send() {
 		NetworkHelper nh = NetworkHelper.getReference();
 		nh.sendChangeSet(this);		
 	}
+	
+	public void addChange(Change c) {
+		addChange(c.field, c.before, c.after);
+	}
 
 	public void addChange(final ChangeSetFields body, final String inBefore, final String inAfter) {
-		
-		// TODO: should we just use some sort of set here? I don't know!!
-		for(Change c: changes) {
-			if (c.field.equals(body)) {
-				// should only add changes once
-				throw new IllegalStateException("Cannot have more than one change for a given field: " + body);
-			}
-		}
+		checkSanityOfChange(body, inBefore, inAfter);
 		
 		Change c = new Change(); 
 		c.field = body; 
@@ -66,9 +58,36 @@ public class CommunicationChangeSet implements Serializable {
 		changes.add(c);
 		
 	}
-
+	
 	public ArrayList<Change> getChanges() {
 		// defensive copy
 		return new ArrayList<Change>(changes);
 	}
+
+	private void assertChangeSetState() {
+		if (state != ChangeSetState.CHANGE) {
+			throw new IllegalStateException("Cannot add changes to this change set of type: " + state);
+		}
+	}
+	
+	private void checkSanityOfChange(final ChangeSetFields body, final String inBefore, final String inAfter) {
+		assertChangeSetState();
+
+		if (body == null || inBefore == null || inAfter == null)
+			throw new IllegalArgumentException("Change fields cannot be null");
+		
+		// TODO: should we just use some sort of set here? I don't know!!
+		for(Change c: changes) {
+			if (c.field.equals(body)) {
+				// should only add changes once
+				throw new IllegalStateException("Cannot have more than one change for a given field: " + body);
+			}
+		}	
+
+		if (inBefore.equals(inAfter)) {
+			throw new IllegalArgumentException("Before and after are the same!");
+		}
+	}
+
+
 }

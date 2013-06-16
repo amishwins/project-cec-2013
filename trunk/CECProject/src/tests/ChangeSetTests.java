@@ -18,11 +18,17 @@ public class ChangeSetTests {
 	
 	CommunicationChangeSet ccs;
 	UUID meetingID;
+	String before;
+	String after;
 
 	@Before
 	public void setUp() throws Exception {
 		meetingID = UUID.randomUUID();
 		ccs = new CommunicationChangeSet(ChangeSetState.CHANGE, meetingID);
+		// should the "before" be calculated by the system? who should populate it? 
+		before = "Before";
+		after = "After";
+		ccs.addChange(ChangeSetFields.BODY, before, after);
 	}
 
 	@After
@@ -31,17 +37,73 @@ public class ChangeSetTests {
 
 	@Test
 	public void addedChangeIsInChangeSet() {
-		
-		// should the "before" be calculated by the system? who should populate it? 
-		ccs.addChange(ChangeSetFields.BODY, "Before", "After");
-		
 		Change c = new Change();
 		c.field = ChangeSetFields.BODY;
-		c.before = "Before";
-		c.after = "After";
+		c.before = before;
+		c.after = after;
 		
 		ArrayList<Change> changes = ccs.getChanges();
-		assertTrue(changes.get(0).isEqualTo(c));		
+		assertTrue(changes.get(0).isEqualTo(c));
+		assertEquals(1, changes.size());	
+	}
+	
+	@Test
+	public void addMultipleFieldsToChangeSet() {
+		ccs.addChange(ChangeSetFields.TO, "bob@hope.com", "jimbo@jimbo.com");
+		ccs.addChange(ChangeSetFields.END_DATE, "END_DATE", "jimbo1@jimbo.com");
+		ccs.addChange(ChangeSetFields.END_TIME, "END_TIME", "jimbo2@jimbo.com");
+		ccs.addChange(ChangeSetFields.START_DATE, "START_DATE", "jimbo3@jimbo.com");
+		ccs.addChange(ChangeSetFields.START_TIME, "START_TIME", "jimbo4@jimbo.com");
+		ccs.addChange(ChangeSetFields.LOCATION, "LOCATION", "jimbo5@jimbo.com");
+		ccs.addChange(ChangeSetFields.SUBJECT, "SUBJECT", "jimbo6@jimbo.com");
+		
+		ArrayList<Change> changes = ccs.getChanges();
+		assertEquals(8, changes.size());
+		
+		Change c = new Change(ChangeSetFields.TO, "bob@hope.com", "jimbo@jimbo.com");
+		assertTrue(changes.get(1).isEqualTo(c));
+		
+		c = new Change(ChangeSetFields.END_DATE, "END_DATE", "jimbo1@jimbo.com");
+		assertTrue(changes.get(2).isEqualTo(c));
+
+		c = new Change(ChangeSetFields.END_TIME, "END_TIME", "jimbo2@jimbo.com");
+		assertTrue(changes.get(3).isEqualTo(c));
+
+		c = new Change(ChangeSetFields.START_DATE, "START_DATE", "jimbo3@jimbo.com");
+		assertTrue(changes.get(4).isEqualTo(c));
+		
+		c = new Change(ChangeSetFields.START_TIME, "START_TIME", "jimbo4@jimbo.com");
+		assertTrue(changes.get(5).isEqualTo(c));
+		
+		c = new Change(ChangeSetFields.LOCATION, "LOCATION", "jimbo5@jimbo.com");
+		assertTrue(changes.get(6).isEqualTo(c));
+		
+		c = new Change(ChangeSetFields.SUBJECT, "SUBJECT", "jimbo6@jimbo.com");
+		assertTrue(changes.get(7).isEqualTo(c));		
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void tryToAddChangeWithSameBeforeAndAfter() {
+		Change c = new Change();
+		c.field = ChangeSetFields.SUBJECT;
+		c.before = "blah";
+		c.after = "blah";
+		ccs.addChange(c);		
 	}
 
+	
+	@Test(expected=IllegalStateException.class)
+	public void tryToAddChangesToTheSameFieldTwice() {
+		Change c = new Change();
+		c.field = ChangeSetFields.BODY;
+		c.before = "blah";
+		c.after = "blahblah";
+		ccs.addChange(c);		
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void tryToAddNullChange() {
+		Change c = new Change();
+		ccs.addChange(c);
+	}
 }

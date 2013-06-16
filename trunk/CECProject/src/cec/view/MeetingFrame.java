@@ -29,6 +29,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 import javax.swing.text.JTextComponent;
 
+import cec.net.NetworkHelper;
 import cec.service.MeetingService;
 
 /**
@@ -232,62 +233,90 @@ public class MeetingFrame extends JFrame {
 	 * refreshes the table view with latest data. 
 	 * Send email.
 	 */
+	// TODO: split sendMeeting into two methods - one for Send Meeting, one for Send Update (need two buttons also?)
 	private void sendMeeting() {
-		buildMeetingViewObject();
-		if (!validateEmailFields())
+		// if it's a new meeting, allow to be disconnected 
+		MeetingViewEntity mve = buildMeetingViewObjectFromUIFields();
+		if (!validateEmailFields(mve))
 			return;
-		meetingService.sendMeeting(meetingView);
-		mainClient.updateMeetingsTable();
-		this.dispose();
+
+		if (newMeeting()) {
+			meetingService.sendMeeting(mve);
+			mainClient.updateMeetingsTable();
+			this.dispose();			
+		}
+		
+		// for meeting updates, the client MUST BE CONNECTED		
+		else {
+			if (!NetworkHelper.isConnectedToServer()) {
+				JOptionPane.showMessageDialog(null, "Please connect to the server before sending meeting updates.");
+				return;
+			}		
+			else {
+				// build the change set
+				meetingService.sendUpdate(meetingView, mve);
+				// TODD: block -- cannot continue until the server returns to us
+			}
+		}
 	}
 
-	private void buildMeetingViewObject() {
-		if (null == meetingView.getId()) {
-			meetingView.setId(id);
+	private MeetingViewEntity buildMeetingViewObjectFromUIFields() {
+		MeetingViewEntity updatedMeetingView = new MeetingViewEntity();
+		
+		if (newMeeting()) {
+			updatedMeetingView.setId(id);
+		}
+		else {
+			updatedMeetingView.setId(meetingView.getId());
 		}
 
-		meetingView.setAttendees(toTextField.getText().trim());
-		meetingView.setSubject(subjectTextField.getText());
-		meetingView.setPlace(locationTextField.getText().trim());
-		meetingView.setStartDate(startDateTextField.getText().trim());
-		meetingView.setEndDate(endDateTextField.getText().trim());
-		meetingView
-				.setStartTime(startTimeComboBox.getSelectedItem().toString());
-		meetingView.setEndTime(endTimeComboBox.getSelectedItem().toString());
-		meetingView.setBody(bodyTextField.getText());
+		updatedMeetingView.setAttendees(toTextField.getText().trim());
+		updatedMeetingView.setSubject(subjectTextField.getText());
+		updatedMeetingView.setPlace(locationTextField.getText().trim());
+		updatedMeetingView.setStartDate(startDateTextField.getText().trim());
+		updatedMeetingView.setEndDate(endDateTextField.getText().trim());
+		updatedMeetingView.setStartTime(startTimeComboBox.getSelectedItem().toString());
+		updatedMeetingView.setEndTime(endTimeComboBox.getSelectedItem().toString());
+		updatedMeetingView.setBody(bodyTextField.getText());
+		
+		return updatedMeetingView;
+	}
+
+	private boolean newMeeting() {
+		return (null == meetingView.getId());
 	}
 
 	/**
 	 * Validate email fields.
+	 * @param newMeetingView 
 	 * 
 	 * @return true, if successful
 	 */
-	private boolean validateEmailFields() {
-		if (!emailValidator.isValidSendees(meetingView.getAttendees(),
-				meetingView.getAttendees())) {
+	private boolean validateEmailFields(MeetingViewEntity newMeetingView) {
+		if (!emailValidator.isValidTo(newMeetingView.getAttendees())) {
 			JOptionPane.showMessageDialog(null,
 					"One address is not properly formatted. Please recheck");
 			return false;
 		}
 
-		if (!emailValidator.isValidDates(meetingView.getStartDate(),
-				meetingView.getEndDate())) {
+		if (!emailValidator.isValidDates(newMeetingView.getStartDate(),
+				newMeetingView.getEndDate())) {
 			JOptionPane
 					.showMessageDialog(null,
 							"One of the Date is not properly formatted. Please recheck");
 			return false;
 		}
 
-		if (!emailValidator.hasNotPassedDates(meetingView.getStartDate(), meetingView.getStartTime(),
-				meetingView.getEndDate(), meetingView.getEndTime())) {
+		if (!emailValidator.hasNotPassedDates(newMeetingView.getStartDate(), newMeetingView.getStartTime(),
+				newMeetingView.getEndDate(), newMeetingView.getEndTime())) {
 			JOptionPane.showMessageDialog(null,
 					"One of the Date is past date. Please recheck");
 			return false;
 		}
 
 		if (!emailValidator.isStartTimeAndEndTimeInOrder(
-				meetingView.getStartDate(), meetingView.getStartTime(),
-				meetingView.getEndDate(), meetingView.getEndTime())) {
+				newMeetingView.getStartDate(), newMeetingView.getStartTime(),
+				newMeetingView.getEndDate(), newMeetingView.getEndTime())) {
 			JOptionPane
 					.showMessageDialog(null,
 							"Start Time should not be less than or equal to End Time. Please recheck");
