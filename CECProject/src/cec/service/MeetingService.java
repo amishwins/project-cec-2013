@@ -3,7 +3,6 @@ package cec.service;
 import javax.swing.JOptionPane;
 
 import cec.exceptions.UserIsNotConnectedException;
-import cec.model.Email;
 import cec.model.Meeting;
 import cec.model.MeetingBuilder;
 import cec.model.FolderFactory;
