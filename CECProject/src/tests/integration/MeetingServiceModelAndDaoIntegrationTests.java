@@ -1,6 +1,6 @@
 package tests.integration;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Map;
 import java.util.UUID;
@@ -20,9 +20,10 @@ public class MeetingServiceModelAndDaoIntegrationTests {
     String MEETING_FILE_EXTENSION = ".xml";
     
     MeetingService meetingService;
+   
 	MeetingDao meetingDao;
 	MeetingViewEntity meetingViewEntity;
-	
+		
 	String systemFolderName;
 	UUID meetingId;
 	String from;
@@ -95,6 +96,8 @@ public class MeetingServiceModelAndDaoIntegrationTests {
 		assertEquals(meetingData.get("Body"),body);
 		assertEquals(meetingData.get("ParentFolder"),parentFolder);
 		meetingService.delete(meetingViewEntity);
+		meetingDao.delete(CECConfigurator.getReference().get("Sent"),meetingId);
+		meetingDao.delete(CECConfigurator.getReference().get("Outbox"), meetingId);
 	}
 
 }
