@@ -7,6 +7,8 @@ import java.io.ObjectOutputStream;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
@@ -21,11 +23,16 @@ import cec.model.FolderFactory;
 
 public class NetworkHelper {
 	
+	
+	
 	static Logger logger = Logger.getLogger(NetworkHelper.class.getName()); 
 
     static { 
         logger.setParent( Logger.getLogger( NetworkHelper.class.getPackage().getName() ) );
     }
+    
+    ConcurrentHashMap<UUID, MeetingLock> waitingForServerResponseLocks = new ConcurrentHashMap<>(); 
+    volatile CommunicationChangeSet receivedCCS;
     
     static NetworkHelper instance;
 
@@ -60,6 +67,13 @@ public class NetworkHelper {
 						Ack ack = (Ack) obj;
 						handleAck(ack);
 					}
+					
+					else if ((obj instanceof CommunicationChangeSet)) { 
+						receivedCCS = (CommunicationChangeSet) obj;
+						// oh god
+						waitingForServerResponseLocks.get(receivedCCS.getId()).notify();
+					}
+					
 				} catch (EOFException e) {
 					logger.info("Disconnected from the server!");
 					break;
@@ -184,7 +198,26 @@ public class NetworkHelper {
 	public void sendChangeSet(CommunicationChangeSet ccs) {
 		if (NetworkHelper.isConnectedToServer()) {
 			try {
-				oos.writeObject(ccs);
+				if (ccs.isChange()){
+					// setup the lock to return control back to the user only when the server 
+					// sends either CHANGE_ACCEPTED, or CHANGE_REJECTED
+					MeetingLock ml = new MeetingLock();
+					waitingForServerResponseLocks.put(ccs.getId(), ml);
+					oos.writeObject(ccs);
+					
+					logger.info("We have locked the main thread. Oh god!");
+					
+					
+					logger.info("We have unlocked the main thread.");
+					
+					
+				}
+				
+				else {
+					oos.writeObject(ccs);
+				}
+					
+				
 			} catch (IOException e) {
 				logger.severe(StackTrace.asString(e));	
 			} catch (Exception e) {
