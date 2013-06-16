@@ -1,8 +1,13 @@
 package cec.service;
 
+import cec.exceptions.UserIsNotConnectedException;
+import cec.model.Email;
 import cec.model.Meeting;
 import cec.model.MeetingBuilder;
 import cec.model.FolderFactory;
+import cec.net.ChangeSetState;
+import cec.net.CommunicationChangeSet;
+import cec.net.NetworkHelper;
 import cec.view.MeetingViewEntity;
 
 /**
@@ -50,8 +55,18 @@ public class MeetingService {
 	 *            the MeetingViewEntity object received from view layer
 	 */
 	public void delete(MeetingViewEntity meetingInView) {
-		Meeting meeting = convertMeetingInViewToMeetinglModel(meetingInView);
-		meeting.delete();
+		if(NetworkHelper.isConnectedToServer()) {
+			// send accept email (ChangeSet)
+			CommunicationChangeSet ccs = new CommunicationChangeSet(ChangeSetState.DECLINE, meetingInView.getId());
+			ccs.send();
+			
+			// delete meeting object
+			Meeting meeting = convertMeetingInViewToMeetinglModel(meetingInView);
+			meeting.delete();
+			}
+			else {
+				throw new UserIsNotConnectedException();			
+			}
 	}
 
 	private Meeting convertMeetingInViewToMeetinglModel(

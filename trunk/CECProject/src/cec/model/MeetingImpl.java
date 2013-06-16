@@ -309,8 +309,6 @@ public class MeetingImpl implements Meeting {
 	 * 
 	 */
 	public void delete() {
-		String subjectPrefix = "Cancellation Meeting Request: ";
-		sendEmailToAttendeesForMeeting(subjectPrefix);
 		meetingDao.delete(parentFolder.getPath(), id);
 	}
 
