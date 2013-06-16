@@ -12,6 +12,7 @@ import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
 import javax.swing.InputMap;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -22,17 +23,17 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JButton;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.PlainDocument;
 import javax.swing.text.JTextComponent;
+import javax.swing.text.PlainDocument;
 
 import cec.config.CECConfigurator;
+import cec.exceptions.UserIsNotConnectedException;
 import cec.service.EmailService;
 import cec.service.PlaceholderHelper;
 import cec.service.TemplateService;
@@ -406,9 +407,15 @@ public class EmailFrame extends JFrame implements DocumentListener {
 	 * Accept Meeting
 	 */		
 	private void acceptMeeting() {
-
-		emailService.acceptMeeting(emailView);
-		this.dispose();
+		
+		try {
+			emailService.acceptMeeting(emailView);
+			this.dispose();
+			EmailClient.getReference().updateEmailsTable();
+		} catch (UserIsNotConnectedException e) {
+			JOptionPane.showMessageDialog(null,
+					"You are currently not connected to CEC Server.");
+		}
 	}
 	
 	// Actions - Decline Meeting
@@ -416,8 +423,14 @@ public class EmailFrame extends JFrame implements DocumentListener {
 	 * Decline Meeting
 	 */		
 	private void declineMeeting() {
-		emailService.delete(emailView);
+		try {
+			emailService.declineMeeting(emailView);
 		this.dispose();
+		} catch (UserIsNotConnectedException e) {
+			JOptionPane.showMessageDialog(null,
+					"You are currently not connected to CEC Server.");
+		}
+		
 	}	
 
 	// Actions - Draft

@@ -26,11 +26,25 @@ public class NetworkHelper {
     static { 
         logger.setParent( Logger.getLogger( NetworkHelper.class.getPackage().getName() ) );
     }
+    
+    static NetworkHelper instance;
+
+    static public NetworkHelper getReference() {
+    	if (instance == null) {
+    		instance = new NetworkHelper();
+    	}
+    	
+    	return instance;
+    }
 
 	public static boolean isConnectedToServer() {	
 			return (clientSocket != null);	
 	}
 
+    private NetworkHelper() {
+    	
+    }
+	
 	class ListenerForMessagesFromServer implements Runnable {
 		public void run() {
 
@@ -165,6 +179,21 @@ public class NetworkHelper {
 				}
 			}
 		});
+	}
+	
+	public void sendChangeSet(CommunicationChangeSet ccs) {
+		if (NetworkHelper.isConnectedToServer()) {
+			try {
+				oos.writeObject(ccs);
+			} catch (IOException e) {
+				logger.severe(StackTrace.asString(e));	
+			} catch (Exception e) {
+				logger.severe(StackTrace.asString(e));				
+			}
+		}
+		else {
+			logger.info("You are currently not connected to the CEC network.");
+		}
 	}
 
 	public void disconnectFromServer() {

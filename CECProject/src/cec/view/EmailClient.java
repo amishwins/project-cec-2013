@@ -875,7 +875,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	//AUTHENTICATION -> CONNECT
 	private class ConnectToServer implements ActionListener {
 		public void actionPerformed(ActionEvent e) {			
-			NetworkHelper nw = new NetworkHelper();
+			NetworkHelper nw = NetworkHelper.getReference();
 			if (NetworkHelper.isConnectedToServer()) {
 				JOptionPane.showMessageDialog(null,  "You are already connected to the server!");
 			}
@@ -899,7 +899,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	//AUTHENTICATION -> DISCONNECT
 	private class DisconnectFromServer implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			NetworkHelper nw = new NetworkHelper();
+			NetworkHelper nw = NetworkHelper.getReference();
 			nw.disconnectFromServer();			
 		}
 	}	
