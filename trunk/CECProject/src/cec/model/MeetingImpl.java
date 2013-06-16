@@ -16,6 +16,58 @@ import cec.persistence.MeetingDaoFactory;
  */
 public class MeetingImpl implements Meeting {
 
+	public MeetingDao getMeetingDao() {
+		return meetingDao;
+	}
+
+	public void setFrom(String from) {
+		this.from = from;
+	}
+
+	public void setAttendees(String attendees) {
+		this.attendees = attendees;
+	}
+
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
+	}
+
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
+	}
+
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
+
+	public void setPlace(String place) {
+		this.place = place;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
+	public void setBody(String body) {
+		this.body = body;
+	}
+
+	public void setLastModifiedTime(String lastModifiedTime) {
+		this.lastModifiedTime = lastModifiedTime;
+	}
+
+	public void setSentTime(String sentTime) {
+		this.sentTime = sentTime;
+	}
+
+	public void setParentFolder(Folder parentFolder) {
+		this.parentFolder = parentFolder;
+	}
+
 	/** The id field. */
 	private final UUID id;
 
