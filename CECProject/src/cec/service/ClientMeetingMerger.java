@@ -7,7 +7,7 @@ import cec.view.MeetingViewEntity;
 
 public class ClientMeetingMerger {
 
-	public CommunicationChangeSet getChanges(MeetingViewEntity before, MeetingViewEntity after) {
+	public CommunicationChangeSet getChangeSet(MeetingViewEntity before, MeetingViewEntity after) {
 		CommunicationChangeSet ccs = new CommunicationChangeSet(ChangeSetState.CHANGE, before.getId());
 		
 		if (!before.getAttendees().equals(after.getAttendees()))

@@ -31,9 +31,8 @@ public class NetworkHelper {
         logger.setParent( Logger.getLogger( NetworkHelper.class.getPackage().getName() ) );
     }
     
-    ConcurrentHashMap<UUID, MeetingLock> waitingForServerResponseLocks = new ConcurrentHashMap<>(); 
-    volatile CommunicationChangeSet receivedCCS;
-    
+    static ConcurrentHashMap<UUID, CommunicationChangeSet> changeSetsForMeetings = new ConcurrentHashMap<>(); 
+        
     static NetworkHelper instance;
 
     static public NetworkHelper getReference() {
@@ -68,10 +67,11 @@ public class NetworkHelper {
 						handleAck(ack);
 					}
 					
-					else if ((obj instanceof CommunicationChangeSet)) { 
+					else if ((obj instanceof CommunicationChangeSet)) {
+						CommunicationChangeSet receivedCCS;
 						receivedCCS = (CommunicationChangeSet) obj;
-						// oh god
-						waitingForServerResponseLocks.get(receivedCCS.getId()).notify();
+						logger.info("Putting the received change set from the server onto the map.");
+						changeSetsForMeetings.put(receivedCCS.getId(), receivedCCS);						
 					}
 					
 				} catch (EOFException e) {
@@ -136,8 +136,8 @@ public class NetworkHelper {
 
 	// TODO: Do we need to make the ExecutorServer static?
 	static Socket clientSocket;
-	static ObjectInputStream ois;
-	static ObjectOutputStream oos;
+	volatile static ObjectInputStream ois;
+	volatile static ObjectOutputStream oos;
 	CECConfigurator config = CECConfigurator.getReference();
 	volatile boolean stop = false;
 	static ExecutorService exec;
@@ -201,15 +201,33 @@ public class NetworkHelper {
 				if (ccs.isChange()){
 					// setup the lock to return control back to the user only when the server 
 					// sends either CHANGE_ACCEPTED, or CHANGE_REJECTED
-					MeetingLock ml = new MeetingLock();
-					waitingForServerResponseLocks.put(ccs.getId(), ml);
 					oos.writeObject(ccs);
 					
 					logger.info("We have locked the main thread. Oh god!");
 					
+					long start_time = System.currentTimeMillis(); 
+					long elapsed_time = 0L;
+					while(true) {
+						
+						CommunicationChangeSet received = changeSetsForMeetings.get(ccs.getId());
+						if (received == null) {
+							Thread.sleep(100);
+							logger.info("Waiting...");
+							
+						}
+						else {
+							logger.info("Was able to get the change set response from the server for this meeting");
+							break;
+						}
+						elapsed_time = System.currentTimeMillis() - start_time;
+						if(elapsed_time > 3000L) {
+							throw new RuntimeException("Server did not respond with a Change Set!");
+						}
+						
+					}
 					
 					logger.info("We have unlocked the main thread.");
-					
+					// Make sure that the client updates his things
 					
 				}
 				

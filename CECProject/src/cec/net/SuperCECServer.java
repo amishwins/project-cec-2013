@@ -97,6 +97,20 @@ class ChangeSetThreadForMeetings implements Runnable {
 		
 		else if (ccs.isChange()) {
 			
+			
+			
+			CommunicationChangeSet response = new CommunicationChangeSet(ChangeSetState.CHANGE_REJECTED, ccs.getId());
+			try {
+				logger.info("About to write object back to client who sent change set.");
+				Thread.sleep(300);
+				SuperCECServer.getEmailToObjectOutputStream().get(emailAddress).writeObject(response);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }
