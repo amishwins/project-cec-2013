@@ -27,3 +27,7 @@
 == Edge Cases == 
 
   * Email is sent with "To: a@b.com; c@d.com". Both recipients are registered, but offline. Do we store TWO copies of this email address in the sentEmails list (on the server)?
+
+  * Client connects. Receives meeting invite. Disconnects. And tries to accept meeting. 
+
+  * Client sends email to non-existant target, and disconnects IMMEDIATELY. Server tries to send delivery failure notification, but the sender is NO LONGER CONNECTED. Server SHOULD put this delivery failure ON TO THE unsendables.
