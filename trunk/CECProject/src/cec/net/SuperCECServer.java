@@ -95,7 +95,7 @@ class ChangeSetThreadForMeetings implements Runnable {
 		}
 		
 		else if (ccs.isChange()) {
-			// todo
+			
 		}
 	}
 }

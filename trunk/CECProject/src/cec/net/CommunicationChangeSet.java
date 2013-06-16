@@ -32,6 +32,14 @@ public class CommunicationChangeSet implements Serializable {
 	public boolean isChange() {
 		return (getState() == ChangeSetState.CHANGE);
 	}
+
+	public boolean isChangeAccepted() {
+		return (getState() == ChangeSetState.CHANGE_ACCEPTED);
+	}
+	
+	public boolean isChangeRejected() {
+		return (getState() == ChangeSetState.CHANGE_REJECTED);
+	}
 	
 	public UUID getId() {
 		return meetingID;
@@ -65,7 +73,8 @@ public class CommunicationChangeSet implements Serializable {
 	}
 
 	private void assertChangeSetState() {
-		if (state != ChangeSetState.CHANGE) {
+		// only allow sending change sets if the type of operation is CHANGE or CHANGE_REJECTED
+		if (state == ChangeSetState.ACCEPT || state == ChangeSetState.DECLINE || state == ChangeSetState.CHANGE_ACCEPTED  ) {
 			throw new IllegalStateException("Cannot add changes to this change set of type: " + state);
 		}
 	}

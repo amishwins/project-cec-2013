@@ -49,18 +49,18 @@ public class ChangeSetTests {
 	
 	@Test
 	public void addMultipleFieldsToChangeSet() {
-		ccs.addChange(ChangeSetFields.TO, "bob@hope.com", "jimbo@jimbo.com");
+		ccs.addChange(ChangeSetFields.ATTENDEES, "bob@hope.com", "jimbo@jimbo.com");
 		ccs.addChange(ChangeSetFields.END_DATE, "END_DATE", "jimbo1@jimbo.com");
 		ccs.addChange(ChangeSetFields.END_TIME, "END_TIME", "jimbo2@jimbo.com");
 		ccs.addChange(ChangeSetFields.START_DATE, "START_DATE", "jimbo3@jimbo.com");
 		ccs.addChange(ChangeSetFields.START_TIME, "START_TIME", "jimbo4@jimbo.com");
-		ccs.addChange(ChangeSetFields.LOCATION, "LOCATION", "jimbo5@jimbo.com");
+		ccs.addChange(ChangeSetFields.PLACE, "LOCATION", "jimbo5@jimbo.com");
 		ccs.addChange(ChangeSetFields.SUBJECT, "SUBJECT", "jimbo6@jimbo.com");
 		
 		ArrayList<Change> changes = ccs.getChanges();
 		assertEquals(8, changes.size());
 		
-		Change c = new Change(ChangeSetFields.TO, "bob@hope.com", "jimbo@jimbo.com");
+		Change c = new Change(ChangeSetFields.ATTENDEES, "bob@hope.com", "jimbo@jimbo.com");
 		assertTrue(changes.get(1).isEqualTo(c));
 		
 		c = new Change(ChangeSetFields.END_DATE, "END_DATE", "jimbo1@jimbo.com");
@@ -75,11 +75,29 @@ public class ChangeSetTests {
 		c = new Change(ChangeSetFields.START_TIME, "START_TIME", "jimbo4@jimbo.com");
 		assertTrue(changes.get(5).isEqualTo(c));
 		
-		c = new Change(ChangeSetFields.LOCATION, "LOCATION", "jimbo5@jimbo.com");
+		c = new Change(ChangeSetFields.PLACE, "LOCATION", "jimbo5@jimbo.com");
 		assertTrue(changes.get(6).isEqualTo(c));
 		
 		c = new Change(ChangeSetFields.SUBJECT, "SUBJECT", "jimbo6@jimbo.com");
 		assertTrue(changes.get(7).isEqualTo(c));		
+	}
+	
+	@Test
+	public void verifyTheStatesGetters() {
+		CommunicationChangeSet acc = new CommunicationChangeSet(ChangeSetState.ACCEPT, meetingID);
+		assertTrue(acc.isAccept());
+		
+		acc = new CommunicationChangeSet(ChangeSetState.CHANGE, meetingID);
+		assertTrue(acc.isChange());
+		
+		acc = new CommunicationChangeSet(ChangeSetState.DECLINE, meetingID);
+		assertTrue(acc.isDecline());
+		
+		acc = new CommunicationChangeSet(ChangeSetState.CHANGE_ACCEPTED, meetingID);
+		assertTrue(acc.isChangeAccepted());
+		
+		acc = new CommunicationChangeSet(ChangeSetState.CHANGE_REJECTED, meetingID);
+		assertTrue(acc.isChangeRejected());
 	}
 	
 	@Test(expected=IllegalArgumentException.class)

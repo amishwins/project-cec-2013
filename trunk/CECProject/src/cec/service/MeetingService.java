@@ -1,5 +1,7 @@
 package cec.service;
 
+import javax.swing.JOptionPane;
+
 import cec.exceptions.UserIsNotConnectedException;
 import cec.model.Email;
 import cec.model.Meeting;
@@ -93,7 +95,16 @@ public class MeetingService {
 	}
 
 	public void sendUpdate(MeetingViewEntity before, MeetingViewEntity after) {
-		CommunicationChangeSet ccs = new CommunicationChangeSet(ChangeSetState.CHANGE, before.getId());
+		
+		ClientMeetingMerger cm = new ClientMeetingMerger();
+		CommunicationChangeSet ccs = cm.getChanges(before, after);
+		if (ccs.getChanges().size() == 0) {
+			// TODO: THIS IS THE WRONG PLACE TO DO THIS
+			JOptionPane.showMessageDialog(null, "No changes were made");
+		}
+		else {
+			NetworkHelper.getReference().sendChangeSet(ccs);
+		}
 		
 	}
 
