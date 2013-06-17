@@ -36,7 +36,7 @@ public class CECConfigurator {
 	}
 
 	private void mapDefaultServerSettings() {
-		systemSettings.put("ServerName", "lee.encs.concordia.ca" ); //"laveran.encs.concordia.ca");
+		systemSettings.put("ServerName", "localhost" ); //"laveran.encs.concordia.ca");
 		systemSettings.put("ServerPort", "7777");		
 	}
 
