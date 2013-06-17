@@ -1,6 +1,7 @@
 package cec.service;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
@@ -13,6 +14,7 @@ import cec.net.ChangeSetFields;
 import cec.net.ChangeSetState;
 import cec.net.CommunicationChangeSet;
 import cec.net.NetworkHelper;
+import cec.net.ServerThreadPerClient;
 import cec.view.MeetingViewEntity;
 import cec.view.MeetingViewFieldChanges;
 import cec.view.ServerStatusForMeetingChange;
@@ -21,6 +23,12 @@ import cec.view.ServerStatusForMeetingChange;
  * Expose the action that can be done on an meeting from the model layer
  */
 public class MeetingService {
+	
+	static Logger logger = Logger.getLogger(MeetingService.class.getName()); 
+
+    static { 
+        logger.setParent( Logger.getLogger( MeetingService.class.getPackage().getName() ) );
+    }	
 
 	/**
 	 * This method communicates the model layer the meetingInView in parameter
@@ -139,24 +147,50 @@ public class MeetingService {
 				mvf.state = ServerStatusForMeetingChange.ACCEPTED;
 			}
 			else if (serverResponse.isChangeRejected()) {
+								
 				ArrayList<Change> changes = serverResponse.getChanges();
 				for(Change c: changes) {
-					if(c.field.equals(ChangeSetFields.ATTENDEES))
+					logger.info("Overall change: " + c.field + " " + c.before + " " + c.after);
+					
+					if(c.field.equals(ChangeSetFields.ATTENDEES)) {
 						before.setAttendees(c.before);
-					if(c.field.equals(ChangeSetFields.BODY))
+						logger.info("Updated attendees");
+					}
+					
+					if(c.field.equals(ChangeSetFields.BODY)) {
 						before.setBody(c.before);
-					if(c.field.equals(ChangeSetFields.END_DATE))
+						logger.info("Updated body");
+					}
+					
+					if(c.field.equals(ChangeSetFields.END_DATE)) {
 						before.setEndDate(c.before);
-					if(c.field.equals(ChangeSetFields.END_TIME))
+						logger.info("Updated end date");
+					}
+					
+					if(c.field.equals(ChangeSetFields.END_TIME)) {
 						before.setEndTime(c.before);
-					if(c.field.equals(ChangeSetFields.PLACE))
+						logger.info("Updated end time");
+					}
+					
+					if(c.field.equals(ChangeSetFields.PLACE)) {
 						before.setPlace(c.before);
-					if(c.field.equals(ChangeSetFields.START_DATE))
+						logger.info("Updated end place");
+					}
+					
+					if(c.field.equals(ChangeSetFields.START_DATE)) {
 						before.setStartDate(c.before);
-					if(c.field.equals(ChangeSetFields.START_TIME))
+						logger.info("Updated start date");
+					}
+					
+					if(c.field.equals(ChangeSetFields.START_TIME)) {
 						before.setStartTime(c.before);
-					if(c.field.equals(ChangeSetFields.SUBJECT))
+						logger.info("Updated start time");
+					}
+					
+					if(c.field.equals(ChangeSetFields.SUBJECT)) {
 						before.setSubject(c.before);
+						logger.info("Updated subject");
+					}
 				}
 				
 				mvf.valuesFromServer = before;  // squashed
@@ -214,6 +248,9 @@ public class MeetingService {
 			}
 
 		}
+		if (datesChanged)
+			JOptionPane.showMessageDialog(null, "Be careful, some dates were changed from the server!");
+		
 		return result;
 	}
 
