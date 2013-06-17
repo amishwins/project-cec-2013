@@ -20,6 +20,7 @@ import cec.model.EmailBuilder;
 import cec.model.EmailImpl;
 import cec.model.Folder;
 import cec.model.FolderFactory;
+import cec.view.EmailClient;
 
 public class NetworkHelper {
 	
@@ -102,6 +103,7 @@ public class NetworkHelper {
 					.build();
 
 			newEmail.saveToInboxFolder();
+			EmailClient.getReference().updateEmailsTable();
 			
 			// send an ack back
 			Ack recieved = new Ack(newEmail.getId(), MessageType.EMAIL);
