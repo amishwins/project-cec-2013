@@ -26,10 +26,12 @@ public class ServerMeetingMerger {
 	public CommunicationChangeSet getChangeSet(MeetingDataWrapper serverCurrent, CommunicationChangeSet clientsBefore) {
 		
 		CommunicationChangeSet ccs = new CommunicationChangeSet(ChangeSetState.CHANGE_REJECTED, clientsBefore.getId());
-
+       
 		ArrayList<Change> changes = clientsBefore.getChanges();
 		for(Change c: changes) {
-
+			/*if(c.field.equals(ChangeSetFields.ATTENDEES)) {
+			          SuperCECServer.getExecutor().submit(new AddAttendeesToMeeting(serverCurrent.meetingObj.getAttendees(),c.before));
+			}*/
 			 if(c.field.equals(ChangeSetFields.ATTENDEES)) 
 					if (!serverCurrent.meetingObj.getAttendees().equals(c.before)){
 						ccs.addChange(ChangeSetFields.ATTENDEES,serverCurrent.meetingObj.getAttendees(), serverCurrent.meetingObj.getAttendees());

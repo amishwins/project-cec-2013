@@ -20,7 +20,6 @@ import cec.model.EmailBuilder;
 import cec.model.EmailImpl;
 import cec.model.Folder;
 import cec.model.FolderFactory;
-import cec.view.EmailClient;
 
 /**
  * @author r_honvo
@@ -36,7 +35,9 @@ public class NetworkHelper {
         logger.setParent( Logger.getLogger( NetworkHelper.class.getPackage().getName() ) );
     }
     
-    static ConcurrentHashMap<UUID, CommunicationChangeSet> changeSetsForMeetings = new ConcurrentHashMap<>(); 
+    static ConcurrentHashMap<UUID, CommunicationChangeSet> changeSetsForMeetings = new ConcurrentHashMap<>();
+ // The Thread Pool we will use is the Executor Service, a really awesome implementation
+ 	static ExecutorService clientExecutor = Executors.newCachedThreadPool();
         
     static NetworkHelper instance;
 
@@ -117,7 +118,10 @@ public class NetworkHelper {
 					.build();
 
 			newEmail.saveToInboxFolder();
-			EmailClient.getReference().updateEmailsTable();
+			
+			logger.info("Spawning a new Task to inform client to upadate itself!");
+			clientExecutor.submit(new UpdateEmailClientView());
+			
 			
 			// send an ack back
 			Ack recieved = new Ack(newEmail.getId(), MessageType.EMAIL);
