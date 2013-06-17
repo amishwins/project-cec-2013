@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.2" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" language="java" name="cec.net.SentEmailCleanupThread" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/net/SuperCECServer.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="498" y="560"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="cec.net.MeetingDataWrapper" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/net/SuperCECServer.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="780" y="609"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="cec.net.ChangeSetThreadForMeetings" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/net/SuperCECServer.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="766" y="99"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="cec.net.SuperCECServer" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/net/SuperCECServer.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="248" y="232"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="cec.net.ServerThreadPerClient" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/net/ServerThreadPerClient.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="769" y="318"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="cec.net.CommunicationChangeSet" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/net/CommunicationChangeSet.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1176" y="300"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="cec.net.ServerClientAcceptor" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/net/ServerClientAcceptor.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="133" y="644"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="cec.net.EmailListenerCECServer" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/net/EmailListenerCECServer.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="409" y="764"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <interface id="9" language="java" name="java.io.Serializable" project="CECProjectAsJavaProject" 
+    file="C:/Program Files (x86)/Java/jre7/lib/rt.jar" binary="true" corner="BOTTOM_RIGHT">    
+    <position height="63" width="103" x="1121" y="-17"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <dependency id="10">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <dependency id="11">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <association id="12">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="13" name="ccs"/>      
+      <multiplicity id="14" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="15">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <dependency id="16">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <dependency id="17">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <association id="18">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="19" name="meetingMap"/>      
+      <multiplicity id="20" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="21">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <realization id="22">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="9"/>  
+  </realization>  
+  <dependency id="23">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <dependency id="24">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <dependency id="25">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <dependency id="26">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

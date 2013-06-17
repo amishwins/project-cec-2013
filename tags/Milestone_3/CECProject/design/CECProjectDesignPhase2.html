@@ -1,0 +1,296 @@
+<html>
+	<head>
+		<title>CECProject Design Phase 2</title>
+
+		<style type="text/css">
+		.myTable { background-color:#FFFFE0;border-collapse:collapse; }
+		.myTable th { background-color:#BDB76B;color:white; }
+		.myTable td, .myTable th { padding:5px;border:1px solid #BDB76B; }
+		</style>
+
+	</head>
+
+	<body>
+	
+		<h1>Collaborative Email Client Project Design - Phase 2</h1>
+		<p>Wednesday, June 5, 2013</p>
+		<p><b>Group 5: </b> Amish Gala, Deyvid William, Pankaj Kapania, and Romeo Honvo</p>
+
+		<p><b>Statistics:</b></p>
+		<table border=1 class="myTable">
+			<tr>
+				<th>Type</th>
+				<th>Measurement Phase 1</th>
+				<th background=>Measurement Phase 2</th>
+			</tr>
+			<tr>
+				<td>Total LOC</td>
+				<td>3222 (43 classes)</td>
+				<td>9633 (94 classes)</td>
+			</tr>
+			<tr>
+				<td>Total Production LOC</td>
+				<td>2477 (29 classes)</td>
+				<td>7292 (69 classes)</td>
+			</tr>
+			<tr>
+				<td>Total Unit Test LOC</td>
+				<td>742 (14 classes, 40 unit tests, 7 integration tests)</td>
+				<td>2341 (25 classes, 137 unit tests, 18 integration tests )</td>
+			</tr>
+			<tr>
+				<td>Code Coverage (ALL)</td>
+				<td>55.6%</td>
+				<td>57.3%</td>
+			</tr>
+			<tr>
+				<td>Code Coverage (Unit)</td>
+				<td>32.2%</td>
+				<td>32.5%</td>
+			</tr>
+			<tr>
+				<td>Code Coverage (Integration)</td>
+				<td>35.5%</td>
+				<td>36.8%</td>
+			</tr>
+		</table>
+		
+		<h2>Architecture and Design</h2>
+		
+		<p>Phase 2 presented us with some new requirements to complement our already <b><i>robust</i></b> 
+		email client:</p>
+		
+		<ol>
+			<li>Email Template
+				<ul>
+					<li>Create Template</li>
+					<li>Edit Template</li>
+					<li>Delete Template</li>
+					<li>Apply Template</li>
+				</ul>
+			</li>
+			<li>Search emails in Inbox (and its subfolders)</li>
+			<li>Email Rule Filters - move email into a specified Inbox subfolder based on certain criteria
+			<ul>
+					<li>Create Filter</li>
+					<li>Edit Filter</li>
+					<li>Delete Filter</li>
+					<li>Activate/Deactivate Filter</li>
+					<li>Re-order Filter</li>
+					<li>Simulate Filter Execution</li>
+				</ul>			
+			</li>
+			<li>Meetings
+			<ul>
+					<li>Create Meeting</li>
+					<li>Edit Meeting</li>
+					<li>Delete Meeting</li>
+					<li>Automatic email sending</li>
+				</ul>			
+			</li>
+		</ol>
+		
+	
+		
+		<h3>N-Tiers and Package Structure</h3>		
+		<p>The package structure stayed the same. Classes were simply added to each tier</p>
+		<p><a href="PackageLayout.jpg"><img src="PackageLayout.jpg" width=600 border=0></img></a><p>
+		
+
+		<h3>Major Additions and Changes to Classes</h3>
+		
+		<p><b>Email Template</b></p>
+		<p>The Email template class diagram is shown here. It is interesting to note that we have followed
+		the same n-tier architecture as originally created. EmailFrame in the context
+		of a Template (NEW, EDIT, APPLY) will know to call the correct service layer methods when
+		actions are performed. Model layer classes to store templates and the collection of templates are
+		provided, and they communicate with the persistence layer abstraction TemplateDao.</p>
+		<p>Note that the placeholder string looks like this: ${text_here}. Thus strings surrounded by this this are
+		automatically selected. </p>		
+		<p><a href="TemplatesClasses.png"><img src="TemplatesClasses.png" width=600 border=0></img></a></p>
+		
+		<p><b>Search Emails</b></p>		
+		<p>Email interface was enhanced to implement a new Searchable interface. This allowed our application
+		to treat emails as searchable, and thus call the "isMatch" method on them. The email delegated the 
+		responsibility to a new Search object which used regex to determine if there is a match. This separation
+		of concerns and nice encapsulation allowed us to fully unit test the search feature <b>(38 JUnit tests!)</b> in
+		isolation. The JTable object in the EmailClient main application was updated with the results,
+		and users could then double click to open up a found email.</p>		
+		<p><a href="SearchClasses.png"><img src="SearchClasses.png" width=600 border=0></img></a></p>
+
+		<p><b>Rule Filters</b></p>		
+		<p>Rule Filters, just like Templates and Meetings required us to build objects in each layer of our
+		n-tier architecture. The communication between layers was respected, and we used View Entity objects
+		to ensure that there was no direct coupling. RuleFrame is responsible to handle the new and edit 
+		functionality. RuleSettings is responsible to help the user organize all rules by having them
+		visible all in one place, and given the ability to re-order them.  </p>
+		<p>In order to realize the function of ordered rules, we decided to use a separate XML file to
+		store the value of the latest rule. This allowed us to easily "query" for the next rule ID. Swap
+		was enabled so that users could change the order of rules, and therefore influence how their
+		emails would be affected when rules were executed. 
+		<p><a href="RulesClasses.png"><img src="RulesClasses.png" width=600 border=0></img></a></p>
+		
+				
+		<p><b>Meetings</b></p>		
+		<p>Meetings constructed as first-class citizens in our overall design - they are given their
+		own independent UI, service, model and persistence objects, and the existing Folder architecture
+		was adapted to handle displaying and manipulation of meetings. We needed to consider the operations
+		such as create, edit, and cancel/delete. One thing we noticed was that the meeting view entity
+		was quite large, and that perhaps we could encapsulate sub-features into their own objects
+		(for example MeetingDates). <i>This will be left as an exercise to the reader.</i> </p>
+		<p><a href="MeetingsClasses.png"><img src="MeetingsClasses.png" width=600 border=0></img></a></p>
+
+		<br><br>
+		
+		<h2>Important Decisions</h2>
+		
+		
+		<h3>Template and Email Sharing Same View Class (EmailFrame)</h3>
+		<p>Problem: Template view looks almost exactly the same as Email view</p>
+		<p>Our design has Template reuse the same view class <code>EmailFrame</code>. This at first seemed
+		like a good idea since Templates and Emails are very similar; however, towards the end of phase 2, 
+		it became troublesome. In the end, we decided to live with this violation of SRP (EmailFrame can 
+		be instantiated for both Emails and Template), because the benefit of reduced duplication outweighed
+		the other considerations.</p>  
+		
+		<h3>Changes to the Folder Model Classes to Support Meetings</h3>
+		<p>Problem: how to support Meeting Objects and the fact that they need to be displayed in a folder 
+		in the UI.</p>
+		<p>Originally, Folder was an abstract class, with two children SystemFolder and UserFolder (to represent
+		the different folders in our hierarchy of folders). Each Folder know about its contents - a generic 
+		collection of &lt;Email&gt;. With the introduction of Meetings, we needed to think long and hard about
+		how to handle these new objects, since they too needed to be represented in some sort of containing 
+		folder. Our solution looked like this:</p>
+		
+		<p><img src="FolderStrategy.png"></img></p>
+		
+		<p>Essentially, we needed to push down SystemFolder and UserFolder in the inheritance hierarchy so that
+		we could treat Folders containing Meetings and Folders containing Emails similarly. However, even this 
+		solution (being as clean as it was), still led to some headaches and "conditional logic" in our EmailClient
+		main view class. Additionally, MeetingFolder and UserFolder shared some mutually exclusive methods, and
+		we were forced to throw exceptions in the event that they were incorrectly called.  
+		
+		<h3>Search and Special Characters</h3>
+		<p>Problem: How to deal with searching special characters</p>
+		<p>CEC Application will not perform the search, ignoring user request, in the following cases:</p>
+		<ul>
+			<li>Search box is empty</li>
+			<li>contains only spaces</li>
+			<li>contains only Special characters</li>
+		</ul> 
+		<p>The symbols "@", "." and "" are not considered Special characters but "Email characters".</p>
+		<p>The Email search engine finds emails that contains the user input in at least one of the fields: From, 
+		To, CC, Subject and Body. It considers every word separately, what means that the application will return 
+		Emails that match with at least one of the words informed by the user. Special characters are not 
+		considered, and words concatenated with them are treated separately.</p> 
+		
+		
+		
+		<h3>Applying Template - Getting the UI to Highlight</h3>
+		<p>Problem: how to support a nice flow of guided template usage so the user is delighted</p>
+		<p>This was a challenging endeavour. We first tried to manually parse the fields in a template, and build
+		some sort of map of placeholders. This, coupled with the complexities of handling replacements in the text
+		and responding to keyboard events resulted in quite a big headache. Eventually, after some research into
+		using JTextArea and JTextFields, we decided that using javax.swing.InputMap and javax.swing.ActionMap was
+		the best approach, and hid complexities in well encapsulated objects.</p>
+		<p>For the regex part, we designed an implemented a Placeholder Helper class, whose responsibility was to
+		respond with the current start and end positions of the next available placeholder match. </p>
+		<p><img src="phh.png"/></p>
+		<p>Each field on which we wanted to apply the highlighting mechanism was asked to return its Input Map and
+		Action Map.	From there, we registered an input (in our case, either the Enter key, or the Tab key), and
+		corresponding Action (in our case, to run an Abstract Action which we aptly named CommitAction). Commit
+		Action took as input the field for which the input was performed, and then executed a simple method (action
+		performed was called by the swing framework upon detection of the input):</p>
+		
+		<p><img src="commitactioncode.png"/></p>
+		
+		<p>Much of the complexity of dealing with the regex and positions was hidden nicely in the Placeholder Helper
+		class. This allowed us to fully test some of the edge and corner cases before actually using the methods.</p>
+		 
+		
+		<h3>Rules - How to Treat Creation, Activation, and Execution</h3>
+		<p>Problem: dealing with single rules, multiple rules, and overlapping rules</p>
+		<p>Our approach here was to make the application of rules as simple as possible. From the very beginning,
+		we designed rules to work with the following constraints:</p>
+		<ul>
+			<li>A single rule could trigger on either email addresses of the sender (semicolon-separated),
+			and/or target words (space-separate)</li>
+			<li>A single rule can have both email addresses and words to trigger on, but not neither. </li>
+			<li>Rules are triggered on all emails in the inbox.</li>
+			<li>If a single rule is applied, it loops over each email in the inbox and checks if the email
+			fits the rule criteria. If it does, it moves the email to the target specified in the rule</li>
+			<li>When all rules are applied, the order of execution is as follows:
+				<ul>
+					<li>For each emails</li>
+					<li>- For each rule </li>
+					<li>- - If rule applies to email, move email and then break. If not, then continue to the next rule</li>
+				</ul>
+			</li>
+			<li>Rules can be reordered. The order they appear in is the order in which they are executed.</li>
+		</ul>
+	
+		
+				
+		<h2>Reused Libraries / Code Inspiration (in addition to Phase 1)</h2>
+		
+		<ul>
+			<li>javax.swing.InputMap and javax.swing.ActionMap - to handle the behavior when the user
+			applied a template to a new email</li>
+			<li>javax.swing.Timer to handle the periodic simulation of receiving an email, and firing the
+			rules afterwards</li>
+		</ul>
+		
+		
+		<h2>Design Patterns (extensions and applications from Phase 1)</h2>
+		
+		<ul>
+			<li>Builder: cec.model.EmailBuilder, cec.model.MeetingBuilder</li>
+			<li>Factory: cec.model.FolderFactory, cec.persistence.EmailDaoFactory, 
+			cec.persistence.FolderDaoFactory, cec.model.RuleSetFactory, cec.persistence.RuleDaoFactory,
+			cec.persistence.MeetingDaoFactory, cec.persistence.TemplateDaoFactory  </li>
+			<li>Adapter/Wrapper: cec.view.Email, cec.view.EmailClient</li>
+			<li>Facade: cec.persistence.EmailXMLDao, cec.persistence.FolderXMLDao (for the javax.xml.parser,
+			javax.xml.transform, apache.commons.io, and w3c.dom classes)</li>
+			<li>Observer: cec.view.EmailClient (TreeSelectionListener), JTable for emails listens to 
+			model changes when an email is send, saved, or deleted., all JTextComponents on which InputMaps
+			and ActionMaps were defined.  
+			</li>
+			<li>Singleton: cec.view.EmailClient</li>
+		</ul>
+		
+		<h2>OOD Honorable Mentions</h2>
+		<ul>
+			<li>Value object: cec.view.EmailViewEntity</li>
+			<li>Data Access Object (DAO) interfaces: cec.persistence.EmailDao, cec.persistence.FolderDao</li>
+			<li>Test Patterns: 
+				<ul>
+					<li>Stub objects: isolated model tests by injecting/stubbing dependencies to persistence</li>
+					<li>Integration: a few more-involved integration tests were written, on the back
+					bone one solid unit tests</li>
+				</ul>
+			</li>	
+		
+		</ul>
+		
+		<h2>Known Issues</h2>
+		<h3>Overwrite Template</h3>
+		<p>Currently our save policy does not check if saving a template with the same name will overwrite 
+		an existing template with the same name. This is 
+		
+		<h3>Closing the rule edit window using the X button</h3>
+		<p>If the user opens the Rule Settings window, and proceeds to edit one rule, but then decides to 
+		cancel the operation, the UI will still show that the rule is selected on the JTable. But if the 
+		user decides to click Edit again, he is in for quite a surprise! The system responds with "Please 
+		select a rule to edit." 
+		
+		<h3>Use a Test Helper for the RuleSetIntegration tests</h3>
+		<p>We wanted to try and use a Test Helper for some of the integration tests to handle some of the
+		heavy lifting, and hide away some complexity from the test class itself. This was not completed in
+		time.</p>
+		
+		<h3>Some TODOs left in the code</h3>
+		<p>We were unable to cleanup every single TODO left in the code. This is something which we should 
+		target before beginning the implementation task for Phase 3.</p>
+		
+	</body>
+</html>

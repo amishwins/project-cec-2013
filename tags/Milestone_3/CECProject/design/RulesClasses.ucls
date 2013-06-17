@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.2" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" language="java" name="cec.view.RuleFrame" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/view/RuleFrame.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="459" width="220" x="179" y="-44"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="cec.view.RuleListViewData" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/view/RuleListViewData.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="978" y="174"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="cec.view.RuleSettings" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/view/RuleSettings.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="646" y="126"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="cec.service.RuleService" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/service/RuleService.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="641" y="576"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <interface id="5" language="java" name="cec.model.Rule" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/model/Rule.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="338" y="729"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <interface id="6" language="java" name="cec.model.RuleSet" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/model/RuleSet.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="652" y="812"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <class id="7" language="java" name="cec.model.RuleImpl" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/model/RuleImpl.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="330" y="1208"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="cec.model.RuleSetImpl" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/model/RuleSetImpl.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="697" y="1097"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <interface id="9" language="java" name="cec.persistence.RuleDao" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/persistence/RuleDao.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="590" y="1574"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <class id="10" language="java" name="cec.persistence.RuleXMLDao" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/persistence/RuleXMLDao.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="576" y="1842"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <realization id="11">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="9"/>  
+  </realization>  
+  <association id="12">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="13" name="ruleService"/>      
+      <multiplicity id="14" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="15">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="16" name="ruleSet"/>      
+      <multiplicity id="17" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="18">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <association id="19">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="20" name="ruleService"/>      
+      <multiplicity id="21" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="22">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <dependency id="23">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <realization id="24">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="6"/>  
+  </realization>  
+  <dependency id="25">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <association id="26">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="27" name="rs"/>      
+      <multiplicity id="28" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="29">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <association id="30">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="31" name="ruleDao"/>      
+      <multiplicity id="32" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="33">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="5"/>  
+  </realization>  
+  <association id="34">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="35" name="ruleDao"/>      
+      <multiplicity id="36" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

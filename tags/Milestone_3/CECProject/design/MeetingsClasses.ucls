@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.2" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" language="java" name="cec.view.MeetingFrame" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/view/MeetingFrame.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="380" y="35"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="cec.view.MeetingListViewData" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/view/MeetingListViewData.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="225" width="309" x="566" y="-287"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="cec.view.MeetingViewEntity" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/view/MeetingViewEntity.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="735" y="382"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="cec.service.MeetingService" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/service/MeetingService.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="367" y="601"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <interface id="5" language="java" name="cec.model.Meeting" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/model/Meeting.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="371" y="897"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <class id="6" language="java" name="cec.model.MeetingImpl" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/model/MeetingImpl.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="370" y="1140"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <interface id="7" language="java" name="cec.persistence.MeetingDao" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/persistence/MeetingDao.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="376" y="1258"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <class id="8" language="java" name="cec.persistence.MeetingXMLDao" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/persistence/MeetingXMLDao.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="375" y="1389"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="cec.view.EmailClient" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/view/EmailClient.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="92" y="382"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <realization id="10">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="5"/>  
+  </realization>  
+  <dependency id="11">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <realization id="12">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="7"/>  
+  </realization>  
+  <association id="13">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="14" name="meetingDao"/>      
+      <multiplicity id="15" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="16">    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="17" name="meetingService"/>      
+      <multiplicity id="18" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="19">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="20" name="data"/>      
+      <multiplicity id="21" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="22">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="23" name="meetingService"/>      
+      <multiplicity id="24" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="25">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <association id="26">    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="27" name="selectedMeetingEntity"/>      
+      <multiplicity id="28" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="29">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="30" name="mainClient"/>      
+      <multiplicity id="31" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="32">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="33" name="meetingView"/>      
+      <multiplicity id="34" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="35">    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="36" name="instance"/>      
+      <multiplicity id="37" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

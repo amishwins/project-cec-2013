@@ -1,0 +1,321 @@
+<html>
+	<head>
+		<title>CECProject Design Phase 1</title>
+	</head>
+
+	<body>
+	
+		<h1>Collaborative Email Client Project Design - Phase 1</h1>
+		<p>Wednesday, May 22, 2013</p>
+		<p><b>Group 5: </b> Amish Gala, Deyvid William, Pankaj Kapania, and Romeo Honvo</p>
+
+		<p><b>Statistics:</b></p>
+		<table border=1>
+			<tr>
+				<th>Type</th>
+				<th>Measurement</th>
+			</tr>
+			<tr>
+				<td>Total LOC</td>
+				<td>3222 (43 classes)</td>
+			</tr>
+			<tr>
+				<td>Total Production LOC</td>
+				<td>2477 (29 classes)</td>
+			</tr>
+			<tr>
+				<td>Total Unit Test LOC</td>
+				<td>742 (14 classes, 40 unit tests, 7 integration tests)</td>
+			</tr>
+			<tr>
+				<td>Code Coverage (ALL)</td>
+				<td>55.6%</td>
+			</tr>
+			<tr>
+				<td>Code Coverage (Unit)</td>
+				<td>32.2%</td>
+			</tr>
+			<tr>
+				<td>Code Coverage (Integration)</td>
+				<td>35.5%</td>
+			</tr>
+		</table>
+		
+		<h2>Architecture and Design</h2>
+		
+		<p>Collaborative Email Client is simple email client application in which we meet some user requirements:</p>
+		
+		<ol>
+			<li>Compose New Email</li>
+			<li>Save Draft Email</li>
+			<li>Display Inbox Folder Hierarchy</li>
+			<li>Create Sub Folders</li>
+			<li>Move Mail to Sub Folders</li>
+			<li>Have a Send Mail Functionality That Moves Email to Outbox</li>
+			<li>Include a Menu, Right Mouse Clicks and Hot Keys for all features</li>
+			<li>Delete an Email from Folders</li>
+			<li>Delete Folders Except Top Level Inbox (modified to disallow deleting <b>any</b> system folder)</li>
+		</ol>
+		
+		<p>We decided to focus on a few properties in terms of <b>internal</b> quality (e.g. code quality): </p>
+		<ul>
+			<li>Maintainability and Correctness</li>
+			<li>Testability (which essentially goes hand-in-hand with maintainability)</li>
+			<li>Usability (user-experience, robustness)</li>
+			<li>And to a lesser extent, Reusability, and Efficiency (although, if we encounter any performance issues,
+			we will surely profile our system and adjust)</li>
+		</ul>
+		
+		<p>To ensure these goals, we aggressively pursued a clean design, in which our code is simple, readable,
+		and decoupled as much as possible. Where necessary, we have hidden complexity. However, sometimes these
+		goals needed to be flexible in order to meet our targets (for example, making our EmailClient 
+		a singleton, as we will show below enabled us to provide a better user experience). </p>
+		
+		<p>We leveraged the power of Object Oriented Design (OOD) in order to help us meet 
+		our code quality goals. Each tier below the UI is coded using clearly defined interfaces, which allowed
+		us to write unit tests and stub out dependencies when needed (for example, the model tests stub out the 
+		dependency to the persistence layer). In addition, communication mechanisms between layers is strictly
+		controlled. The view and model layers communicate via the service layer, which is responsible for 
+		converting model objects into view-consumable entities, as shown here: </p>
+		
+		<p><a href="EmailViewEntity.png"><img src="EmailViewEntity.png" width=600 border=0></img></a></p>
+		
+		<p>This way, the view really does not know anything about the model.</p>
+		
+		<p>For the most part of the project, we ensured good communication between all team members, and even 
+		attempted pair-programming. This enabled us to establish a suitable naming convention to promote readabilty
+		of our class names, method names, and variable names. When designing and composing objects, we referred 
+		to the General Responsibility Assignment Software Patterns 
+		(<a href="http://en.wikipedia.org/wiki/GRASP_(object-oriented_design)" target="_top">GRASP</a>) which guided 
+		us in determining where to put methods and responsibility (e.g. creator pattern, ensuring <b>high cohesion </b>
+		and <b>low coupling </b>etc.)</p> 
+		
+		<p>Finally, to promote maintainability and flexibility, we followed well established conventions and 
+		used familiar "code beacons" where appropriate. For example, we utilized Java Collections Framework, and
+		Java Generics - the goal was to minimize the learning curve for future maintainers, and take advantage
+		of well-tested and well-documented functionality provided by the JDK.</p>
+		
+		<p>In the sections below the approach is described in detail. We start from the most abstract (the package
+		structure), and then go in-depth for the most prominent classes and interactions.</p>
+		
+		<h3>N-Tiers and Package Structure</h3>
+		
+		<p>Highlighted in blue are the major CEC packages. As depicted, we deployed an 4-tier architecture 
+		which includes: View, Service, Model, and Persistence. We minimized coupling between layers by having
+		dependencies flow from top to bottom. The exception to this was that the service layer needed to communicate
+		with the view layer in order to ensure a consistent user experience. However, this coupling was restricted 
+		to a specific mechanism which was well encapsulated. More on this appear below. </p>
+		
+		<p>Certain cross-cutting concerns span multiple tiers and they were organized into separate packages:
+		Configuration, and Exceptions.</p>  
+	
+		<p><a href="PackageLayout.jpg"><img src="PackageLayout.jpg" width=600 border=0></img></a><p>
+
+		<h3>Major classes</h3>
+
+		<p>The main view classes are shown and described here:</p>
+		<p><a href="ViewClasses.png"><img src="ViewClasses.png" width=900 border=0></img></a></p>
+		<p>The major UI classes are EmailClient and Email. EmailClient is created in the main runnable() of our 
+		application. It extends JFrame and implements a TreeSelectionListener interface, so that it can respond
+		to clicks on the Folders JTree. Email is the view which is used to create new emails, and to display
+		existing emails. It also extends JFrame, and is created as a response to user actions in the EmailClient.</p>
+		
+		<p>For simplicity, we implemented many ActionListeners as private internal classes within EmailClient. 
+		While this is perhaps not the most clean (speculative) design, it served our purposes nicely.
+		Certain events on the Email JFrame require actions to take place on the EmailClient. For example, if 
+		the user is currently looking at the Drafts folder, creates a new email, and saves it to drafts, the 
+		EmailClient view should automatically be updated. This is accomplished by providing a callback mechanism
+		which updates the model on which certain UI elements are based.  
+		</p> 
+				
+		<p>The main service classes are EmailService and FolderService. Their purpose is to decouple the 
+		View classes from the Model classes. They act as a controller and respond to events such as saving an 
+		email, moving an email, creating a folder, and deleting a folder.</p>
+		
+		<p>The main model classes are shown and described here:</p>
+		<p><a href="ModelClasses.png"><img src="ModelClasses.png" width=900 border=0></img></a></p>
+		<p>The model classes are based on abstractions (Email Interface, Folder Abstract Class), and we 
+		implemented an EmailBuilder class to construct Emails in a fluent manner (see EmailBuilderTests). 
+		Additionally, a FolderFactory provides a convenient way to retrieve a folder object for a given
+		path. Folders can either be System Folders (e.g. Inbox, Drafts..), or User Folders (e.g. Jokes etc.). </p>
+		
+		<p>The main persistence classes are shown and described here:</p>
+		<p><a href="PersistenceClasses.png"><img src="PersistenceClasses.png" width=900 border=0></img></a></p>
+		<p>The persistence classes are based on two main interfaces (EmailDao and FolderDao). Each 
+		object can be created using their respective factory (EmailDaoFactory and FolderDaoFactory). The 
+		only mode of persistence provided in this application is storage via XML files in the Windows file
+		system. Thus two concrete implementations are provided (EmailXMLDao and FolderXMLDao). The diagram 
+		shows very nicely that the model layer only knows about the interfaces, and the factories - it
+		has no clue about the XML files. 
+		
+		<p>Example of isolated unit tests:</p>
+		<p><a href="EmailTestsClasses.png"><img src="EmailTestsClasses.png" width=700 border=0></img></a></p>
+		<p>In this example, the class we wish to test is EmailImpl (the model class for Email). The issue 
+		is that EmailImpl depends on EmailDao (the interface for the persistence layer). In our tests, we did not 
+		want to actually save or delete files from the hard drive. Thus we designed our tests as shown above. 
+		EmailImplCUT extends EmailImpl, and injects the fake EmailDao. This fake simply logged calls which were 
+		made to it. This is only possible since EmailImpl depends on the EmailDao interface, and not directly 
+		on the concrete	EmailXMLDao class. We used a few XUnit test patterns 
+		here - we introduced sensing variables to check if stubbed classes were called, and we inherited
+		from the actual EmailImpl class so that we could inject the fake. Very cool! </p>
+
+		
+		<h2>Important Decisions</h2>
+		
+		<h3>User Experience</h3>
+		<p><b>Look and Feel</b></p>
+		<p>Look and feel (L &amp; F) refers to the appearance of GUI widgets and their behaviors. Swing's architecture 
+		enables multiple L &amp; F's that provides a concrete implementation for each of the ComponentUI subclasses. 
+		To improve user experience we decided to use SystemLookAndFeel that implements an UI that is native to 
+		the Operating System the application is running on. </p>
+
+		<p><b>Icons/Images</b></p> 
+		<p>All Icons used in our project are part of the "Primo icon set" provided freely by Double-J Design for for 
+		personal and commercial use in their website.</p> 
+
+		<p><b>Hot keys used in our application</b></p> 
+		<ul>
+			<li>(Main window)</li> 
+				<ul>
+					<li>Alt+F - Open File Menu </li>
+					<li>Ctrl+N - New Email </li>
+					<li>Ctrl+F - New Sub-folder </li>
+					<li>Ctrl+O - Open Selected Email</li> 
+					<li>Alt+E - Open Edit Menu </li>
+					<li>Ctrl+M - Move Email </li>
+					<li>Ctrl+E - Delete Email </li>
+					<li>Ctrl+R - Delete Folder</li>
+				</ul> 
+			<li> (Email window) </li>
+				<ul> 
+					<li>Alt+F - Open File Menu</li> 
+					<li>Ctrl+D - Save as Draft </li>
+					<li>Ctrl+S - Send Email </li>
+					<li>Escape - Exit</li>
+				</ul>
+		</ul>
+		
+		<p><b>Refreshing Policy</b></p>
+		<p>The issue we faced here was that when the user created a new Email, we needed a mechanism
+		to update the EmailClient main window for certain changes. This was solved by allows the Email
+		window to retrieve the running instance of the EmailClient, and update the model. Since the 
+		JTree and JTable views were listeners on the model, the views got updated.</p>
+		
+		<p>Folder Structure Tree - Left Panel: whenever a change is made to the folder structure (adding or 
+		deleting a folder) the JTree view's model is set which triggers a rebuild of the view from the   
+		persistence layer. This was a safer approach than premature optimization at the view level (by buffering
+		a complex directory structures). </p>
+
+		<p>Email Table - Top Panel: Likewise, the strategy adopted to refresh the Email table when a Folder is 
+		selected as well as when an email is deleted/moved is to request the persistence layer to check the 
+		Operating system's File System and load an updated list of Email Entities (XML Files).	</p>
+		
+		<p><b>Sorting Folders</b></p>
+		<p> Our assumption is that users will always want to see the most recent messages on top. 
+		Therefore, each folder is sorted in a descending order. We will not (at least for phase 1) provide 
+		another means to sort. To solve this problem, the Email model object implements the Comparable 
+		interface, which allowed us to define a CompareTo method and sort by the Last Modified Time.</p> 
+		
+		
+		<h3>Data format at each layer (+formatting XML)</h3>
+		<p>Each layer has it's own usable format. For example, emails are persisted in the file system as XML:</p>
+		<p><img src="emailXMLformat.png"></img></p>
+		<p>The model has its own format (which is similar to this one, except the link to ParentFolder is a
+		reference to an actual Folder model object). And then the view uses EmailViewEntity which only has Strings.
+		</p>
+		
+		<h3>Input Validation</h3>
+		<p>Problem: how do we validate email addresses and folder names so that they conform to some pre-determined
+		standard?</p>
+		<p>Our solution was to come up with a Validator class, which sits in the view package. The class has two 
+		public methods: isValidSendees(String), and isValidFolderName(String). The EmailClient and Email classes 
+		use the validator before invoking the service layer. The validator uses some rudimentary regex patterns
+		to prevent the user from creating invalid folder names, and sending emails to addresses which 
+		are badly formed. This is acceptable for our application, but would not stand up to rigorous testing. </p>
+		
+		<h3>Creating and deleting folders</h3>
+		<p>We've decided to allow subfolder creation at any point in the tree <b>except for the root node</b>. As 
+		specified by the professor, we will prevent the deletion of Inbox (and other System folders: Drafts, Outbox
+		and Sent). This is accomplished by modelling a parent abstract Folder class, which implements the main 
+		create/updated/delete methods, and defining two subclasses: SystemFolder and UserFolder. Both subclasses 
+		override the delete method and act accordingly. A factory FolderFactor is responsible for creating the 
+		runtime model objects according the the rules stipulated above. </p>
+		
+		
+		<h3>Unit Testing Checked Exceptions</h3>
+		<p>The problem we faced was that when parsing and comparing dates in order to sort emails, the 
+		DateFormat class throws a ParseError which is a checked exception. This caused us issues because we had
+		to either add a "throws"" keyword into the signature, or surround by try/catch). </p>
+
+		<p>To circumvent this issue, we handle the exception in a protected method in the EmailImpl class, 
+		and then re-throw an unchecked (runtime) exception. The unit test code can catch it, and we can
+		correctly test the behavior (that an exception WAS thrown).</p>
+		
+		<p><img src="checked_exception.png"></img></p>		
+		
+		<h3>Formatting XML</h3>
+		<p> In EmailXMLDao, we are using a StreamSource.xls file to help us format the XML output:
+		<br><br>
+		<code> 
+			StreamSource stylesource = new StreamSource(getClass().getResourceAsStream("proper-indenting.xsl"));<br>
+			Transformer transformer = transformerFactory.newTransformer(stylesource);<br>
+		</code>
+		<br>
+		We used the following as inspiration: 
+		<a href="http://stackoverflow.com/questions/3273182/how-to-write-properly-formatted-xml">Stack Overflow link</a> 
+		
+		</p>
+		
+		<h2>Reused Libraries / Code Inspiration</h2>
+		
+		<ul>
+			<li>Apache commons IO: for FileUtils and FileDelete and FileDeleteStrategy</li>
+			<li>W3C DOM: comes with JDK - to interact and interrogate DOM objects</li>
+			<li>TreeModelBuilder: we used some code we found here in order to build a TreeModel from a collection
+			of strings. This was a real issue for us due to lack of experience working with the JTree and the 
+			DefaultTreeNode hierarchy: <a href="http://stackoverflow.com/questions/13931934/building-jtree-from-strings">
+			Stack Overflow link</a>.</li>
+			<li>Writing Out a DOM as an XML File : http://docs.oracle.com/javase/tutorial/jaxp/xslt/writingDom.html</li>		
+		</ul>
+		
+		
+		<h2>Design Patterns</h2>
+		
+		<ul>
+			<li>Builder: cec.model.EmailBuilder</li>
+			<li>Factory: cec.model.FolderFactory, cec.persistence.EmailDaoFactory, 
+			cec.persistence.FolderDaoFactory</li>
+			<li>Adapter/Wrapper: cec.view.Email, cec.view.EmailClient</li>
+			<li>Facade: cec.persistence.EmailXMLDao, cec.persistence.FolderXMLDao (for the javax.xml.parser,
+			javax.xml.transform, apache.commons.io, and w3c.dom classes)</li>
+			<li>Observer: cec.view.EmailClient (TreeSelectionListener), JTable for emails listens to 
+			model changes when an email is send, saved, or deleted.</li>
+			<li>Singleton: cec.view.EmailClient</li>
+		</ul>
+		
+		<h2>OOD Honorable Mentions</h2>
+		<ul>
+			<li>Value object: cec.view.EmailViewEntity</li>
+			<li>Data Access Object (DAO) interfaces: cec.persistence.EmailDao, cec.persistence.FolderDao</li>
+			<li>Test Patterns: 
+				<ul>
+					<li>Stub objects: isolated model tests by injecting/stubbing dependencies to persistence</li>
+					<li>Integration: a few more-involved integration tests were written, on the back
+					bone one solid unit tests</li>
+				</ul>
+			</li>	
+		
+		</ul>
+		
+		<h2>Known Issues</h2>
+		<h3>Corrupted data?</h3>
+		<p>Something is wrong with opening "badly formatted" emails. We need to double check why sometimes
+		emails in the Drafts folder are read-only. </p>
+		
+		<h3>Tree Refresh</h3>
+		<p>After we create or delete a subfolder, there's an problem that we redraw the JTree. This doesn't 
+		provided the best user experience, but it was an algorithmically challenging problem, and we didn't 
+		want to spend more time on it.</p> 
+		
+	</body>
+</html>

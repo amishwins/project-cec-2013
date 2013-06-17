@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.2" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true">  
+  <package id="1" language="java" name="cec.view" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/view" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="341" y="83"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="2" language="java" name="cec.service" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/service" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="338" y="190"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="3" language="java" name="cec.model" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/model" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="336" y="286"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="4" language="java" name="cec.persistence" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/persistence" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="339" y="367"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="5" language="java" name="cec.config" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/config" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="598" y="187"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="6" language="java" name="java.awt" project="CECProjectAsJavaProject" 
+    file="C:/Program Files (x86)/Java/jre7/lib/rt.jar" binary="true" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="169" y="77"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="7" language="java" name="java.io" project="CECProjectAsJavaProject" 
+    file="C:/Program Files (x86)/Java/jre7/lib/rt.jar" binary="true" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="185" y="392"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="8" language="java" name="org.apache.commons.io" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/lib/commons-io-2.4.jar" binary="true" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="185" y="469"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="9" language="java" name="javax.xml.transform" project="CECProjectAsJavaProject" 
+    file="C:/Program Files (x86)/Java/jre7/lib/rt.jar" binary="true" corner="BOTTOM_RIGHT">    
+    <position height="50" width="138" x="287" y="447"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="10" language="java" name="javax.xml.parsers" project="CECProjectAsJavaProject" 
+    file="C:/Program Files (x86)/Java/jre7/lib/rt.jar" binary="true" corner="BOTTOM_RIGHT">    
+    <position height="50" width="126" x="442" y="447"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="11" language="java" name="javax.swing" project="CECProjectAsJavaProject" 
+    file="C:/Program Files (x86)/Java/jre7/lib/resources.jar" binary="true" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="171" y="145"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="12" language="java" name="cec.net" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/net" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="168" y="256"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <dependency id="13">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="14">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="15">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <dependency id="16">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <dependency id="17">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <dependency id="18">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <dependency id="19">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="20">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <dependency id="21">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="22">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="9"/>  
+  </dependency>  
+  <dependency id="23">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="24">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <dependency id="25">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="12"/>  
+  </dependency>  
+  <dependency id="26">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <dependency id="27">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="28">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

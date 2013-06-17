@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.2" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" language="java" name="cec.view.EmailFrame.CommitAction" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/view/EmailFrame.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="122" y="130"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="cec.view.EmailFrame" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/view/EmailFrame.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="412" y="120"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="cec.view.TemplateViewEntity" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/view/TemplateViewEntity.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="727" y="255"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="cec.service.TemplateService" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/service/TemplateService.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="414" y="350"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <interface id="5" language="java" name="cec.model.Template" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/model/Template.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="382" y="596"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <class id="6" language="java" name="cec.model.TemplateFolder" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/model/TemplateFolder.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="716" y="577"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="cec.model.TemplateImpl" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/model/TemplateImpl.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="380" y="914"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <interface id="8" language="java" name="cec.persistence.TemplateDao" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/persistence/TemplateDao.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="719" y="1095"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <class id="9" language="java" name="cec.persistence.TemplateXMLDao" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/persistence/TemplateXMLDao.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="714" y="1327"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="cec.service.PlaceholderHelper" project="CECProjectAsJavaProject" 
+    file="/CECProjectAsJavaProject/src/cec/service/PlaceholderHelper.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="101" y="393"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <association id="11">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="12" name="templateView"/>      
+      <multiplicity id="13" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="14">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="15" name="templateService"/>      
+      <multiplicity id="16" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="17">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="18" name="templateDao"/>      
+      <multiplicity id="19" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="20">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="21" name="ph"/>      
+      <multiplicity id="22" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="23">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="1"/>  
+  </nesting>  
+  <dependency id="24">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <association id="25">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="26" name="templateDao"/>      
+      <multiplicity id="27" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="28">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="8"/>  
+  </realization>  
+  <association id="29">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="30" name="templates"/>      
+      <multiplicity id="31" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="32">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="33" name="tf"/>      
+      <multiplicity id="34" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="35">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <realization id="36">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="5"/>  
+  </realization>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
