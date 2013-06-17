@@ -93,9 +93,9 @@ public class CommunicationChangeSet implements Serializable {
 			}
 		}	
 
-		if (inBefore.equals(inAfter)) {
+		/*if (inBefore.equals(inAfter)) {
 			throw new IllegalArgumentException("Before and after are the same!");
-		}
+		}*/
 	}
 
 
