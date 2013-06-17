@@ -93,7 +93,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	JTextField searchField = new JTextField(null, 22);
 	
 	EmailClientTimer tm = new EmailClientTimer(); //Timer
-	JMenuItem timerAct = new JMenuItem("Start Timer");
+	//JMenuItem timerAct = new JMenuItem("Start Timer");
 	boolean timerStatus = true; 
 	
 	private static EmailClient instance;
@@ -274,7 +274,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 		setupFileMenu(menuBar);
 		setupEditMenu(menuBar);
 		setupRulesMenu(menuBar);
-		setupTimerMenu(menuBar);
+		//setupTimerMenu(menuBar);
 		setupAuthenticationMenu(menuBar);
 	}
 	
@@ -400,7 +400,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 	}
 	
 	// Timer
-	private void setupTimerMenu(JMenuBar menuBar) {
+	/*private void setupTimerMenu(JMenuBar menuBar) {
 		
 		JMenu timerMenuBarEntry = new JMenu("Timer");		
 		timerMenuBarEntry.setMnemonic('I');
@@ -414,7 +414,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 			}
 		});	
 
-	}		
+	}	*/	
 	
 	private void setupAuthenticationMenu(JMenuBar menuBar) {		
 		
@@ -958,7 +958,7 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 			 timer.setInitialDelay(1000);
 		}
 		
-		public void enable(boolean flag) {
+	/*	public void enable(boolean flag) {
 
 			if (flag)
 				 timer.start();
@@ -970,8 +970,8 @@ public class EmailClient extends JFrame implements TreeSelectionListener {
 			if (timerStatus)
 				timerAct.setText("Start Timer");
 			else
-				timerAct.setText("Stop Timer");			
-		}
+				timerAct.setText("Stop Timer");		
+		}*/
 		
 		private boolean flag = false;
 		
