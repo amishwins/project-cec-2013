@@ -104,15 +104,69 @@
 		<p><b>Network Classes</b></p>
 		<p>Server classes</p>
 		<ul>
-			<li>CECServer: listens for client connections, and if received, verifies the client via a HandShake. Uses 
-			the HandShake and submits a new ServerThreadPerClient task to the ExecutorService thread pool. </li>
+			<li>SuperCECServer: This class represents our server. It encapsulates and hides the complexity for handling
+			sockets, and input/output streams. Upon launch, it submits three main tasks to a thread pool which it also
+			encapsulates (ExecutorService). 
+				<ul>
+					<li><b>ServerClientAcceptor</b>: this task is responsible for listening on the Server Socket which the 
+					server instantiates. Each time a client connects, it spawns a new task: ServerThreadPerClient. 
+					This task handles each individual client connection to the server - socket, streams, email address,
+					sending/receiving from the server to the target client. </li>
+					<li><b>EmailListenerCECServer</b>: the ServerThreadPerClient task puts emails which it receives on a 
+					a LinkedBlockingDeque owned by the SuperCECServer. This shared data is concurrently accessed by 
+					the EmailListenerCECServer task which takes care of getting the right output stream and sending
+					that email to the target recipient. </li>
+					<li><b>SendPendingMessages</b>: in the event that a user had registered with the server, and is now
+					currently offline and receives an email, this thread is tasked with trying to send all un-received
+					emails to that person upon his reconnection. It is triggered from the ServerClientAcceptor.</li>
+				</ul>
+			</li>
 			
+			<li>All data structures owned by the SuperCECServer used to manage the concurrency. It was smarter to create
+			new thread-safe library-managed collections and then use the ExecutorService than trying to hand-code the 
+			wait/notify or even more low-level lock/unlock. We might be able to squash some of these
+			collections together by merging some objects; however, we don't have a compelling reason yet. <br><br>
+				<img src="SuperCECServerDataStructures.png" border=0></img><br><br>
+				
+			</li>
 			
+			<li>The Server main() code is very simple as shown here: <br><br>
+				<img src="SuperCECServerMainMethod.png" border=0></img><br><br>
+			</li>
+			
+			<li> The handshake between the client and the server looks something like this (used http://www.websequencediagrams.com/): 
+			<br><br>
+			<img src="handshake.png"></img><br></li>
 		
 		</ul>		
-		<p>Image Placeholder</p>
+		<p>The overall set of classes which communicate on the server side are shown here:</p>
+		<p><a href="networkserverclasses.png"><img src="networkserverclasses.png" width=800 border=0></img></a></p>
 		
+		<p>Client Network Classes</p>
+		<ul>
+			<li>NetworkHelper: used to initially connect to the server (see handshake sequence diagram above). Its other
+			responsibilities are to send emails, meeting requests, and meeting updates. It manages its own local thread
+			pool, on which it adds the task to listen for messages from server.  </li>
+			<li>ListenerForMessagesFromServer: the server can send different types of objects - emails, acknowledgement 
+			of receiving something, and meeting change sets. This task is responsible for listening and responding 
+			correctly to each of the kinds of objects it can receive. </li>
+			<li><a href="networkclientclasses.png"><img src="networkclientclasses.png" border=0></img></a><br></li>
+		</ul>
 		<br><br>
+		
+		<p>Communication Change Set (CCS)</p>
+		<ul>
+			<li>The CCS was used to communicate differences to the server when a client updated a meeting after it had already
+			been sent and received by the server.</li>
+			<li>A <b>Change </b>object contains the before and after values for a field. Each change the user makes is stored
+			in a CCS object as shown below. The CCS can take one one of a few states (ACCEPT, DECLINE, CHANGE, CHANGE_ACCEPTED,
+			and CHANGE_REJECTED). These states were used to communicate between client and server on the type of operation
+			which was being sent. </li>
+			<li>This change set was the main form of communication between client and server to enable two clients to 
+			simultaneously edit an appointment over the network, and relied on a few system invariants (mostly discussed 
+			below), such as the fact that the meeting after being sent is OWNED by the server.  <br><br></li> 
+			<li><img src="changesets.png"></img></li>   
+		</ul>
 		
 		<h2>Important Decisions</h2>
 		
