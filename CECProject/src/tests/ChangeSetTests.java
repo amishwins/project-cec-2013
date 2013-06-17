@@ -100,13 +100,15 @@ public class ChangeSetTests {
 		assertTrue(acc.isChangeRejected());
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void tryToAddChangeWithSameBeforeAndAfter() {
 		Change c = new Change();
 		c.field = ChangeSetFields.SUBJECT;
 		c.before = "blah";
 		c.after = "blah";
-		ccs.addChange(c);		
+		ccs.addChange(c);	
+		assertTrue(ccs.getChanges().get(1).before.equals("blah"));
+		assertTrue(ccs.getChanges().get(1).after.equals("blah"));
 	}
 
 	
