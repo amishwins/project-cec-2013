@@ -70,7 +70,7 @@ public class NetworkHelper {
 					else if ((obj instanceof CommunicationChangeSet)) {
 						CommunicationChangeSet receivedCCS;
 						receivedCCS = (CommunicationChangeSet) obj;
-						logger.info("Putting the received change set from the server onto the map.");
+						logger.info("Putting the received change set from the server onto the map. It is of type: " + receivedCCS.getState());
 						changeSetsForMeetings.put(receivedCCS.getId(), receivedCCS);						
 					}
 					
