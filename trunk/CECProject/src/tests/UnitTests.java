@@ -7,6 +7,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({ 
 	CECConfiguratorTests.class,
+	ChangeSetTests.class,
 	EmailBuilderTests.class,
 	EmailSortingTests.class,
 	EmailTests.class,
