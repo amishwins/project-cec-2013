@@ -235,15 +235,19 @@ public class MeetingService {
 			}
 			
 			if(c.field.equals(ChangeSetFields.END_DATE)){
+				result.setEndDate(squashed.getEndDate());
 				datesChanged = true;
 			}
 			if(c.field.equals(ChangeSetFields.START_DATE)){
+				result.setStartDate(squashed.getStartDate());
 				datesChanged = true; 
 			}
 			if(c.field.equals(ChangeSetFields.START_TIME)){
+				result.setStartTime(squashed.getStartTime());
 				datesChanged = true; 
 			}			
 			if(c.field.equals(ChangeSetFields.END_TIME)){
+				result.setEndTime(squashed.getEndTime());
 				datesChanged = true;
 			}
 
