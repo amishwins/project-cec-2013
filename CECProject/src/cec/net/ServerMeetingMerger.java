@@ -28,12 +28,12 @@ public class ServerMeetingMerger {
 						ccs.addChange(ChangeSetFields.ATTENDEES,serverCurrent.meetingObj.getAttendees(), serverCurrent.meetingObj.getAttendees());
 					    logger.info("Field: "+  ChangeSetFields.ATTENDEES + " Client's Before: <"+c.before + "> Servers' Before: <" + serverCurrent.meetingObj.getAttendees()+">");
 					}
-			
-			 /*if(c.field.equals(ChangeSetFields.BODY))
+			 
+			 if(c.field.equals(ChangeSetFields.BODY))
 				if (!serverCurrent.meetingObj.getBody().equals(c.before)){
 					ccs.addChange(ChangeSetFields.BODY,serverCurrent.meetingObj.getBody(), serverCurrent.meetingObj.getBody());
 					logger.info("Field: "+  ChangeSetFields.BODY + " Client's Before: <"+c.before + "> Servers' Before: <" + serverCurrent.meetingObj.getBody()+">");
-				}*/
+				}
 			 
 			 if(c.field.equals(ChangeSetFields.SUBJECT))
 					if (!serverCurrent.meetingObj.getSubject().equals(c.before)){

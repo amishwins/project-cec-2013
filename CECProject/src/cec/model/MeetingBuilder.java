@@ -325,7 +325,7 @@ public class MeetingBuilder {
 		String location = bodyLines[3].split(":",2)[1].trim();
 		String startDateTime = bodyLines[4].split(":",2)[1].trim();
 		String endDateTime = bodyLines[5].split(":",2)[1].trim();
-		String body = bodyLines[7];
+		String body = bodyLines[7].substring(0,(bodyLines[7].length()-1) );
           
 		logger.fine(subject);
 		logger.fine(location);
