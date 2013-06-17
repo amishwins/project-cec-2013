@@ -97,7 +97,7 @@ class ChangeSetThreadForMeetings implements Runnable {
 		}
 		
 		else if (ccs.isChange()) {
-			
+			logger.info("Changes Sent by client: "+emailAddress );
 			ServerMeetingMerger cm = new ServerMeetingMerger();
 			CommunicationChangeSet response = cm.getChangeSet(md, ccs);
 			
