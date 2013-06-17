@@ -4,7 +4,7 @@ public class BodyMerger implements Merger {
 
 	@Override
 	public String merge(String before, String after) {
-		return null;
+		return ">>>From server: \n" + before + "\n\n<<<Your version: \n" + after;
 	}
 
 }

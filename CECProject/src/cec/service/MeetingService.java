@@ -14,6 +14,9 @@ import cec.net.ChangeSetFields;
 import cec.net.ChangeSetState;
 import cec.net.CommunicationChangeSet;
 import cec.net.NetworkHelper;
+import cec.service.mergers.BodyMerger;
+import cec.service.mergers.Merger;
+import cec.service.mergers.SimpleTextFieldMerger;
 import cec.view.MeetingViewEntity;
 import cec.view.MeetingViewFieldChanges;
 import cec.view.ServerStatusForMeetingChange;
@@ -209,47 +212,63 @@ public class MeetingService {
 	public MeetingViewEntity merge(MeetingViewFieldChanges meetingViewChanges) {
 		MeetingViewEntity squashed = meetingViewChanges.valuesFromServer; 
 		MeetingViewEntity result = meetingViewChanges.userChanges;
-		boolean datesChanged = false;
-
+		boolean filedChanged = false;
+		Merger fieldMerger  = new SimpleTextFieldMerger();
+		Merger bodyMerger = new BodyMerger();
+		StringBuilder message = new StringBuilder();
+		
 		for(Change c: meetingViewChanges.changes) {
 			
 			if(c.field.equals(ChangeSetFields.ATTENDEES)) {
-				result.setAttendees(">>>From server: " + squashed.getAttendees() + " <<<Your version: " + result.getAttendees());
-			}
-			
-			// For body, we add a new line!!
-			if(c.field.equals(ChangeSetFields.BODY)) {
-				result.setBody(">>>From server: \n" + squashed.getBody() + "\n\n<<<Your version: \n" + result.getBody());
+				result.setAttendees(fieldMerger.merge(squashed.getAttendees(),result.getAttendees()));
+				filedChanged=true;
+				message.append("Attendees\n");
 			}
 			
 			if(c.field.equals(ChangeSetFields.PLACE)){
-				result.setPlace(">>>From server: " + squashed.getPlace() +" <<<Your version: " + result.getPlace());
+				result.setPlace(fieldMerger.merge(squashed.getPlace(),result.getPlace()));
+				filedChanged=true;
+				message.append("Location\n");
 			}
 
 			if(c.field.equals(ChangeSetFields.SUBJECT)){
-				result.setSubject(">>>From server: " + squashed.getSubject() + " <<<Your version: " + result.getSubject());
+				result.setSubject(fieldMerger.merge(squashed.getSubject(),result.getSubject()));
+				filedChanged=true;
+				message.append("Subject\n");
 			}
 			
-			if(c.field.equals(ChangeSetFields.END_DATE)){
-				result.setEndDate(squashed.getEndDate());
-				datesChanged = true;
-			}
 			if(c.field.equals(ChangeSetFields.START_DATE)){
 				result.setStartDate(squashed.getStartDate());
-				datesChanged = true; 
+				filedChanged = true;
+				message.append("Start Date\n");
 			}
 			if(c.field.equals(ChangeSetFields.START_TIME)){
 				result.setStartTime(squashed.getStartTime());
-				datesChanged = true; 
-			}			
+				filedChanged = true; 
+				message.append("Start Time\n");
+			}
+			if(c.field.equals(ChangeSetFields.END_DATE)){
+				result.setEndDate(squashed.getEndDate());
+				filedChanged = true;
+				message.append("End Date\n");
+			}
 			if(c.field.equals(ChangeSetFields.END_TIME)){
 				result.setEndTime(squashed.getEndTime());
-				datesChanged = true;
+				filedChanged = true;
+				message.append("End Time\n");
+			}
+			// For body, we add a new line!!
+	    	if(c.field.equals(ChangeSetFields.BODY)) {
+		    	result.setBody(bodyMerger.merge(squashed.getBody(),result.getBody()));
+		    	filedChanged = true;
+				message.append("Body\n");
 			}
 
 		}
-		if (datesChanged)
-			JOptionPane.showMessageDialog(null, "Be careful, some dates were changed from the server!");
+		if (filedChanged){
+			JOptionPane.showMessageDialog(null, "Be careful, the following fields were changed!\n"+ message);
+		}
+			
 		
 		return result;
 	}
