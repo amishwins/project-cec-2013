@@ -129,8 +129,10 @@ class ChangeSetThreadForMeetings implements Runnable {
 			    		m.setEndTime(c.after);
 			    	}
 			    }
-				
+			    logCurrentServerMeetingData(md);
 			}
+			
+			
 						
 			//CommunicationChangeSet response = new CommunicationChangeSet(ChangeSetState.CHANGE_REJECTED, ccs.getId());
 			try {
@@ -146,6 +148,18 @@ class ChangeSetThreadForMeetings implements Runnable {
 			}
 		}
 	}
+
+	private void logCurrentServerMeetingData(MeetingDataWrapper md) {
+		logger.info("Printing Servers Content when changed by Client: ");
+		logger.info("Attendees: "+md.meetingObj.getAttendees());
+		logger.info("Body: "+md.meetingObj.getBody());
+		logger.info("Subject: "+md.meetingObj.getSubject());
+		logger.info("Place: "+md.meetingObj.getPlace());
+		logger.info("StartDate: "+md.meetingObj.getStartDate());
+		logger.info("StartTime: "+md.meetingObj.getStartTime());
+		logger.info("EndDate: "+md.meetingObj.getEndDate());
+		logger.info("EndTime: "+md.meetingObj.getEndTime());
+   }
 }
 
 public class SuperCECServer {

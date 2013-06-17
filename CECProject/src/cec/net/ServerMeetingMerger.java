@@ -26,48 +26,48 @@ public class ServerMeetingMerger {
 			 if(c.field.equals(ChangeSetFields.ATTENDEES)) 
 					if (!serverCurrent.meetingObj.getAttendees().equals(c.before)){
 						ccs.addChange(ChangeSetFields.ATTENDEES,serverCurrent.meetingObj.getAttendees(), serverCurrent.meetingObj.getAttendees());
-					    logger.info("Field: "+  ChangeSetFields.ATTENDEES + " Client's Before: "+c.before + " Servers' Before: " + serverCurrent.meetingObj.getAttendees());
+					    logger.info("Field: "+  ChangeSetFields.ATTENDEES + " Client's Before: <"+c.before + "> Servers' Before: <" + serverCurrent.meetingObj.getAttendees()+">");
 					}
 			
 			 /*if(c.field.equals(ChangeSetFields.BODY))
 				if (!serverCurrent.meetingObj.getBody().equals(c.before)){
 					ccs.addChange(ChangeSetFields.BODY,serverCurrent.meetingObj.getBody(), serverCurrent.meetingObj.getBody());
-					logger.info("Field: "+  ChangeSetFields.BODY + " Client's Before: "+c.before + " Servers' Before: " + serverCurrent.meetingObj.getBody());
+					logger.info("Field: "+  ChangeSetFields.BODY + " Client's Before: <"+c.before + "> Servers' Before: <" + serverCurrent.meetingObj.getBody()+">");
 				}*/
 			 
 			 if(c.field.equals(ChangeSetFields.SUBJECT))
 					if (!serverCurrent.meetingObj.getSubject().equals(c.before)){
 						ccs.addChange(ChangeSetFields.SUBJECT, serverCurrent.meetingObj.getSubject(), serverCurrent.meetingObj.getSubject());
-		                logger.info("Field: "+  ChangeSetFields.SUBJECT + " Client's Before: "+c.before + " Servers' Before: " + serverCurrent.meetingObj.getSubject());
+		                logger.info("Field: "+  ChangeSetFields.SUBJECT + " Client's Before: <"+c.before + "> Servers' Before: <" + serverCurrent.meetingObj.getSubject()+">");
 		             }
 			 
 			 if(c.field.equals(ChangeSetFields.PLACE)) 
 					if (!serverCurrent.meetingObj.getPlace().equals(c.before)){
 						ccs.addChange(ChangeSetFields.PLACE, serverCurrent.meetingObj.getPlace(), serverCurrent.meetingObj.getPlace());
-		            	 logger.info("Field: "+  ChangeSetFields.PLACE + " Client's Before: "+c.before + " Servers' Before: " + serverCurrent.meetingObj.getPlace());
+		            	 logger.info("Field: "+  ChangeSetFields.PLACE + " Client's Before: <"+c.before + "> Servers' Before: <" + serverCurrent.meetingObj.getPlace()+">");
                      }
 			 
 			 if(c.field.equals(ChangeSetFields.START_DATE))
 					if (!serverCurrent.meetingObj.getStartDate().equals(c.before)){
 						ccs.addChange(ChangeSetFields.START_DATE, serverCurrent.meetingObj.getStartDate(), serverCurrent.meetingObj.getStartDate());
-						logger.info("Field: "+  ChangeSetFields.START_DATE + " Client's Before: "+c.before + " Servers' Before: " + serverCurrent.meetingObj.getStartDate());
+						logger.info("Field: "+  ChangeSetFields.START_DATE + " Client's Before: <"+c.before + "> Servers' Before: <" + serverCurrent.meetingObj.getStartDate()+">");
 		             }
 			 if(c.field.equals(ChangeSetFields.START_TIME))
 					if (!serverCurrent.meetingObj.getStartTime().equals(c.before)){
 						ccs.addChange(ChangeSetFields.START_TIME, serverCurrent.meetingObj.getStartTime(), serverCurrent.meetingObj.getStartTime());
-						logger.info("Field: "+  ChangeSetFields.START_TIME + " Client's Before: "+c.before + " Servers' Before: " + serverCurrent.meetingObj.getStartTime());
+						logger.info("Field: "+  ChangeSetFields.START_TIME + " Client's Before: <"+c.before + "> Servers' Before: <" + serverCurrent.meetingObj.getStartTime()+">");
 		             }			 
 			 
 			 if(c.field.equals(ChangeSetFields.END_DATE))
 					if (!serverCurrent.meetingObj.getEndDate().equals(c.before)){
 						ccs.addChange(ChangeSetFields.END_DATE, serverCurrent.meetingObj.getEndDate(), serverCurrent.meetingObj.getEndDate());
-						logger.info("Field: "+  ChangeSetFields.END_DATE + " Client's Before: "+c.before + " Servers' Before: " + serverCurrent.meetingObj.getEndDate());
+						logger.info("Field: "+  ChangeSetFields.END_DATE + " Client's Before: <"+c.before + "> Servers' Before: <" + serverCurrent.meetingObj.getEndDate()+">");
 		             }
 			
 			 if(c.field.equals(ChangeSetFields.END_TIME))
 					if (!serverCurrent.meetingObj.getEndTime().equals(c.before)){
 						ccs.addChange(ChangeSetFields.END_TIME, serverCurrent.meetingObj.getEndTime(), serverCurrent.meetingObj.getEndTime());
-						logger.info("Field: "+  ChangeSetFields.END_TIME + " Client's Before: "+c.before + " Servers' Before: " + serverCurrent.meetingObj.getEndTime());
+						logger.info("Field: "+  ChangeSetFields.END_TIME + " Client's Before: <"+c.before + "> Servers' Before: <" + serverCurrent.meetingObj.getEndTime()+">");
 		             }
 			
 		}
