@@ -45,6 +45,29 @@ public class MeetingService {
 								.getFolder())).build();
 		newMeeting.send();
 	}
+	
+	public void updateMeeting(MeetingViewEntity meetingInView) {
+		MeetingBuilder meetingBuilder = new MeetingBuilder();
+		Meeting newMeeting = meetingBuilder
+				.withId(meetingInView.getId())
+				.withFrom()
+				.withAttendees(meetingInView.getAttendees())
+				.withStartDate(meetingInView.getStartDate())
+				.withEndDate(meetingInView.getEndDate())
+				.withStartTime(meetingInView.getStartTime())
+				.withEndTime(meetingInView.getEndTime())
+				.withPlace(meetingInView.getPlace())
+				.withSubject(meetingInView.getSubject())
+				.withBody(meetingInView.getBody())
+				.computelastModifiedTime()
+				.computeSentTime()
+				.withParentFolder(
+						FolderFactory.getFolder(meetingInView
+								.getFolder())).build();
+		newMeeting.saveAfterAccept();
+	}
+	
+	
 
 	/**
 	 * This method communicates the model layer the meetingInView object has to be
