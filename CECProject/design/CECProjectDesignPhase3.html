@@ -28,37 +28,37 @@
 				<td>Total LOC</td>
 				<td>3222 (43 classes)</td>
 				<td>9633 (94 classes)</td>
-				<td>?? (?? classes)</td>
+				<td>12360 (127 classes)</td>
 			</tr>
 			<tr>
 				<td>Total Production LOC</td>
 				<td>2477 (29 classes)</td>
 				<td>7292 (69 classes)</td>
-				<td>?? (?? classes)</td>
+				<td>9641 (97 classes)</td>
 			</tr>
 			<tr>
 				<td>Total Unit Test LOC</td>
 				<td>742 (14 classes, 40 unit tests, 7 integration tests)</td>
-				<td>2341 (25 classes, 137 unit tests, 18 integration tests )</td>
-				<td>Unit Test Code</td>
+				<td>2341 (25 classes, 137 unit tests, 18 integration tests)</td>
+				<td>2719 (30 classes, 158 unit tests, 18 integration tests)</td>
 			</tr>
 			<tr>
 				<td>Code Coverage (ALL)</td>
 				<td>55.6%</td>
 				<td>57.3%</td>
-				<td>???%</td>
+				<td>43.1%</td>
 			</tr>
 			<tr>
 				<td>Code Coverage (Unit)</td>
 				<td>32.2%</td>
 				<td>32.5%</td>
-				<td>???%</td>
+				<td>30.8%</td>
 			</tr>
 			<tr>
 				<td>Code Coverage (Integration)</td>
 				<td>35.5%</td>
 				<td>36.8%</td>
-				<td>???%</td>
+				<td>21.0%</td>
 			</tr>
 		</table>
 		
@@ -108,15 +108,15 @@
 			sockets, and input/output streams. Upon launch, it submits three main tasks to a thread pool which it also
 			encapsulates (ExecutorService). 
 				<ul>
-					<li><b>ServerClientAcceptor</b>: this task is responsible for listening on the Server Socket which the 
+					<li><b>ServerClientAcceptor (long running)</b>: this task is responsible for listening on the Server Socket which the 
 					server instantiates. Each time a client connects, it spawns a new task: ServerThreadPerClient. 
 					This task handles each individual client connection to the server - socket, streams, email address,
 					sending/receiving from the server to the target client. </li>
-					<li><b>EmailListenerCECServer</b>: the ServerThreadPerClient task puts emails which it receives on a 
+					<li><b>EmailListenerCECServer (long running)</b>: the ServerThreadPerClient task puts emails which it receives on a 
 					a LinkedBlockingDeque owned by the SuperCECServer. This shared data is concurrently accessed by 
 					the EmailListenerCECServer task which takes care of getting the right output stream and sending
 					that email to the target recipient. </li>
-					<li><b>SendPendingMessages</b>: in the event that a user had registered with the server, and is now
+					<li><b>SendPendingMessages (one shot)</b>: in the event that a user had registered with the server, and is now
 					currently offline and receives an email, this thread is tasked with trying to send all un-received
 					emails to that person upon his reconnection. It is triggered from the ServerClientAcceptor.</li>
 				</ul>
@@ -147,9 +147,11 @@
 			<li>NetworkHelper: used to initially connect to the server (see handshake sequence diagram above). Its other
 			responsibilities are to send emails, meeting requests, and meeting updates. It manages its own local thread
 			pool, on which it adds the task to listen for messages from server.  </li>
-			<li>ListenerForMessagesFromServer: the server can send different types of objects - emails, acknowledgement 
+			<li>ListenerForMessagesFromServer (long running): the server can send different types of objects - emails, acknowledgement 
 			of receiving something, and meeting change sets. This task is responsible for listening and responding 
 			correctly to each of the kinds of objects it can receive. </li>
+			<li>UpdateEmailClientView: a simple one-shot thread which is called whenever a client receives an email to
+			nicely update his inbox.</li>
 			<li><a href="networkclientclasses.png"><img src="networkclientclasses.png" border=0></img></a><br></li>
 		</ul>
 		<br><br>
@@ -169,13 +171,93 @@
 		</ul>
 		
 		<h2>Important Decisions</h2>
+
+		<h3>Testing and Confidence</h3>
+		<p>Problem: How to test our code, for all threading / concurrency and serialization?</p>
+		<p>Solution: We found it quite difficult to approach this phase with the same strategy for unit testing as we did 
+		in the first two phases. There were no real "domain" entities, and most of the code added was related to handling 
+		communication over the network. Thus the approach we adopted was to strengthen our use of the logger, especially
+		in all the network classes. This proved very useful when testing - somebody sitting at the server console
+		would literally see everything that was being sent through - almost like watching the code in The Matrix!
+		While this was no where near as effective (since we needed to first start up the clients, launch the server,
+		connect to the server, and then actually run the tests), good concise and precise logging paid off in many
+		situations. </p>
+		
+		<p>Some unit tests were still created to help test the CommunicationChangeSet (the object responsible for capturing
+		changes to a meeting), and Change (the object contained within a change set). </p> 
+		
+		<h3>Serializing Email, Meeting, Acknowledgement, CommunicationChangeSet</h3>
+		<p>Problem: How to send data across the wire to CEC clients connected to the server?</p>
+		<p>Solution: We leveraged the Serializable interface provided by the standard java.io package. All of these objects 
+		were quite simple: their logical and physical forms matched quite nicely, so we used the default serialized form 
+		instead of creating our own custom ones. </p>  
+		
+		<h3>Connecting, Offline, Online</h3>
+		<p>Problem: How to deal with clients who connect, and then disconnect?</p>
+		<p>Solution: At first, it was a real challenge - we encountered countless "stream corruption" exceptions. We needed
+		a better strategy to deal with the different connection possibilities, and to act accordingly. Many sites online 
+		had references to the fact that a lot of socket methods were unreliable, thus we decided to opt for a simple, clean
+		and efficient design. The idea is that upon connecting, the SuperCECServer stored a link between the client's 
+		registration email, his socket, and the input and output streams. Whenever a client with the same email "reconnected"
+		we simply overwrote those mappings. We understand that in a real scenario, this poses a security check; however,
+		this is out of scope for this phase and thus we deemed it an appropriate solution. </p>  
 		
 		
-		<h3>Decision Name</h3>
-		<p>Problem: ?</p>
-		<p>Solution: ?</p>  
+		<h3>Concurrency Techniques</h3>
+		<p>Problem: How to manage access to shared resources, especially when an arbitrary number of threads can access? Also, 
+		how to manage the threads and providing Runnables to be executed?</p>
+		<p>Solution: here we leaned heavily on the well tested and documented thread pool abstraction: Executor Service. This
+		class provided the thread-safety, thread-management, and orchestration necessary to successfully build a multi-client
+		email program, which allows optimistic changes to shared data. We had numerous amount of threads:</p>
+		<b>Long running (meaning when spawned, keeps running until the application closes or some other even occurs):</b>
+		<ul>
+			<li>ServerClientAcceptor</li>
+			<li>ServerThreadPerClient</li>
+			<li>EmailListenerCECServer</li>
+			<li>SentEMailCleanupThread (handle acknowledgements)</li>
+			<li>ServerClientAcceptor</li>
+			<li>ListenerForMessagesFromServer</li>
+		</ul>
+		<b>One shot(meaning when spawned, runs for the data its given and then completes):</b>
+		<ul>
+			<li>ChangeSetThreadForMeetings</li>
+			<li>SendPendingMessages (in case a client reconnects, to send him his messages)</li>
+			<li>UpdateEmailClientView (to actually refresh the Inbox if the user is on that view)</li>
+		</ul>
+		<p>Thus for the most part, it made sense to communicate with our SuperCECServer and submit these tasks to the 
+		main Executor.</p>  
 		
-	
+		
+		
+		<h3>Concurrent Editing of a Meeting</h3>
+		<p>Problem: How to be able to concurrently edit a meeting on the network? </p>
+		<p>Solution: We simplified our design with the following decision: as soon as the client sends a meeting to the server,
+		the client is no longer the owner of the meeting and it now is a shared document which belongs to the server. All
+		subsequent updates need to go through the server, and this alleviates the need for clients to know about other
+		clients (in a peer-to-peer fashion). This allowed us to make some important decisions regarding the Change Set -
+		most notably: if a client tries to update a meeting, if his original copy does not match the servers, then he needs
+		to perform an update. This led to the design of the Change object (see above). </p>  
+		<p>One major challenge with this was how to address the issue of what happens when a client tries to update, but 
+		is not in sync. We decided that the best approach was to mimic SVN - during the update, lock the UI. If the update 
+		is successful, simply close the window. If the update was rejected, then give a message to the user that some fields
+		need to be merged, and prevent the system from saving the meeting on his local client. This proved challenging from
+		an implementation perspective, and also from a correctness perspective - is it good practice to lock the main AWT 
+		thread? Regardless, we followed this approach and included some basic usability: log that we're waiting for a response 
+		every 100ms, and upon reception, unlock the main UI thread. If the server doesn't respond in 3 seconds, then
+		we tell the user that something is wrong with the server and to try later. The code in the NetworkHelper (client 
+		side) which runs is shown here: </p>
+		<p>
+			<img src="lockthemainthread.png"></img>
+		</p>
+		
+		
+		
+		<h3>Merger Classes - Server CCS Merge and Client CCS Merge</h3>
+		<p>Problem: How to intelligently take changes to a meeting and apply them (also intelligently)</p>
+		<p>Solution: Due to time constraints, we were not able to fully realize a merge algorithm strategy based on different
+		fields. We did however plan for it by designing a Merger interface, and creating the shells for some basic merge classes 
+		(BodyMerger, SimpleTextFieldMerger). Thus for the purposes of the phase 3 release schedule, we simply send back
+		any conflicts to the client, and ask him to resolve it. </p>  
 		
 				
 		<h2>Reused Libraries / Code Inspiration (in addition to Phase 1)</h2>
@@ -185,6 +267,7 @@
 			(java.util.StringTokenizer)</li>
 			<li>SrtringUtils: Apache Commons Language StringUtils to help with counting the number 
 			of occurrences of a certain character within a string (org.apache.commons.lang3.StringUtils)</li>
+			<li>Cleanup convenience methods as provided by Troy in lecture code</li>
 		</ul>
 		
 		
@@ -220,8 +303,16 @@
 		</ul>
 		
 		<h2>Known Issues</h2>
-		<h3>Placeholder </h3>
-		<p>Placeholder</p> 
+		<h3>Meeting Edge Cases</h3>
+		<p>Because of how meetings are edited concurrently over the network, we have disabled a somewhat 
+		expected feature: distribution. We felt it was more important to handle the change sets on the server,
+		and completed this implementation; however, we don't have a solid strategy to "notify" all members 
+		of this shared document, that changes were made.</p> 
+
+		<h3>Merging</h3>
+		<p>We wanted to try and implement a more comprehensive merge algorithm, but due to time constraints 
+		we were unable to fully realize it. We have positioned the code to use the proper merge algorithm 
+		strategy, however, those classes are simply placeholder for now. </p> 
 		
 		
 	</body>
