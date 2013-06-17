@@ -254,8 +254,35 @@ public class MeetingFrame extends JFrame {
 			}		
 			else {
 				// build the change set
-				meetingService.sendUpdate(meetingView, mve);
-				// TODD: block -- cannot continue until the server returns to us
+				
+				MeetingViewFieldChanges meetingViewChanges = meetingService.sendUpdate(meetingView, mve);
+				
+				if (meetingViewChanges.isNoChangesFromUser()) {
+					JOptionPane.showMessageDialog(null, "No changes were made");
+				}
+				
+				else if (meetingViewChanges.isNoResponse()) {
+					JOptionPane.showMessageDialog(null, "Unable to contact server. Please seek an Administrator.");
+				}
+				
+				else if (meetingViewChanges.isAccepted()) {
+					// TODO: save the meeting, and close the window, BUT DO NOT SEND AN EMAIL!!
+					meetingService.updateMeeting(mve);
+					mainClient.updateMeetingsTable();
+					this.dispose();	
+				}
+				
+				else if (meetingViewChanges.isRejected()) {
+					// this is the case where the server has returned conflict. Thus we need to 
+					// resolve the currently stored meetingView entity;
+					if (!meetingView.getEndDate().equals(meetingViewChanges.valuesFromServer.getEndDate())) {
+						JOptionPane.showMessageDialog(null, "Server changed some dates. Please verify. ");	
+					}
+					meetingView = meetingViewChanges.valuesFromServer; // this contains the data from the server
+					meetingView.setId(meetingViewChanges.meetingID);
+					MeetingViewEntity merged = meetingService.merge(meetingViewChanges);
+				}
+
 			}
 		}
 	}

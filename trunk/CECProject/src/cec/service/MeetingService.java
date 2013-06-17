@@ -1,15 +1,21 @@
 package cec.service;
 
+import java.util.ArrayList;
+
 import javax.swing.JOptionPane;
 
 import cec.exceptions.UserIsNotConnectedException;
+import cec.model.FolderFactory;
 import cec.model.Meeting;
 import cec.model.MeetingBuilder;
-import cec.model.FolderFactory;
+import cec.net.Change;
+import cec.net.ChangeSetFields;
 import cec.net.ChangeSetState;
 import cec.net.CommunicationChangeSet;
 import cec.net.NetworkHelper;
 import cec.view.MeetingViewEntity;
+import cec.view.MeetingViewFieldChanges;
+import cec.view.ServerStatusForMeetingChange;
 
 /**
  * Expose the action that can be done on an meeting from the model layer
@@ -116,18 +122,69 @@ public class MeetingService {
 		return meeting;
 	}
 
-	public void sendUpdate(MeetingViewEntity before, MeetingViewEntity after) {
+	public MeetingViewFieldChanges sendUpdate(MeetingViewEntity before, MeetingViewEntity after) {
 		
-		ClientMeetingMerger cm = new ClientMeetingMerger();
-		CommunicationChangeSet ccs = cm.getChangeSet(before, after);
-		if (ccs.getChanges().size() == 0) {
-			// TODO: THIS IS THE WRONG PLACE TO DO THIS
-			JOptionPane.showMessageDialog(null, "No changes were made");
+		ClientMeetingMerger cm = new ClientMeetingMerger(before, after);
+		CommunicationChangeSet ccs = cm.getChangeSet();
+		MeetingViewFieldChanges mvf = new MeetingViewFieldChanges(ccs.getId());
+		if (cm.wereChangesMade()) {
+			
+			CommunicationChangeSet serverResponse = NetworkHelper.getReference().sendChangeSet(ccs);
+
+			if(serverResponse == null) {
+				mvf.state = ServerStatusForMeetingChange.NOT_CONNECTED;
+			}
+			
+			if (serverResponse.isChangeAccepted()) {
+				mvf.state = ServerStatusForMeetingChange.ACCEPTED;
+			}
+			else if (serverResponse.isChangeRejected()) {
+				ArrayList<Change> changes = serverResponse.getChanges();
+				for(Change c: changes) {
+					if(c.field.equals(ChangeSetFields.ATTENDEES))
+						before.setAttendees(c.before);
+					if(c.field.equals(ChangeSetFields.BODY))
+						before.setBody(c.before);
+					if(c.field.equals(ChangeSetFields.END_DATE))
+						before.setEndDate(c.before);
+					if(c.field.equals(ChangeSetFields.END_TIME))
+						before.setEndTime(c.before);
+					if(c.field.equals(ChangeSetFields.PLACE))
+						before.setPlace(c.before);
+					if(c.field.equals(ChangeSetFields.START_DATE))
+						before.setStartDate(c.before);
+					if(c.field.equals(ChangeSetFields.START_TIME))
+						before.setStartTime(c.before);
+					if(c.field.equals(ChangeSetFields.SUBJECT))
+						before.setSubject(c.before);
+				}
+				
+				mvf.valuesFromServer = before;  // squashed
+				mvf.userChanges = after;
+				mvf.changes = changes;
+				mvf.state = ServerStatusForMeetingChange.REJECTED;
+			}
 		}
+
 		else {
-			NetworkHelper.getReference().sendChangeSet(ccs);
-		}
+			mvf.state = ServerStatusForMeetingChange.NO_CHANGES_FROM_USER;		
+		}	
+		return mvf;
 		
+	}
+
+	public MeetingViewEntity merge(MeetingViewFieldChanges meetingViewChanges) {
+		//MeetingViewEntity squashed = meetingViewChanges. 
+		MeetingViewEntity result = meetingViewChanges.userChanges;
+
+		for(Change c: meetingViewChanges.changes) {
+			
+			if(c.field.equals(ChangeSetFields.ATTENDEES))
+				result.setAttendees(meetingViewChanges.valuesFromServer.getAttendees() + ". Your addition: " + meetingViewChanges.userChanges.getAttendees());
+
+			
+		}
+		return null;
 	}
 
 }

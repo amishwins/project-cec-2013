@@ -195,7 +195,7 @@ public class NetworkHelper {
 		});
 	}
 	
-	public void sendChangeSet(CommunicationChangeSet ccs) {
+	public CommunicationChangeSet sendChangeSet(CommunicationChangeSet ccs) {
 		if (NetworkHelper.isConnectedToServer()) {
 			try {
 				if (ccs.isChange()){
@@ -207,9 +207,9 @@ public class NetworkHelper {
 					
 					long start_time = System.currentTimeMillis(); 
 					long elapsed_time = 0L;
+					CommunicationChangeSet received;
 					while(true) {
-						
-						CommunicationChangeSet received = changeSetsForMeetings.get(ccs.getId());
+						received = changeSetsForMeetings.get(ccs.getId());
 						if (received == null) {
 							Thread.sleep(100);
 							logger.info("Waiting...");
@@ -228,11 +228,13 @@ public class NetworkHelper {
 					
 					logger.info("We have unlocked the main thread.");
 					// Make sure that the client updates his things
+					return received;
 					
 				}
 				
 				else {
 					oos.writeObject(ccs);
+					
 				}
 					
 				
@@ -245,6 +247,7 @@ public class NetworkHelper {
 		else {
 			logger.info("You are currently not connected to the CEC network.");
 		}
+		return null;
 	}
 
 	public void disconnectFromServer() {
