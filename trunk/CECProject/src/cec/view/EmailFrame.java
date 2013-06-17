@@ -533,6 +533,7 @@ public class EmailFrame extends JFrame implements DocumentListener {
 
 		subjectField.setDocument(new EntryFieldMaxLength(max_Length));
 
+				
 		// Draft Email
 		if (emailView.getFolder().equals(CECConfigurator.getReference().get("Drafts"))) {
 			send.setVisible(true);
@@ -562,6 +563,11 @@ public class EmailFrame extends JFrame implements DocumentListener {
 			ccField.setEditable(false);
 			subjectField.setEditable(false);
 			bodyField.setEditable(false);
+		}
+		if (emailView.getFolder().equals(CECConfigurator.getReference().get("Sent")))
+		{
+			acceptMeeting.setEnabled(false);
+			declineMeeting.setEnabled(false);			
 		}
 		
 				
