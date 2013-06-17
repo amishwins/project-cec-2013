@@ -205,13 +205,11 @@ class FolderDaoStub implements FolderDao {
 
 	@Override
 	public Iterable<String> loadSubFolders(String parentFolder) {
-		// TODO Auto-generated method stub
-		return null;
+	   return null;
 	}
 	
 	@Override
 	public Iterable<Map<String,String>> loadMeetings(String parentFolder) {
-		// TODO Auto-generated method stub
-		return null;
+	   return null;
 	}
 }

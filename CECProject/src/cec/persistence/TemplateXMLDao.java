@@ -29,7 +29,7 @@ public class TemplateXMLDao implements TemplateDao {
 	@Override
 	public void saveAsTemplate(String name, String to, String cc, String subject, String body) {
 
-		String pathToSaveFile = pathToTemplate + name + ".xml"; // TODO: move to configurator
+		String pathToSaveFile = pathToTemplate + name + ".xml"; // 
 		
 		try {
 			Document emailTemplateInXMLFormat = buildXmlFile(name, to, cc, subject, body);
@@ -53,7 +53,7 @@ public class TemplateXMLDao implements TemplateDao {
 	public void deleteTemplate(String fileName) {
 		FileDeleteStrategy file = FileDeleteStrategy.FORCE;
 		try{
-			file.delete(new File( pathToTemplate + fileName.toString() + ".xml")); // TODO: get rid of magic #
+			file.delete(new File( pathToTemplate + fileName.toString() + ".xml")); 
 		} catch(IOException fileDeleteException){
 			fileDeleteException.printStackTrace();
 			throw new RuntimeException("Cannot delete template!");

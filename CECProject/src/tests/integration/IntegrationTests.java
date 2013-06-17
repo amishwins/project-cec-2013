@@ -11,7 +11,7 @@ import org.junit.runners.Suite.SuiteClasses;
 	FolderServiceModelAndDaoIntegrationTests.class,
 	MeetingServiceModelAndDaoIntegrationTests.class,
 	TemplateModelAndDaoIntegrationTests.class,
-	 RuleSetModelAndDaoIntegrationTests.class })
+	RuleSetModelAndDaoIntegrationTests.class })
 
 public class IntegrationTests {
 

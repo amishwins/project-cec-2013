@@ -233,7 +233,6 @@ public class MeetingFrame extends JFrame {
 	 * refreshes the table view with latest data. 
 	 * Send email.
 	 */
-	// TODO: split sendMeeting into two methods - one for Send Meeting, one for Send Update (need two buttons also?)
 	private void sendMeeting() {
 		// if it's a new meeting, allow to be disconnected 
 		MeetingViewEntity mve = buildMeetingViewObjectFromUIFields();
@@ -266,7 +265,6 @@ public class MeetingFrame extends JFrame {
 				}
 				
 				else if (meetingViewChanges.isAccepted()) {
-					// TODO: save the meeting, and close the window, BUT DO NOT SEND AN EMAIL!!
 					meetingService.updateMeeting(mve);
 					mainClient.updateMeetingsTable();
 					this.dispose();	

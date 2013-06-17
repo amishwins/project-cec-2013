@@ -14,7 +14,6 @@ import cec.net.ChangeSetFields;
 import cec.net.ChangeSetState;
 import cec.net.CommunicationChangeSet;
 import cec.net.NetworkHelper;
-import cec.net.ServerThreadPerClient;
 import cec.view.MeetingViewEntity;
 import cec.view.MeetingViewFieldChanges;
 import cec.view.ServerStatusForMeetingChange;

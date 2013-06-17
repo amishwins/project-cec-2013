@@ -124,7 +124,6 @@ class RuleImplCUT extends RuleImpl {
 	public RuleImplCUT(UUID id, int rank, String emailAddresses, String words,
 			Folder targetFolder, boolean active) {
 		super(id, rank, emailAddresses, words, targetFolder, active);
-		// TODO Auto-generated constructor stub
 	}
 	
 	protected void setRuleDao(RuleDao ruleDao) {
@@ -150,20 +149,17 @@ class RuleDaoStub implements RuleDao {
 
 	@Override
 	public Map<String, String> loadRule(String folder, String ruleXmlFileName) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Iterable<Map<String, String>> loadAllRules(String pathToRuleFolder) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void update(UUID id, String rank, String sender, String keyword,
 			String tartgetFolder, String status, String pathToSaveRuleFile) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -177,37 +173,31 @@ class EmailStub implements Email {
 
 	@Override
 	public int compareTo(Email o) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public boolean isMatch(String pattern) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public void send() {
-		// TODO Auto-generated method stub
-		
+				
 	}
 
 	@Override
 	public void saveToDraftFolder() {
-		// TODO Auto-generated method stub
-		
+	
 	}
 	
 	@Override
 	public void saveToInboxFolder() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void delete() {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -218,7 +208,6 @@ class EmailStub implements Email {
 
 	@Override
 	public UUID getId() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -229,14 +218,12 @@ class EmailStub implements Email {
 
 	@Override
 	public String getTo() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getCC() {
-		// TODO Auto-generated method stub
-		return null;
+	   return null;
 	}
 
 	@Override
@@ -251,25 +238,21 @@ class EmailStub implements Email {
 
 	@Override
 	public String getSentTime() {
-		// TODO Auto-generated method stub
-		return null;
+	  return null;
 	}
 
 	@Override
 	public String getLastModifiedTime() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Folder getParentFolder() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getLastModifiedTimeNicelyFormatted() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
@@ -283,38 +266,31 @@ class FolderStub extends Folder {
 
 	@Override
 	public void delete() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void createSubFolder(String newFolderName) {
-		// TODO Auto-generated method stub
-		
+	
 	}
 
 	@Override
 	public Iterable<Email> loadEmails() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Iterable<Email> searchEmails(String searchString,
 			Folder folderToSearchIn) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Iterable<Meeting> loadMeetings() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Iterable<Email> loadRuleApplicableEmails() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	

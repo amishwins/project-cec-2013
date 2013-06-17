@@ -87,5 +87,4 @@ public class EmailBuilderTests {
 		assertNotNull(email);
 	}
 	
-	// TODO: make a better test for the load method. Fill in a full HashMap.
 }

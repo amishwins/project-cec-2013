@@ -126,96 +126,79 @@ class MeetingStub implements Meeting {
 
 	@Override
 	public int compareTo(Meeting arg0) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public UUID getId() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getStartTime() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getEndTime() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getStartDate() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getEndDate() {
-		// TODO Auto-generated method stub
-		return null;
+	    return null;
 	}
 
 	@Override
 	public String getPlace() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getSubject() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getBody() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getSentTime() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getLastModifiedTime() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Folder getParentFolder() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getLastModifiedTimeNicelyFormatted() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void send() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void delete() {
-		// TODO Auto-generated method stub		
 	}
 
 	@Override
 	public void saveAfterAccept() {
-		// TODO Auto-generated method stub
-		
 	}	
 }

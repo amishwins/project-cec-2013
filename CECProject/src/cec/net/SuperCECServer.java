@@ -20,30 +20,11 @@ import cec.model.Email;
 import cec.model.Meeting;
 import cec.model.MeetingImpl;
 import cec.model.ServerMeetingData;
-import cec.service.ClientMeetingMerger;
 
 class MeetingDataWrapper {
 	public UUID id;
 	public Meeting meetingObj;
 	public ServerMeetingData meetingData;
-}
-
-class SentEmailWriteToSysout implements Runnable {
-	static Logger logger = Logger.getLogger(SentEmailWriteToSysout.class.getName()); 
-
-    static { 
-        logger.setParent( Logger.getLogger( SentEmailWriteToSysout.class.getPackage().getName() ) );
-    }
-	public void run() {
-		while(true) {
-			logger.info(String.valueOf(SuperCECServer.getSentEmailMap().size()));
-			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				logger.severe(StackTrace.asString(e));
-			}
-		}
-	}
 }
 
 class SentEmailCleanupThread implements Runnable {
@@ -139,12 +120,8 @@ class ChangeSetThreadForMeetings implements Runnable {
 				logger.info("About to write object back to client who sent change set.");
 				Thread.sleep(300);
 				SuperCECServer.getEmailToObjectOutputStream().get(emailAddress).writeObject(response);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (Exception e) {
+				logger.severe(StackTrace.asString(e));
 			}
 		}
 	}
@@ -234,7 +211,7 @@ public class SuperCECServer {
 		executor.submit(new ServerClientAcceptor(server));
 		executor.submit(new EmailListenerCECServer());
 		executor.submit(new SentEmailCleanupThread());
-		//executor.submit(new SentEmailWriteToSysout());
+		
 
 		try {
 			executor.awaitTermination(1, TimeUnit.DAYS);

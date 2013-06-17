@@ -136,7 +136,6 @@ public class NetworkHelper {
 		}
 	}
 
-	// TODO: Do we need to make the ExecutorServer static?
 	static Socket clientSocket;
 	volatile static ObjectInputStream ois;
 	volatile static ObjectOutputStream oos;
@@ -257,7 +256,6 @@ public class NetworkHelper {
 		stopClient();
 		if (null != exec)
 			exec.shutdown();
-		// TODO do we have to awaitTermination?
 		Cleanup.closeQuietly(ois);
 		Cleanup.closeQuietly(oos);
 		Cleanup.closeQuietly(clientSocket);
