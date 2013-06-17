@@ -22,6 +22,10 @@ import cec.model.Folder;
 import cec.model.FolderFactory;
 import cec.view.EmailClient;
 
+/**
+ * @author r_honvo
+ *
+ */
 public class NetworkHelper {
 	
 	
@@ -44,6 +48,9 @@ public class NetworkHelper {
     	return instance;
     }
 
+	/**
+	 * @return
+	 */
 	public static boolean isConnectedToServer() {	
 			return (clientSocket != null);	
 	}
@@ -52,6 +59,13 @@ public class NetworkHelper {
     	
     }
 	
+	/**
+	 * While server is running, client receive email or acknowledgment or a 
+	 * Communication Change Set for a meeting he is trying to update	
+	 * for an email, it has to be saved in the inbox folder and an Ack has to be sent back to server
+	 * for an acknowledgment, server confirm reception of email client just sent and then email is moved
+	 * from outbox folder to sent folder on the client side.
+	 */
 	class ListenerForMessagesFromServer implements Runnable {
 		public void run() {
 
@@ -122,6 +136,12 @@ public class NetworkHelper {
 		oos.writeObject(hs);
 	}
 
+	/**
+	 * This function is responsible of handling acknowledgment received as parameter
+	 * If the received acknowledgment from server is an email acknowledgment, the existing email is 
+	 * moved from the outbox folder to the sent folder
+	 * @param ack
+	 */
 	public void handleAck(Ack ack) {
 		Ack recievedAck = ack;
 		if (recievedAck.getMsgType() == MessageType.EMAIL) {
@@ -143,10 +163,20 @@ public class NetworkHelper {
 	volatile boolean stop = false;
 	static ExecutorService exec;
 
+	
+	
+	/**
+	 * Return the user socket
+	 * @return
+	 */
 	public static Socket getSocket() {
 		return clientSocket;
 	}
 
+	/**
+	 * Client try to connection to the server
+	 * with a server name and a port number
+	 */
 	public void connectToServer() {
 
 		if (!isConnectedToServer()){		
@@ -183,6 +213,11 @@ public class NetworkHelper {
 		}
 	}
 
+	/**
+	 * Client try to perform the operation of sending 
+	 * Email object to the server
+	 * @param email
+	 */
 	public void sendEmail(Email email) {
 		final Email myEmail = email;
 		exec.submit(new Runnable() {
@@ -196,6 +231,13 @@ public class NetworkHelper {
 		});
 	}
 	
+	/**
+	 * Tell if the change user is trying to make is accepted or no by server.
+	 * Return the change set from the server
+	 * 
+	 * @param ccs
+	 * @return
+	 */
 	public CommunicationChangeSet sendChangeSet(CommunicationChangeSet ccs) {
 		if (NetworkHelper.isConnectedToServer()) {
 			try {
@@ -214,8 +256,7 @@ public class NetworkHelper {
 						changeSetsForMeetings.remove(ccs.getId());
 						if (received == null) {
 							Thread.sleep(100);
-							logger.info("Waiting...");
-							
+							logger.info("Waiting...");							
 						}
 						else {
 							logger.info("Was able to get the change set response from the server for this meeting");
@@ -251,6 +292,7 @@ public class NetworkHelper {
 		}
 		return null;
 	}
+
 
 	public void disconnectFromServer() {
 		stopClient();
