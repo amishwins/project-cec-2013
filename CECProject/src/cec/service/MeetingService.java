@@ -215,24 +215,20 @@ public class MeetingService {
 		for(Change c: meetingViewChanges.changes) {
 			
 			if(c.field.equals(ChangeSetFields.ATTENDEES)) {
-				result.setAttendees("From server: " + squashed.getAttendees() + 
-						". Your version: " + result.getAttendees());
+				result.setAttendees(">>>From server: " + squashed.getAttendees() + " <<<Your version: " + result.getAttendees());
 			}
 			
 			// For body, we add a new line!!
 			if(c.field.equals(ChangeSetFields.BODY)) {
-				result.setBody("From server: " + squashed.getBody() + 
-						". \nYour version: " + result.getBody());
+				result.setBody(">>>From server: " + squashed.getBody() + "\n\n<<<Your version: " + result.getBody());
 			}
 			
 			if(c.field.equals(ChangeSetFields.PLACE)){
-				result.setPlace("From server: " + squashed.getPlace() + 
-						". Your version: " + result.getPlace());
+				result.setPlace(">>>From server: " + squashed.getPlace() +" <<<Your version: " + result.getPlace());
 			}
 
 			if(c.field.equals(ChangeSetFields.SUBJECT)){
-				result.setSubject("From server: " + squashed.getSubject() + 
-						". Your version: " + result.getSubject());
+				result.setSubject(">>>From server: " + squashed.getSubject() + " <<<Your version: " + result.getSubject());
 			}
 			
 			if(c.field.equals(ChangeSetFields.END_DATE)){
