@@ -9,8 +9,8 @@ import cec.net.CommunicationChangeSet;
 
 /**
  * Auxiliary Class used in the server-side by <code>SuperCECServer</code> class to compare the content of a specific meeting
- * object between the server's version and the version that the client is trying to update, find the differences and create a new Change Set.
- * If there differences, a Change Set with the status "CHANGE_REJECTED" containing all unmatched fields is generated to be sent back to the client.
+ * object between the server's version and the version that the client is trying to update, find the differences and create a new Change Set.<BR>
+ * If there differences, a Change Set with the status "CHANGE_REJECTED" containing all unmatched fields is generated to be sent back to the client.<BR>
  * If there are no differences, which means that the client and server have the same Meeting version, 
  * the server accepts client's changes and an empty Change Set with the status "CHANGE_ACCEPTED" is created to be sent back to the client.
  */
