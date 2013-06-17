@@ -216,22 +216,23 @@ public class MeetingService {
 			
 			if(c.field.equals(ChangeSetFields.ATTENDEES)) {
 				result.setAttendees("From server: " + squashed.getAttendees() + 
-						". Your addition: " + result.getAttendees());
+						". Your version: " + result.getAttendees());
 			}
 			
+			// For body, we add a new line!!
 			if(c.field.equals(ChangeSetFields.BODY)) {
 				result.setBody("From server: " + squashed.getBody() + 
-						". Your addition: " + result.getBody());
+						". \nYour version: " + result.getBody());
 			}
 			
 			if(c.field.equals(ChangeSetFields.PLACE)){
 				result.setPlace("From server: " + squashed.getPlace() + 
-						". Your addition: " + result.getPlace());
+						". Your version: " + result.getPlace());
 			}
 
 			if(c.field.equals(ChangeSetFields.SUBJECT)){
 				result.setSubject("From server: " + squashed.getSubject() + 
-						". Your addition: " + result.getSubject());
+						". Your version: " + result.getSubject());
 			}
 			
 			if(c.field.equals(ChangeSetFields.END_DATE)){
