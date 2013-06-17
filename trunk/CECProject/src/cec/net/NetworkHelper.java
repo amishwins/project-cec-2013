@@ -210,6 +210,7 @@ public class NetworkHelper {
 					CommunicationChangeSet received;
 					while(true) {
 						received = changeSetsForMeetings.get(ccs.getId());
+						changeSetsForMeetings.remove(ccs.getId());
 						if (received == null) {
 							Thread.sleep(100);
 							logger.info("Waiting...");
