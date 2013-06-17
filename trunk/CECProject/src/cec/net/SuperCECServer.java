@@ -21,12 +21,25 @@ import cec.model.Meeting;
 import cec.model.MeetingImpl;
 import cec.model.ServerMeetingData;
 
+/**
+ * Class MeetingDataWrapper is a convenience class which stores a meeting object,
+ * and ServerMeetingData. ServerMeetingData is a simplified abstraction of storing 
+ * who has been invited to a meeting, who has accepted, and who has declined. This 
+ * object must be kept in sync on the server.  
+ *
+ */
 class MeetingDataWrapper {
 	public UUID id;
 	public Meeting meetingObj;
 	public ServerMeetingData meetingData;
 }
 
+/**
+ * This thread listens for acknowledgements from the client. This is to clean up
+ * any dangling objects the server has kept in case the client was unreachable. For the 
+ * most part, we are not yet using this functionality. 
+ *
+ */
 class SentEmailCleanupThread implements Runnable {
 	static Logger logger = Logger.getLogger(SentEmailCleanupThread.class.getName()); 
 
@@ -48,6 +61,16 @@ class SentEmailCleanupThread implements Runnable {
 	}
 }
 
+/**
+ * The main thread which responds to a communication change set it has received. It handles
+ * taking this change set (from the client), and trying to update the server with it. It first reads 
+ * the shared meetinMap data. From it, it builds its own change set response by using the ServerMeetingMerger.
+ * For each difference, it then make the update for the stored meeting.
+ * 
+ * Pre-condition: this meeting MUST have been made in this session. If the server goes down,
+ * all meetings are gone. And therefore, the client must clear his meetings. 
+ *
+ */
 class ChangeSetThreadForMeetings implements Runnable {
 	static Logger logger = Logger.getLogger(ChangeSetThreadForMeetings.class.getName()); 
 
@@ -139,6 +162,15 @@ class ChangeSetThreadForMeetings implements Runnable {
    }
 }
 
+/**
+ * This is the main server class. This class represents our server. It encapsulates and 
+ * hides the complexity for handling sockets, and input/output streams. Upon launch, it 
+ * submits three main tasks to a thread pool which it also encapsulates (ExecutorService).
+ * 
+ * Most threads need to communicate with the server in order to access shared data. This
+ * is made possible by convenient accessor methods.  
+ *
+ */
 public class SuperCECServer {
 	
 	static Logger logger = Logger.getLogger(SuperCECServer.class.getName()); 
