@@ -174,17 +174,47 @@ public class MeetingService {
 	}
 
 	public MeetingViewEntity merge(MeetingViewFieldChanges meetingViewChanges) {
-		//MeetingViewEntity squashed = meetingViewChanges. 
+		MeetingViewEntity squashed = meetingViewChanges.valuesFromServer; 
 		MeetingViewEntity result = meetingViewChanges.userChanges;
+		boolean datesChanged = false;
 
 		for(Change c: meetingViewChanges.changes) {
 			
-			if(c.field.equals(ChangeSetFields.ATTENDEES))
-				result.setAttendees(meetingViewChanges.valuesFromServer.getAttendees() + ". Your addition: " + meetingViewChanges.userChanges.getAttendees());
-
+			if(c.field.equals(ChangeSetFields.ATTENDEES)) {
+				result.setAttendees("From server: " + squashed.getAttendees() + 
+						". Your addition: " + result.getAttendees());
+			}
 			
+			if(c.field.equals(ChangeSetFields.BODY)) {
+				result.setBody("From server: " + squashed.getBody() + 
+						". Your addition: " + result.getBody());
+			}
+			
+			if(c.field.equals(ChangeSetFields.PLACE)){
+				result.setPlace("From server: " + squashed.getPlace() + 
+						". Your addition: " + result.getPlace());
+			}
+
+			if(c.field.equals(ChangeSetFields.SUBJECT)){
+				result.setSubject("From server: " + squashed.getSubject() + 
+						". Your addition: " + result.getSubject());
+			}
+			
+			if(c.field.equals(ChangeSetFields.END_DATE)){
+				datesChanged = true;
+			}
+			if(c.field.equals(ChangeSetFields.START_DATE)){
+				datesChanged = true; 
+			}
+			if(c.field.equals(ChangeSetFields.START_TIME)){
+				datesChanged = true; 
+			}			
+			if(c.field.equals(ChangeSetFields.END_TIME)){
+				datesChanged = true;
+			}
+
 		}
-		return null;
+		return result;
 	}
 
 }

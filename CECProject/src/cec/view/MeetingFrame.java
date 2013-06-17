@@ -100,7 +100,7 @@ public class MeetingFrame extends JFrame {
 		meetingView = existingMeeting;
 		buildMeetingFrame();
 		setPropertiesForExisitngMeetingFrameFields();
-		setExistingValuesToMeetingFrameFields();
+		setExistingValuesToMeetingFrameFields(meetingView);
 	}
 
 	private Vector<String> buildTimeArrayForJComboBoxes() {
@@ -281,6 +281,7 @@ public class MeetingFrame extends JFrame {
 					meetingView = meetingViewChanges.valuesFromServer; // this contains the data from the server
 					meetingView.setId(meetingViewChanges.meetingID);
 					MeetingViewEntity merged = meetingService.merge(meetingViewChanges);
+					setExistingValuesToMeetingFrameFields(merged);
 				}
 
 			}
@@ -360,16 +361,16 @@ public class MeetingFrame extends JFrame {
 		return true;
 	}
 
-	private void setExistingValuesToMeetingFrameFields() {
+	private void setExistingValuesToMeetingFrameFields(MeetingViewEntity mve) { 
 		this.id = meetingView.getId();
-		this.toTextField.setText(meetingView.getAttendees());
-		this.locationTextField.setText(meetingView.getPlace());
-		this.subjectTextField.setText(meetingView.getSubject());
-		this.startDateTextField.setText(meetingView.getStartDate());
-		this.endDateTextField.setText(meetingView.getEndDate());
-		this.startTimeComboBox.setSelectedItem(meetingView.getStartTime());
-		this.endTimeComboBox.setSelectedItem(meetingView.getEndTime());
-		this.bodyTextField.setText(meetingView.getBody());
+		this.toTextField.setText(mve.getAttendees());
+		this.locationTextField.setText(mve.getPlace());
+		this.subjectTextField.setText(mve.getSubject());
+		this.startDateTextField.setText(mve.getStartDate());
+		this.endDateTextField.setText(mve.getEndDate());
+		this.startTimeComboBox.setSelectedItem(mve.getStartTime());
+		this.endTimeComboBox.setSelectedItem(mve.getEndTime());
+		this.bodyTextField.setText(mve.getBody());
 	}
 
 	private void setPropertiesForExisitngMeetingFrameFields() {
