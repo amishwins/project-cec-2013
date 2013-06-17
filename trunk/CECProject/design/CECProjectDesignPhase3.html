@@ -314,6 +314,12 @@
 		we were unable to fully realize it. We have positioned the code to use the proper merge algorithm 
 		strategy, however, those classes are simply placeholder for now. </p> 
 		
+		<h3>Temporal Coupling</h3>
+		<p>The code for handling the Communication Change Set is a little fragile. There are places in the code
+		where the order of initialization and execution is so crucial that slight changes can cause exception
+		in areas of code we did not expect. This is a side effect of multiple things: unfamiliarity with 
+		executor / socket / multi-threading type programming, heroic programming, and unflexible deadlines.</p>
+		
 		
 	</body>
 </html>
