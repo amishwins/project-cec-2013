@@ -7,7 +7,14 @@ import cec.net.ChangeSetFields;
 import cec.net.ChangeSetState;
 import cec.net.CommunicationChangeSet;
 
-//Responsible to create a new change set and update the values on server side
+/**
+ * Auxiliary Class used in the server-side by <code>SuperCECServer</code> class to compare the content of a specific meeting
+ * object between the server's version and the version that the client is trying to update, find the differences and create a new Change Set.
+ * If there differences, a Change Set with the status "CHANGE_REJECTED" containing all unmatched fields is generated to be sent back to the client.
+ * If there are no differences, which means that the client and server have the same Meeting version, 
+ * the server accepts client's changes and an empty Change Set with the status "CHANGE_ACCEPTED" is created to be sent back to the client.
+ */
+
 public class ServerMeetingMerger {
 	
 	static Logger logger = Logger.getLogger(ServerMeetingMerger.class.getName()); 
@@ -68,11 +75,10 @@ public class ServerMeetingMerger {
 					if (!serverCurrent.meetingObj.getEndTime().equals(c.before)){
 						ccs.addChange(ChangeSetFields.END_TIME, serverCurrent.meetingObj.getEndTime(), serverCurrent.meetingObj.getEndTime());
 						logger.info("Field: "+  ChangeSetFields.END_TIME + " Client's Before: <"+c.before + "> Servers' Before: <" + serverCurrent.meetingObj.getEndTime()+">");
-		             }
-			
+		             }			
 		}
 
-		//If  client's Meeting before's state = Server's current Meeting object  > Accept the changes  
+		
 		if (ccs.getChanges().size() == 0){
 			ccs = new CommunicationChangeSet(ChangeSetState.CHANGE_ACCEPTED, clientsBefore.getId());
 			logger.info("Meeting change request ACCEPTED for clients before meeting Id : " +clientsBefore.getId()  );
