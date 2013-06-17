@@ -18,7 +18,9 @@ import java.util.logging.Logger;
 import cec.exceptions.StackTrace;
 import cec.model.Email;
 import cec.model.Meeting;
+import cec.model.MeetingImpl;
 import cec.model.ServerMeetingData;
+import cec.service.ClientMeetingMerger;
 
 class MeetingDataWrapper {
 	public UUID id;
@@ -96,9 +98,41 @@ class ChangeSetThreadForMeetings implements Runnable {
 		
 		else if (ccs.isChange()) {
 			
+			ServerMeetingMerger cm = new ServerMeetingMerger();
+			CommunicationChangeSet response = cm.getChangeSet(md, ccs);
 			
-			
-			CommunicationChangeSet response = new CommunicationChangeSet(ChangeSetState.CHANGE_REJECTED, ccs.getId());
+			if (response.isChangeAccepted()){
+			    for(Change c: ccs.getChanges()) {
+			    	MeetingImpl m = (MeetingImpl)md.meetingObj;
+			    	if(c.field.equals(ChangeSetFields.ATTENDEES)) {
+			    		m.setAttendees(c.after);
+			    	}
+			    	if(c.field.equals(ChangeSetFields.BODY)) {
+			    		m.setBody(c.after);
+			    	}
+			    	if(c.field.equals(ChangeSetFields.SUBJECT)) {
+    		    		m.setSubject(c.after);
+			    	}
+			    	if(c.field.equals(ChangeSetFields.PLACE)) {
+			    		m.setPlace(c.after);
+			    	}
+			    	if(c.field.equals(ChangeSetFields.START_DATE)) {
+			    		m.setStartDate(c.after);
+			    	}
+			    	if(c.field.equals(ChangeSetFields.START_TIME)) {
+			    		m.setStartTime(c.after);
+			    	}
+			    	if(c.field.equals(ChangeSetFields.END_DATE)) {
+			    		m.setEndDate(c.after);
+			    	}
+			    	if(c.field.equals(ChangeSetFields.END_TIME)) {
+			    		m.setEndTime(c.after);
+			    	}
+			    }
+				
+			}
+						
+			//CommunicationChangeSet response = new CommunicationChangeSet(ChangeSetState.CHANGE_REJECTED, ccs.getId());
 			try {
 				logger.info("About to write object back to client who sent change set.");
 				Thread.sleep(300);
