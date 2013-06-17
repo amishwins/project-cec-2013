@@ -220,7 +220,7 @@ public class MeetingService {
 			
 			// For body, we add a new line!!
 			if(c.field.equals(ChangeSetFields.BODY)) {
-				result.setBody(">>>From server: " + squashed.getBody() + "\n\n<<<Your version: " + result.getBody());
+				result.setBody(">>>From server: \n" + squashed.getBody() + "\n\n<<<Your version: \n" + result.getBody());
 			}
 			
 			if(c.field.equals(ChangeSetFields.PLACE)){
