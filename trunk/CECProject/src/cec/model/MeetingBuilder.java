@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 
 import cec.config.CECConfigurator;
 
-// TODO: Auto-generated Javadoc
 /**
  * A builder of meeting instances. 
  * 

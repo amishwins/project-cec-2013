@@ -28,7 +28,7 @@ public class TemplateFolder {
 	 * format such that it can be easily displayed on the UI. 
 	 */
 	public String[] loadTemplateNames() {
-		refresh(); // TODO: determine if refresh is a good strategy
+		refresh(); 
 		String[] templateNames = new String[templates.size()];
 		int index = 0;
 		for (Template t: templates) {

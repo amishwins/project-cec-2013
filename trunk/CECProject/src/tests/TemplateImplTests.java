@@ -86,13 +86,11 @@ class TemplateDaoStub implements TemplateDao {
 
 	@Override
 	public Map<String, String> loadTemplate(String fileName) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Iterable<Map<String, String>> loadAllTemplates() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	

@@ -85,7 +85,6 @@ class TemplateStub implements Template {
 
 	@Override
 	public int compareTo(Template arg0) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 

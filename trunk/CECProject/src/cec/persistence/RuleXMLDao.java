@@ -26,7 +26,6 @@ import cec.config.CECConfigurator;
 import cec.exceptions.StackTrace;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * 
  * RuleXMLDao is a class in the persistence layer responsible for handling rule

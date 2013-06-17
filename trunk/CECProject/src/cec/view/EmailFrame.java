@@ -624,8 +624,6 @@ public class EmailFrame extends JFrame implements DocumentListener {
 
 	@Override
 	public void changedUpdate(DocumentEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -635,8 +633,6 @@ public class EmailFrame extends JFrame implements DocumentListener {
 
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	private class CommitAction extends AbstractAction {

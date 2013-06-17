@@ -85,7 +85,6 @@ public class CommunicationChangeSet implements Serializable {
 		if (body == null || inBefore == null || inAfter == null)
 			throw new IllegalArgumentException("Change fields cannot be null");
 		
-		// TODO: should we just use some sort of set here? I don't know!!
 		for(Change c: changes) {
 			if (c.field.equals(body)) {
 				// should only add changes once
