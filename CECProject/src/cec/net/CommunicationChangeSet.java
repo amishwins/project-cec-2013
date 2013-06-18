@@ -4,6 +4,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * Serializable object that represents a Change Set and stores a set of <code>Change</code> objects.<BR>
+ * It's used in the communication between Client and Server to report whether a Meeting 
+ * has been CHANGED, ACCEPTED, DECLINED by the Clients involved or had a CHANGE ACCEPTED or REJECTED by the Server.<BR>
+ * Its responsible to transport only the changes that have to be applied in the other end to make Client and Server synchronized.  *  
+ */
+
 public class CommunicationChangeSet implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

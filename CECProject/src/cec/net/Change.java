@@ -2,6 +2,12 @@ package cec.net;
 
 import java.io.Serializable;
 
+/**
+ * Class that represents a Change object - the lowest level of granularity in a Meeting Change Set.<BR>
+ * Stores the Meeting field that has been changed and its values before and after. 
+ * These values are compared to verify if Client and Server are properly synchronized.
+ */
+
 public class Change implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public ChangeSetFields field;
