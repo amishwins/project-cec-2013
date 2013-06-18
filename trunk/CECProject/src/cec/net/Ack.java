@@ -3,11 +3,14 @@ package cec.net;
 import java.io.Serializable;
 import java.util.UUID;
 
+
+/**
+ * Serializable Acknowledgement Object used by both Client and Server
+ * to report that a Email or Meeting has been successfully received. 
+ */
+
 public class Ack implements Serializable {
-	/**
-	 * Serializable Acknowledgement Object used by both Client and Server
-	 * to report that a Email or Meeting has been successfully received. 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	private UUID id;
 	private MessageType msgType;
