@@ -5,8 +5,13 @@ import java.util.logging.Logger;
 import cec.exceptions.StackTrace;
 import cec.view.EmailClient;
 
+
+/**
+ * The Class UpdateEmailClientView.
+ */
 public class UpdateEmailClientView implements Runnable {
 
+	/* It creates the logger for this class. */
 	static Logger logger = Logger.getLogger(UpdateEmailClientView.class
 			.getName());
 
@@ -15,6 +20,10 @@ public class UpdateEmailClientView implements Runnable {
 				.getPackage().getName()));
 	}
 
+	/**
+	 * It refreshes the email client view whenever email is received by the client
+	 */
+			
 	public void run() {
 		try {
 			EmailClient.getReference().updateEmailsTable();
