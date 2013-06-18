@@ -12,16 +12,27 @@ import cec.model.MeetingBuilder;
 import cec.model.ServerMeetingData;
 import cec.model.ServerMeetingDataImpl;
 
+ 
+/**
+ * The Class ServerThreadPerClient object handles the requests per client. 
+ */
 public class ServerThreadPerClient implements Runnable {
 
+	/** The logger. */
 	static Logger logger = Logger.getLogger(ServerThreadPerClient.class.getName()); 
 
     static { 
         logger.setParent( Logger.getLogger( ServerThreadPerClient.class.getPackage().getName() ) );
     }
 	
+	/** The email address. */
 	private String emailAddress;
 
+	/**
+	 * Instantiates a new server thread per client.
+	 *
+	 * @param emailAddress the email address
+	 */
 	public ServerThreadPerClient(String emailAddress) {
 		this.emailAddress = emailAddress;
 	}
@@ -94,15 +105,33 @@ public class ServerThreadPerClient implements Runnable {
 			}
 		}
 	}
+	
+	/**
+	 * Apply change set to meeting map.
+	 *
+	 * @param emailAddress the email address
+	 * @param ccs the ccs
+	 */
 	private void applyChangeSetToMeetingMap(String emailAddress, CommunicationChangeSet ccs) {
 		SuperCECServer.getExecutor().submit(new ChangeSetThreadForMeetings(emailAddress, ccs));
 	}
 
+	/**
+	 * Builds the meeting.
+	 *
+	 * @param e the e
+	 * @return the meeting
+	 */
 	private Meeting buildMeeting(EmailImpl e) {
 		MeetingBuilder mb = new MeetingBuilder();
 		return mb.buildFromAcceptInvite(e);
       }
 
+	/**
+	 * Handle ack.
+	 *
+	 * @param ack the ack
+	 */
 	private void handleAck(Ack ack) {
 		if (ack.getMsgType() == MessageType.EMAIL || ack.getMsgType() == MessageType.MEETING ) {
 			try {
