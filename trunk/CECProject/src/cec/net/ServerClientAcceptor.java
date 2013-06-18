@@ -11,21 +11,44 @@ import java.util.logging.Logger;
 import cec.exceptions.StackTrace;
 import cec.model.Email;
 
+/**
+ * The Class ServerClientAcceptor handles accepting  connections from client.
+ * client handshakes with the servers sending its email Address 
+ * and server register client on the server.
+ */
 public class ServerClientAcceptor implements Runnable {
+	
+	/** The logger. */
 	static Logger logger = Logger.getLogger(ServerClientAcceptor.class.getName());
 
 	static {
 		logger.setParent(Logger.getLogger(ServerClientAcceptor.class.getPackage().getName()));
 	}
 
+	/** The server. */
 	ServerSocket server = null;
+	
+	/** The in. */
 	ObjectInputStream in = null;
+	
+	/** The out. */
 	ObjectOutputStream out = null;
 
+	/**
+	 * Instantiates a new server client acceptor.
+	 *
+	 * @param server the server
+	 */
 	public ServerClientAcceptor(ServerSocket server) {
 		this.server = server;
 	}
-
+	
+	/**
+	 * This thread accepts new client connection. registers it to the server.
+	 * This thread is also responsible for setting up the server data.
+	 * It also holds the responsibility to send pending email(s) to client.
+	 * @param server the server
+	 */
 	public void run() {
 		logger.info("Thread to Accept Connections is started .....");
 		while (true) {
@@ -36,9 +59,6 @@ public class ServerClientAcceptor implements Runnable {
 				in = new ObjectInputStream(socket.getInputStream());
 				out = new ObjectOutputStream(socket.getOutputStream());
 
-				
-				
-				
 				HandShake handShake = (HandShake) in.readObject();
 				setupServerMaps(socket, handShake);
 				
@@ -65,6 +85,9 @@ public class ServerClientAcceptor implements Runnable {
 		}
 	}
 
+	/**
+	 * Log currently registered users.
+	 */
 	private void logCurrentlyRegisteredUsers() {
 		Set<String> emails = SuperCECServer.getEmailToSocketMap().keySet();
 		for (String email : emails) {
@@ -77,6 +100,12 @@ public class ServerClientAcceptor implements Runnable {
 		}
 	}
 
+	/**
+	 * Setup server maps.
+	 *
+	 * @param socket the socket
+	 * @param handShake the hand shake
+	 */
 	private void setupServerMaps(Socket socket, HandShake handShake) {
 		SuperCECServer.getEmailToSocketMap().put(handShake.emailAddress, socket);
 		SuperCECServer.getEmailToObjectInputStream().put(handShake.emailAddress, in);
