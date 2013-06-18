@@ -12,7 +12,6 @@ import cec.model.MeetingBuilder;
 import cec.model.ServerMeetingData;
 import cec.model.ServerMeetingDataImpl;
 
- 
 /**
  * The Class ServerThreadPerClient object handles the requests per client. 
  */
@@ -29,7 +28,7 @@ public class ServerThreadPerClient implements Runnable {
 	private String emailAddress;
 
 	/**
-	 * Instantiates a new server thread per client.
+	 * Instantiates a new server thread(task) per client. 
 	 *
 	 * @param emailAddress the email address
 	 */
@@ -37,6 +36,11 @@ public class ServerThreadPerClient implements Runnable {
 		this.emailAddress = emailAddress;
 	}
 
+	
+	/**
+	 * This thread accepts email, change-set, acknowledgement etc.
+	 * 
+	 */
 	public void run() {
 		logger.info("Accepting Emails from this client: " + emailAddress);
 		while (true) {
@@ -117,7 +121,7 @@ public class ServerThreadPerClient implements Runnable {
 	}
 
 	/**
-	 * Builds the meeting.
+	 * Builds the meeting object.
 	 *
 	 * @param e the e
 	 * @return the meeting
@@ -128,7 +132,7 @@ public class ServerThreadPerClient implements Runnable {
       }
 
 	/**
-	 * Handle ack.
+	 * Handles acknowledgement object.
 	 *
 	 * @param ack the ack
 	 */
