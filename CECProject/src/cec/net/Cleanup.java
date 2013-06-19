@@ -1,5 +1,8 @@
 package cec.net;
-//import com.sun.org.apache.bcel.internal.generic.NEW;
+
+/**
+ * Class Cleanup used to close objects in the Network Layer.  
+ */
 
 import java.io.Closeable;
 import java.lang.reflect.Method;
