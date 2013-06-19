@@ -10,6 +10,14 @@ import cec.exceptions.StackTrace;
 import cec.model.Email;
 import cec.model.EmailBuilder;
 
+/**
+ * Server is running and listening to any incoming email.
+ * For any email received, a list of recipients is built from to and cc fields,
+ * and server try to send email to each recipients. for non existing user, a notice of failure
+ * delivery is send back to the sender email address. For not connected user, the email 
+ * is kept in a queue and will be delivered when recipient will connect.  
+ *
+ */
 public class EmailListenerCECServer implements Runnable {
 	
 	static Logger logger = Logger.getLogger(EmailListenerCECServer.class.getName()); 

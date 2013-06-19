@@ -3,6 +3,9 @@ package cec.net;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+/**
+ * Builds the list of recipients by concatenating the <code>To</code> and <code>Cc</code> fields and separating each email address by a ";"
+ */
 public class Recipients {
 	String to;
 	String cc;
