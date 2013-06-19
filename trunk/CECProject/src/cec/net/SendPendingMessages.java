@@ -10,6 +10,10 @@ import java.util.logging.Logger;
 import cec.exceptions.StackTrace;
 import cec.model.Email;
 
+/**
+ * The Class SendPendingMessages handles Pending Messages on Server side. 
+ */
+
 public class SendPendingMessages implements Runnable {
 
 	static Logger logger = Logger
