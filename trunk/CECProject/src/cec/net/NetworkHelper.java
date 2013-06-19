@@ -21,10 +21,6 @@ import cec.model.EmailImpl;
 import cec.model.Folder;
 import cec.model.FolderFactory;
 
-/**
- * @author r_honvo
- *
- */
 public class NetworkHelper {
 	
 	
@@ -50,6 +46,7 @@ public class NetworkHelper {
     }
 
 	/**
+	 * tell whether or not the user is connected to server
 	 * @return
 	 */
 	public static boolean isConnectedToServer() {	
@@ -171,7 +168,7 @@ public class NetworkHelper {
 	
 	/**
 	 * Return the user socket
-	 * @return
+	 * @return Socket the Client Socket
 	 */
 	public static Socket getSocket() {
 		return clientSocket;
@@ -239,8 +236,8 @@ public class NetworkHelper {
 	 * Tell if the change user is trying to make is accepted or no by server.
 	 * Return the change set from the server
 	 * 
-	 * @param ccs
-	 * @return
+	 * @param CommunicationChangeSet ccs
+	 * @return CommunicationChangeSet from server
 	 */
 	public CommunicationChangeSet sendChangeSet(CommunicationChangeSet ccs) {
 		if (NetworkHelper.isConnectedToServer()) {
@@ -297,19 +294,5 @@ public class NetworkHelper {
 		return null;
 	}
 
-
-	public void disconnectFromServer() {
-		stopClient();
-		if (null != exec)
-			exec.shutdown();
-		Cleanup.closeQuietly(ois);
-		Cleanup.closeQuietly(oos);
-		Cleanup.closeQuietly(clientSocket);
-		clientSocket = null;
-	}
-
-	private void stopClient() {
-		stop = true;
-	}
 
 }
