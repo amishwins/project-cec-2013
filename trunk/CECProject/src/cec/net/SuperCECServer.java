@@ -180,7 +180,7 @@ public class SuperCECServer {
     }
 
     // All data structures which hold our CEC Email and Meeting Data which needs to be 
-    // thread safe and concurrently accessable
+    // thread safe and concurrently accessible
    	static LinkedBlockingDeque<Email> arrivingEmails = new LinkedBlockingDeque<>();
 	static LinkedBlockingDeque<Ack> arrivingEmailAcks = new LinkedBlockingDeque<>();
 	static ConcurrentHashMap<UUID, Email> sentEmails = new ConcurrentHashMap<>();
