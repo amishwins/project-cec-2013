@@ -1,0 +1,269 @@
+## Design Decisions ##
+
+### Phase 3 ###
+
+#### Tasks ####
+  1. Create the receiveEmail method and make corresponding changes in persistence
+  1. Change the Timer implementation to take advantage of this implementation (instead of creating a mail, moving to draft, and then moving to Inbox)
+  1. Serialize the EmailImpl class (not the interface!), take care to create a custom serialized form, and to ensure that (all) fields are set to transient - according to the guidelines.
+  1. Come up with a proof of concept for the "merge" - write code which takes two "meeting" model objects and merges them, creating a new meeting object. Don't put this code in the meeting object itself. We might want to do like SVN does when we have a conflict, it adds ">>>> mine" and "=======" in case we've changed the same lines to show what areas are conflicted.
+  1. Modify Email to include a flag: "isMeetingInvite". This should ripple down to the persistence and up to the view. This will help up determine if the received email should have a "Accept" and "Decline" button.
+
+
+#### Phase 3 ####
+
+1. Send email through network between at least 3 clients your filters should apply to received email
+  * When server receives the email, it should send an ACK back to the sender
+  * When receiver receives email, it should send ACK back to the SERVER
+  * If user is not connected, we need to store message and try to send later (use a DEQUEUE)
+  * If we send an email to a user who has not been registered, we should send an email BACK to the sender saying "no user with this email address found"
+  * Only delete the email from the Queue once the recipient has sent back an ACK
+
+2. When you create a new meeting involving another person they should
+recevie email and be able to accept or decline the appointment and edit
+over the network
+3. Allow two instances of your program to concurrently edit an appointment
+over a network using optismistic locking
+
+Scenarios for Email
+Scenario A (No User)
+
+  1. Launch server
+  1. Pankaj connects
+  1. Sends email to Deyvid
+  1. Server does not have Deyvid registered; server sends email back to Pankaj
+  1. Server deletee from memory
+
+
+Scenario B (User Exists)
+  1. Launch server
+  1. Pankaj connects; Deyvid connects
+  1. Pankaj sends email to Deyvid
+  1. Server sends ACK back to Pankaj
+  1. Server sends email to Deyvid
+  1. Deyvid sends ACK back to Server
+  1. Server deletes from memory
+
+
+Scenario C (User Exists, but disconnected)
+  1. Launch server
+  1. Pankaj connects; Deyvid connects
+  1. Deyvid disconnects
+  1. Pankaj sends email to Deyvid
+  1. Server sends ACK back to Pankaj
+  1. Server blocks on message
+  1. Devyid reconnects
+  1. Server unblocks and sends to Deyvid
+  1. Deyvid sends ACK back to Server
+  1. Server deletes from memory
+
+
+Scenario D (Send to multiple recipients - OKAY)
+  1. Launch server
+  1. Pankaj connects; Deyvid connects; Romeo connects
+  1. Pankaj sends email to Deyvid and Romeo
+  1. Server sends ACK back to Pankaj
+  1. Server sends email to Deyvid and Romeo
+  1. Deyvid and Romeo send ACK back to Server
+  1. Server deletes from memory
+
+
+Scenario E (Send to multiple recipients - Not okay)
+  1. Launch server
+  1. Pankaj connects; Deyvid connects; Romeo connects
+  1. Deyvid disconnects
+  1. Pankaj sends email to Deyvid and Romeo
+  1. Server sends ACK back to Pankaj
+  1. Server sends email to Romeo
+  1. Romeo sends ACK back to Server
+  1. Server continues to try to send email to Deyvid
+  1. Deyvid reconnects (and then see scenario C step 7 onwards)
+  1. Server deletes from memory
+
+
+### Phase 2 ###
+
+### Search ###
+
+CEC Application will not perform the search, ignoring user request, in the following cases:
+  * Search box is empty
+  * contains only spaces
+  * contains only Special characters
+
+The symbols "@", "." and "_" are not considered Special characters but "Email characters"._
+
+The Email search engine finds emails that contains the user input in at least one of the fields: From, To, CC, Subject and Body. It considers every word separately, what means that the application will return Emails that match with at least one of the words informed by the user. Special characters are not considered, and words concatenated with them are treated separately.
+
+
+### Column Widths for JTable ###
+
+We manually call `defineEmailTableLayout` whenever the `updateJTable` is called. Is this a good design decision?
+
+### Error Messages for the User ###
+
+The following cases will display an error message:
+
+  * Try to create a folder with the same name as an existing folder
+  * Try to move an email to the same folder in which it already exists
+
+
+## Creation and Deletion of Folders ##
+
+We have decided that users can **not** create folders anywhere. They may only create them as subfolders of the four "system" folders (not the emails root):
+
+  * emails
+    * Inbox
+    * Drafts
+    * Outbox
+    * Sent
+
+Users are also not allowed to delete any system folder.
+
+### Validation on Folder Names for Creation ###
+
+Users are only allowed to create folders with names which match our awesome regex pattern: `^[a-zA-Z0-9_\\s]+$`
+
+YaY!
+
+
+
+### Formatting XML ###
+In EmailXMLDao, we are using a `StreamSource.xls` file to help us format the XML output:
+
+```
+StreamSource stylesource = new StreamSource(getClass().getResourceAsStream("proper-indenting.xsl"));
+Transformer transformer = transformerFactory.newTransformer(stylesource);
+```
+
+We used the following as inspiration:
+http://stackoverflow.com/questions/3273182/how-to-write-properly-formatted-xml
+
+### How Data Looks at Each Layer (needs to be updated) ###
+The persistence layer email object looks like:
+
+```
+<?xml version="1.0" encoding="UTF-8"?><E-Mail>
+   <Id>32e61786-ef7c-4ca3-8019-df5e2ca2020d</Id>
+   <From>cec@cec.com</From>
+   <To>1234</To>
+   <CC>4565</CC>
+   <LastModifiedTime>2013.05.17_At_00.05.18.763</LastModifiedTime>
+   <SentTime>2013.05.17_At_00.05.18.763</SentTime>
+   <Subject>7897</Subject>
+   <Body>1239</Body>
+</E-Mail>
+```
+
+The model layer email object has the following getters:
+
+```
+    public UUID getId();
+    public String getFrom();
+    public String getTo();
+    public String getCC();
+    public String getSubject();
+    public String getBody();
+    public String getSentTime();
+    public String getLastModifiedTime();
+    public Folder getParentFolder();
+```
+
+### Unit Testing Checked Exceptions ###
+
+The `Email` interface extends `Comparable<Email>` in order for us to be able to sort emails (for now, based on `lastModifiedDate`). The issue we run into is that `SimpleDateFormat` method parse() throws a `ParseException`, which is a checked exception (forcing us to either add a throws keyword into the signature, or surround by try/catch).
+
+To circumvent this issue, we handle the exception in a protected method in the `EmailImpl` class, and inherit from this class in the unit test class `EmailSortingTests`. The handling class is overridden as follows:
+
+```
+	@Override
+	protected void handleParseException(Exception e) {
+		if (e.getClass().getName().equals("java.text.ParseException")) {
+			throw new RuntimeException();
+		}
+	}
+```
+
+And then our unit test looks like:
+
+```
+	// We cannot cannot throw a ParseException since it is checked.  
+	@Test(expected=RuntimeException.class)
+	public void sortThrowsExceptionWhenBadDate() {
+		Email badlyFormatedEmail = new EmailImplExceptionCUT(UUID.randomUUID(), "", "", "", "", "", 
+			"xyz", "", null);
+		emailList.add(badlyFormatedEmail);
+		Collections.sort(emailList);
+	}
+```
+
+
+### Creation and Deletion of Folders ###
+
+We've decided to allow subfolder creation at any point in the tree. As specified by the professor, we will prevent the deletion of Inbox (and other System folders: Drafts & Outbox).
+
+This is accomplished by modelling a parent abstract `Folder` class, which implements the main create/updated/delete methods, and defining two subclasses: `SystemFolder` and `UserFolder`. Both subclasses override the delete method and act accordingly. A factory `FolderFactor` is responsible for creating the runtime model objects according the the rules stipulated above.
+
+### Sorting Folders ###
+
+Our assumption is that users will always want to see the most recent messages on top. Therefore, each folder is sorted in a descending order. We will not (at least for phase 1) provide another means to sort.
+
+
+### Refreshing policy ###
+
+**Folder Structure Tree - Left Panel**
+
+We've decided to refresh the Folder Structure by rebuilting it entirely from the persistence layer  - re-scaning the "emails" directory structure from Operating system's File System - every time **a subfolder is created or deleted**. Considering that I/O and Memory overheads are not concerns as our Email application should not deal with complex directory structures with large number of subdirectories, this approach is interesting as it ensures that the user is browsing a correct and updated tree and if an error occurs the user will see his update has not been properly performed.
+
+**Email Table - Top Panel**
+
+Likewise, the strategy adopted to refresh the Email table when **a Folder is selected** as well as **an email is Deleted/Moved** is to request the persistence layer to check the Operating system's File System and load an updated list of Email Entities (XML Files).
+
+
+---
+
+
+### UI/User Experience ###
+
+**Look and Feel**
+
+Look and feel (L&F) refers to the appearance of GUI widgets and their behaviors. Swing's architecture enables multiple L&Fs that provides a concrete implementation for each of the ComponentUI subclasses. To improve user experience we decided to use the L&F **SystemLookAndFeel** that implements an UI that is native to the Operating System the application is running on.
+
+
+**Icons/Images**
+
+All Icons used in our project are part of the "Primo icon set" provided freely by Double-J Design for for personal and commercial use in their website.
+
+
+**Hot keys used in our application**
+
+
+  * (Main window)
+    * Alt+F - Open File Menu
+    * Ctrl+N - New Email
+    * Ctrl+F - New Sub-folder
+    * Ctrl+O - Open Selected Email
+    * Alt+E - Open Edit Menu
+    * Ctrl+M - Move Email
+    * Ctrl+E - Delete Email
+    * Ctrl+R - Delete Folder
+
+  * (Email window)
+    * Alt+F - Open File Menu
+    * Ctrl+D - Save as Draft
+    * Ctrl+S - Send Email
+    * Escape - Exit
+
+
+---
+
+
+
+## Some awesome links: ##
+
+  * http://oreilly.com/catalog/jfcnut/chapter/ch03.html#ch03_20.html
+  * http://docs.oracle.com/javase/tutorial/uiswing/components/table.html#data
+  * Working with Abstract Table Model http://stackoverflow.com/questions/3090013/load-an-array-to-a-java-table
+  * How to select text in a text area:
+    * http://docs.oracle.com/javase/1.4.2/docs/api/javax/swing/text/JTextComponent.html
+    * http://forums.codeguru.com/showthread.php?308517-How-do-you-highlight-the-text-in-a-JTextfield
+    * http://docs.oracle.com/javase/tutorial/uiswing/misc/focus.html#customFocusTraversal

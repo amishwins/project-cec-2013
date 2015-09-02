@@ -1,0 +1,84 @@
+# Document Issues we Find (todos, etc.) #
+
+## Priority ##
+
+### Phase 3 ###
+  * Where should the thread for client go? In which layer?
+  * Connect the code which Romeo wrote for the EmailClient to register a client with the server
+  * Whats a good strategy to update the Inbox when a client RECEIVES an email? Should we refresh every few seconds (no)? What if the user is currently in the meetings folder?
+  * User 1 invites User 2 and User 3. User 2 declines before User 3 accepts. What happens? User 2's decline should go to both User 1 and User 3. And now when User 3 accepts, it should only go to User 1. How to model / implement this?
+  * Test the new field isMeetingEmail flag in EmailImpl and EmailXMLDao.
+
+
+### Phase 2 ###
+  * When changing meeting by adding/removing attendees, how should we handle the removed attendees?
+  * Can we cancel a meeting completely?
+  * Currently using 2 separate strategies for the placeholders and tab behavior. One strategy for To, CC, and Subject, and a more complex one for the Body. Is this okay?
+  * Robustness for Meeting:
+    * Send empty meeting?
+    * Email recipient validation
+    * Date and time validation (might have to refactor the date time to use a single Java Date object for DateTime, as opposed to 2 Dates and 2 Strings)
+    * If edit meeting, and make no changes, we can still "send update"
+  * Robustness for Template:
+    * Check for poorly formated placeholders
+    * If edit template, and make no changes, we can still "overwrite"
+  * Unit test gaps: Service Layer for Template, and Search
+  * Clean up warnings in all classes (mostly unused imports)
+  * Console Log messages - find a nice way to turn them all off!
+  * Clean up Email Client and Email Frame
+
+### Phase 1 ###
+  * Create and delete subfolder -> decide on a refresh tree strategy (decide to show at least 1 level only on create and delete - TODO
+
+  * Javadocs (big points)
+
+  * Robustness - do some basic input sanitization / validation. This is for: folder name, to address, subject, max length on certain fields. Should we allow moving emails which are in the Drafts folder?
+
+  * EmailClient is too large (500+ lines). We need to have better naming for our variables (camelCase)
+
+  * (DONE) Can we make JTable columns 20%, 60%, 20% ? See http://stackoverflow.com/questions/953972/java-jtable-setting-column-width
+
+  * (DONE) New Email UI: Could we make the Send button first, and Save to Draft second? Also, can we extend the "To", "CC", and "Subject" fields to the whole width?
+
+  * (DONE) Create Subfolder -> if subfolder already exists, prevent user from creating.
+
+  * (DONE) Consistency of labels between right click and menu entries (Move Email vs. Move Selected Email)
+
+  * (DONE) Using EmailViewEntity selectedEmailEntity in EmailClient isn't the best way. Look for alternatives.
+
+  * (DONE) System allows adding subfolders under "emails" root. But the tree doesn't display them. See `HierarchyImpl`
+
+  * (DONE) Move -> Persistence Layer should take care of Move (means, open the existing file for the email, set ParentFolder to new Destination, and then use the File.io cut/paste)
+
+  * (DONE) Open the Drafts Folder. Create a new email. While working on it, Save as Draft. Issue is that we need to update the model, so the view behind the email is updated (automatically).
+
+
+  * (DONE) Alt-F should open up the File menu, and Alt-E should open up the Edit.
+
+  * (DONE) Prevent deletion of the emails root folder.
+
+  * (DONE) Look and Feel for Menu -> can we underline the hotkeys in the Menu.
+
+  * (DONE)(Low) see how we disabled multiple selection for JTable. Multiple selection is allowed with Shift and Keyboard up / down
+
+
+## UI ##
+
+
+  * (Low) Headings for JTable are different in Inbox (From, Subject, Time), and Drafts (To, Subject, Time)
+
+
+## Model ##
+
+  * Finalize interfaces
+  * Unit tests
+  * `EmailImpl` currently checks if the date field `LastModifiedDate` is empty. If not, we get a runtime exception. But this might be the wrong approach. We basically cannot allow this field to ever be empty. It's an invariant! The sorting depends on it.
+
+## Persistence ##
+
+  * Unit tests ?
+  * If you hit "enter" a few times while composing an email, the system inserts "\n" within the text. In the XML file however, it's stored simply as space (new lines). How can we preserve that when we convert the XML back to a string to display in the UI?
+
+## Cross-cutting Concerns ##
+
+  * The fields for EACH LAYER need to be well established and documented

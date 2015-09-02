@@ -1,0 +1,33 @@
+
+# Connect-Disconnect and Error/Exception Log Issues #
+
+
+1. Server is running and client A and Client B are connected.
+> a) Client A Disconnects(Either through disconnect option or through closing the email client Window) and servers starts throwing exceptions in console.
+> > Fixed:  This case has been taken care of.... Now server logs a message whenever cleint disconnects.
+
+
+> b) Client A Disconnects and client A starts throwing exception logs too.
+> > Fixed:  This case has been taken care of.... Now client logs a message whenever cleint disconnects.
+
+2. Server is not running and client tries to connect to server....
+
+> Pending:
+
+# Sending/Receving Email ToDos #
+
+
+1. Server is running and Client A is connecting to it.
+> a) Client A tries to send email to Cleint B which is not conncted.
+> > Pending:
+
+2. when we run Junit Test cases : AllTests.java, it generates few emails which are not good for our server as it starts throwing exception.
+
+
+## Edge Cases ##
+
+  * Email is sent with "To: a@b.com; c@d.com". Both recipients are registered, but offline. Do we store TWO copies of this email address in the sentEmails list (on the server)?
+
+  * Client connects. Receives meeting invite. Disconnects. And tries to accept meeting.
+
+  * Client sends email to non-existant target, and disconnects IMMEDIATELY. Server tries to send delivery failure notification, but the sender is NO LONGER CONNECTED. Server SHOULD put this delivery failure ON TO THE unsendables.
